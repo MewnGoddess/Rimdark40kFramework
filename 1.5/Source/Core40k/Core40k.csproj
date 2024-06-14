@@ -57,8 +57,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Comps\CompForceWeapon.cs" />
     <Compile Include="Comps\CompProperties_ForceWeapon.cs" />
+    <Compile Include="Comps\CompForceWeapon.cs" />
     <Compile Include="DefModExtensions\DefModExtension_InheritableArchite.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_SpecificInheritableArchiteGenes.cs" />
     <Compile Include="Recipe_InstallImplantWithLevels.cs" />
@@ -84,6 +84,7 @@
     <Compile Include="DefModExtensions\DefModExtension_Geneseed.cs" />
     <Compile Include="DefModExtensions\DefModExtension_UntradeablePawn.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_NoSlavesPatch.cs" />
+    <Compile Include="WarpFlameDamageWorker.cs" />
     <Compile Include="Core40kMod.cs" />
     <Compile Include="Core40kDefOf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

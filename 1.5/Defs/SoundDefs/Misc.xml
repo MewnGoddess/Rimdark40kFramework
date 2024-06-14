@@ -2,7 +2,6 @@
 <Defs>
 
     <!-- No Sound -->
-
     <SoundDef>
         <defName>BEWH_NoSound</defName>
         <context>MapOnly</context>
@@ -21,7 +20,6 @@
     </SoundDef>
 
     <!-- No Sound Sustain -->
-
     <SoundDef>
         <defName>BEWH_NoSoundSustain</defName>
         <context>MapOnly</context>
