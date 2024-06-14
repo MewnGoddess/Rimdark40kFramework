@@ -7,7 +7,7 @@
 	</supportedVersions>
 	<packageId>Phonicmas.40kCore</packageId>
 	<description>
-		Warhammer 40k - Core module.
+		Warhammer 40k - Framework.
 	</description>
 	<modDependencies>
 		<li>
