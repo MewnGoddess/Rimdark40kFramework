@@ -3,9 +3,6 @@
 
   <ModSettingsNameCore>Warhammer 40k - Core</ModSettingsNameCore>
 
-  <MayNotHaveGene>{0} may not have the gene: {1}.</MayNotHaveGene>
-  <DoesNotHaveGene>{0} does not have required gene: {1}.</DoesNotHaveGene>
-
   <TzeentchName>Tzeentch</TzeentchName>
   <KhorneName>Khorne</KhorneName>
   <NurgleName>Nurgle</NurgleName>
