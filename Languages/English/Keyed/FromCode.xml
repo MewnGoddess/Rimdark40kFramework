@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
 
-  <ModSettingsNameCore>Warhammer 40k - Framework</ModSettingsNameCore>
+  <BEWH.ModSettingsNameCore>Warhammer 40k - Framework</BEWH.ModSettingsNameCore>
 
-  <TzeentchName>Tzeentch</TzeentchName>
-  <KhorneName>Khorne</KhorneName>
-  <NurgleName>Nurgle</NurgleName>
-  <SlaaneshName>Slaanesh</SlaaneshName>
-  <UndividedName>Undivided</UndividedName>
+  <BEWH.CheckVEFPatches>Remember to check Vanilla Expanded Framework toggable patches for more settings!</BEWH.CheckVEFPatches>
 
-  <Reset>Reset</Reset>
-  <JumpTo>Jump to</JumpTo>
+  <BEWH.TzeentchName>Tzeentch</BEWH.TzeentchName>
+  <BEWH.KhorneName>Khorne</BEWH.KhorneName>
+  <BEWH.NurgleName>Nurgle</BEWH.NurgleName>
+  <BEWH.SlaaneshName>Slaanesh</BEWH.SlaaneshName>
+  <BEWH.UndividedName>Undivided</BEWH.UndividedName>
+  
+  <BEWH.CannotRecruitLetter>Unbreakable Loyalty</BEWH.CannotRecruitLetter>
+  <BEWH.CannotRecruitMessage>{1} tried to recruit {0}, but {0}'s unbreakable loyalty to their faction made them resist all attempts.\n\n{0} cannot be recruited.</BEWH.CannotRecruitMessage>
+  <BEWH.CannotEnslaveMessage>{1} tried to enslave {0}, but {0}'s unbreakable loyalty to their faction made them resist all attempts.\n\n{0} cannot be enslaved.</BEWH.CannotEnslaveMessage>
 
-  <CannotRecruitLetter>Unbreakable Loyalty</CannotRecruitLetter>
-  <CannotRecruitMessage>{1} tried to recruit {0}, but {0}'s unbreakable loyalty to their faction made them resist all attempts.\n\n{0} cannot be recruited.</CannotRecruitMessage>
-  <CannotEnslaveMessage>{1} tried to enslave {0}, but {0}'s unbreakable loyalty to their faction made them resist all attempts.\n\n{0} cannot be enslaved.</CannotEnslaveMessage>
+  <BEWH.OnlyOneBuildingAllowedPerMap>You may only place one {0} per map.</BEWH.OnlyOneBuildingAllowedPerMap>
 
 </LanguageData>

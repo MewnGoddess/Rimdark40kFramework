@@ -23,7 +23,7 @@ namespace Core40k
                 {
                     if (!gene.def.GetModExtension<DefModExtension_SlaveabilityRecruitability>().canBeEnslaved)
                     {
-                        Find.LetterStack.ReceiveLetter("CannotRecruitLetter".Translate(), "CannotEnslaveMessage".Translate(recipient.Named("PAWN"), initiator.Named("PAWN")), LetterDefOf.NeutralEvent);
+                        Find.LetterStack.ReceiveLetter("BEWH.CannotRecruitLetter".Translate(), "BEWH.CannotEnslaveMessage".Translate(recipient.Named("PAWN"), initiator.Named("PAWN")), LetterDefOf.NeutralEvent);
                         return false;
                     }
                 }
