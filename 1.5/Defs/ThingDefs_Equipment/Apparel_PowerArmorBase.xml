@@ -61,6 +61,8 @@
                 <li>EVA</li>
             </tags>
         </apparel>
+        <tradeTags Inherit="False" />
+        <thingSetMakerTags Inherit="False" />
     </ThingDef>
 
 
@@ -118,7 +120,8 @@
                 <li>EVA</li>
             </tags>
         </apparel>
+        <tradeTags Inherit="False" />
+        <thingSetMakerTags Inherit="False" />
     </ThingDef>
-
 
 </Defs>
