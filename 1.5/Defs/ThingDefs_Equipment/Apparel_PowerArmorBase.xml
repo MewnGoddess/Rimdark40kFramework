@@ -116,9 +116,6 @@
             <defaultOutfitTags>
                 <li>Soldier</li>
             </defaultOutfitTags>
-            <tags>
-                <li>EVA</li>
-            </tags>
         </apparel>
         <tradeTags Inherit="False" />
         <thingSetMakerTags Inherit="False" />

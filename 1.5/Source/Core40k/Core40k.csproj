@@ -51,24 +51,40 @@
       <HintPath>..\..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
     <Reference Include="VFECore">
       <HintPath>..\..\..\..\..\..\..\workshop\content\294100\2023507013\1.4\Assemblies\VFECore.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Comps\ApparelColourTwo.cs" />
     <Compile Include="Comps\Hediff_SendLetterAtSeverity.cs" />
     <Compile Include="Comps\HediffCompProperties_SendLetterAtSeverity.cs" />
     <Compile Include="Comps\CompProperties_ForceWeapon.cs" />
     <Compile Include="Comps\CompForceWeapon.cs" />
+    <Compile Include="DefModExtensions\DefModExtension_AddRandomTraitByWeight.cs" />
+    <Compile Include="DefModExtensions\DefModExtension_AddRandomGeneByWeight.cs" />
+    <Compile Include="DefModExtensions\DefModExtension_BoostQualityCreatedByPawn.cs" />
     <Compile Include="DefModExtensions\DefModExtension_GeneExtension.cs" />
     <Compile Include="DefModExtensions\DefModExtension_DontPlaceProduct.cs" />
     <Compile Include="DefModExtensions\DefModExtension_InheritableArchite.cs" />
+    <Compile Include="DialogWindows\Dialog_PaintSecondaryColour.cs" />
+    <Compile Include="GeneClasses\Gene_AddRandomGeneAndOrTraitByWeight.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_AddedWorldCarryCapacityPatch.cs" />
+    <Compile Include="HarmonyPatches\HarmonyPatch_ApparelColourTwoPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_DontPlaceProductPatch.cs" />
+    <Compile Include="HarmonyPatches\HarmonyPatch_QualityCreatedBoostFromGenePatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_SpecificInheritableArchiteGenes.cs" />
-    <Compile Include="PlaceWorker_OnlyOnePerMap.cs" />
-    <Compile Include="Recipe_InstallImplantWithLevels.cs" />
+    <Compile Include="PlaceWorkers\PlaceWorker_OnlyOnePerMap.cs" />
+    <Compile Include="Recipes\Recipe_InstallImplantWithLevels.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_LostHeartSurvivalPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_LostLungSurvivalPatch.cs" />
     <Compile Include="DefModExtensions\DefModExtension_LostLungSurvival.cs" />
@@ -78,20 +94,20 @@
     <Compile Include="HarmonyPatches\HarmonyPatch_UnslaveablePatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_UnrecruitablePatch.cs" />
     <Compile Include="DefModExtensions\DefModExtension_SlaveabilityRecruitability.cs" />
-    <Compile Include="Gene_GiveVFECoreAbility.cs" />
+    <Compile Include="GeneClasses\Gene_GiveVFECoreAbility.cs" />
     <Compile Include="DefModExtensions\DefModExtension_GivesVFEAbility.cs" />
     <Compile Include="DefModExtensions\DefModExtension_GenderDistribution.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_GenderDistributionPatch.cs" />
     <Compile Include="DefModExtensions\DefModExtension_RequiresHediff.cs" />
     <Compile Include="DefModExtensions\DefModExtension_RequiresGene.cs" />
-    <Compile Include="Recipe_InstallImplantRequiringHediff.cs" />
-    <Compile Include="Recipe_InstallImplantRequiringGene.cs" />
-    <Compile Include="Letter_JumpTo.cs" />
+    <Compile Include="Recipes\Recipe_InstallImplantRequiringHediff.cs" />
+    <Compile Include="Recipes\Recipe_InstallImplantRequiringGene.cs" />
+    <Compile Include="Letters\Letter_JumpTo.cs" />
     <Compile Include="WeightedSelection.cs" />
     <Compile Include="DefModExtensions\DefModExtension_Geneseed.cs" />
     <Compile Include="DefModExtensions\DefModExtension_UntradeablePawn.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_NoSlavesPatch.cs" />
-    <Compile Include="WarpFlameDamageWorker.cs" />
+    <Compile Include="DamageWorkers\WarpFlameDamageWorker.cs" />
     <Compile Include="Core40kMod.cs" />
     <Compile Include="Core40kDefOf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
