@@ -1,15 +1,24 @@
 ﻿using HarmonyLib;
 using RimWorld;
+using System;
 using System.Linq;
 using UnityEngine;
 using Verse;
 
 namespace Core40k
 {
-    [HarmonyPatch(typeof(QualityUtility), "GenerateQualityCreatedByPawn")]
+    [HarmonyPatch(typeof(QualityUtility), "GenerateQualityCreatedByPawn", new Type[]
+        {
+            typeof(Pawn),
+            typeof(SkillDef),
+        }, new ArgumentType[]
+        {
+            ArgumentType.Normal,
+            ArgumentType.Normal,
+        })]
     public class QualityCreatedBoostFromGene
     {
-        public static void Postfix(Pawn pawn, SkillDef relevantSkill, QualityCategory __result)
+        public static void Postfix(Pawn pawn, SkillDef relevantSkill, QualityCategory __result )
         {
             if (pawn.genes != null)
             {
