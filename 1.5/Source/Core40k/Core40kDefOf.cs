@@ -8,6 +8,8 @@ namespace Core40k
     {
         public static DamageDef BEWH_WarpFlame;
 
+        public static JobDef BEWH_OpenStylingStationDialogForSecondColour;
+
         static Core40kDefOf()
         {
             DefOfHelper.EnsureInitializedInCtor(typeof(Core40kDefOf));

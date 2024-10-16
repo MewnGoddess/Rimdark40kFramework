@@ -85,8 +85,10 @@
     <Compile Include="HarmonyPatches\HarmonyPatch_AddedWorldCarryCapacityPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_ApparelColourTwoPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_DontPlaceProductPatch.cs" />
+    <Compile Include="HarmonyPatches\HarmonyPatch_ColourTwoSelectableOnStylingStation.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_QualityCreatedBoostFromGenePatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_SpecificInheritableArchiteGenes.cs" />
+    <Compile Include="JobDriver\Dialog_PaintSecondaryColour.cs" />
     <Compile Include="PlaceWorkers\PlaceWorker_OnlyOnePerMap.cs" />
     <Compile Include="Recipes\Recipe_InstallImplantWithLevels.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_LostHeartSurvivalPatch.cs" />
@@ -115,6 +117,9 @@
     <Compile Include="Core40kMod.cs" />
     <Compile Include="Core40kDefOf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Other\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
