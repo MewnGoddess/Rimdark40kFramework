@@ -1,5 +1,4 @@
 ﻿using RimWorld;
-using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
@@ -21,7 +20,7 @@ namespace Core40k
         {
             get
             {
-                CompColorable comp = GetComp<CompColorable>();
+                var comp = GetComp<CompColorable>();
                 if (comp != null && comp.Active)
                 {
                     return comp.Color;
@@ -30,21 +29,9 @@ namespace Core40k
             }
         }
 
-        public override Color DrawColorTwo
-        {
-            get
-            {
-                return drawColorTwo;
-            }
-        }
-        
-        public Color DrawColorTwoTemp
-        {
-            get
-            {
-                return drawColorTwoToSet;
-            }
-        }
+        public override Color DrawColorTwo => drawColorTwo;
+
+        public Color DrawColorTwoTemp => drawColorTwoToSet;
 
         public void SetOriginalColor(Color color)
         {

@@ -9,12 +9,11 @@ namespace Core40k
         public override void CompPostPostRemoved()
         {
             base.CompPostPostRemoved();
-            if (Pawn.InMentalState)
+            if (!Pawn.InMentalState) return;
+            
+            if (Props.specificMentalState == null || Props.specificMentalState == Pawn.MentalStateDef)
             {
-                if (Props.specificMentalState == null || Props.specificMentalState == Pawn.MentalStateDef)
-                {
-                    Pawn.mindState.mentalStateHandler.Reset();
-                }
+                Pawn.mindState.mentalStateHandler.Reset();
             }
         }
     }

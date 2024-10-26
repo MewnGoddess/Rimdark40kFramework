@@ -35,17 +35,11 @@ namespace Core40k
                 return false;
             }
 
-            if (pawn.health.hediffSet.HasHediff(recipe.addsHediff))
-            {
-                Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(recipe.addsHediff);
+            if (!pawn.health.hediffSet.HasHediff(recipe.addsHediff)) return true;
+            
+            var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(recipe.addsHediff);
 
-                if (hediff.Severity == hediff.def.maxSeverity)
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return hediff.Severity != hediff.def.maxSeverity;
         }
 
         public override IEnumerable<BodyPartRecord> GetPartsToApplyOn(Pawn pawn, RecipeDef recipe)
@@ -56,11 +50,7 @@ namespace Core40k
                 {
                     return false;
                 }
-                if (pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(record))
-                {
-                    return false;
-                }
-                return true;
+                return !pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(record);
             });
         }
     }

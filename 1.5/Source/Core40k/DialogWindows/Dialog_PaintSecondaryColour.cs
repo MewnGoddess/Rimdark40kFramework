@@ -40,26 +40,26 @@ namespace Core40k
         {
             get
             {
-                if (allColors == null)
+                if (allColors != null) return allColors;
+                
+                allColors = new List<Color>();
+                if (pawn.Ideo != null && !Find.IdeoManager.classicMode)
                 {
-                    allColors = new List<Color>();
-                    if (pawn.Ideo != null && !Find.IdeoManager.classicMode)
-                    {
-                        allColors.Add(pawn.Ideo.ApparelColor);
-                    }
-                    if (pawn.story != null && !pawn.DevelopmentalStage.Baby() && pawn.story.favoriteColor.HasValue && !allColors.Any((Color c) => pawn.story.favoriteColor.Value.IndistinguishableFrom(c)))
-                    {
-                        allColors.Add(pawn.story.favoriteColor.Value);
-                    }
-                    foreach (ColorDef colDef in DefDatabase<ColorDef>.AllDefs.Where((ColorDef x) => x.colorType == ColorType.Ideo || x.colorType == ColorType.Misc || (DevMode && !ModsConfig.IdeologyActive && x.colorType == ColorType.Structure)))
-                    {
-                        if (!allColors.Any((Color x) => x.IndistinguishableFrom(colDef.color)))
-                        {
-                            allColors.Add(colDef.color);
-                        }
-                    }
-                    allColors.SortByColor((Color x) => x);
+                    allColors.Add(pawn.Ideo.ApparelColor);
                 }
+                if (pawn.story != null && !pawn.DevelopmentalStage.Baby() && pawn.story.favoriteColor.HasValue && !allColors.Any(c => pawn.story.favoriteColor.Value.IndistinguishableFrom(c)))
+                {
+                    allColors.Add(pawn.story.favoriteColor.Value);
+                }
+                foreach (var colDef in DefDatabase<ColorDef>.AllDefs.Where((ColorDef x) => x.colorType == ColorType.Ideo || x.colorType == ColorType.Misc || (DevMode && !ModsConfig.IdeologyActive && x.colorType == ColorType.Structure)))
+                {
+                    if (!allColors.Any(color => color.IndistinguishableFrom(colDef.color)))
+                    {
+                        allColors.Add(colDef.color);
+                    }
+                }
+                allColors.SortByColor(x => x);
+                
                 return allColors;
             }
         }
@@ -73,7 +73,7 @@ namespace Core40k
             this.stylingStation = stylingStation;
             showClothes = true;
             showHeadgear = true;
-            foreach (ApparelColourTwo item in pawn.apparel.WornApparel.Where(a => a is ApparelColourTwo).Cast<ApparelColourTwo>())
+            foreach (var item in pawn.apparel.WornApparel.Where(a => a is ApparelColourTwo).Cast<ApparelColourTwo>())
             {
                 item.SetOriginalColor(item.DrawColorTwo);
             }
@@ -82,18 +82,18 @@ namespace Core40k
         public override void DoWindowContents(Rect inRect)
         {
             Text.Font = GameFont.Medium;
-            Rect rect = new Rect(inRect)
+            var rect = new Rect(inRect)
             {
                 height = Text.LineHeight * 2f
             };
             Widgets.Label(rect, "StylePawn".Translate().CapitalizeFirst() + ": " + Find.ActiveLanguageWorker.WithDefiniteArticle(pawn.Name.ToStringShort, pawn.gender, plural: false, name: true).ApplyTag(TagType.Name));
             Text.Font = GameFont.Small;
             inRect.yMin = rect.yMax + 4f;
-            Rect rect2 = inRect;
+            var rect2 = inRect;
             rect2.width *= 0.3f;
             rect2.yMax -= ButSize.y + 4f;
             DrawPawn(rect2);
-            Rect rect3 = inRect;
+            var rect3 = inRect;
             rect3.xMin = rect2.xMax + 10f;
             rect3.yMax -= ButSize.y + 4f;
             DrawApparelColor(rect3);
@@ -105,9 +105,9 @@ namespace Core40k
         {
             Texture2D texture2D = null;
             TaggedString taggedString = null;
-            bool flag = Mouse.IsOver(boxRect);
-            Pawn_StoryTracker story = pawn.story;
-            if (story != null && story.favoriteColor.HasValue && color.IndistinguishableFrom(pawn.story.favoriteColor.Value))
+            var flag = Mouse.IsOver(boxRect);
+            var story = pawn.story;
+            if (story?.favoriteColor != null && color.IndistinguishableFrom(pawn.story.favoriteColor.Value))
             {
                 texture2D = FavoriteColorTex;
                 if (flag)
@@ -140,16 +140,16 @@ namespace Core40k
 
         private void DrawPawn(Rect rect)
         {
-            Rect rect2 = rect;
+            var rect2 = rect;
             rect2.yMin = rect.yMax - Text.LineHeight * 2f;
             Widgets.CheckboxLabeled(new Rect(rect2.x, rect2.y, rect2.width, rect2.height / 2f), "ShowHeadgear".Translate(), ref showHeadgear);
             Widgets.CheckboxLabeled(new Rect(rect2.x, rect2.y + rect2.height / 2f, rect2.width, rect2.height / 2f), "ShowApparel".Translate(), ref showClothes);
             rect.yMax = rect2.yMin - 4f;
             Widgets.BeginGroup(rect);
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
-                Rect position = new Rect(0f, rect.height / 3f * (float)i, rect.width, rect.height / 3f).ContractedBy(4f);
-                RenderTexture image = PortraitsCache.Get(pawn, new Vector2(position.width, position.height), new Rot4(2 - i), PortraitOffset, 1.1f, supersample: true, compensateForUIScale: true, showHeadgear, showClothes, null, null, stylingStation: true);
+                var position = new Rect(0f, rect.height / 3f * (float)i, rect.width, rect.height / 3f).ContractedBy(4f);
+                var image = PortraitsCache.Get(pawn, new Vector2(position.width, position.height), new Rot4(2 - i), PortraitOffset, 1.1f, supersample: true, compensateForUIScale: true, showHeadgear, showClothes, null, null, stylingStation: true);
                 GUI.DrawTexture(position, image);
             }
             Widgets.EndGroup();
@@ -157,19 +157,19 @@ namespace Core40k
 
         private void DrawApparelColor(Rect rect)
         {
-            Rect viewRect = new Rect(rect.x, rect.y, rect.width - 16f, viewRectHeight);
+            var viewRect = new Rect(rect.x, rect.y, rect.width - 16f, viewRectHeight);
             Widgets.BeginScrollView(rect, ref apparelColorScrollPosition, viewRect);
-            float curY = rect.y;
-            IEnumerable<ApparelColourTwo> apparelColourTwos = pawn.apparel.WornApparel.Where(a => a is ApparelColourTwo).Cast<ApparelColourTwo>();
-            foreach (ApparelColourTwo item in apparelColourTwos)
+            var curY = rect.y;
+            var apparelColourTwos = pawn.apparel.WornApparel.Where(a => a is ApparelColourTwo).Cast<ApparelColourTwo>();
+            foreach (var item in apparelColourTwos)
             {
                 var value = item.DrawColorTwo;
-                Rect rect2 = new Rect(rect.x, curY, viewRect.width, 92f);
+                var rect2 = new Rect(rect.x, curY, viewRect.width, 92f);
                 curY += rect2.height + 10f;
                 if (!pawn.apparel.IsLocked(item) || DevMode)
                 {
                     Widgets.ColorSelector(rect2, ref value, AllColors, out var _, null, 22, 2, ColorSelecterExtraOnGUI);
-                    float num2 = rect2.x;
+                    var num2 = rect2.x;
                     if (pawn.Ideo != null && !Find.IdeoManager.classicMode)
                     {
                         rect2 = new Rect(num2, curY, 200f, 24f);
@@ -180,7 +180,7 @@ namespace Core40k
                         }
                         num2 += 210f;
                     }
-                    Pawn_StoryTracker story = pawn.story;
+                    var story = pawn.story;
                     if (story != null && story.favoriteColor.HasValue)
                     {
                         rect2 = new Rect(num2, curY, 200f, 24f);
@@ -196,7 +196,7 @@ namespace Core40k
                 {
                     Widgets.ColorSelectorIcon(new Rect(rect2.x, rect2.y, 88f, 88f), item.def.uiIcon, value);
                     Text.Anchor = TextAnchor.MiddleLeft;
-                    Rect rect3 = rect2;
+                    var rect3 = rect2;
                     rect3.x += 100f;
                     Widgets.Label(rect3, ((string)"ApparelLockedCannotRecolor".Translate(pawn.Named("PAWN"), item.Named("APPAREL"))).Colorize(ColorLibrary.RedReadable));
                     Text.Anchor = TextAnchor.UpperLeft;

@@ -11,7 +11,6 @@ namespace Core40k
     {
         public override bool AvailableOnNow(Thing thing, BodyPartRecord part = null)
         {
-
             if (!(thing is Pawn pawn && (pawn.genes != null) && recipe.HasModExtension<DefModExtension_RequiresGene>() && pawn.genes.HasActiveGene(recipe.GetModExtension<DefModExtension_RequiresGene>().geneDef)))
             {
                 return false;

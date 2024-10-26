@@ -25,11 +25,10 @@ namespace Core40k
                 pawn.genes.AddGene(chosenGene, true);
             }
 
-            if (chosenTrait != null)
-            {
-                var trait = new Trait(chosenTrait, chosenTraitDegree);
-                pawn.story.traits.GainTrait(trait);
-            }
+            if (chosenTrait == null) return;
+            
+            var trait = new Trait(chosenTrait, chosenTraitDegree);
+            pawn.story.traits.GainTrait(trait);
         }
 
         public override void PostRemove()
@@ -44,13 +43,12 @@ namespace Core40k
                 }
             }
 
-            if (chosenTrait != null)
+            if (chosenTrait == null) return;
+            
+            var trait = pawn.story.traits.GetTrait(chosenTrait);
+            if (trait != null)
             {
-                var trait = pawn.story.traits.GetTrait(chosenTrait);
-                if (trait != null)
-                {
-                    pawn.story.traits.RemoveTrait(trait);
-                }
+                pawn.story.traits.RemoveTrait(trait);
             }
         }
 
@@ -58,7 +56,7 @@ namespace Core40k
         {
             var defMod = def.GetModExtension<DefModExtension_AddRandomTraitByWeight>();
 
-            Random random = new Random();
+            var random = new Random();
            
             if (random.Next(0, 100) < defMod.chanceToGrantTrait)
             {
@@ -89,7 +87,7 @@ namespace Core40k
         {
             var defMod = def.GetModExtension<DefModExtension_AddRandomGeneByWeight>();
 
-            Random random = new Random();
+            var random = new Random();
 
             if (random.Next(0, 100) < defMod.chanceToGrantGene)
             {

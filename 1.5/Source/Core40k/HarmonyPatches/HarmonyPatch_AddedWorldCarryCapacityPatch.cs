@@ -20,17 +20,13 @@ namespace Core40k
             {
                 return;
             }
-            IEnumerable<Gene> genes = p.genes.GenesListForReading.Where(x => x.def.HasModExtension<DefModExtension_GeneExtension>());
+            var genes = p.genes.GenesListForReading.Where(x => x.def.HasModExtension<DefModExtension_GeneExtension>());
             if (genes.EnumerableNullOrEmpty())
             {
                 return;
             }
-            float num = 0;
-
-            foreach (Gene gene in genes)
-            {
-                num += gene.def.GetModExtension<DefModExtension_GeneExtension>().addedWorldCarryCapacity;
-            }
+            
+            var num = genes.Sum(gene => gene.def.GetModExtension<DefModExtension_GeneExtension>().addedWorldCarryCapacity);
 
             __result += num;
         }

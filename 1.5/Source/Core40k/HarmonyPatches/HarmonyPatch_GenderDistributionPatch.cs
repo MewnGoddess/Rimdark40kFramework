@@ -15,40 +15,30 @@ namespace Core40k
             {
                 return;
             }
-            List<Gene> genesListForReading = pawn.genes.GenesListForReading;
+            var genesListForReading = pawn.genes.GenesListForReading;
             float male = -1;
             float female = -1;
-            foreach (Gene gene in genesListForReading)
+            foreach (var gene in genesListForReading)
             {
-                if (gene.Active)
+                if (!gene.Active) continue;
+                
+                var modExtension = gene.def.GetModExtension<GeneExtension>();
+                if (modExtension != null && (modExtension.forceFemale || modExtension.forceMale))
                 {
-                    GeneExtension modExtension = gene.def.GetModExtension<GeneExtension>();
-                    if (modExtension != null && (modExtension.forceFemale || modExtension.forceMale))
-                    {
-                        return;
-                    }
-                    DefModExtension_GenderDistribution defModExtension = gene.def.GetModExtension<DefModExtension_GenderDistribution>();
-                    if (defModExtension != null)
-                    {
-                        male = defModExtension.male;
-                        female = defModExtension.female;
-                    }
+                    return;
                 }
+                var defModExtension = gene.def.GetModExtension<DefModExtension_GenderDistribution>();
+                if (defModExtension == null) continue;
+                
+                male = defModExtension.male;
+                female = defModExtension.female;
             }
 
-            if (male >= 0 && female >= 0)
-            {
-                Random rand = new Random();
-                int rando = rand.Next(1, 100);
-                if (rando <= male)
-                {
-                    pawn.gender = Gender.Male;
-                }
-                else
-                {
-                    pawn.gender = Gender.Female;
-                }
-            }
+            if (!(male >= 0) || !(female >= 0)) return;
+            
+            var rand = new Random();
+            var rando = rand.Next(1, 100);
+            pawn.gender = rando <= male ? Gender.Male : Gender.Female;
 
         }
     }

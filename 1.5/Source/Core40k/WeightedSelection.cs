@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Verse;
 
 namespace Core40k
@@ -24,30 +25,26 @@ namespace Core40k
 
         public T GetRandom()
         {
-            double r = rand.NextDouble() * accumulatedWeight;
+            var r = rand.NextDouble() * accumulatedWeight;
 
-            foreach (Entry entry in entries)
+            foreach (var entry in entries.Where(entry => entry.accumulatedWeight >= r))
             {
-                if (entry.accumulatedWeight >= r)
-                {
-                    return entry.item;
-                }
+                return entry.item;
             }
             return default(T); //should only happen when there are no entries
         }
 
         public T GetRandomUnique()
         {
-            double r = rand.NextDouble() * accumulatedWeight;
+            var r = rand.NextDouble() * accumulatedWeight;
 
-            foreach (Entry entry in entries)
+            foreach (var entry in entries)
             {
-                if (entry.accumulatedWeight >= r)
-                {
-                    Entry unique = new Entry{ item = entry.item, accumulatedWeight = entry.accumulatedWeight };
-                    entries.Remove(entry);
-                    return unique.item;
-                }
+                if (!(entry.accumulatedWeight >= r)) continue;
+                
+                var unique = new Entry{ item = entry.item, accumulatedWeight = entry.accumulatedWeight };
+                entries.Remove(entry);
+                return unique.item;
             }
             return default(T); //should only happen when there are no entries
         }

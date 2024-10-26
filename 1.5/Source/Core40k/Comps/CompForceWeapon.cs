@@ -27,40 +27,39 @@ namespace Core40k
 
         private void CalculateExtraDamage(Pawn pawn)
         {
-            if (pawn == null && pawn.GetStatValue(Props.scalingStat) <= 0)
+            if (pawn == null || pawn.GetStatValue(Props.scalingStat) <= 0)
             {
                 return;
             }
 
             statValue = pawn.GetStatValue(Props.scalingStat);
 
-            float cachedDamageValue = statValue * Props.damageScalingFactor;
-            float cachedPenValue = Props.flatPen;
+            var cachedDamageValue = statValue * Props.damageScalingFactor;
+            var cachedPenValue = Props.flatPen;
 
             if (Props.scalesPen)
             {
                 cachedPenValue = pawn.GetStatValue(Props.scalingStat) * Props.penScaleFactor;
             }
 
-            if (parent.TryGetComp<CompEquippable>().Tools != null)
+            if (parent.TryGetComp<CompEquippable>().Tools == null) return;
+            
+            foreach (var tool in parent.TryGetComp<CompEquippable>().Tools)
             {
-                foreach (Tool tool in parent.TryGetComp<CompEquippable>().Tools)
+                if (tool.capacities.Intersect(Props.capacitiesToApplyOn).EnumerableNullOrEmpty()) continue;
+                
+                var extraDamage = new ExtraDamage
                 {
-                    if (!tool.capacities.Intersect(Props.capacitiesToApplyOn).EnumerableNullOrEmpty())
-                    {
-                        ExtraDamage extraDamage = new ExtraDamage
-                        {
-                            def = Props.damageDef,
-                            amount = cachedDamageValue,
-                            armorPenetration = cachedPenValue
-                        };
-                        if (tool.extraMeleeDamages.NullOrEmpty())
-                        {
-                            tool.extraMeleeDamages = new List<ExtraDamage>();
-                        }
-                        tool.extraMeleeDamages.Add(extraDamage);
-                    }
+                    def = Props.damageDef,
+                    amount = cachedDamageValue,
+                    armorPenetration = cachedPenValue
+                };
+                    
+                if (tool.extraMeleeDamages.NullOrEmpty())
+                {
+                    tool.extraMeleeDamages = new List<ExtraDamage>();
                 }
+                tool.extraMeleeDamages.Add(extraDamage);
             }
         }
     }

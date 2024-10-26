@@ -11,11 +11,11 @@ namespace Core40k
     {
         public static IEnumerable<Thing> Postfix(IEnumerable<Thing> __result)
         {
-			List<Thing> newResult = new List<Thing>();
+	        var newResult = new List<Thing>();
 
-            foreach (Thing thing in __result)
+            foreach (var thing in __result)
             {
-				bool addThing = true;
+	            var addThing = true;
 				if (thing is Pawn pawn)
 				{
 					if (pawn.genes == null)
@@ -33,12 +33,7 @@ namespace Core40k
 				}
 			}
 
-			if (newResult.NullOrEmpty())
-			{
-				return __result;
-			}
-
-			return newResult;
+			return newResult.NullOrEmpty() ? __result : newResult;
         }
     }
 }

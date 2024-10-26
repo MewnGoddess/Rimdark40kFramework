@@ -10,12 +10,10 @@ namespace Core40k
     {
         public static bool Prefix(ref bool __result, Apparel apparel, BodyTypeDef bodyType, ref ApparelGraphicRecord rec)
         {
-            if (apparel is ApparelColourTwo)
-            {
-                __result = TryGetGraphicApparel(apparel, bodyType, ref rec);
-                return false;
-            }
-            return true;
+            if (!(apparel is ApparelColourTwo)) return true;
+            
+            __result = TryGetGraphicApparel(apparel, bodyType, ref rec);
+            return false;
         }
 
         public static bool TryGetGraphicApparel(Apparel apparel, BodyTypeDef bodyType, ref ApparelGraphicRecord rec)
@@ -30,8 +28,8 @@ namespace Core40k
                 rec = new ApparelGraphicRecord(null, null);
                 return false;
             }
-            string path = ((apparel.def.apparel.LastLayer != ApparelLayerDefOf.Overhead && apparel.def.apparel.LastLayer != ApparelLayerDefOf.EyeCover && !apparel.RenderAsPack() && !(apparel.WornGraphicPath == BaseContent.PlaceholderImagePath) && !(apparel.WornGraphicPath == BaseContent.PlaceholderGearImagePath)) ? (apparel.WornGraphicPath + "_" + bodyType.defName) : apparel.WornGraphicPath);
-            Shader shader = ShaderDatabase.Cutout;
+            var path = ((apparel.def.apparel.LastLayer != ApparelLayerDefOf.Overhead && apparel.def.apparel.LastLayer != ApparelLayerDefOf.EyeCover && !apparel.RenderAsPack() && !(apparel.WornGraphicPath == BaseContent.PlaceholderImagePath) && !(apparel.WornGraphicPath == BaseContent.PlaceholderGearImagePath)) ? (apparel.WornGraphicPath + "_" + bodyType.defName) : apparel.WornGraphicPath);
+            var shader = ShaderDatabase.Cutout;
             if (apparel.StyleDef?.graphicData.shaderType != null)
             {
                 shader = apparel.StyleDef.graphicData.shaderType.Shader;
@@ -40,7 +38,7 @@ namespace Core40k
             {
                 shader = ShaderDatabase.CutoutComplex;
             }
-            Graphic graphic = GraphicDatabase.Get<Graphic_Multi>(path, shader, apparel.def.graphicData.drawSize, apparel.DrawColor, apparel.DrawColorTwo);
+            var graphic = GraphicDatabase.Get<Graphic_Multi>(path, shader, apparel.def.graphicData.drawSize, apparel.DrawColor, apparel.DrawColorTwo);
             rec = new ApparelGraphicRecord(graphic, apparel);
             return true;
         }

@@ -17,16 +17,14 @@ namespace Core40k
             {
                 return true;
             }
-            foreach (Gene gene in recipient.genes.GenesListForReading)
+            foreach (var gene in recipient.genes.GenesListForReading)
             {
-                if (gene.def.HasModExtension<DefModExtension_SlaveabilityRecruitability>())
-                {
-                    if (!gene.def.GetModExtension<DefModExtension_SlaveabilityRecruitability>().canBeRecruited)
-                    {
-                        Find.LetterStack.ReceiveLetter("BEWH.CannotRecruitLetter".Translate(), "BEWH.CannotRecruitMessage".Translate(recipient.Named("PAWN"), initiator.Named("PAWN")), LetterDefOf.NeutralEvent);
-                        return false;
-                    }
-                }
+                if (!gene.def.HasModExtension<DefModExtension_SlaveabilityRecruitability>()) continue;
+                
+                if (gene.def.GetModExtension<DefModExtension_SlaveabilityRecruitability>().canBeRecruited) continue;
+                    
+                Find.LetterStack.ReceiveLetter("BEWH.CannotRecruitLetter".Translate(), "BEWH.CannotRecruitMessage".Translate(recipient.Named("PAWN"), initiator.Named("PAWN")), LetterDefOf.NeutralEvent);
+                return false;
             }
             return true;
         }

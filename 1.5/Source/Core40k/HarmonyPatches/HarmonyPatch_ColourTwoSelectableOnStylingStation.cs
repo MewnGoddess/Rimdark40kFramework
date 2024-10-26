@@ -16,14 +16,14 @@ namespace Core40k
             {
                 yield return floatMenu;
             }
-            if (selPawn.apparel.WornApparel.Where(a => a is ApparelColourTwo).Any())
+
+            if (!selPawn.apparel.WornApparel.Any(a => a is ApparelColourTwo)) yield break;
+            
+            var secondColourChangeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.ChangeSecondaryColour".Translate().CapitalizeFirst(), delegate
             {
-                var secondColourChangeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.ChangeSecondaryColour".Translate().CapitalizeFirst(), delegate
-                {
-                    selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(Core40kDefOf.BEWH_OpenStylingStationDialogForSecondColour, __instance), JobTag.Misc);
-                }), selPawn, __instance);
-                yield return secondColourChangeFloatMenu;
-            }
+                selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(Core40kDefOf.BEWH_OpenStylingStationDialogForSecondColour, __instance), JobTag.Misc);
+            }), selPawn, __instance);
+            yield return secondColourChangeFloatMenu;
         }
     }
 }

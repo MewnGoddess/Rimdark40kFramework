@@ -14,25 +14,23 @@ namespace Core40k
         public override void CompPostTick(ref float severityAdjustment)
         {
             base.CompPostTick(ref severityAdjustment);
-            if (Pawn.IsHashIntervalTick(SeverityUpdateInterval))
-            {
-                if (parent.Severity >= Props.severitySendAt)
-                {
-                    if (Props.onlySendOnce && hasSentLetter)
-                    {
-                        return;
-                    }
-                    Letter_JumpTo letter = new Letter_JumpTo
-                    {
-                        lookTargets = Pawn,
-                        def = Props.letterDef,
-                        Text = Props.letter,
-                        Label = Props.message,
-                    };
+            if (!Pawn.IsHashIntervalTick(SeverityUpdateInterval)) return;
 
-                    Find.LetterStack.ReceiveLetter(letter);
-                }
+            if (!(parent.Severity >= Props.severitySendAt)) return;
+            
+            if (Props.onlySendOnce && hasSentLetter)
+            {
+                return;
             }
+            var letter = new Letter_JumpTo
+            {
+                lookTargets = Pawn,
+                def = Props.letterDef,
+                Text = Props.letter,
+                Label = Props.message,
+            };
+
+            Find.LetterStack.ReceiveLetter(letter);
         }
 
         public override void CompExposeData()

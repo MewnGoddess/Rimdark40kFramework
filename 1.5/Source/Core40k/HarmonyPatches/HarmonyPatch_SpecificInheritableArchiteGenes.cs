@@ -17,65 +17,62 @@ namespace Core40k
 
         public static void Postfix(ref Thing __result, Pawn geneticMother, Pawn father)
         {
-            Pawn pawn = (Pawn)__result;
+            var pawn = (Pawn)__result;
 
             if (geneticMother == null || geneticMother.genes == null || father == null || father.genes == null)
             {
                 return;
             }
 
-            List<GeneDef> inheritedArchiteGenes = GetInheriteArchiteGenes(geneticMother.genes, father.genes);
+            var inheritedArchiteGenes = GetInheriteArchiteGenes(geneticMother.genes, father.genes);
 
             if (inheritedArchiteGenes.NullOrEmpty())
             {
                 return;
             }
 
-            foreach (GeneDef geneDef in inheritedArchiteGenes)
+            foreach (var geneDef in inheritedArchiteGenes.Where(geneDef => !pawn.genes.HasActiveGene(geneDef)))
             {
-                if (!pawn.genes.HasActiveGene(geneDef))
-                {
-                    pawn.genes.AddGene(geneDef, false);
-                }
+                pawn.genes.AddGene(geneDef, false);
             }
         }
 
 
         private static List<GeneDef> GetInheriteArchiteGenes(Pawn_GeneTracker mother, Pawn_GeneTracker father)
         {
-            List<GeneDef> geneSetMother = mother.Endogenes.Select((Gene x) => x.def).ToList();
-            List<GeneDef> geneSetFather = father.Endogenes.Select((Gene x) => x.def).ToList();
+            var geneSetMother = mother.Endogenes.Select((Gene x) => x.def).ToList();
+            var geneSetFather = father.Endogenes.Select((Gene x) => x.def).ToList();
 
-            List<GeneDef> finalGenes = new List<GeneDef>();
+            var finalGenes = new List<GeneDef>();
 
 
-            foreach (GeneDef geneDef in geneSetMother)
+            foreach (var geneDef in geneSetMother)
             {
                 if (finalGenes.Contains(geneDef))
                 {
                     continue;
                 }
-                if (geneDef.biostatArc > 0 && geneDef.HasModExtension<DefModExtension_InheritableArchite>())
+
+                if (geneDef.biostatArc <= 0 || !geneDef.HasModExtension<DefModExtension_InheritableArchite>()) continue;
+                
+                if (!geneDef.GetModExtension<DefModExtension_InheritableArchite>().presentOnBothParentsRequired || geneSetFather.Contains(geneDef))
                 {
-                    if (!geneDef.GetModExtension<DefModExtension_InheritableArchite>().presentOnBothParentsRequired || geneSetFather.Contains(geneDef))
-                    {
-                        finalGenes.Add(geneDef);
-                    }
+                    finalGenes.Add(geneDef);
                 }
             }
 
-            foreach (GeneDef geneDef in geneSetFather)
+            foreach (var geneDef in geneSetFather)
             {
                 if (finalGenes.Contains(geneDef))
                 {
                     continue;
                 }
-                if (geneDef.biostatArc > 0 && geneDef.HasModExtension<DefModExtension_InheritableArchite>())
+
+                if (geneDef.biostatArc <= 0 || !geneDef.HasModExtension<DefModExtension_InheritableArchite>()) continue;
+                
+                if (!geneDef.GetModExtension<DefModExtension_InheritableArchite>().presentOnBothParentsRequired)
                 {
-                    if (!geneDef.GetModExtension<DefModExtension_InheritableArchite>().presentOnBothParentsRequired)
-                    {
-                        finalGenes.Add(geneDef);
-                    }
+                    finalGenes.Add(geneDef);
                 }
             }
 

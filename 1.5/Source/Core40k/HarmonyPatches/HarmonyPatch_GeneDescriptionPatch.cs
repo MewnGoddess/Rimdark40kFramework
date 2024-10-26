@@ -15,8 +15,8 @@ namespace Core40k
             {
                 return;
             }
-            DefModExtension_Description defModExtension = __instance.GetModExtension<DefModExtension_Description>();
-            StringBuilder sb = new StringBuilder();
+            var defModExtension = __instance.GetModExtension<DefModExtension_Description>();
+            var sb = new StringBuilder();
 
             sb.Append(__instance.description).AppendLine().AppendLine();
 
@@ -43,9 +43,6 @@ namespace Core40k
             sb.AppendLine("  - " + defModExtension.newCustomEffectText.Translate());
 
             __result = sb.ToString().TrimEndNewlines();
-
-            return;
-
         }
     }
 }   

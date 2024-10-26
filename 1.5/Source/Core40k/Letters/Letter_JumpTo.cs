@@ -17,7 +17,7 @@ namespace Core40k
                 {
                     yield return Option_JumpToLocation;
                 }
-                yield return base.Option_Close;
+                yield return Option_Close;
             }
         }
     }

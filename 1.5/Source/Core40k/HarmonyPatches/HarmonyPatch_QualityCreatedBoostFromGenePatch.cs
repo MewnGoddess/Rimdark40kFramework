@@ -34,7 +34,7 @@ namespace Core40k
                 return;
             }
 
-            int levelIncrease = genes.Sum(g => g.def.GetModExtension<DefModExtension_BoostQualityCreatedByPawn>().qualityBoostLevel.Values.First());
+            var levelIncrease = genes.Sum(g => g.def.GetModExtension<DefModExtension_BoostQualityCreatedByPawn>().qualityBoostLevel.Values.First());
 
             __result = (QualityCategory)Mathf.Min((int)__result + levelIncrease, 6);
         }

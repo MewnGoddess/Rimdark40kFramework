@@ -8,13 +8,13 @@ namespace Core40k
     {
         public override void PostAdd()
         {
-            CompAbilities comp = pawn.GetComp<CompAbilities>();
+            var comp = pawn.GetComp<CompAbilities>();
             if (comp != null)
             {
                 if (def.HasModExtension<DefModExtension_GivesVFEAbility>())
                 {
-                    DefModExtension_GivesVFEAbility defModExtension = def.GetModExtension<DefModExtension_GivesVFEAbility>();
-                    foreach (AbilityDef abilityDef in defModExtension.abilityDefs)
+                    var defModExtension = def.GetModExtension<DefModExtension_GivesVFEAbility>();
+                    foreach (var abilityDef in defModExtension.abilityDefs)
                     {
                         comp.GiveAbility(abilityDef);
                     }
@@ -26,15 +26,15 @@ namespace Core40k
 
         public override void PostRemove()
         {
-            CompAbilities comp = pawn.GetComp<CompAbilities>();
+            var comp = pawn.GetComp<CompAbilities>();
             if (comp != null)
             {
                 if (def.HasModExtension<DefModExtension_GivesVFEAbility>())
                 {
-                    DefModExtension_GivesVFEAbility defModExtension = def.GetModExtension<DefModExtension_GivesVFEAbility>();
-                    for (int i = 0; i < comp.LearnedAbilities.Count; i++)
+                    var defModExtension = def.GetModExtension<DefModExtension_GivesVFEAbility>();
+                    for (var i = 0; i < comp.LearnedAbilities.Count; i++)
                     {
-                        foreach (AbilityDef abilityDef in defModExtension.abilityDefs)
+                        foreach (var abilityDef in defModExtension.abilityDefs)
                         {
                             if (comp.LearnedAbilities[i].def == abilityDef)
                             {
