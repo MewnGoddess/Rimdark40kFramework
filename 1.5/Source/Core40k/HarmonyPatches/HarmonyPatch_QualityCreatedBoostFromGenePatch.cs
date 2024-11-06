@@ -18,7 +18,7 @@ namespace Core40k
         })]
     public class QualityCreatedBoostFromGene
     {
-        public static void Postfix(Pawn pawn, SkillDef relevantSkill, QualityCategory __result )
+        public static void Postfix(Pawn pawn, SkillDef relevantSkill, ref QualityCategory __result )
         {
             if (pawn.genes != null)
             {
