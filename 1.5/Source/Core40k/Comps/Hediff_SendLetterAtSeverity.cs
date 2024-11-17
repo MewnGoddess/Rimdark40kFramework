@@ -10,27 +10,34 @@ namespace Core40k
 
         private HediffCompProperties_SendLetterAtSeverity Props => (HediffCompProperties_SendLetterAtSeverity)props;
 
-
         public override void CompPostTick(ref float severityAdjustment)
         {
             base.CompPostTick(ref severityAdjustment);
-            if (!Pawn.IsHashIntervalTick(SeverityUpdateInterval)) return;
+            if (!Pawn.IsHashIntervalTick(SeverityUpdateInterval))
+            {
+                return;
+            }
 
-            if (!(parent.Severity >= Props.severitySendAt)) return;
+            if (!(parent.Severity >= Props.severitySendAt))
+            {
+                return;
+            }
             
             if (Props.onlySendOnce && hasSentLetter)
             {
                 return;
             }
+            
             var letter = new Letter_JumpTo
             {
                 lookTargets = Pawn,
                 def = Props.letterDef,
-                Text = Props.letter,
-                Label = Props.message,
+                Text = Props.message,
+                Label = Props.letter,
             };
 
             Find.LetterStack.ReceiveLetter(letter);
+            hasSentLetter = true;
         }
 
         public override void CompExposeData()
