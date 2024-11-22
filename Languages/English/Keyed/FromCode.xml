@@ -10,7 +10,7 @@
   <BEWH.NurgleName>Nurgle</BEWH.NurgleName>
   <BEWH.SlaaneshName>Slaanesh</BEWH.SlaaneshName>
   <BEWH.UndividedName>Undivided</BEWH.UndividedName>
-  
+
   <BEWH.CannotRecruitLetter>Unbreakable Loyalty</BEWH.CannotRecruitLetter>
   <BEWH.CannotRecruitMessage>{1} tried to recruit {0}, but {0}'s unbreakable loyalty to their faction made them resist all attempts.\n\n{0} cannot be recruited.</BEWH.CannotRecruitMessage>
   <BEWH.CannotEnslaveMessage>{1} tried to enslave {0}, but {0}'s unbreakable loyalty to their faction made them resist all attempts.\n\n{0} cannot be enslaved.</BEWH.CannotEnslaveMessage>
@@ -19,5 +19,7 @@
 
   <BEWH.ChangeSecondaryColour>Change secondary colour</BEWH.ChangeSecondaryColour>
   <BEWH.ChangeSecondaryColourDesc>Changes the secondary colour on {0}.</BEWH.ChangeSecondaryColourDesc>
+
+  <BEWH.RankTab>Rank</BEWH.RankTab>
 
 </LanguageData>
