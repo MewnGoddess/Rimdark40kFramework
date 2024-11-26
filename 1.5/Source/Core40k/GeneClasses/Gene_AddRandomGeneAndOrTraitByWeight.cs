@@ -8,27 +8,28 @@ namespace Core40k
 {
     public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
     {
-        private static GeneDef chosenGene;
+        private static GeneDef chosenGene = null;
 
-        private static TraitDef chosenTrait;
-        private static int chosenTraitDegree;
+        private static TraitDef chosenTrait = null;
+        private static int chosenTraitDegree = 0;
 
         public override void PostAdd()
         {
             base.PostAdd();
-
+            
             SelectGeneToGive();
             SelectTraitToGive();
-
+            
             if (chosenGene != null)
             {
                 pawn.genes.AddGene(chosenGene, true);
             }
 
-            if (chosenTrait == null) return;
-            
-            var trait = new Trait(chosenTrait, chosenTraitDegree);
-            pawn.story.traits.GainTrait(trait);
+            if (chosenTrait != null)
+            {
+                var trait = new Trait(chosenTrait, chosenTraitDegree);
+                pawn.story.traits.GainTrait(trait);
+            }
         }
 
         public override void PostRemove()
@@ -43,12 +44,13 @@ namespace Core40k
                 }
             }
 
-            if (chosenTrait == null) return;
-            
-            var trait = pawn.story.traits.GetTrait(chosenTrait);
-            if (trait != null)
+            if (chosenTrait != null)
             {
-                pawn.story.traits.RemoveTrait(trait);
+                var trait = pawn.story.traits.GetTrait(chosenTrait);
+                if (trait != null)
+                {
+                    pawn.story.traits.RemoveTrait(trait);
+                }
             }
         }
 
@@ -58,15 +60,15 @@ namespace Core40k
 
             var random = new Random();
            
-            if (random.Next(0, 100) < defMod.chanceToGrantTrait)
+            if (defMod == null || random.Next(0, 100) > defMod.chanceToGrantTrait)
             {
                 return;
             }
 
             var weightedSelection = new WeightedSelection<Dictionary<TraitDef, int>>();
-            var possibleTraits = defMod.possibleTraitsToGive.Where(g => !pawn.story.traits.HasTrait(g.Key.Keys.First(), g.Key.Values.First()));
+            var possibleTraits = defMod.possibleTraitsToGive.Where(g => !pawn.story.traits.HasTrait(g.Key.Keys.First(), g.Key.Values.First())).ToList();
 
-            if (possibleTraits.EnumerableNullOrEmpty())
+            if (possibleTraits.NullOrEmpty())
             {
                 return;
             }
@@ -89,24 +91,23 @@ namespace Core40k
 
             var random = new Random();
 
-            if (random.Next(0, 100) < defMod.chanceToGrantGene)
+            if (defMod == null ||random.Next(0, 100) > defMod.chanceToGrantGene)
             {
                 return;
             }
-
+            
             var weightedSelection = new WeightedSelection<GeneDef>();
-            var possibleGenes = defMod.possibleGenesToGive.Where(g => !pawn.genes.HasActiveGene(g.Key));
-
-            if (possibleGenes.EnumerableNullOrEmpty())
+            var possibleGenes = defMod.possibleGenesToGive.Where(g => !pawn.genes.HasActiveGene(g.Key)).ToList();
+            if (possibleGenes.NullOrEmpty())
             {
                 return;
             }
-
+            
             foreach (var gene in possibleGenes)
             {
                 weightedSelection.AddEntry(gene.Key, gene.Value);
             }
-
+            
             chosenGene = weightedSelection.GetRandom();
         }
 

@@ -69,6 +69,7 @@
     <Compile Include="Comps\CompAbilityEffect_GiveHediffAndMentalBreak.cs" />
     <Compile Include="Comps\CompProperties_AbilityGiveHediffAndMental.cs" />
     <Compile Include="Comps\CompProperties_RankInfo.cs" />
+    <Compile Include="Comps\GameComponent_RankInfo.cs" />
     <Compile Include="Comps\HediffCompProperties_RemoveMentalStateOnHediffEnd.cs" />
     <Compile Include="Comps\Hediff_RemoveMentalStateOnHediffEnd.cs" />
     <Compile Include="Comps\Hediff_SendLetterAtSeverity.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Comps\CompProperties_ForceWeapon.cs" />
     <Compile Include="Comps\CompForceWeapon.cs" />
     <Compile Include="Comps\CompRankInfo.cs" />
+    <Compile Include="Core40kModSettings.cs" />
     <Compile Include="DefModExtensions\DefModExtension_AddRandomTraitByWeight.cs" />
     <Compile Include="DefModExtensions\DefModExtension_AddRandomGeneByWeight.cs" />
     <Compile Include="DefModExtensions\DefModExtension_BoostQualityCreatedByPawn.cs" />
@@ -90,10 +92,15 @@
     <Compile Include="HarmonyPatches\HarmonyPatch_ApparelColourTwoPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_DontPlaceProductPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_ColourTwoSelectableOnStylingStation.cs" />
+    <Compile Include="HarmonyPatches\HarmonyPatch_GetExplanationUnfinalizedFromRankPatch.cs" />
+    <Compile Include="HarmonyPatches\HarmonyPatch_GetValueUnfinalizedFromRankPatch.cs" />
+    <Compile Include="HarmonyPatches\HarmonyPatch_PopulateMutableStatsWithRankStatsPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_QualityCreatedBoostFromGenePatch.cs" />
+    <Compile Include="HarmonyPatches\HarmonyPatch_RankLimitResurrectionReAdd.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_SpecificInheritableArchiteGenes.cs" />
     <Compile Include="JobDriver\Dialog_PaintSecondaryColour.cs" />
     <Compile Include="Misc\ITab_RankSystem.cs" />
+    <Compile Include="Misc\TraitData.cs" />
     <Compile Include="PlaceWorkers\PlaceWorker_OnlyOnePerMap.cs" />
     <Compile Include="Recipes\Recipe_InstallImplantWithLevels.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_LostHeartSurvivalPatch.cs" />

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
 
-  <BEWH.ModSettingsNameCore>Warhammer 40k - Framework</BEWH.ModSettingsNameCore>
+  <BEWH.ModSettingsNameCore>RimDark 40k - Framework</BEWH.ModSettingsNameCore>
+  <BEWH.ModSettingsShowTabName>Always show Rank tab for player pawns. Will show even if no category or rank is available to the pawn.</BEWH.ModSettingsShowTabName>
 
-  <BEWH.CheckVEFPatches>Remember to check Vanilla Expanded Framework toggable patches for more settings!</BEWH.CheckVEFPatches>
+  <BEWH.CheckVEFPatches>Remember to check Vanilla Expanded Framework toggable patches for more settings for this mod!</BEWH.CheckVEFPatches>
 
   <BEWH.TzeentchName>Tzeentch</BEWH.TzeentchName>
   <BEWH.KhorneName>Khorne</BEWH.KhorneName>
@@ -20,6 +21,39 @@
   <BEWH.ChangeSecondaryColour>Change secondary colour</BEWH.ChangeSecondaryColour>
   <BEWH.ChangeSecondaryColourDesc>Changes the secondary colour on {0}.</BEWH.ChangeSecondaryColourDesc>
 
+  <!-- Rank stuff-->
   <BEWH.RankTab>Rank</BEWH.RankTab>
+
+  <BEWH.CategoryRequires>Category "{0}"" requires that pawn has {1}</BEWH.CategoryRequires>
+
+  <BEWH.CategoryRequiredGene>the {0} gene</BEWH.CategoryRequiredGene>
+  <BEWH.CategoryRequiredHediff>the {0} hediff</BEWH.CategoryRequiredHediff>
+  <BEWH.CategoryRequiredTrait>the {0} trait</BEWH.CategoryRequiredTrait>
+  <BEWH.And> and </BEWH.And>
+
+
+  <BEWH.NoRankSelected>No rank selected.</BEWH.NoRankSelected>
+  <BEWH.NoCategorySelected>No category selected.</BEWH.NoCategorySelected>
+
+  <BEWH.RankDescription>Description</BEWH.RankDescription>
+  <BEWH.RankRequirements>Requirements</BEWH.RankRequirements>
+  <BEWH.RankBonuses>Bonuses from rank</BEWH.RankBonuses>
+
+  <BEWH.None>None</BEWH.None>
+  <BEWH.Stats>Stats</BEWH.Stats>
+  <BEWH.Abilities>Abilities</BEWH.Abilities>
+
+  <BEWH.StatsReport_Rank>Relevant ranks</BEWH.StatsReport_Rank>
+
+  <BEWH.RequirementsSkills>All of the following skills</BEWH.RequirementsSkills>
+  <BEWH.RequirementsRanks>All of the following ranks</BEWH.RequirementsRanks>
+
+  <BEWH.RequirementsTraitAll>All of the following traits</BEWH.RequirementsTraitAll>
+  <BEWH.RequirementsTraitAtLeastOne>At least one of the following traits</BEWH.RequirementsTraitAtLeastOne>
+
+  <BEWH.RequirementsGeneAll>All of the following genes</BEWH.RequirementsGeneAll>
+  <BEWH.RequirementsGeneAtLeastOne>At least one of the following genes</BEWH.RequirementsGeneAtLeastOne>
+
+  <BEWH.RequirementsLimit>Only {0} pawns of this rank may exist at a time. Currently {1} exists.</BEWH.RequirementsLimit>
 
 </LanguageData>
