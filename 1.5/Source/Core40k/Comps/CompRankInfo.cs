@@ -14,13 +14,25 @@ namespace Core40k
         public List<RankDef> UnlockedRanks => unlockedRanks;
 
         private RankCategoryDef lastOpenedRankCategory = null;
+        
         public RankCategoryDef LastOpenedRankCategory => lastOpenedRankCategory;
+        
+        private Dictionary<RankDef, int> daysAsRank = new Dictionary<RankDef, int>();
+        
+        public Dictionary<RankDef, int> DaysAsRank => daysAsRank;
 
         public void UnlockRank(RankDef rank)
         {
-            if (!unlockedRanks.Contains(rank))
+            if (unlockedRanks.Contains(rank))
             {
-                unlockedRanks.Add(rank);
+                return;
+            }
+            
+            unlockedRanks.Add(rank);
+            
+            if (!daysAsRank.ContainsKey(rank))
+            {
+                daysAsRank.Add(rank, 0);
             }
         }
 
@@ -32,16 +44,41 @@ namespace Core40k
         public override void Notify_Killed(Map prevMap, DamageInfo? dinfo = null)
         {
             base.Notify_Killed(prevMap, dinfo);
-            DecreaseRankLimitCountIfnecessary();
+            DecreaseRankLimitCountIfNecessary();
         }
         
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
             base.PostDestroy(mode, previousMap);
-            DecreaseRankLimitCountIfnecessary();
+            DecreaseRankLimitCountIfNecessary();
+        }
+        
+        public override void CompTick()
+        {
+            base.CompTick();
+            if (!(parent is Pawn pawn))
+            {
+                return;
+            }
+
+            if (!pawn.IsHashIntervalTick(60000))
+            {
+                return;
+            }
+
+            IncreaseDaysAsRank();
         }
 
-        private void DecreaseRankLimitCountIfnecessary()
+        public void IncreaseDaysAsRank()
+        {
+            var daysAsRankTemp = daysAsRank.ToList();
+            foreach (var rank in daysAsRankTemp)
+            {
+                daysAsRank[rank.Key]++;
+            }
+        }
+
+        private void DecreaseRankLimitCountIfNecessary()
         {
             var gameComp = Current.Game.GetComponent<GameComponent_RankInfo>();
             foreach (var rank in UnlockedRanks.Where(rank => rank.colonyLimitOfRank.x > 0 || (rank.colonyLimitOfRank.x == 0 && rank.colonyLimitOfRank.y > 0)))
@@ -65,7 +102,18 @@ namespace Core40k
         {
             base.PostExposeData();
             Scribe_Collections.Look(ref unlockedRanks, "unlockedRanks", LookMode.Def);
+            Scribe_Collections.Look(ref daysAsRank, "daysAsRank");
             Scribe_Defs.Look(ref lastOpenedRankCategory, "lastOpenedRankCategory");
+
+            if (Scribe.mode != LoadSaveMode.PostLoadInit)
+            {
+                return;
+            }
+            
+            if (daysAsRank == null)
+            {
+                daysAsRank = new Dictionary<RankDef, int>();
+            }
         }
     }
 }

@@ -12,7 +12,9 @@ namespace Core40k
         
         public RankCategoryDef rankCategory;
 
-        public List<RankDef> rankRequirements = new List<RankDef>();
+        public List<RankData> rankRequirements = new List<RankData>();
+        
+        public List<RankDef> incompatibleRanks = new List<RankDef>();
 
         public List<Aptitude> requiredSkills = new List<Aptitude>();
         

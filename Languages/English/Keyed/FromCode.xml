@@ -22,7 +22,7 @@
   <BEWH.ChangeSecondaryColourDesc>Changes the secondary colour on {0}.</BEWH.ChangeSecondaryColourDesc>
 
   <!-- Rank stuff-->
-  <BEWH.RankTab>Rank</BEWH.RankTab>
+  <BEWH.RankTab>Ranks</BEWH.RankTab>
 
   <BEWH.CategoryRequires>Category "{0}"" requires that pawn has {1}</BEWH.CategoryRequires>
 
@@ -38,6 +38,7 @@
   <BEWH.RankDescription>Description</BEWH.RankDescription>
   <BEWH.RankRequirements>Requirements</BEWH.RankRequirements>
   <BEWH.RankBonuses>Bonuses from rank</BEWH.RankBonuses>
+  <BEWH.DaysSinceRankGiven>{0} days since rank was given</BEWH.DaysSinceRankGiven>
 
   <BEWH.None>None</BEWH.None>
   <BEWH.Stats>Stats</BEWH.Stats>
@@ -56,4 +57,9 @@
 
   <BEWH.RequirementsLimit>Only {0} pawns of this rank may exist at a time. Currently {1} exists.</BEWH.RequirementsLimit>
 
+  <BEWH.HaveBeenRankForDays>Must have been a {0} for at least {1} days</BEWH.HaveBeenRankForDays>
+  <BEWH.HaveAchievedRank>Must have achieved the rank of {0}</BEWH.HaveAchievedRank>
+
+   <BEWH.IncompatibleRank>Incompatible with the following ranks</BEWH.IncompatibleRank>
+  
 </LanguageData>

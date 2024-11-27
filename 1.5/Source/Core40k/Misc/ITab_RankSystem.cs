@@ -14,13 +14,13 @@ namespace Core40k
     [StaticConstructorOnStartup]
     public class ITab_RankSystem : ITab
     {
-        private RankDef currentlySelectedRank = null;
+        private RankInfoForTab currentlySelectedRank = null;
         
         private RankCategoryDef currentlySelectedRankCategory = null;
         
         private List<RankCategoryDef> availableCategories = new List<RankCategoryDef>();
         
-        private List<RankDef> availableRanksForCategory = new List<RankDef>();
+        private List<RankInfoForTab> availableRanksForCategory = new List<RankInfoForTab>();
 
         private Pawn pawn;
         
@@ -35,8 +35,13 @@ namespace Core40k
         const float rankIconRectSize = 40f;
         const float rankIconGapSize = 40f;
         const float rankPlacementMult = rankIconGapSize + rankIconRectSize;
+        const float rankIconMargin = 20f;
+
+        private static readonly Color requirementMetColour = Color.white;
+        private static readonly Color requirementNotMetColour = Color.red;
         
-        
+        private Vector2 scrollPosition;
+
         public override bool IsVisible
         {
             get
@@ -65,6 +70,10 @@ namespace Core40k
             pawn = (Pawn)Find.Selector.SingleSelectedThing;
             compRankInfo = pawn.GetComp<CompRankInfo>();
             rankPos.Clear();
+            if (gameCompRankInfo == null)
+            {
+                gameCompRankInfo = Current.Game.GetComponent<GameComponent_RankInfo>();
+            }
             UpdateRankCategoryList();
             if (compRankInfo.LastOpenedRankCategory != null)
             {
@@ -75,11 +84,7 @@ namespace Core40k
                 currentlySelectedRankCategory = availableCategories.Count > 0 ? availableCategories[0] : null;
             }
             GetRanksForCategory();
-            currentlySelectedRank = availableRanksForCategory.FirstOrFallback(rank => rank.defaultFirstRank, fallback: null);
-            if (gameCompRankInfo == null)
-            {
-                gameCompRankInfo = Current.Game.GetComponent<GameComponent_RankInfo>();
-            }
+            currentlySelectedRank = availableRanksForCategory.FirstOrFallback(rank => rank.rankDef.defaultFirstRank, fallback: null);
         }
 
         protected override void FillTab()   
@@ -140,16 +145,18 @@ namespace Core40k
                     }
                     list.Add(menuOption);
                 }
-                //Does not show properly for some reason
                 if (!list.NullOrEmpty())
                 {
                     Find.WindowStack.Add(new FloatMenu(list));
                 }
             }
             
-            TooltipHandler.TipRegion(categoryTextRect, currentlySelectedRankCategory.description.CapitalizeFirst());
+            var toolTip = currentlySelectedRankCategory != null ? currentlySelectedRankCategory.label.CapitalizeFirst() : "None";
+            TooltipHandler.TipRegion(categoryTextRect, toolTip);
 
             curY += 12f;
+
+            UpdateRanksForCategory();
             
             //Rank info
             var rectRankInfo = new Rect(rect2);
@@ -179,65 +186,81 @@ namespace Core40k
 
         private void FillRankTree(Rect rectRankTree)
         {
-            var yStart = rectRankTree.height / 2 + rankIconRectSize / 2;
-            var xStart = rectRankTree.xMin + 20f;
+            //this works
+            var viewRect = new Rect(rectRankTree);
+            viewRect.xMax *= 2;
+            viewRect.yMax *= 2;
+            viewRect.yMin *= 2;
             
-            //Find positions for ranks if they're not presents. Will only happend when category is switched
+            var yStart = viewRect.height / 2 + rankIconRectSize;
+            var xStart = viewRect.xMin + 20f;
+            
+            //try calculate needed size.
+            //Should be something like Biggest minus smallest for x and y. mult that by rankPlacementMult and add rankIconMargin*2 for both.
+            //that should give the height and width
+            
+            Widgets.BeginScrollView(rectRankTree, ref scrollPosition, viewRect);
+            Widgets.BeginGroup(viewRect);
+            
+            //Find positions for ranks if they're not presents. Will only happen when category is switched
             if (rankPos.NullOrEmpty())
             {
                 foreach (var rank in availableRanksForCategory)
                 {
-                    var rankRect = new Rect(rectRankTree)
+                    var rankRect = new Rect
                     {
                         width = rankIconRectSize,
                         height = rankIconRectSize,
-                        x = xStart + rank.displayPosition.x * rankPlacementMult,
-                        y = yStart + rank.displayPosition.y * rankPlacementMult,
+                        x = xStart + rank.rankDef.displayPosition.x * rankPlacementMult,
+                        y = yStart + rank.rankDef.displayPosition.y * rankPlacementMult,
                     };
 
-                    if (rank.displayPosition.x < 0)
+                    if (rank.rankDef.displayPosition.x < 0)
                     {
-                        Log.Error(rank.defName + " has display position with x < 0. Should be 0 or above");
+                        Log.Error(rank.rankDef.defName + " has display position with x < 0. Should be 0 or above");
                     }
-                
-                    rankPos.Add(rank, rankRect.position);
+
+                    if (!rankPos.ContainsKey(rank.rankDef))
+                    {
+                        rankPos.Add(rank.rankDef, rankRect.position);
+                    }
                 }
             }
 
             //Draws requirement lines
             foreach (var rank in availableRanksForCategory)
             {
-                if (rank.rankRequirements == null)
+                if (rank.rankDef.rankRequirements == null)
                 {
                     continue;
                 }
-                foreach (var rankReq in rank.rankRequirements)
+                foreach (var rankReq in rank.rankDef.rankRequirements)
                 {
-                    var startPos = new Vector2(rankPos[rank].x + rankIconRectSize/2, rankPos[rank].y + rankIconRectSize/2);
-                    var endPos = new Vector2(rankPos[rankReq].x + rankIconRectSize/2, rankPos[rankReq].y + rankIconRectSize/2);
-                    Widgets.DrawLine(startPos, endPos, compRankInfo.UnlockedRanks.Contains(rank) ? Color.white : Color.grey, 2f);
+                    var startPos = new Vector2(rankPos[rank.rankDef].x + rankIconRectSize/2, rankPos[rank.rankDef].y + rankIconRectSize/2);
+                    var endPos = new Vector2(rankPos[rankReq.rankDef].x + rankIconRectSize/2, rankPos[rankReq.rankDef].y + rankIconRectSize/2);
+                    Widgets.DrawLine(startPos, endPos, compRankInfo.UnlockedRanks.Contains(rank.rankDef) ? Color.white : Color.grey, 2f);
                 }
             }
             
             //Draws icons
             foreach (var rank in availableRanksForCategory)
             {
-                var rankRect = new Rect(rectRankTree)
+                var rankRect = new Rect
                 {
                     width = rankIconRectSize,
                     height = rankIconRectSize,
-                    x = xStart + rank.displayPosition.x * rankPlacementMult,
-                    y = yStart + rank.displayPosition.y * rankPlacementMult,
+                    x = xStart + rank.rankDef.displayPosition.x * rankPlacementMult,
+                    y = yStart + rank.rankDef.displayPosition.y * rankPlacementMult,
                 };
                 
-                if (MeetsRankRequirements(rank) && !AlreadyUnlocked(rank))
+                if (rank.requirementsMet && !AlreadyUnlocked(rank.rankDef))
                 {
                     Widgets.DrawStrongHighlight(rankRect.ExpandedBy(6f));
                 }
                 
-                DrawIcon(rankRect, rank);
+                DrawIcon(rankRect, rank.rankDef);
                 
-                if (!MeetsRankRequirements(rank) && !AlreadyUnlocked(rank))
+                if (!rank.requirementsMet && !AlreadyUnlocked(rank.rankDef))
                 {
                     Widgets.DrawRectFast(rankRect, new Color(0f, 0f, 0f, 0.6f));
                 }
@@ -247,8 +270,11 @@ namespace Core40k
                     currentlySelectedRank = rank;
                 }
 
-                TooltipHandler.TipRegion(rankRect, rank.label.CapitalizeFirst());
+                TooltipHandler.TipRegion(rankRect, rank.rankDef.label.CapitalizeFirst());
             }
+            
+            Widgets.EndGroup();
+            Widgets.EndScrollView();
         }
         
         private void FillRankInfo(Rect rect)
@@ -266,17 +292,25 @@ namespace Core40k
                 
                 //Name
                 listingRankInfo.Gap(5);
-                var rankLabel = currentlySelectedRank.label.CapitalizeFirst();
+                var rankLabel = currentlySelectedRank.rankDef.label.CapitalizeFirst();
                 listingRankInfo.Label(rankLabel);
                 
+                if (compRankInfo.DaysAsRank.TryGetValue(currentlySelectedRank.rankDef, out var daysSpentAs))
+                {
+                    listingRankInfo.Gap(5);
+                    Text.Font = GameFont.Small;
+                    listingRankInfo.Label("BEWH.DaysSinceRankGiven".Translate(daysSpentAs));
+                    Text.Font = GameFont.Medium;
+                }
+                
                 //Unlock button
-                if (MeetsRankRequirements(currentlySelectedRank) && !AlreadyUnlocked(currentlySelectedRank))
+                if (currentlySelectedRank.requirementsMet && !AlreadyUnlocked(currentlySelectedRank.rankDef))
                 {   
                     listingRankInfo.Gap();
                     listingRankInfo.Indent(rectRankInfo.width * 0.25f);
                     if (listingRankInfo.ButtonText("Unlock", widthPct: 0.5f))
                     {
-                        UnlockRank(currentlySelectedRank);
+                        UnlockRank(currentlySelectedRank.rankDef);
                     }
                     listingRankInfo.Outdent(rectRankInfo.width * 0.25f);
                 }
@@ -289,14 +323,14 @@ namespace Core40k
                 Text.Anchor = TextAnchor.UpperLeft;
                 listingRankInfo.Label("BEWH.RankDescription".Translate());
                 Text.Font = GameFont.Small;
-                listingRankInfo.Label(currentlySelectedRank.description);
+                listingRankInfo.Label(currentlySelectedRank.rankDef.description);
 
                 //Requirements
                 listingRankInfo.Gap();
                 Text.Font = GameFont.Medium;
                 listingRankInfo.Label("BEWH.RankRequirements".Translate());
                 Text.Font = GameFont.Small;
-                var requirementText = BuildRequirementString(currentlySelectedRank);
+                var requirementText = currentlySelectedRank.rankText;
                 listingRankInfo.Label(requirementText);
                 
                 //Given stats
@@ -304,7 +338,7 @@ namespace Core40k
                 Text.Font = GameFont.Medium;
                 listingRankInfo.Label("BEWH.RankBonuses".Translate());
                 Text.Font = GameFont.Small;
-                var rankBonusText = BuildRankBonusString(currentlySelectedRank);
+                var rankBonusText = BuildRankBonusString(currentlySelectedRank.rankDef);
                 listingRankInfo.Label(rankBonusText);
                 
                 //End
@@ -326,75 +360,55 @@ namespace Core40k
 
         private void GetRanksForCategory()
         {
-            availableRanksForCategory = DefDatabase<RankDef>.AllDefsListForReading.Where(rank => rank.rankCategory == currentlySelectedRankCategory).ToList();
+            var ranksForCategory = DefDatabase<RankDef>.AllDefsListForReading.Where(rank => rank.rankCategory == currentlySelectedRankCategory).ToList();
+
+            foreach (var rank in ranksForCategory)
+            {
+                var rankInfo = BuildRankInfoForCategory(rank);
+                availableRanksForCategory.Add(rankInfo);
+            }
         }
 
-        private string BuildRequirementString(RankDef rankDef)
+        private void UpdateRanksForCategory()
         {
-            var stringBuilder = new StringBuilder();
-            //var firstAppend = true;
-            //Skills
-            if (!rankDef.requiredSkills.NullOrEmpty())
+            foreach (var rank in availableRanksForCategory)
             {
-                stringBuilder.Append("\n");
-                stringBuilder.AppendLine("BEWH.RequirementsSkills".Translate());
-                foreach (var skill in rankDef.requiredSkills)
-                {
-                    stringBuilder.AppendLine("    " + skill.skill.label.CapitalizeFirst() + ": " + skill.level);
-                }
-            }
-            //Ranks
-            if (!rankDef.rankRequirements.NullOrEmpty())
-            {
-                stringBuilder.Append("\n");
-                stringBuilder.AppendLine("BEWH.RequirementsRanks".Translate());
-                foreach (var rank in rankDef.rankRequirements)
-                {
-                    stringBuilder.AppendLine("    " + rank.label.CapitalizeFirst());
-                }
-            }
-            //Traits all
-            if (!rankDef.requiredTraitsAll.NullOrEmpty())
-            {
-                stringBuilder.Append("\n");
-                stringBuilder.AppendLine("BEWH.RequirementsTraitAll".Translate());
-                foreach (var rank in rankDef.requiredTraitsAll)
-                {
-                    stringBuilder.AppendLine("    " + rank.traitDef.DataAtDegree(rank.degree).label.CapitalizeFirst());
-                }
-            }
-            //Traits one among
-            if (!rankDef.requiredTraitsOneAmong.NullOrEmpty())
-            {
-                stringBuilder.Append("\n");
-                stringBuilder.AppendLine("BEWH.RequirementsTraitAtLeastOne".Translate());
-                foreach (var rank in rankDef.requiredTraitsOneAmong)
-                {
-                    stringBuilder.AppendLine("    " + rank.traitDef.DataAtDegree(rank.degree).label.CapitalizeFirst());
-                }
-            }
-            //Genes all
-            if (!rankDef.requiredGenesAll.NullOrEmpty())
-            {
-                stringBuilder.Append("\n");
-                stringBuilder.AppendLine("BEWH.RequirementsGeneAll".Translate());
-                foreach (var rank in rankDef.requiredGenesAll)
-                {
-                    stringBuilder.AppendLine("    " + rank.label.CapitalizeFirst());
-                }
-            }
-            //Genes one among
-            if (!rankDef.requiredGenesOneAmong.NullOrEmpty())
-            {
-                stringBuilder.Append("\n");
-                stringBuilder.AppendLine("BEWH.RequirementsGeneAtLeastOne".Translate());
-                foreach (var rank in rankDef.requiredGenesOneAmong)
-                {
-                    stringBuilder.AppendLine("    " + rank.label.CapitalizeFirst());
-                }
+                var rankInfoForTab = rank;
+                UpdateRankInfoForCategory(ref rankInfoForTab);
             }
 
-            //Rank limits
+            if (currentlySelectedRank != null)
+            {
+                UpdateRankInfoForCategory(ref currentlySelectedRank);
+            }
+        }
+        
+        private RankInfoForTab BuildRankInfoForCategory(RankDef rankDef)
+        {
+            var res = RequirementMetAndText(rankDef);
+            
+            return new RankInfoForTab
+            {
+                rankDef = rankDef,
+                requirementsMet = res.requirementMet,
+                rankText = res.requirementText,
+            };
+        }
+
+        private void UpdateRankInfoForCategory(ref RankInfoForTab rankInfoForTab)
+        {
+            var res = RequirementMetAndText(rankInfoForTab.rankDef);
+
+            rankInfoForTab.requirementsMet = res.requirementMet;
+            rankInfoForTab.rankText = res.requirementText;
+        }
+
+        private (bool requirementMet, string requirementText) RequirementMetAndText(RankDef rankDef)
+        {
+            var stringBuilder = new StringBuilder();
+            
+            //Limit on rank amount
+            var rankLimitRequirementsMet = true;
             if (rankDef.colonyLimitOfRank.x > 0 || (rankDef.colonyLimitOfRank.x == 0 && rankDef.colonyLimitOfRank.y > 0))
             {
                 var playerPawnAmount = GetColonistForCounting();
@@ -407,21 +421,183 @@ namespace Core40k
                 {
                     currentAmount = gameCompRankInfo.rankLimits.TryGetValue(rankDef);
                 }
+
+                rankLimitRequirementsMet = allowedAmount > currentAmount;
+                
+                var requirementColour = rankLimitRequirementsMet ? requirementMetColour : requirementNotMetColour;
                 
                 stringBuilder.Append("\n");
-                stringBuilder.AppendLine("BEWH.RequirementsLimit".Translate(allowedAmount, currentAmount));
+                stringBuilder.AppendLine("BEWH.RequirementsLimit".Translate(allowedAmount, currentAmount).Colorize(requirementColour));
             }
             
-            var requirements = stringBuilder.ToString().TrimEnd('\r', '\n').TrimStart('\r', '\n');
-            if (requirements.NullOrEmpty())
+            //Skills
+            var skillRequirementsMet = true;
+            if (!rankDef.requiredSkills.NullOrEmpty())
             {
-                requirements = "    " + "BEWH.None".Translate();
+                stringBuilder.Append("\n");
+                stringBuilder.AppendLine("BEWH.RequirementsSkills".Translate());
+                foreach (var aptitude in rankDef.requiredSkills)
+                {
+                    var skillRequirementMet = pawn.skills.GetSkill(aptitude.skill).Level >= aptitude.level;
+                    if (!skillRequirementMet)
+                    {
+                        skillRequirementsMet = false;
+                    }
+                    var requirementColour = skillRequirementMet ? requirementMetColour : requirementNotMetColour;
+                    stringBuilder.AppendLine(("    " + aptitude.skill.label.CapitalizeFirst() + ": " + aptitude.level).Colorize(requirementColour));
+                }
             }
             
-            return requirements;
-        }
+            //Ranks
+            var rankRequirementsMet = true;
+            if (!rankDef.rankRequirements.NullOrEmpty())
+            {
+                stringBuilder.Append("\n");
+                stringBuilder.AppendLine("BEWH.RequirementsRanks".Translate());
+                foreach (var rank in rankDef.rankRequirements)
+                {
+                    var rankRequirementMet = compRankInfo.UnlockedRanks.Contains(rank.rankDef) &&
+                                                 compRankInfo.DaysAsRank[rank.rankDef] >= rank.daysAs;
+                    
+                    if (!rankRequirementMet)
+                    {
+                        rankRequirementsMet = false;
+                    }
+                    
+                    var requirementColour = rankRequirementMet ? requirementMetColour : requirementNotMetColour;
+                    
+                    if (rank.daysAs > 0)
+                    {
+                        stringBuilder.AppendLine(("    " + "BEWH.HaveBeenRankForDays".Translate(rank.rankDef.label.CapitalizeFirst(), rank.daysAs)).Colorize(requirementColour));
+                    }
+                    else
+                    {
+                        stringBuilder.AppendLine(("    " + "BEWH.HaveAchievedRank".Translate(rank.rankDef.label.CapitalizeFirst())).Colorize(requirementColour));
+                    }
+                    
+                }
+            }
+            
+            //Traits
+            //All
+            var traitsAllRequirementsMet = true;
+            if (!rankDef.requiredTraitsAll.NullOrEmpty())
+            {
+                stringBuilder.Append("\n");
+                stringBuilder.AppendLine("BEWH.RequirementsTraitAll".Translate());
+                foreach (var trait in rankDef.requiredTraitsAll)
+                {
+                    var traitsAllRequirementMet = pawn.story.traits.HasTrait(trait.traitDef, trait.degree);
+                    
+                    if (!traitsAllRequirementMet)
+                    {
+                        traitsAllRequirementsMet = false;
+                    }
+                    
+                    var requirementColour = traitsAllRequirementMet ? requirementMetColour : requirementNotMetColour;
+                    stringBuilder.AppendLine(("    " + trait.traitDef.DataAtDegree(trait.degree).label.CapitalizeFirst()).Colorize(requirementColour));
+                }
+            }
+            //One Among
+            var traitsAtLeastOneRequirementsMet = rankDef.requiredTraitsOneAmong.NullOrEmpty();
+            if (!rankDef.requiredTraitsOneAmong.NullOrEmpty())
+            {
+                stringBuilder.Append("\n");
+                stringBuilder.AppendLine("BEWH.RequirementsTraitAtLeastOne".Translate());
+                foreach (var trait in rankDef.requiredTraitsOneAmong)
+                {
+                    var traitsAtLeastOneRequirementMet = pawn.story.traits.HasTrait(trait.traitDef, trait.degree);
+                        
+                    if (traitsAtLeastOneRequirementMet)
+                    {
+                        traitsAtLeastOneRequirementsMet = true;
+                    }
+                    
+                    var requirementColour = traitsAtLeastOneRequirementMet ? requirementMetColour : requirementNotMetColour;
+                    
+                    stringBuilder.AppendLine(("    " + trait.traitDef.DataAtDegree(trait.degree).label.CapitalizeFirst()).Colorize(requirementColour));
+                }
+            }
+            
+            //Genes
+            var genesAllRequirementsMet = true;
+            var genesAtLeastOneRequirementsMet = rankDef.requiredGenesOneAmong.NullOrEmpty();
+            if (pawn.genes != null)
+            {
+                //All
+                if (!rankDef.requiredGenesAll.NullOrEmpty())
+                {
+                    stringBuilder.Append("\n");
+                    stringBuilder.AppendLine("BEWH.RequirementsGeneAll".Translate());
+                    foreach (var gene in rankDef.requiredGenesAll)
+                    {
+                        var genesAllRequirementMet = pawn.genes.HasActiveGene(gene);
+                        
+                        if (!genesAllRequirementMet)
+                        {
+                            genesAllRequirementsMet = false;
+                        }
+                        
+                        var requirementColour = genesAllRequirementMet ? requirementMetColour : requirementNotMetColour;
+                        
+                        stringBuilder.AppendLine(("    " + gene.label.CapitalizeFirst()).Colorize(requirementColour));
+                    }
+                }
+                //One Among
+                if (!rankDef.requiredGenesOneAmong.NullOrEmpty())
+                {
+                    stringBuilder.Append("\n");
+                    stringBuilder.AppendLine("BEWH.RequirementsGeneAtLeastOne".Translate());
+                    foreach (var gene in rankDef.requiredGenesOneAmong)
+                    {
+                        var genesAtLeastOneRequirementMet = pawn.genes.HasActiveGene(gene);
+                        
+                        if (genesAtLeastOneRequirementMet)
+                        {
+                            genesAtLeastOneRequirementsMet = true;
+                        }
+                    
+                        var requirementColour = genesAtLeastOneRequirementMet ? requirementMetColour : requirementNotMetColour;
+                        stringBuilder.AppendLine(("    " + gene.label.CapitalizeFirst()).Colorize(requirementColour));
+                    }
+                }
+            }
+            //Incompatible Ranks
+            var noIncompatibleRanks = true;
+            if (!rankDef.incompatibleRanks.NullOrEmpty())
+            {
+                stringBuilder.Append("\n");
+                stringBuilder.AppendLine("BEWH.IncompatibleRank".Translate());
+                foreach (var rank in rankDef.incompatibleRanks)
+                {
+                    var isIncompatibleRank = compRankInfo.UnlockedRanks.Contains(rank);
 
-        private string BuildRankBonusString(RankDef rankDef)
+                    if (isIncompatibleRank)
+                    {
+                        noIncompatibleRanks = false;
+                    }
+                    
+                    var requirementColour = !isIncompatibleRank ? requirementMetColour : requirementNotMetColour;
+                    
+                    stringBuilder.AppendLine(("    " + rank.label.CapitalizeFirst()).Colorize(requirementColour));
+                }
+            }
+            
+            var requirementText = stringBuilder.ToString().TrimEnd('\r', '\n').TrimStart('\r', '\n');
+            if (requirementText.NullOrEmpty())
+            {
+                requirementText = "    " + "BEWH.None".Translate();
+            }
+
+            var requirementsMet = skillRequirementsMet && rankRequirementsMet &&
+                                             rankLimitRequirementsMet && noIncompatibleRanks &&
+                                             traitsAllRequirementsMet && traitsAtLeastOneRequirementsMet &&
+                                             genesAllRequirementsMet && genesAtLeastOneRequirementsMet;
+            
+            return (requirementsMet, requirementText);
+        }
+        
+        private static string BuildRankBonusString(RankDef rankDef)
         {
             var statStringBuilder = new StringBuilder();
 
@@ -487,72 +663,6 @@ namespace Core40k
                 text2 = string.Format(stat.formatString, text2);
             }
             return text2;
-        }
-        
-        private bool MeetsRankRequirements(RankDef rankDef)
-        {
-            //Skills
-            var skillRequirementMet = true;
-            if (!rankDef.requiredSkills.NullOrEmpty())
-            {
-                skillRequirementMet = rankDef.requiredSkills.All(skill => pawn.skills.GetSkill(skill.skill).Level >= skill.level);
-            }
-            
-            //Ranks
-            var rankRequirementMet = true;
-            if (!rankDef.rankRequirements.NullOrEmpty())
-            {
-                rankRequirementMet = rankDef.rankRequirements.All(rank => compRankInfo.UnlockedRanks.Contains(rank));
-            }
-
-            //Traits
-            var traitsAllRequirementMet = true;
-            if (!rankDef.requiredTraitsAll.NullOrEmpty())
-            {
-                traitsAllRequirementMet = rankDef.requiredTraitsAll.All(trait => pawn.story.traits.HasTrait(trait.traitDef, trait.degree));
-            }
-            var traitsAtLeastOneRequirementMet = true;
-            if (!rankDef.requiredTraitsOneAmong.NullOrEmpty())
-            {
-                traitsAtLeastOneRequirementMet = rankDef.requiredTraitsOneAmong.Any(trait => pawn.story.traits.HasTrait(trait.traitDef, trait.degree));
-            }
-
-            //Genes
-            var genesAllRequirementMet = true;
-            var genesAtLeastOneRequirementMet = true;
-            if (pawn.genes != null)
-            {
-                if (!rankDef.requiredGenesAll.NullOrEmpty())
-                {
-                    genesAllRequirementMet = rankDef.requiredGenesAll.All(gene => pawn.genes.HasActiveGene(gene));
-                }
-                if (!rankDef.requiredGenesOneAmong.NullOrEmpty())
-                {
-                    genesAtLeastOneRequirementMet = rankDef.requiredGenesOneAmong.Any(gene => pawn.genes.HasActiveGene(gene));
-                }
-            }
-            
-            //Limit on rank amount
-            var rankLimitRequirementMet = true;
-            if (rankDef.colonyLimitOfRank.x > 0 || (rankDef.colonyLimitOfRank.x == 0 && rankDef.colonyLimitOfRank.y > 0))
-            {
-                var playerPawnAmount = GetColonistForCounting();
-                
-                var allowedAmount = rankDef.colonyLimitOfRank.y > 0 ? rankDef.colonyLimitOfRank.x + Math.Floor(playerPawnAmount/rankDef.colonyLimitOfRank.y) : rankDef.colonyLimitOfRank.x;
-                
-                var currentAmount = 0;
-
-                if (gameCompRankInfo.rankLimits.ContainsKey(rankDef))
-                {
-                    currentAmount = gameCompRankInfo.rankLimits.TryGetValue(rankDef);
-                }
-
-                rankLimitRequirementMet = allowedAmount > currentAmount;
-                
-                //And whenever they die, harmony patch to remove if needed. patch both them dying and resurrection utility.
-            }
-            
-            return skillRequirementMet && rankRequirementMet && traitsAllRequirementMet && traitsAtLeastOneRequirementMet && genesAllRequirementMet && genesAtLeastOneRequirementMet && rankLimitRequirementMet;
         }
 
         private static int GetColonistForCounting()
@@ -669,5 +779,12 @@ namespace Core40k
                 gameCompRankInfo.rankLimits.Add(rank, 1);
             }
         }
+    }
+
+    internal class RankInfoForTab
+    {
+        public RankDef rankDef;
+        public bool requirementsMet;
+        public string rankText;
     }
 }

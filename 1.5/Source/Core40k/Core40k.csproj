@@ -99,7 +99,9 @@
     <Compile Include="HarmonyPatches\HarmonyPatch_RankLimitResurrectionReAdd.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_SpecificInheritableArchiteGenes.cs" />
     <Compile Include="JobDriver\Dialog_PaintSecondaryColour.cs" />
+    <Compile Include="Misc\DebugActions.cs" />
     <Compile Include="Misc\ITab_RankSystem.cs" />
+    <Compile Include="Misc\RankData.cs" />
     <Compile Include="Misc\TraitData.cs" />
     <Compile Include="PlaceWorkers\PlaceWorker_OnlyOnePerMap.cs" />
     <Compile Include="Recipes\Recipe_InstallImplantWithLevels.cs" />
