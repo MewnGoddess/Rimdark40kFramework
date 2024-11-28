@@ -43,6 +43,7 @@
   <BEWH.None>None</BEWH.None>
   <BEWH.Stats>Stats</BEWH.Stats>
   <BEWH.Abilities>Abilities</BEWH.Abilities>
+  <BEWH.UnlockRank>Unlock rank</BEWH.UnlockRank>
 
   <BEWH.StatsReport_Rank>Relevant ranks</BEWH.StatsReport_Rank>
 
@@ -60,6 +61,6 @@
   <BEWH.HaveBeenRankForDays>Must have been a {0} for at least {1} days</BEWH.HaveBeenRankForDays>
   <BEWH.HaveAchievedRank>Must have achieved the rank of {0}</BEWH.HaveAchievedRank>
 
-   <BEWH.IncompatibleRank>Incompatible with the following ranks</BEWH.IncompatibleRank>
-  
+  <BEWH.IncompatibleRank>Incompatible with the following ranks</BEWH.IncompatibleRank>
+
 </LanguageData>

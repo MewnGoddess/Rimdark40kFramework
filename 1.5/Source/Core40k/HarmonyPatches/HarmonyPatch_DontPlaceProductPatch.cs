@@ -11,7 +11,10 @@ namespace Core40k
     {
         public static bool Prefix(ref IEnumerable<Thing> __result, RecipeDef recipeDef)
         {
-            if (!recipeDef.HasModExtension<DefModExtension_DontPlaceProduct>()) return true;
+            if (!recipeDef.HasModExtension<DefModExtension_DontPlaceProduct>())
+            {
+                return true;
+            }
             
             __result = new List<Thing>();
             return false;

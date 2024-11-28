@@ -36,6 +36,13 @@ namespace Core40k
             }
         }
 
+        public void ResetRanks()
+        {
+            DecreaseRankLimitCountIfNecessary();
+            unlockedRanks.Clear();
+            daysAsRank.Clear();
+        }
+        
         public void OpenedRankCategory(RankCategoryDef rankCategory)
         {
             lastOpenedRankCategory = rankCategory;

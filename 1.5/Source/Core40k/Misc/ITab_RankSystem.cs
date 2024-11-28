@@ -38,7 +38,7 @@ namespace Core40k
         const float rankIconMargin = 20f;
 
         private static readonly Color requirementMetColour = Color.white;
-        private static readonly Color requirementNotMetColour = Color.red;
+        private static readonly Color requirementNotMetColour = new Color(1f, 0.0f, 0.0f, 0.8f);
         
         private Vector2 scrollPosition;
 
@@ -113,12 +113,32 @@ namespace Core40k
                 categoryText = currentlySelectedRankCategory.label.CapitalizeFirst();
             }
             
-            var categoryTextRect = new Rect(rect2);
-            categoryTextRect.height = 30f;
+            var categoryTextRect = new Rect(rect2)
+            {
+                height = 30f
+            };
             categoryTextRect.width /= 2;
             categoryTextRect.x += categoryTextRect.width/2;
 
             curY += categoryTextRect.height;
+            
+            if (Prefs.DevMode)
+            {
+                var debugResetRankRect = new Rect(rect2)
+                {
+                    height = 20f,
+                    width = 80f,
+                };
+                debugResetRankRect.y += 5f;
+                debugResetRankRect.x += 10f;
+                
+                Text.Font = GameFont.Small;
+                if (Widgets.ButtonText(debugResetRankRect,"dev: reset"))
+                {
+                    compRankInfo.ResetRanks();
+                }
+                Text.Font = GameFont.Medium;
+            }
 
             if (Widgets.ButtonText(categoryTextRect,categoryText))
             {
@@ -184,23 +204,48 @@ namespace Core40k
             Text.Anchor = anchor;
         }
 
+        private (float yMax, float yMin, float xMax) GetYAndX()
+        {
+            var ranks = availableRanksForCategory.Select(rank => rank.rankDef).ToList();
+            
+            var xMax = ranks.MaxBy(rank => rank.displayPosition.x);
+            var yMax = ranks.MaxBy(rank => rank.displayPosition.y);
+            var yMin = ranks.MinBy(rank => rank.displayPosition.y);
+                
+            return (yMax.displayPosition.y, yMin.displayPosition.y, xMax.displayPosition.x);
+        }
+        
         private void FillRankTree(Rect rectRankTree)
         {
-            //this works
             var viewRect = new Rect(rectRankTree);
-            viewRect.xMax *= 2;
-            viewRect.yMax *= 2;
-            viewRect.yMin *= 2;
+
+            viewRect.ContractedBy(20f);
             
             var yStart = viewRect.height / 2 + rankIconRectSize;
-            var xStart = viewRect.xMin + 20f;
+            var xStart = rectRankTree.xMin + rankIconMargin;
             
-            //try calculate needed size.
-            //Should be something like Biggest minus smallest for x and y. mult that by rankPlacementMult and add rankIconMargin*2 for both.
-            //that should give the height and width
+            var (yMax, yMin, xMax) = GetYAndX();
             
-            Widgets.BeginScrollView(rectRankTree, ref scrollPosition, viewRect);
-            Widgets.BeginGroup(viewRect);
+            var newYMin = Math.Abs(yMin * rankIconRectSize) + (Math.Abs(yMin * rankIconGapSize) - rankIconGapSize/2) + rankIconMargin;
+            var newYMax = Math.Abs(yMax * rankIconRectSize) + (Math.Abs(yMax * rankIconGapSize) - rankIconGapSize/2) + rankIconMargin;
+            var newXMax = Math.Abs(xMax * rankPlacementMult) + rankIconMargin * 2;
+
+            if (newYMin - yStart > 0)
+            {
+                viewRect.yMin -= Math.Abs(newYMin);
+            }
+            if (newYMax - yStart > 0)
+            {
+                viewRect.yMax += Math.Abs(newYMax);
+            }
+            if (newXMax > viewRect.width)
+            {
+                viewRect.width = newXMax;
+            }
+            
+            Widgets.BeginScrollView(rectRankTree.ContractedBy(10f), ref scrollPosition, viewRect);
+            
+            Widgets.DrawRectFast(viewRect, new Color(0f, 0f, 0f, 0.3f));
             
             //Find positions for ranks if they're not presents. Will only happen when category is switched
             if (rankPos.NullOrEmpty())
@@ -273,7 +318,6 @@ namespace Core40k
                 TooltipHandler.TipRegion(rankRect, rank.rankDef.label.CapitalizeFirst());
             }
             
-            Widgets.EndGroup();
             Widgets.EndScrollView();
         }
         
@@ -308,7 +352,7 @@ namespace Core40k
                 {   
                     listingRankInfo.Gap();
                     listingRankInfo.Indent(rectRankInfo.width * 0.25f);
-                    if (listingRankInfo.ButtonText("Unlock", widthPct: 0.5f))
+                    if (listingRankInfo.ButtonText("BEWH.UnlockRank".Translate(), widthPct: 0.5f))
                     {
                         UnlockRank(currentlySelectedRank.rankDef);
                     }
