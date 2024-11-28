@@ -313,11 +313,6 @@ namespace Core40k
                     Widgets.DrawStrongHighlight(rankRect.ExpandedBy(4f));
                 }
                 
-                if (AlreadyUnlocked(rank.rankDef))
-                {
-                    Widgets.DrawStrongHighlight(rankRect.ExpandedBy(3f), Color.green);
-                }
-                
                 DrawIcon(rankRect, rank.rankDef.RankIcon, true);
                 
                 if (!rank.requirementsMet && !AlreadyUnlocked(rank.rankDef))
