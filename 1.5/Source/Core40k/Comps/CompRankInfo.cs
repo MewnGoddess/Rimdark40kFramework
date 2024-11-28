@@ -42,6 +42,11 @@ namespace Core40k
             unlockedRanks.Clear();
             daysAsRank.Clear();
         }
+
+        public bool HasRank(RankDef rankDef)
+        {
+            return unlockedRanks.Contains(rankDef);
+        }
         
         public void OpenedRankCategory(RankCategoryDef rankCategory)
         {

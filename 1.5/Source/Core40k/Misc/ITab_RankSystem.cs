@@ -32,6 +32,8 @@ namespace Core40k
         
         private GameComponent_RankInfo gameCompRankInfo;
         
+        private static readonly CachedTexture LockedIcon = new CachedTexture("UI/Misc/LockedIcon");
+        
         const float rankIconRectSize = 40f;
         const float rankIconGapSize = 40f;
         const float rankPlacementMult = rankIconGapSize + rankIconRectSize;
@@ -283,7 +285,15 @@ namespace Core40k
                 {
                     var startPos = new Vector2(rankPos[rank.rankDef].x + rankIconRectSize/2, rankPos[rank.rankDef].y + rankIconRectSize/2);
                     var endPos = new Vector2(rankPos[rankReq.rankDef].x + rankIconRectSize/2, rankPos[rankReq.rankDef].y + rankIconRectSize/2);
-                    Widgets.DrawLine(startPos, endPos, compRankInfo.UnlockedRanks.Contains(rank.rankDef) ? Color.white : Color.grey, 2f);
+                    
+                    var rankUnlocked = compRankInfo.HasRank(rankReq.rankDef) ? Color.white : Color.grey;
+
+                    if (currentlySelectedRank.rankDef == rankReq.rankDef)
+                    {
+                        rankUnlocked = new Color(0.0f, 0.5f, 1f, 0.9f);
+                    }
+                    
+                    Widgets.DrawLine(startPos, endPos, rankUnlocked, 2f);
                 }
             }
             
@@ -297,17 +307,30 @@ namespace Core40k
                     x = xStart + rank.rankDef.displayPosition.x * rankPlacementMult,
                     y = yStart + rank.rankDef.displayPosition.y * rankPlacementMult,
                 };
-                
-                if (rank.requirementsMet && !AlreadyUnlocked(rank.rankDef))
+
+                if (rank == currentlySelectedRank)
                 {
-                    Widgets.DrawStrongHighlight(rankRect.ExpandedBy(6f));
+                    Widgets.DrawStrongHighlight(rankRect.ExpandedBy(4f));
                 }
                 
-                DrawIcon(rankRect, rank.rankDef);
+                if (AlreadyUnlocked(rank.rankDef))
+                {
+                    Widgets.DrawStrongHighlight(rankRect.ExpandedBy(3f), Color.green);
+                }
+                
+                DrawIcon(rankRect, rank.rankDef.RankIcon, true);
                 
                 if (!rank.requirementsMet && !AlreadyUnlocked(rank.rankDef))
                 {
                     Widgets.DrawRectFast(rankRect, new Color(0f, 0f, 0f, 0.6f));
+                }
+                
+                if (rank.rankDef.incompatibleRanks != null)
+                {
+                    if (Enumerable.Any(rank.rankDef.incompatibleRanks, rankDef => !compRankInfo.HasRank(rank.rankDef)))
+                    {
+                        DrawIcon(rankRect, LockedIcon.Texture, false);
+                    }
                 }
                 
                 if (Widgets.ButtonInvisible(rankRect))
@@ -500,7 +523,7 @@ namespace Core40k
                 stringBuilder.AppendLine("BEWH.RequirementsRanks".Translate());
                 foreach (var rank in rankDef.rankRequirements)
                 {
-                    var rankRequirementMet = compRankInfo.UnlockedRanks.Contains(rank.rankDef) &&
+                    var rankRequirementMet = compRankInfo.HasRank(rank.rankDef) &&
                                                  compRankInfo.DaysAsRank[rank.rankDef] >= rank.daysAs;
                     
                     if (!rankRequirementMet)
@@ -614,7 +637,7 @@ namespace Core40k
                 stringBuilder.AppendLine("BEWH.IncompatibleRank".Translate());
                 foreach (var rank in rankDef.incompatibleRanks)
                 {
-                    var isIncompatibleRank = compRankInfo.UnlockedRanks.Contains(rank);
+                    var isIncompatibleRank = compRankInfo.HasRank(rank);
 
                     if (isIncompatibleRank)
                     {
@@ -778,16 +801,19 @@ namespace Core40k
         
         private bool AlreadyUnlocked(RankDef rankDef)
         {
-            return compRankInfo != null && compRankInfo.UnlockedRanks.Contains(rankDef);
+            return compRankInfo != null && compRankInfo.HasRank(rankDef);
         }
 
-        private static void DrawIcon(Rect inRect, RankDef rankDef)
+        private static void DrawIcon(Rect inRect, Texture2D icon, bool drawBg)
         {
             var color = Mouse.IsOver(inRect) ? GenUI.MouseoverColor : Color.white;
             GUI.color = color;
-            GUI.DrawTexture(inRect, Command.BGTexShrunk);
+            if (drawBg)
+            {
+                GUI.DrawTexture(inRect, Command.BGTexShrunk);
+            }
             GUI.color = Color.white;
-            GUI.DrawTexture(inRect, rankDef.RankIcon);
+            GUI.DrawTexture(inRect, icon);
         }
         
         private void UnlockRank(RankDef rank)
