@@ -20,5 +20,16 @@ namespace Core40k
 
             p.GetComp<CompRankInfo>().IncreaseDaysAsRank();
         }
+        
+        [DebugAction("RimDark", null, false, false, true, false, 0, false, actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap, displayPriority = -1000)]
+        private static void ResetRank(Pawn p)
+        {
+            if (!p.HasComp<CompRankInfo>())
+            {
+                return;
+            }
+
+            p.GetComp<CompRankInfo>().ResetRanks();
+        }
     }
 }

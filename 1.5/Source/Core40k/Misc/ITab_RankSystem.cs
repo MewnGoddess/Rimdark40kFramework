@@ -489,7 +489,31 @@ namespace Core40k
                 var requirementColour = rankLimitRequirementsMet ? requirementMetColour : requirementNotMetColour;
                 
                 stringBuilder.Append("\n");
-                stringBuilder.AppendLine("BEWH.RequirementsLimit".Translate(allowedAmount, currentAmount).Colorize(requirementColour));
+                if (rankDef.colonyLimitOfRank.y == 0)
+                {
+                    stringBuilder.AppendLine("BEWH.RequirementsLimitOnlyOneEver".Translate(allowedAmount, currentAmount).Colorize(requirementColour));
+                }
+                else
+                {
+                    var limitIncreaseAmount = rankDef.colonyLimitOfRank.y;
+                    var text = " " + limitIncreaseAmount;
+                    switch (limitIncreaseAmount)
+                    {
+                        case 1:
+                            text = "";
+                            break;
+                        case 2:
+                            text += "nd";
+                            break;
+                        case 3:
+                            text += "rd";
+                            break;
+                        default:
+                            text += "th";
+                            break;
+                    }
+                    stringBuilder.AppendLine("BEWH.RequirementsLimit".Translate(allowedAmount, currentAmount, text).Colorize(requirementColour));
+                }
             }
             
             //Skills
