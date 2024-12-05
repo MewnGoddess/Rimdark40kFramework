@@ -20,7 +20,7 @@ namespace Core40k
     {
         public static void Postfix(Pawn pawn, SkillDef relevantSkill, ref QualityCategory __result )
         {
-            if (pawn.genes != null)
+            if (pawn.genes == null)
             {
                 return;
             }

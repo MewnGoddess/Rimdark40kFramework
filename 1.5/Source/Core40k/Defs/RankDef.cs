@@ -41,6 +41,8 @@ namespace Core40k
         public Vector2 displayPosition;
 
         public bool defaultFirstRank = false;
+
+        public int rankTier = 0;
         
         [Unsaved]
         private Texture2D rankIcon;
