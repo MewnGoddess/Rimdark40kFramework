@@ -65,4 +65,12 @@
 
   <BEWH.IncompatibleRank>Incompatible with the following ranks</BEWH.IncompatibleRank>
 
+  <BEWH.DoesNotHaveRank>{0} incapable of obtaining ranks</BEWH.DoesNotHaveRank>
+
+  <BEWH.NoUnlockedRanks>{0} does not have any ranks</BEWH.NoUnlockedRanks>
+
+  <BEWH.NoUnlockedRanksOfCategory>{0} does not have any ranks of category {1}</BEWH.NoUnlockedRanksOfCategory>
+
+  <BEWH.RankTooHigh>{0} rank is too high to reset</BEWH.RankTooHigh>
+
 </LanguageData>

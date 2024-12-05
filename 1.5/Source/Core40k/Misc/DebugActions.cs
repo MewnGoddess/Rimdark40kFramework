@@ -29,7 +29,7 @@ namespace Core40k
                 return;
             }
 
-            p.GetComp<CompRankInfo>().ResetRanks();
+            p.GetComp<CompRankInfo>().ResetRanks(null);
         }
     }
 }

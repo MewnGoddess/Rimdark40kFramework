@@ -137,7 +137,7 @@ namespace Core40k
                 Text.Font = GameFont.Small;
                 if (Widgets.ButtonText(debugResetRankRect,"dev: reset"))
                 {
-                    compRankInfo.ResetRanks();
+                    compRankInfo.ResetRanks(currentlySelectedRankCategory);
                 }
                 Text.Font = GameFont.Medium;
             }

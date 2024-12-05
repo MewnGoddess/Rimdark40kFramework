@@ -68,8 +68,10 @@
     <Compile Include="Abilities\Ability_MapWideHediff.cs" />
     <Compile Include="Comps\ApparelColourTwo.cs" />
     <Compile Include="Comps\CompAbilityEffect_GiveHediffAndMentalBreak.cs" />
+    <Compile Include="Comps\CompAbilityEffect_ResetRanks.cs" />
     <Compile Include="Comps\CompProperties_AbilityGiveHediffAndMental.cs" />
     <Compile Include="Comps\CompProperties_RankInfo.cs" />
+    <Compile Include="Comps\CompProperties_ResetRanks.cs" />
     <Compile Include="Comps\GameComponent_RankInfo.cs" />
     <Compile Include="Comps\HediffCompProperties_RemoveMentalStateOnHediffEnd.cs" />
     <Compile Include="Comps\Hediff_RemoveMentalStateOnHediffEnd.cs" />

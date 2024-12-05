@@ -36,11 +36,32 @@ namespace Core40k
             }
         }
 
-        public void ResetRanks()
+        public int HighestRank()
+        {
+            return unlockedRanks.MaxBy(rank => rank.rankTier).rankTier;
+        }
+
+        public bool HasRankOfCategory(RankCategoryDef rankCategoryDef)
+        {
+            return unlockedRanks.Any(rank => rank.rankCategory == rankCategoryDef);
+        }
+
+        public void ResetRanks(RankCategoryDef rankCategoryDef)
         {
             DecreaseRankLimitCountIfNecessary();
-            unlockedRanks.Clear();
-            daysAsRank.Clear();
+            if (rankCategoryDef != null)
+            {
+                foreach (var rankDef in unlockedRanks.ToList().Where(rankDef => rankDef.rankCategory == rankCategoryDef))
+                {
+                    unlockedRanks.Remove(rankDef);
+                    daysAsRank.Remove(rankDef);
+                }
+            }
+            else
+            {
+                unlockedRanks.Clear();
+                daysAsRank.Clear();  
+            }
         }
 
         public bool HasRank(RankDef rankDef)
