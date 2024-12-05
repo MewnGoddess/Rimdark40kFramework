@@ -63,6 +63,9 @@
         </apparel>
         <tradeTags Inherit="False" />
         <thingSetMakerTags Inherit="False" />
+        <smeltable>false</smeltable>
+        <burnableByRecipe>true</burnableByRecipe>
+        <tradeability>None</tradeability>
     </ThingDef>
 
 
@@ -119,6 +122,9 @@
         </apparel>
         <tradeTags Inherit="False" />
         <thingSetMakerTags Inherit="False" />
+        <smeltable>false</smeltable>
+        <burnableByRecipe>true</burnableByRecipe>
+        <tradeability>None</tradeability>
     </ThingDef>
 
 </Defs>
