@@ -5,7 +5,7 @@ using Verse;
 
 namespace Core40k
 {
-    public class CompAbilityEffect_ResetRanks : CompAbilityEffect_GiveHediff
+    public class CompAbilityEffect_ResetRanks : CompAbilityEffect
     {
         public CompProperties_ResetRanks Props => (CompProperties_ResetRanks)props;
 
@@ -33,8 +33,14 @@ namespace Core40k
             {
                 return false;
             }
+
+            var canDemoteTier = Props.canDemoteToTierInclusive;
+            if (Props.ownRankAsTier)
+            {
+                canDemoteTier = parent.pawn.GetComp<CompRankInfo>().HighestRank();
+            }
             
-            return target.Pawn.GetComp<CompRankInfo>().HighestRank() < Props.canDemoteToTierInclusive;
+            return target.Pawn.GetComp<CompRankInfo>().HighestRank() <= canDemoteTier;
         }
         
         public override string ExtraLabelMouseAttachment(LocalTargetInfo target)
@@ -53,8 +59,14 @@ namespace Core40k
             {
                 return "BEWH.NoUnlockedRanksOfCategory".Translate(target.Pawn, Props.rankCategoryDef);
             }
+            
+            var canDemoteTier = Props.canDemoteToTierInclusive;
+            if (Props.ownRankAsTier)
+            {
+                canDemoteTier = parent.pawn.GetComp<CompRankInfo>().HighestRank();
+            }
 
-            if (target.Pawn.GetComp<CompRankInfo>().HighestRank() > Props.canDemoteToTierInclusive)
+            if (target.Pawn.GetComp<CompRankInfo>().HighestRank() > canDemoteTier)
             {
                 return "BEWH.RankTooHigh".Translate(target.Pawn);
             }
