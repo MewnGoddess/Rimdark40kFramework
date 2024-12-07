@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Verse;
+using VFECore.Abilities;
 
 
 namespace Core40k
@@ -27,12 +28,79 @@ namespace Core40k
             {
                 return;
             }
+
+            if (!(parent is Pawn pawn))
+            {
+                return;
+            }
             
             unlockedRanks.Add(rank);
             
             if (!daysAsRank.ContainsKey(rank))
             {
                 daysAsRank.Add(rank, 0);
+            }
+            
+            if (rank.givesAbilities != null)
+            {
+                foreach (var ability in rank.givesAbilities)
+                {
+                    pawn.abilities.GainAbility(ability);
+                }
+            }
+            
+            if (rank.givesVFEAbilities != null)
+            {
+                var comp = pawn.GetComp<CompAbilities>();
+                if (comp != null)
+                {
+                    foreach (var ability in rank.givesVFEAbilities)
+                    {
+                        comp.GiveAbility(ability);
+                    }
+                }
+            }
+            
+            var gameCompRankInfo = Current.Game.GetComponent<GameComponent_RankInfo>();
+
+            if (gameCompRankInfo.rankLimits.ContainsKey(rank))
+            {
+                gameCompRankInfo.rankLimits[rank] += 1;
+            }
+            else
+            {
+                gameCompRankInfo.rankLimits.Add(rank, 1);
+            }
+        }
+
+        public void RemoveRank(RankDef rankDef)
+        {
+            unlockedRanks.Remove(rankDef);
+            daysAsRank.Remove(rankDef);
+            
+            if (!(parent is Pawn pawn))
+            {
+                return;
+            }
+            
+            if (rankDef.givesAbilities != null)
+            {
+                foreach (var ability in rankDef.givesAbilities)
+                {
+                    pawn.abilities.RemoveAbility(ability);
+                }
+            }
+            
+            if (rankDef.givesVFEAbilities != null)
+            {
+                var comp = pawn.GetComp<CompAbilities>();
+                if (comp != null)
+                {
+                    foreach (var ability in rankDef.givesVFEAbilities)
+                    {
+                        comp.LearnedAbilities.RemoveWhere(learnedAbility => learnedAbility.def == ability);
+                    }
+                }
             }
         }
 
@@ -53,14 +121,15 @@ namespace Core40k
             {
                 foreach (var rankDef in unlockedRanks.ToList().Where(rankDef => rankDef.rankCategory == rankCategoryDef))
                 {
-                    unlockedRanks.Remove(rankDef);
-                    daysAsRank.Remove(rankDef);
+                    RemoveRank(rankDef);
                 }
             }
             else
             {
-                unlockedRanks.Clear();
-                daysAsRank.Clear();  
+                foreach (var rankDef in unlockedRanks)
+                {
+                    RemoveRank(rankDef);
+                }
             }
         }
 

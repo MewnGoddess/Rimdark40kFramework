@@ -126,18 +126,33 @@ namespace Core40k
             
             if (Prefs.DevMode)
             {
-                var debugResetRankRect = new Rect(rect2)
+                const float width = 80f;
+                const float padding = 30f;
+                var debugResetRankRect = new Rect(categoryTextRect)
                 {
-                    height = 20f,
-                    width = 80f,
+                    width = width,
                 };
-                debugResetRankRect.y += 5f;
-                debugResetRankRect.x += 10f;
+                debugResetRankRect.height += 10f;
+                debugResetRankRect.y += -5f;
+                debugResetRankRect.x -= debugResetRankRect.width + padding;
+                
+                var debugUnlockRankRect = new Rect(categoryTextRect)
+                {
+                    width = width,
+                };
+                debugUnlockRankRect.height += 10f;
+                debugUnlockRankRect.y += -5f;
+                debugUnlockRankRect.x += categoryTextRect.width + padding;
                 
                 Text.Font = GameFont.Small;
-                if (Widgets.ButtonText(debugResetRankRect,"dev: reset"))
+                if (Widgets.ButtonText(debugResetRankRect,"dev:\nreset ranks"))
                 {
                     compRankInfo.ResetRanks(currentlySelectedRankCategory);
+                }
+                
+                if (Widgets.ButtonText(debugUnlockRankRect,"dev:\nunlock rank"))
+                {
+                    compRankInfo.UnlockRank(currentlySelectedRank.rankDef);
                 }
                 Text.Font = GameFont.Medium;
             }
@@ -838,35 +853,6 @@ namespace Core40k
         private void UnlockRank(RankDef rank)
         {
             compRankInfo.UnlockRank(rank);
-            if (rank.givesAbilities != null)
-            {
-                foreach (var ability in rank.givesAbilities)
-                {
-                    pawn.abilities.GainAbility(ability);
-                }
-            }
-            
-            if (rank.givesVFEAbilities != null)
-            {
-                var comp = pawn.GetComp<CompAbilities>();
-                if (comp != null)
-                {
-                    foreach (var ability in rank.givesVFEAbilities)
-                    {
-                        comp.GiveAbility(ability);
-                    }
-                    
-                }
-            }
-
-            if (gameCompRankInfo.rankLimits.ContainsKey(rank))
-            {
-                gameCompRankInfo.rankLimits[rank] += 1;
-            }
-            else
-            {
-                gameCompRankInfo.rankLimits.Add(rank, 1);
-            }
         }
     }
 
