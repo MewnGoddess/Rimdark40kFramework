@@ -74,4 +74,7 @@
 
   <BEWH.RankTooHigh>{0} rank is too high to reset</BEWH.RankTooHigh>
 
+  <BEWH.PawnDoesNotHaveRequiredGene>{0} does not have the {1} gene</BEWH.PawnDoesNotHaveRequiredGene>
+
+
 </LanguageData>
