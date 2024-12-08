@@ -36,6 +36,8 @@ namespace Core40k
         
         public List<VFECore.Abilities.AbilityDef> givesVFEAbilities = new List<VFECore.Abilities.AbilityDef>();
         
+        public List<string> customEffectDescriptions = new List<string>();
+        
         public Vector2 colonyLimitOfRank = new Vector2(-1, -1);
         
         public Vector2 displayPosition;

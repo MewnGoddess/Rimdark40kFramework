@@ -330,14 +330,15 @@ namespace Core40k
                 
                 DrawIcon(rankRect, rank.rankDef.RankIcon, true);
                 
-                if (!rank.requirementsMet && !AlreadyUnlocked(rank.rankDef))
+                if (!AlreadyUnlocked(rank.rankDef))
                 {
-                    Widgets.DrawRectFast(rankRect, new Color(0f, 0f, 0f, 0.6f));
+                    var colour = rank.requirementsMet ? new Color(0f, 0f, 0f, 0.55f) : new Color(0f, 0f, 0f, 0.9f);
+                    Widgets.DrawRectFast(rankRect, colour);
                 }
                 
                 if (rank.rankDef.incompatibleRanks != null)
                 {
-                    if (Enumerable.Any(rank.rankDef.incompatibleRanks, rankDef => !compRankInfo.HasRank(rank.rankDef)))
+                    if (Enumerable.Any(rank.rankDef.incompatibleRanks, rankDef => compRankInfo.HasRank(rankDef)))
                     {
                         DrawIcon(rankRect, LockedIcon.Texture, false);
                     }
@@ -394,6 +395,8 @@ namespace Core40k
                 
                 listingRankInfo.GapLine(1f);
                 listingRankInfo.Indent(rectRankInfo.width * 0.02f);
+                
+                
                 
                 //Description
                 listingRankInfo.Gap();
@@ -706,7 +709,6 @@ namespace Core40k
             {
                 statStringBuilder.AppendLine("    " + statOffset.stat.label.CapitalizeFirst() + ": " + ValueToString(statOffset.stat, statOffset.value, finalized: false, ToStringNumberSense.Offset));
             }
-            
             foreach (var statFactor in rankDef.statFactors)
             {
                 statStringBuilder.AppendLine("    " + statFactor.stat.label.CapitalizeFirst() + ": " + ValueToString(statFactor.stat, statFactor.value, finalized: false, ToStringNumberSense.Factor));
@@ -718,13 +720,13 @@ namespace Core40k
                 statBonuses = "BEWH.Stats".Translate() + "\n" + statBonuses;
             }
             
+            
             var abilityStringBuilder = new StringBuilder();
             
             foreach (var ability in rankDef.givesAbilities)
             {
                 abilityStringBuilder.AppendLine("    " + ability.label.CapitalizeFirst());
             }
-            
             foreach (var abilityVfe in rankDef.givesVFEAbilities)
             {
                 abilityStringBuilder.AppendLine("    " + abilityVfe.label.CapitalizeFirst());
@@ -736,8 +738,22 @@ namespace Core40k
             {
                 abilityBonuses = "BEWH.Abilities".Translate() + "\n" + abilityBonuses;
             }
+            
+            
+            var customEffectStringBuilder = new StringBuilder();
 
-            var result = statBonuses + "\n" + abilityBonuses;
+            foreach (var customEffect in rankDef.customEffectDescriptions)
+            {
+                customEffectStringBuilder.Append("    " + customEffect.CapitalizeFirst());
+            }
+
+            var customEffects = customEffectStringBuilder.ToString();
+            if (!customEffects.NullOrEmpty())
+            {
+                customEffects = "BEWH.OtherEffects".Translate() + "\n" + customEffects;
+            }
+
+            var result = statBonuses + "\n" + abilityBonuses + "\n" + customEffects;
             
             if (statBonuses.NullOrEmpty() && abilityBonuses.NullOrEmpty())
             {

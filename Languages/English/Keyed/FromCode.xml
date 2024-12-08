@@ -43,6 +43,7 @@
   <BEWH.None>None</BEWH.None>
   <BEWH.Stats>Stats</BEWH.Stats>
   <BEWH.Abilities>Abilities</BEWH.Abilities>
+  <BEWH.OtherEffects>Other Effects</BEWH.OtherEffects>
   <BEWH.UnlockRank>Unlock rank</BEWH.UnlockRank>
 
   <BEWH.StatsReport_Rank>Relevant ranks</BEWH.StatsReport_Rank>
@@ -57,7 +58,7 @@
   <BEWH.RequirementsGeneAtLeastOne>At least one of the following genes</BEWH.RequirementsGeneAtLeastOne>
 
   <!-- Every{2} colonist from below text is on purpose and should stay as so-->
-  <BEWH.RequirementsLimit>Only {0} may have this rank at a time. Every{2} colonist will increase this limit by 1. Currently {1} exists.</BEWH.RequirementsLimit>
+  <BEWH.RequirementsLimit>Only {0} may have this rank at a time. \nEvery{2} colonist will increase this limit by 1. Currently {1} exists.</BEWH.RequirementsLimit>
   <BEWH.RequirementsLimitOnlyOneEver>Only {0} may ever have this rank. Currently {1} exists.</BEWH.RequirementsLimitOnlyOneEver>
 
   <BEWH.HaveBeenRankForDays>Must have been a {0} for at least {1} days</BEWH.HaveBeenRankForDays>
