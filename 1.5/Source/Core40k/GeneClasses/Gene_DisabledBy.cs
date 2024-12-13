@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Verse;
 
-namespace Genes40k
+namespace Core40k
 {
     public class Gene_DisabledBy : Gene
     {
