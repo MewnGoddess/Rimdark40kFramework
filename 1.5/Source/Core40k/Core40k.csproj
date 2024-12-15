@@ -82,6 +82,7 @@
     <Compile Include="Comps\CompProperties_ForceWeapon.cs" />
     <Compile Include="Comps\CompForceWeapon.cs" />
     <Compile Include="Core40kModSettings.cs" />
+    <Compile Include="DamageWorkers\DamageWorker_Holy.cs" />
     <Compile Include="DefModExtensions\DefModExtension_AddRandomTraitByWeight.cs" />
     <Compile Include="DefModExtensions\DefModExtension_AddRandomGeneByWeight.cs" />
     <Compile Include="DefModExtensions\DefModExtension_BoostQualityCreatedByPawn.cs" />
@@ -133,7 +134,7 @@
     <Compile Include="DefModExtensions\DefModExtension_Geneseed.cs" />
     <Compile Include="DefModExtensions\DefModExtension_UntradeablePawn.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_NoSlavesPatch.cs" />
-    <Compile Include="DamageWorkers\WarpFlameDamageWorker.cs" />
+    <Compile Include="DamageWorkers\DamageWorker_WarpFlame.cs" />
     <Compile Include="Core40kMod.cs" />
     <Compile Include="Core40kDefOf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -36,7 +36,10 @@ namespace Core40k
                 }
             }
 
-            if (!victim.Destroyed || map == null || pawn != null) return damageResult;
+            if (!victim.Destroyed || map == null || pawn != null)
+            {
+                return damageResult;
+            }
             
             foreach (var item in victim.OccupiedRect())
             {
