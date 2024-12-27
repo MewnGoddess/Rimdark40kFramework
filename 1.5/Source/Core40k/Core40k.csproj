@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0ColourPicker">
+      <HintPath>..\..\Assemblies\0ColourPicker.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="0Harmony">
       <HintPath>..\..\..\..\..\..\..\workshop\content\294100\2009463077\Current\Assemblies\0Harmony.dll</HintPath>
       <Private>False</Private>
@@ -54,10 +58,12 @@
     <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="VFECore">
       <HintPath>..\..\..\..\..\..\..\workshop\content\294100\2023507013\1.4\Assemblies\VFECore.dll</HintPath>
@@ -66,7 +72,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abilities\Ability_MapWideHediff.cs" />
-    <Compile Include="Comps\ApparelColourTwo.cs" />
     <Compile Include="Comps\CompAbilityEffect_GiveHediffAndMentalBreak.cs" />
     <Compile Include="Comps\CompAbilityEffect_MustHaveGeneTraitOrHediff.cs" />
     <Compile Include="Comps\CompAbilityEffect_ResetRanks.cs" />
@@ -103,7 +108,8 @@
     <Compile Include="HarmonyPatches\HarmonyPatch_QualityCreatedBoostFromGenePatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_RankLimitResurrectionReAdd.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_SpecificInheritableArchiteGenes.cs" />
-    <Compile Include="JobDriver\Dialog_PaintSecondaryColour.cs" />
+    <Compile Include="JobDriver\JobDriver_OpenStylingStationDialogForSecondColour.cs" />
+    <Compile Include="Misc\ApparelColourTwo.cs" />
     <Compile Include="Misc\DebugActions.cs" />
     <Compile Include="Misc\TraitData.cs" />
     <Compile Include="PlaceWorkers\PlaceWorker_OnlyOnePerMap.cs" />

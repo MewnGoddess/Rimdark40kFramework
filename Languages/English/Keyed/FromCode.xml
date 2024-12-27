@@ -18,8 +18,10 @@
 
   <BEWH.OnlyOneBuildingAllowedPerMap>You may only place one {0} per map.</BEWH.OnlyOneBuildingAllowedPerMap>
 
-  <BEWH.ChangeSecondaryColour>Change secondary colour</BEWH.ChangeSecondaryColour>
-  <BEWH.ChangeSecondaryColourDesc>Changes the secondary colour on {0}.</BEWH.ChangeSecondaryColourDesc>
+  <BEWH.ChangeSecondaryColour>Change both colours</BEWH.ChangeSecondaryColour>
+  <BEWH.ChangeSecondaryColourDesc>Changes both colours of apparel on {0}.</BEWH.ChangeSecondaryColourDesc>
+  <BEWH.PrimaryColor>Primary</BEWH.PrimaryColor>
+  <BEWH.SecondaryColor>Secondary</BEWH.SecondaryColor>
 
   <!-- Rank stuff-->
   <BEWH.RankTab>Ranks</BEWH.RankTab>

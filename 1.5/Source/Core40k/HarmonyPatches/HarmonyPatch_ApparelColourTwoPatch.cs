@@ -13,10 +13,11 @@ namespace Core40k
             if (!(apparel is ApparelColourTwo)) return true;
             
             __result = TryGetGraphicApparel(apparel, bodyType, ref rec);
+            
             return false;
         }
 
-        public static bool TryGetGraphicApparel(Apparel apparel, BodyTypeDef bodyType, ref ApparelGraphicRecord rec)
+        private static bool TryGetGraphicApparel(Apparel apparel, BodyTypeDef bodyType, ref ApparelGraphicRecord rec)
         {
             if (bodyType == null)
             {

@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using RimWorld;
 using System.Collections.Generic;
-using System.Linq;
 using Verse;
 using Verse.AI;
 
@@ -17,7 +16,10 @@ namespace Core40k
                 yield return floatMenu;
             }
 
-            if (!selPawn.apparel.WornApparel.Any(a => a is ApparelColourTwo)) yield break;
+            if (!selPawn.apparel.WornApparel.Any(a => a is ApparelColourTwo))
+            {
+                yield break;
+            }
             
             var secondColourChangeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.ChangeSecondaryColour".Translate().CapitalizeFirst(), delegate
             {

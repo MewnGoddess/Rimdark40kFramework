@@ -2,60 +2,55 @@
 using UnityEngine;
 using Verse;
 
-
 namespace Core40k
 {
     [StaticConstructorOnStartup]
     public class ApparelColourTwo : Apparel
     {
-        private Color originalColor = Color.black;
-
+        private Color drawColorOne = Color.white;
+        
+        private Color originalColorOne = Color.white;
+        
         private Color drawColorTwo = Color.red;
 
-        private Color drawColorOne = Color.white;
-
-        private Color drawColorTwoToSet = Color.red;
+        private Color originalColorTwo = Color.red;
 
         public override Color DrawColor
         {
-            get
+            get => drawColorOne;
+            set
             {
-                var comp = GetComp<CompColorable>();
-                if (comp != null && comp.Active)
-                {
-                    return comp.Color;
-                }
-                return drawColorOne;
+                drawColorOne = value;
+                Notify_ColorChanged();
             }
         }
 
         public override Color DrawColorTwo => drawColorTwo;
 
-        public Color DrawColorTwoTemp => drawColorTwoToSet;
-
-        public void SetOriginalColor(Color color)
+        public virtual void SetOriginalColor()
         {
-            originalColor = color;
+            originalColorOne = drawColorOne;
+            originalColorTwo = drawColorTwo;
         }
 
-        public void SetSecondaryColor(Color color)
+        public virtual void SetSecondaryColor(Color color)
         {
             drawColorTwo = color;
-            drawColorTwoToSet = color;
             Notify_ColorChanged();
         }
 
-        public void ResetSecondaryColor()
+        public virtual void ResetColors()
         {
-            drawColorTwo = originalColor;
+            drawColorOne = originalColorOne;
+            drawColorTwo = originalColorTwo;
             Notify_ColorChanged();
         }
 
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look(ref originalColor, "originalColor", Color.black);
-            Scribe_Values.Look(ref drawColorTwoToSet, "drawColorTwoToSet", Color.red);
+            Scribe_Values.Look(ref originalColorOne, "originalColorOne", Color.black);
+            Scribe_Values.Look(ref originalColorTwo, "originalColorTwo", Color.red);
             Scribe_Values.Look(ref drawColorTwo, "drawColorTwo", Color.red);
             Scribe_Values.Look(ref drawColorOne, "drawColorOne", Color.white);
 

@@ -1,6 +1,7 @@
 ﻿using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
+using ColourPicker;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
@@ -11,8 +12,6 @@ namespace Core40k
     public class Dialog_PaintSecondaryColour : Window
     {
         private Pawn pawn;
-
-        private Thing stylingStation;
 
         private bool showHeadgear;
 
@@ -67,15 +66,14 @@ namespace Core40k
         public Dialog_PaintSecondaryColour()
         { }
 
-        public Dialog_PaintSecondaryColour(Pawn pawn, Thing stylingStation)
+        public Dialog_PaintSecondaryColour(Pawn pawn)
         {
             this.pawn = pawn;
-            this.stylingStation = stylingStation;
             showClothes = true;
             showHeadgear = true;
             foreach (var item in pawn.apparel.WornApparel.Where(a => a is ApparelColourTwo).Cast<ApparelColourTwo>())
             {
-                item.SetOriginalColor(item.DrawColorTwo);
+                item.SetOriginalColor();
             }
         }
 
@@ -98,44 +96,6 @@ namespace Core40k
             rect3.yMax -= ButSize.y + 4f;
             DrawApparelColor(rect3);
             DrawBottomButtons(inRect);
-
-        }
-
-        private void ColorSelecterExtraOnGUI(Color color, Rect boxRect)
-        {
-            Texture2D texture2D = null;
-            TaggedString taggedString = null;
-            var flag = Mouse.IsOver(boxRect);
-            var story = pawn.story;
-            if (story?.favoriteColor != null && color.IndistinguishableFrom(pawn.story.favoriteColor.Value))
-            {
-                texture2D = FavoriteColorTex;
-                if (flag)
-                {
-                    taggedString = "FavoriteColorPickerTip".Translate(pawn.Named("PAWN"));
-                }
-            }
-            else if (pawn.Ideo != null && !Find.IdeoManager.classicMode && color.IndistinguishableFrom(pawn.Ideo.ApparelColor))
-            {
-                texture2D = IdeoColorTex;
-                if (flag)
-                {
-                    taggedString = "IdeoColorPickerTip".Translate(pawn.Named("PAWN"));
-                }
-            }
-            if (texture2D != null)
-            {
-                Rect position = boxRect.ContractedBy(4f);
-                GUI.color = Color.black.ToTransparent(0.2f);
-                GUI.DrawTexture(new Rect(position.x + 2f, position.y + 2f, position.width, position.height), texture2D);
-                GUI.color = Color.white.ToTransparent(0.8f);
-                GUI.DrawTexture(position, texture2D);
-                GUI.color = Color.white;
-            }
-            if (!taggedString.NullOrEmpty())
-            {
-                TooltipHandler.TipRegion(boxRect, taggedString);
-            }
         }
 
         private void DrawPawn(Rect rect)
@@ -164,39 +124,57 @@ namespace Core40k
             foreach (var item in apparelColourTwos)
             {
                 var value = item.DrawColorTwo;
-                var rect2 = new Rect(rect.x, curY, viewRect.width, 92f);
-                curY += rect2.height + 10f;
+                var nameRect = new Rect(rect.x, curY, viewRect.width, 30f);
+                nameRect.width /= 2;
+                nameRect.x += nameRect.width / 2;
+                Widgets.DrawMenuSection(nameRect);
+                Text.Anchor = TextAnchor.MiddleCenter;
+                Widgets.Label(nameRect, item.Label);
+                Text.Anchor = TextAnchor.UpperLeft;
+                curY += nameRect.height + 3f;
+                var itemRect = new Rect(rect.x, curY, viewRect.width, 92f);
+                curY += itemRect.height;
+                
                 if (!pawn.apparel.IsLocked(item) || DevMode)
                 {
-                    Widgets.ColorSelector(rect2, ref value, AllColors, out var _, null, 22, 2, ColorSelecterExtraOnGUI);
-                    var num2 = rect2.x;
-                    if (pawn.Ideo != null && !Find.IdeoManager.classicMode)
+                    var colorOneRect = new Rect(itemRect);
+                    colorOneRect.width /= 2;
+                    colorOneRect.x = itemRect.xMin + 1f;
+                    Widgets.DrawMenuSection(colorOneRect.ContractedBy(-1));
+                    Widgets.DrawRectFast(colorOneRect, item.DrawColor);
+                    Text.Anchor = TextAnchor.MiddleCenter;
+                    Widgets.Label(colorOneRect, "BEWH.PrimaryColor".Translate());
+                    Text.Anchor = TextAnchor.UpperLeft;
+                    if (Widgets.ButtonInvisible(colorOneRect))
                     {
-                        rect2 = new Rect(num2, curY, 200f, 24f);
-                        if (Widgets.ButtonText(rect2, "SetIdeoColor".Translate()))
+                        Find.WindowStack.Add( new Dialog_ColourPicker( item.DrawColor, ( newColour ) =>
                         {
-                            value = pawn.Ideo.ApparelColor;
-                            SoundDefOf.Tick_Low.PlayOneShotOnCamera();
-                        }
-                        num2 += 210f;
+                            item.DrawColor = newColour;
+                        } ) );
                     }
-                    var story = pawn.story;
-                    if (story != null && story.favoriteColor.HasValue)
+                    
+                    
+                    var colorTwoRect = new Rect(itemRect);
+                    colorTwoRect.width /= 2;
+                    colorTwoRect.x = itemRect.xMax - colorTwoRect.width - 1f;
+                    Widgets.DrawMenuSection(colorTwoRect.ContractedBy(-1));
+                    Widgets.DrawRectFast(colorTwoRect, item.DrawColorTwo);
+                    Text.Anchor = TextAnchor.MiddleCenter;
+                    Widgets.Label(colorTwoRect, "BEWH.SecondaryColor".Translate());
+                    Text.Anchor = TextAnchor.UpperLeft;
+                    if (Widgets.ButtonInvisible(colorTwoRect))
                     {
-                        rect2 = new Rect(num2, curY, 200f, 24f);
-                        if (Widgets.ButtonText(rect2, "SetFavoriteColor".Translate()))
+                        Find.WindowStack.Add( new Dialog_ColourPicker( item.DrawColor, ( newColour ) =>
                         {
-                            value = pawn.story.favoriteColor.Value;
-                            SoundDefOf.Tick_Low.PlayOneShotOnCamera();
-                        }
+                            item.SetSecondaryColor(newColour);
+                        } ) );
                     }
-                    item.SetSecondaryColor(value);
                 }
                 else
                 {
-                    Widgets.ColorSelectorIcon(new Rect(rect2.x, rect2.y, 88f, 88f), item.def.uiIcon, value);
+                    Widgets.ColorSelectorIcon(new Rect(itemRect.x, itemRect.y, 88f, 88f), item.def.uiIcon, value);
                     Text.Anchor = TextAnchor.MiddleLeft;
-                    var rect3 = rect2;
+                    var rect3 = itemRect;
                     rect3.x += 100f;
                     Widgets.Label(rect3, ((string)"ApparelLockedCannotRecolor".Translate(pawn.Named("PAWN"), item.Named("APPAREL"))).Colorize(ColorLibrary.RedReadable));
                     Text.Anchor = TextAnchor.UpperLeft;
@@ -225,6 +203,7 @@ namespace Core40k
             if (Widgets.ButtonText(new Rect(inRect.xMax - ButSize.x, inRect.yMax - ButSize.y, ButSize.x, ButSize.y), "Accept".Translate()))
             {
                 ApplyApparelColors();
+                Close();
             }
         }
 
@@ -234,16 +213,16 @@ namespace Core40k
             {
                 Reset();
             }
-            base.Close();
+            base.Close(doCloseSound);
         }
 
         private void Reset(bool resetColors = true)
         {
             if (resetColors)
             {
-                foreach (ApparelColourTwo item in pawn.apparel.WornApparel.Where(a => a is ApparelColourTwo).Cast<ApparelColourTwo>())
+                foreach (var item in pawn.apparel.WornApparel.Where(a => a is ApparelColourTwo).Cast<ApparelColourTwo>())
                 {
-                    item.ResetSecondaryColor();
+                    item.ResetColors();
                 }
             }
             pawn.Drawer.renderer.SetAllGraphicsDirty();
@@ -251,12 +230,11 @@ namespace Core40k
 
         private void ApplyApparelColors()
         {
-            foreach (ApparelColourTwo item in pawn.apparel.WornApparel.Where(a => a is ApparelColourTwo).Cast<ApparelColourTwo>())
+            foreach (var item in pawn.apparel.WornApparel.Where(a => a is ApparelColourTwo).Cast<ApparelColourTwo>())
             {
-                item.SetSecondaryColor(item.DrawColorTwoTemp);
                 item.Notify_ColorChanged();
+                item.SetOriginalColor();
             }
-            base.Close();
         }
     }
 }
