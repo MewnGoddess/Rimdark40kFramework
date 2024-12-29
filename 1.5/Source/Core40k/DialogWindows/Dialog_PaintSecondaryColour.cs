@@ -123,7 +123,7 @@ namespace Core40k
             var apparelColourTwos = pawn.apparel.WornApparel.Where(a => a is ApparelColourTwo).Cast<ApparelColourTwo>();
             foreach (var item in apparelColourTwos)
             {
-                var value = item.DrawColorTwo;
+                //Item name
                 var nameRect = new Rect(rect.x, curY, viewRect.width, 30f);
                 nameRect.width /= 2;
                 nameRect.x += nameRect.width / 2;
@@ -131,12 +131,35 @@ namespace Core40k
                 Text.Anchor = TextAnchor.MiddleCenter;
                 Widgets.Label(nameRect, item.Label);
                 Text.Anchor = TextAnchor.UpperLeft;
+                
+                var selectPresetRect = new Rect(rect.x, curY, viewRect.width, 30f);
+                selectPresetRect.width /= 5;
+                selectPresetRect.x = nameRect.xMax + nameRect.width/20;
+                //check if mankind is present. IF SO add the colours from it to the presets available to the player.
+                //Also make a gamecomponent that keeps track of player presets.
+                //Append first mandking presets, then own presets to selectable list
+                //If somehow possible show small snippet of colours of the preset before it is chosen
+                if (ModsConfig.IsActive(Core40kUtils.MankindsFinestPackageId))
+                {
+                    
+                }
+
+                Widgets.ButtonText(selectPresetRect, "SelectPreset");
+                
+                
+                var savePresetRect = new Rect(rect.x, curY, viewRect.width, 30f);
+                savePresetRect.width /= 5;
+                savePresetRect.x = nameRect.xMin - savePresetRect.width - nameRect.width/20;
+                
+                Widgets.ButtonText(savePresetRect, "SavePreset");
+                
                 curY += nameRect.height + 3f;
                 var itemRect = new Rect(rect.x, curY, viewRect.width, 92f);
                 curY += itemRect.height;
                 
                 if (!pawn.apparel.IsLocked(item) || DevMode)
                 {
+                    //Primary Color
                     var colorOneRect = new Rect(itemRect);
                     colorOneRect.width /= 2;
                     colorOneRect.x = itemRect.xMin + 1f;
@@ -153,7 +176,7 @@ namespace Core40k
                         } ) );
                     }
                     
-                    
+                    //Secondary Color
                     var colorTwoRect = new Rect(itemRect);
                     colorTwoRect.width /= 2;
                     colorTwoRect.x = itemRect.xMax - colorTwoRect.width - 1f;
@@ -172,7 +195,6 @@ namespace Core40k
                 }
                 else
                 {
-                    Widgets.ColorSelectorIcon(new Rect(itemRect.x, itemRect.y, 88f, 88f), item.def.uiIcon, value);
                     Text.Anchor = TextAnchor.MiddleLeft;
                     var rect3 = itemRect;
                     rect3.x += 100f;

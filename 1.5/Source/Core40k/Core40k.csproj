@@ -87,6 +87,7 @@
     <Compile Include="Comps\CompProperties_ForceWeapon.cs" />
     <Compile Include="Comps\CompForceWeapon.cs" />
     <Compile Include="Core40kModSettings.cs" />
+    <Compile Include="Core40kUtils.cs" />
     <Compile Include="DamageWorkers\DamageWorker_Holy.cs" />
     <Compile Include="DefModExtensions\DefModExtension_AddRandomTraitByWeight.cs" />
     <Compile Include="DefModExtensions\DefModExtension_AddRandomGeneByWeight.cs" />
