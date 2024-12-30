@@ -77,9 +77,7 @@
     <Compile Include="Comps\CompAbilityEffect_ResetRanks.cs" />
     <Compile Include="Comps\CompProperties_AbilityGiveHediffAndMental.cs" />
     <Compile Include="Comps\CompProperties_MustHaveGeneTraitOrHediff.cs" />
-    <Compile Include="Comps\CompProperties_RankInfo.cs" />
     <Compile Include="Comps\CompProperties_ResetRanks.cs" />
-    <Compile Include="Comps\GameComponent_RankInfo.cs" />
     <Compile Include="Comps\GameComponent_SavedPresets.cs" />
     <Compile Include="Comps\HediffCompProperties_RemoveMentalStateOnHediffEnd.cs" />
     <Compile Include="Comps\Hediff_RemoveMentalStateOnHediffEnd.cs" />
@@ -118,7 +116,9 @@
     <Compile Include="Misc\DebugActions.cs" />
     <Compile Include="Misc\TraitData.cs" />
     <Compile Include="PlaceWorkers\PlaceWorker_OnlyOnePerMap.cs" />
+    <Compile Include="Rank\CompProperties_RankInfo.cs" />
     <Compile Include="Rank\CompRankInfo.cs" />
+    <Compile Include="Rank\GameComponent_RankInfo.cs" />
     <Compile Include="Rank\ITab_RankSystem.cs" />
     <Compile Include="Rank\RankCategoryDef.cs" />
     <Compile Include="Rank\RankData.cs" />

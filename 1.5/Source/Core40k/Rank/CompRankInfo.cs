@@ -168,16 +168,21 @@ namespace Core40k
                 return;
             }
 
-            IncreaseDaysAsRank();
+            IncreaseDaysForAllRank();
         }
 
-        public void IncreaseDaysAsRank()
+        public void IncreaseDaysForAllRank()
         {
             var daysAsRankTemp = daysAsRank.ToList();
             foreach (var rank in daysAsRankTemp)
             {
                 daysAsRank[rank.Key]++;
             }
+        }
+        
+        public void IncreaseDaysAsRank(RankDef rankDef)
+        {
+            daysAsRank[rankDef]++;
         }
 
         private void DecreaseRankLimitCountIfNecessary()

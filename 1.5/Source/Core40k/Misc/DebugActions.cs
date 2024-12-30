@@ -18,7 +18,7 @@ namespace Core40k
                 return;
             }
 
-            p.GetComp<CompRankInfo>().IncreaseDaysAsRank();
+            p.GetComp<CompRankInfo>().IncreaseDaysForAllRank();
         }
         
         [DebugAction("RimDark", null, false, false, true, false, 0, false, actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap, displayPriority = -1000)]
