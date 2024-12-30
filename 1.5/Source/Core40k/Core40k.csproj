@@ -80,6 +80,7 @@
     <Compile Include="Comps\CompProperties_RankInfo.cs" />
     <Compile Include="Comps\CompProperties_ResetRanks.cs" />
     <Compile Include="Comps\GameComponent_RankInfo.cs" />
+    <Compile Include="Comps\GameComponent_SavedPresets.cs" />
     <Compile Include="Comps\HediffCompProperties_RemoveMentalStateOnHediffEnd.cs" />
     <Compile Include="Comps\Hediff_RemoveMentalStateOnHediffEnd.cs" />
     <Compile Include="Comps\Hediff_SendLetterAtSeverity.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="DefModExtensions\DefModExtension_GeneExtension.cs" />
     <Compile Include="DefModExtensions\DefModExtension_DontPlaceProduct.cs" />
     <Compile Include="DefModExtensions\DefModExtension_InheritableArchite.cs" />
+    <Compile Include="DialogWindows\Dialog_EnterNewName.cs" />
     <Compile Include="DialogWindows\Dialog_PaintSecondaryColour.cs" />
     <Compile Include="GeneClasses\Gene_AddRandomGeneAndOrTraitByWeight.cs" />
     <Compile Include="GeneClasses\Gene_DisabledBy.cs" />
@@ -111,6 +113,8 @@
     <Compile Include="HarmonyPatches\HarmonyPatch_SpecificInheritableArchiteGenes.cs" />
     <Compile Include="JobDriver\JobDriver_OpenStylingStationDialogForSecondColour.cs" />
     <Compile Include="Misc\ApparelColourTwo.cs" />
+    <Compile Include="Misc\ColourPreset.cs" />
+    <Compile Include="Misc\ColourPresetDef.cs" />
     <Compile Include="Misc\DebugActions.cs" />
     <Compile Include="Misc\TraitData.cs" />
     <Compile Include="PlaceWorkers\PlaceWorker_OnlyOnePerMap.cs" />

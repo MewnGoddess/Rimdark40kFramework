@@ -113,8 +113,10 @@ namespace Core40k
 
         public override void ExposeData()
         {
+            base.ExposeData();
             Scribe_Defs.Look(ref chosenGene, "chosenGene");
             Scribe_Defs.Look(ref chosenTrait, "chosenTrait");
+            Scribe_Values.Look(ref chosenTraitDegree, "chosenTraitDegree", 0);
         }
     }
 }   

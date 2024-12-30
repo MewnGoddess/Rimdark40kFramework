@@ -10,7 +10,10 @@ namespace Core40k
     {
         public static bool Prefix(ref bool __result, Apparel apparel, BodyTypeDef bodyType, ref ApparelGraphicRecord rec)
         {
-            if (!(apparel is ApparelColourTwo)) return true;
+            if (!(apparel is ApparelColourTwo))
+            {
+                return true;
+            }
             
             __result = TryGetGraphicApparel(apparel, bodyType, ref rec);
             

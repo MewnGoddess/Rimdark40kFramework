@@ -23,6 +23,13 @@
   <BEWH.PrimaryColor>Primary</BEWH.PrimaryColor>
   <BEWH.SecondaryColor>Secondary</BEWH.SecondaryColor>
 
+  <BEWH.SelectPreset>Select Preset</BEWH.SelectPreset>
+  <BEWH.EditPreset>Edit Preset</BEWH.EditPreset>
+  <BEWH.NewPreset>[New Preset]</BEWH.NewPreset>
+  <BEWH.EnterPresetName>Enter name of new preset</BEWH.EnterPresetName>
+  <BEWH.OverridePreset>Override {0} with currently selected colours</BEWH.OverridePreset>
+  <BEWH.PresetExists>Already exists!</BEWH.PresetExists>
+
   <!-- Rank stuff-->
   <BEWH.RankTab>Ranks</BEWH.RankTab>
 

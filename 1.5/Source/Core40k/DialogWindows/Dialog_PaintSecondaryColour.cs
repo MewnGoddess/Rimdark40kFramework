@@ -23,58 +23,32 @@ namespace Core40k
 
         private float viewRectHeight;
 
-        private static readonly Texture2D FavoriteColorTex = ContentFinder<Texture2D>.Get("UI/Icons/ColorSelector/ColorFavourite");
-
-        private static readonly Texture2D IdeoColorTex = ContentFinder<Texture2D>.Get("UI/Icons/ColorSelector/ColorIdeology");
-
         private static readonly Vector2 ButSize = new Vector2(200f, 40f);
 
         public override Vector2 InitialSize => new Vector2(950f, 750f);
 
         private bool DevMode => Prefs.DevMode;
-
-        private List<Color> allColors;
-
-        private List<Color> AllColors
-        {
-            get
-            {
-                if (allColors != null) return allColors;
-                
-                allColors = new List<Color>();
-                if (pawn.Ideo != null && !Find.IdeoManager.classicMode)
-                {
-                    allColors.Add(pawn.Ideo.ApparelColor);
-                }
-                if (pawn.story != null && !pawn.DevelopmentalStage.Baby() && pawn.story.favoriteColor.HasValue && !allColors.Any(c => pawn.story.favoriteColor.Value.IndistinguishableFrom(c)))
-                {
-                    allColors.Add(pawn.story.favoriteColor.Value);
-                }
-                foreach (var colDef in DefDatabase<ColorDef>.AllDefs.Where((ColorDef x) => x.colorType == ColorType.Ideo || x.colorType == ColorType.Misc || (DevMode && !ModsConfig.IdeologyActive && x.colorType == ColorType.Structure)))
-                {
-                    if (!allColors.Any(color => color.IndistinguishableFrom(colDef.color)))
-                    {
-                        allColors.Add(colDef.color);
-                    }
-                }
-                allColors.SortByColor(x => x);
-                
-                return allColors;
-            }
-        }
+        
+        private List<ColourPresetDef> presets;
 
         public Dialog_PaintSecondaryColour()
-        { }
+        {
+        }
 
         public Dialog_PaintSecondaryColour(Pawn pawn)
         {
             this.pawn = pawn;
             showClothes = true;
             showHeadgear = true;
+            
+            presets = DefDatabase<ColourPresetDef>.AllDefs.ToList();
+            
             foreach (var item in pawn.apparel.WornApparel.Where(a => a is ApparelColourTwo).Cast<ApparelColourTwo>())
             {
                 item.SetOriginalColor();
             }
+            
+            Find.TickManager.Pause();
         }
 
         public override void DoWindowContents(Rect inRect)
@@ -132,26 +106,82 @@ namespace Core40k
                 Widgets.Label(nameRect, item.Label);
                 Text.Anchor = TextAnchor.UpperLeft;
                 
+                //Select button
                 var selectPresetRect = new Rect(rect.x, curY, viewRect.width, 30f);
                 selectPresetRect.width /= 5;
                 selectPresetRect.x = nameRect.xMax + nameRect.width/20;
-                //check if mankind is present. IF SO add the colours from it to the presets available to the player.
-                //Also make a gamecomponent that keeps track of player presets.
-                //Append first mandking presets, then own presets to selectable list
-                //If somehow possible show small snippet of colours of the preset before it is chosen
-                if (ModsConfig.IsActive(Core40kUtils.MankindsFinestPackageId))
+                if (Widgets.ButtonText(selectPresetRect, "BEWH.SelectPreset".Translate()))
                 {
+                    var list = new List<FloatMenuOption>();
+                    foreach (var preset in presets)
+                    {
+                        var menuOption = new FloatMenuOption(preset.label, delegate
+                        {
+                            item.DrawColor = preset.primaryColour;
+                            item.SetSecondaryColor(preset.secondaryColour);
+                            
+                        }, Core40kUtils.ColourPreview(preset.primaryColour, preset.secondaryColour), Color.white);
+                        list.Add(menuOption);
+                    }
                     
+                    var gameComp = Current.Game.GetComponent<GameComponent_SavedPresets>();
+                    foreach (var preset in gameComp.colourPresetDefs)
+                    {
+                        var menuOption = new FloatMenuOption(preset.label.CapitalizeFirst(), delegate
+                        {
+                            item.DrawColor = preset.primaryColour;
+                            item.SetSecondaryColor(preset.secondaryColour);
+                            
+                        }, Core40kUtils.ColourPreview(preset.primaryColour, preset.secondaryColour), Color.white);
+                        list.Add(menuOption);
+                    }
+                
+                    if (!list.NullOrEmpty())
+                    {
+                        Find.WindowStack.Add(new FloatMenu(list));
+                    }
                 }
-
-                Widgets.ButtonText(selectPresetRect, "SelectPreset");
                 
-                
+                //Save button
                 var savePresetRect = new Rect(rect.x, curY, viewRect.width, 30f);
                 savePresetRect.width /= 5;
                 savePresetRect.x = nameRect.xMin - savePresetRect.width - nameRect.width/20;
+                if (Widgets.ButtonText(savePresetRect, "BEWH.EditPreset".Translate()))
+                {
+                    var list = new List<FloatMenuOption>();
+                    
+                    var gameComp = Current.Game.GetComponent<GameComponent_SavedPresets>();
+                    //Delete or override existing
+                    foreach (var preset in gameComp.colourPresetDefs)
+                    {
+                        var menuOption = new FloatMenuOption(preset.label, delegate
+                        {
+                            gameComp.UpdatePreset(preset, item.DrawColor, item.DrawColorTwo);
+                        }, Widgets.PlaceholderIconTex, Color.white);
+                        menuOption.extraPartWidth = 30f;
+                        menuOption.extraPartOnGUI = rect1 => Core40kUtils.DeletePreset(rect1, gameComp, preset);
+                        menuOption.tooltip = "BEWH.OverridePreset".Translate(preset.label);
+                        list.Add(menuOption);
+                    }
+                    
+                    //Create new
+                    var newPreset = new FloatMenuOption("BEWH.NewPreset".Translate(), delegate
+                    {
+                        var newColourPreset = new ColourPreset
+                        {
+                            primaryColour = item.DrawColor,
+                            secondaryColour = item.DrawColorTwo,
+                        };
+                        Find.WindowStack.Add( new Dialog_EnterNewName(gameComp, newColourPreset));
+                    }, Widgets.PlaceholderIconTex, Color.white);
+                    list.Add(newPreset);
                 
-                Widgets.ButtonText(savePresetRect, "SavePreset");
+                    if (!list.NullOrEmpty())
+                    {
+                        Find.WindowStack.Add(new FloatMenu(list));
+                    }
+                }
+                
                 
                 curY += nameRect.height + 3f;
                 var itemRect = new Rect(rect.x, curY, viewRect.width, 92f);
@@ -187,7 +217,7 @@ namespace Core40k
                     Text.Anchor = TextAnchor.UpperLeft;
                     if (Widgets.ButtonInvisible(colorTwoRect))
                     {
-                        Find.WindowStack.Add( new Dialog_ColourPicker( item.DrawColor, ( newColour ) =>
+                        Find.WindowStack.Add( new Dialog_ColourPicker( item.DrawColorTwo, ( newColour ) =>
                         {
                             item.SetSecondaryColor(newColour);
                         } ) );
