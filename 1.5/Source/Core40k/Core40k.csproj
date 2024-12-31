@@ -91,6 +91,7 @@
     <Compile Include="DefModExtensions\DefModExtension_AddRandomTraitByWeight.cs" />
     <Compile Include="DefModExtensions\DefModExtension_AddRandomGeneByWeight.cs" />
     <Compile Include="DefModExtensions\DefModExtension_BoostQualityCreatedByPawn.cs" />
+    <Compile Include="DefModExtensions\DefModExtension_EnableTabDef.cs" />
     <Compile Include="DefModExtensions\DefModExtension_GeneDisabledBy.cs" />
     <Compile Include="DefModExtensions\DefModExtension_GeneExtension.cs" />
     <Compile Include="DefModExtensions\DefModExtension_DontPlaceProduct.cs" />
@@ -111,6 +112,8 @@
     <Compile Include="HarmonyPatches\HarmonyPatch_SpecificInheritableArchiteGenes.cs" />
     <Compile Include="JobDriver\JobDriver_OpenStylingStationDialogForSecondColour.cs" />
     <Compile Include="Misc\ApparelColourTwo.cs" />
+    <Compile Include="Misc\ApparelColourTwoTabDef.cs" />
+    <Compile Include="Misc\ApparelColourTwoTabDrawer.cs" />
     <Compile Include="Misc\ColourPreset.cs" />
     <Compile Include="Misc\ColourPresetDef.cs" />
     <Compile Include="Misc\DebugActions.cs" />

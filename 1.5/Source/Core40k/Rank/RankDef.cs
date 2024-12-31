@@ -46,6 +46,8 @@ namespace Core40k
 
         public int rankTier = 0;
         
+        public bool specialistRank = false;
+        
         [Unsaved]
         private Texture2D rankIcon;
 

@@ -27,7 +27,7 @@ namespace Core40k
 
         public override Color DrawColorTwo => drawColorTwo;
 
-        public virtual void SetOriginalColor()
+        public virtual void SetOriginals()
         {
             originalColorOne = drawColorOne;
             originalColorTwo = drawColorTwo;
@@ -39,7 +39,7 @@ namespace Core40k
             Notify_ColorChanged();
         }
 
-        public virtual void ResetColors()
+        public virtual void Reset()
         {
             drawColorOne = originalColorOne;
             drawColorTwo = originalColorTwo;

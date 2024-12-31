@@ -1,10 +1,12 @@
-﻿using RimWorld;
+﻿using System;
+using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
 using ColourPicker;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
+using VFECore;
 
 namespace Core40k
 {
@@ -31,6 +33,14 @@ namespace Core40k
         
         private List<ColourPresetDef> presets;
 
+        private readonly List<ApparelColourTwoTabDef> allTabs;
+        
+        private readonly List<TabRecord> tabs;
+
+        private static readonly string MainTab = "BEWH.MainTab".Translate();
+
+        private string curTab;
+
         public Dialog_PaintSecondaryColour()
         {
         }
@@ -43,10 +53,43 @@ namespace Core40k
             
             presets = DefDatabase<ColourPresetDef>.AllDefs.ToList();
             
+            allTabs = DefDatabase<ApparelColourTwoTabDef>.AllDefsListForReading;
+            
+            tabs = new List<TabRecord>();
+            
+            var mainTabRecord = new TabRecord(MainTab, delegate
+            {
+                curTab = MainTab;
+            }, curTab == MainTab);
+            
+            tabs.Add(mainTabRecord);
+            
             foreach (var item in pawn.apparel.WornApparel.Where(a => a is ApparelColourTwo).Cast<ApparelColourTwo>())
             {
-                item.SetOriginalColor();
+                item.SetOriginals();
+                if (!item.def.HasModExtension<DefModExtension_EnableTabDef>())
+                {
+                    continue;
+                }
+                
+                var tabDef = item.def.GetModExtension<DefModExtension_EnableTabDef>().tabDef;
+                if (!allTabs.Contains(tabDef))
+                {
+                    continue;
+                }
+                
+                var tabRecord = new TabRecord(tabDef.label, delegate
+                {
+                    curTab = tabDef.label;
+                }, curTab == tabDef.label);
+
+                if (!Enumerable.Any(tabs, tab => tab.label == tabRecord.label))
+                {
+                    tabs.Add(tabRecord);
+                }
             }
+
+            curTab = tabs.FirstOrDefault()?.label;
             
             Find.TickManager.Pause();
         }
@@ -68,22 +111,32 @@ namespace Core40k
             var rect3 = inRect;
             rect3.xMin = rect2.xMax + 10f;
             rect3.yMax -= ButSize.y + 4f;
-            DrawApparelColor(rect3);
+            
+            Widgets.DrawMenuSection(rect3);
+            TabDrawer.DrawTabs(rect3, tabs);
+            rect3 = rect3.ContractedBy(18f);
+            
+            if (curTab == MainTab)
+            {
+                DrawApparelColor(rect3);
+            }
+            else
+            {
+                var tab = allTabs.FirstOrDefault(def => def.label == curTab).tabDrawerClass;
+                var tabDrawer = (ApparelColourTwoTabDrawer)Activator.CreateInstance(tab);
+                tabDrawer.DrawTab(rect3, pawn, viewRectHeight, ref apparelColorScrollPosition);
+            }
+            
             DrawBottomButtons(inRect);
         }
 
         private void DrawPawn(Rect rect)
         {
-            var rect2 = rect;
-            rect2.yMin = rect.yMax - Text.LineHeight * 2f;
-            Widgets.CheckboxLabeled(new Rect(rect2.x, rect2.y, rect2.width, rect2.height / 2f), "ShowHeadgear".Translate(), ref showHeadgear);
-            Widgets.CheckboxLabeled(new Rect(rect2.x, rect2.y + rect2.height / 2f, rect2.width, rect2.height / 2f), "ShowApparel".Translate(), ref showClothes);
-            rect.yMax = rect2.yMin - 4f;
             Widgets.BeginGroup(rect);
-            for (var i = 0; i < 3; i++)
+            for (var i = 0; i < 4; i++)
             {
-                var position = new Rect(0f, rect.height / 3f * (float)i, rect.width, rect.height / 3f).ContractedBy(4f);
-                var image = PortraitsCache.Get(pawn, new Vector2(position.width, position.height), new Rot4(2 - i), PortraitOffset, 1.1f, supersample: true, compensateForUIScale: true, showHeadgear, showClothes, null, null, stylingStation: true);
+                var position = new Rect(0f, rect.height / 4f * i, rect.width, rect.height / 4f).ContractedBy(4f);
+                var image = PortraitsCache.Get(pawn, new Vector2(position.width, position.height), new Rot4(3 - i), PortraitOffset, 1.1f, supersample: true, compensateForUIScale: true, true, true, null, null, stylingStation: true);
                 GUI.DrawTexture(position, image);
             }
             Widgets.EndGroup();
@@ -265,6 +318,17 @@ namespace Core40k
             {
                 Reset();
             }
+
+            foreach (var tab in allTabs)
+            {
+                if (tab.label == MainTab)
+                {
+                    continue;
+                }
+                var tabDrawer = (ApparelColourTwoTabDrawer)Activator.CreateInstance(tab.tabDrawerClass);
+                tabDrawer.OnClose(closeOnCancel, closeOnClickedOutside);
+            }
+            
             base.Close(doCloseSound);
         }
 
@@ -274,7 +338,7 @@ namespace Core40k
             {
                 foreach (var item in pawn.apparel.WornApparel.Where(a => a is ApparelColourTwo).Cast<ApparelColourTwo>())
                 {
-                    item.ResetColors();
+                    item.Reset();
                 }
             }
             pawn.Drawer.renderer.SetAllGraphicsDirty();
@@ -285,7 +349,17 @@ namespace Core40k
             foreach (var item in pawn.apparel.WornApparel.Where(a => a is ApparelColourTwo).Cast<ApparelColourTwo>())
             {
                 item.Notify_ColorChanged();
-                item.SetOriginalColor();
+                item.SetOriginals();
+            }
+
+            foreach (var tab in allTabs)
+            {
+                if (tab.label == MainTab)
+                {
+                    continue;
+                }
+                var tabDrawer = (ApparelColourTwoTabDrawer)Activator.CreateInstance(tab.tabDrawerClass);
+                tabDrawer.OnAccept();
             }
         }
     }

@@ -23,6 +23,8 @@
   <BEWH.PrimaryColor>Primary</BEWH.PrimaryColor>
   <BEWH.SecondaryColor>Secondary</BEWH.SecondaryColor>
 
+  <BEWH.MainTab>Main</BEWH.MainTab>
+
   <BEWH.SelectPreset>Select Preset</BEWH.SelectPreset>
   <BEWH.EditPreset>Edit Preset</BEWH.EditPreset>
   <BEWH.NewPreset>[New Preset]</BEWH.NewPreset>

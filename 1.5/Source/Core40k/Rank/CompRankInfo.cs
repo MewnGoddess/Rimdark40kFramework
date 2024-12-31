@@ -108,6 +108,13 @@ namespace Core40k
         {
             return unlockedRanks.MaxBy(rank => rank.rankTier).rankTier;
         }
+        
+        public RankDef HighestRankDef(bool onlySpecialist)
+        {
+            var list = unlockedRanks.Where(def => !onlySpecialist || def.specialistRank).ToList();
+            
+            return list.NullOrEmpty() ? null : list.MaxBy(rank => rank.rankTier);
+        }
 
         public bool HasRankOfCategory(RankCategoryDef rankCategoryDef)
         {
