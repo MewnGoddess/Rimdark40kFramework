@@ -80,26 +80,6 @@ namespace Core40k
             {
                 Close();
             }
-            /*var listingStandard = new Listing_Standard();
-            listingStandard.Begin(inRect);
-
-            listingStandard.Label("BEWH.EnterPresetName".Translate());
-
-            var newName = listingStandard.TextEntry(textEntry);
-            textEntry = newName;
-
-            listingStandard.Indent(inRect.width * 0.3f);
-            if (listingStandard.ButtonText("Accept".Translate(), widthPct: 0.4f))
-            {
-                colourPreset.name = newName;
-                if (gameComp.AddPreset(colourPreset))
-                {
-                    Close();
-                }
-            }
-            listingStandard.Outdent(inRect.width * 0.3f);
-
-            listingStandard.End();*/
         }
     }
 }

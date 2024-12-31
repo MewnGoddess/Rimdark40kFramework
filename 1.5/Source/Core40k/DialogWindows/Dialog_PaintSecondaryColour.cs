@@ -246,6 +246,7 @@ namespace Core40k
                     var colorOneRect = new Rect(itemRect);
                     colorOneRect.width /= 2;
                     colorOneRect.x = itemRect.xMin + 1f;
+                    colorOneRect.y = itemRect.yMin + 2f;
                     Widgets.DrawMenuSection(colorOneRect.ContractedBy(-1));
                     Widgets.DrawRectFast(colorOneRect, item.DrawColor);
                     Text.Anchor = TextAnchor.MiddleCenter;
@@ -263,6 +264,7 @@ namespace Core40k
                     var colorTwoRect = new Rect(itemRect);
                     colorTwoRect.width /= 2;
                     colorTwoRect.x = itemRect.xMax - colorTwoRect.width - 1f;
+                    colorTwoRect.y = itemRect.yMin + 2f;
                     Widgets.DrawMenuSection(colorTwoRect.ContractedBy(-1));
                     Widgets.DrawRectFast(colorTwoRect, item.DrawColorTwo);
                     Text.Anchor = TextAnchor.MiddleCenter;
