@@ -86,7 +86,15 @@ namespace Core40k
                 currentlySelectedRankCategory = availableCategories.Count > 0 ? availableCategories[0] : null;
             }
             GetRanksForCategory();
-            currentlySelectedRank = availableRanksForCategory.FirstOrFallback(rank => rank.rankDef.defaultFirstRank, fallback: null);
+            if (!compRankInfo.UnlockedRanks.NullOrEmpty())
+            {
+                var highestRank = compRankInfo.HighestRankDef(true) ?? compRankInfo.HighestRankDef(false);
+                currentlySelectedRank = availableRanksForCategory.FirstOrFallback(rank => rank.rankDef == highestRank, fallback: null);
+            }
+            else
+            {
+                currentlySelectedRank = availableRanksForCategory.FirstOrFallback(rank => rank.rankDef.defaultFirstRank, fallback: null);
+            }
         }
 
         protected override void FillTab()   
@@ -303,9 +311,12 @@ namespace Core40k
                     
                     var rankUnlocked = compRankInfo.HasRank(rankReq.rankDef) ? Color.white : Color.grey;
 
-                    if (currentlySelectedRank.rankDef == rankReq.rankDef)
+                    if (currentlySelectedRank != null)
                     {
-                        rankUnlocked = new Color(0.0f, 0.5f, 1f, 0.9f);
+                        if (currentlySelectedRank.rankDef == rankReq.rankDef)
+                        {
+                            rankUnlocked = new Color(0.0f, 0.5f, 1f, 0.9f);
+                        }
                     }
                     
                     Widgets.DrawLine(startPos, endPos, rankUnlocked, 2f);
