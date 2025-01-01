@@ -21,7 +21,7 @@ namespace Core40k
                 yield break;
             }
             
-            var secondColourChangeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.ApparelColourTwo.ChangeSecondaryColour".Translate().CapitalizeFirst(), delegate
+            var secondColourChangeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.Framework.ApparelColourTwo.ChangeSecondaryColour".Translate().CapitalizeFirst(), delegate
             {
                 selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(Core40kDefOf.BEWH_OpenStylingStationDialogForSecondColour, __instance), JobTag.Misc);
             }), selPawn, __instance);

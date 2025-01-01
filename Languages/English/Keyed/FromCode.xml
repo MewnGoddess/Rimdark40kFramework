@@ -2,92 +2,92 @@
 <LanguageData>
 
   <!--=== Mod Setting related ===-->
-  <BEWH.ModSettings.Framework.ModName>RimDark 40k - Framework</BEWH.ModSettings.Framework.ModName>
-  <BEWH.ModSettings.Framework.ShowRankTab>Always show Rank tab for player pawns. Will show even if no category or rank is available to the pawn.</BEWH.ModSettings.Framework.ShowRankTab>
+  <BEWH.Framework.ModSettings.ModName>RimDark 40k - Framework</BEWH.Framework.ModSettings.ModName>
+  <BEWH.Framework.ModSettings.ShowRankTab>Always show Rank tab for player pawns. Will show even if no category or rank is available to the pawn.</BEWH.Framework.ModSettings.ShowRankTab>
 
   <BEWH.ModSettings.CheckVEFPatches>Remember to check Vanilla Expanded Framework toggable patches for more settings for this mod!</BEWH.ModSettings.CheckVEFPatches>
 
 
   <!--=== Common Keywords ===-->
-  <BEWH.CommonKeyword.None>None</BEWH.CommonKeyword.None>
+  <BEWH.Framework.CommonKeyword.None>None</BEWH.Framework.CommonKeyword.None>
 
 
   <!--=== Apparel Two ===-->
-  <BEWH.ApparelColourTwo.MainTab>Main</BEWH.ApparelColourTwo.MainTab>
+  <BEWH.Framework.ApparelColourTwo.MainTab>Main</BEWH.Framework.ApparelColourTwo.MainTab>
 
-  <BEWH.ApparelColourTwo.PrimaryColor>Primary</BEWH.ApparelColourTwo.PrimaryColor>
-  <BEWH.ApparelColourTwo.SecondaryColor>Secondary</BEWH.ApparelColourTwo.SecondaryColor>
+  <BEWH.Framework.ApparelColourTwo.PrimaryColor>Primary</BEWH.Framework.ApparelColourTwo.PrimaryColor>
+  <BEWH.Framework.ApparelColourTwo.SecondaryColor>Secondary</BEWH.Framework.ApparelColourTwo.SecondaryColor>
 
-  <BEWH.ApparelColourTwo.SelectPreset>Select Preset</BEWH.ApparelColourTwo.SelectPreset>
-  <BEWH.ApparelColourTwo.EditPreset>Edit Preset</BEWH.ApparelColourTwo.EditPreset>
-  <BEWH.ApparelColourTwo.NewPreset>[New Preset]</BEWH.ApparelColourTwo.NewPreset>
-  <BEWH.ApparelColourTwo.EnterPresetName>Enter name of new preset</BEWH.ApparelColourTwo.EnterPresetName>
-  <BEWH.ApparelColourTwo.OverridePreset>Override {0} with currently selected colours</BEWH.ApparelColourTwo.OverridePreset>
-  <BEWH.ApparelColourTwo.PresetExists>Already exists!</BEWH.ApparelColourTwo.PresetExists>
+  <BEWH.Framework.ApparelColourTwo.SelectPreset>Select Preset</BEWH.Framework.ApparelColourTwo.SelectPreset>
+  <BEWH.Framework.ApparelColourTwo.EditPreset>Edit Preset</BEWH.Framework.ApparelColourTwo.EditPreset>
+  <BEWH.Framework.ApparelColourTwo.NewPreset>[New Preset]</BEWH.Framework.ApparelColourTwo.NewPreset>
+  <BEWH.Framework.ApparelColourTwo.EnterPresetName>Enter name of new preset</BEWH.Framework.ApparelColourTwo.EnterPresetName>
+  <BEWH.Framework.ApparelColourTwo.OverridePreset>Override {0} with currently selected colours</BEWH.Framework.ApparelColourTwo.OverridePreset>
+  <BEWH.Framework.ApparelColourTwo.PresetExists>Already exists!</BEWH.Framework.ApparelColourTwo.PresetExists>
 
-  <BEWH.ApparelColourTwo.ChangeSecondaryColour>Change both colours</BEWH.ApparelColourTwo.ChangeSecondaryColour>
-  <BEWH.ApparelColourTwo.ChangeSecondaryColourDesc>Changes both colours of apparel on {0}.</BEWH.ApparelColourTwo.ChangeSecondaryColourDesc>
+  <BEWH.Framework.ApparelColourTwo.ChangeSecondaryColour>Change both colours</BEWH.Framework.ApparelColourTwo.ChangeSecondaryColour>
+  <BEWH.Framework.ApparelColourTwo.ChangeSecondaryColourDesc>Changes both colours of apparel on {0}.</BEWH.Framework.ApparelColourTwo.ChangeSecondaryColourDesc>
 
 
   <!--=== Rank System ===-->
-  <BEWH.RankSystem.RankTab>Ranks</BEWH.RankSystem.RankTab>
+  <BEWH.Framework.RankSystem.RankTab>Ranks</BEWH.Framework.RankSystem.RankTab>
 
-  <BEWH.RankSystem.CategoryRequires>Category "{0}"" requires that pawn has {1}</BEWH.RankSystem.CategoryRequires>
-  <BEWH.RankSystem.NoCategorySelected>No category selected.</BEWH.RankSystem.NoCategorySelected>
+  <BEWH.Framework.RankSystem.CategoryRequires>Category "{0}"" requires that pawn has {1}</BEWH.Framework.RankSystem.CategoryRequires>
+  <BEWH.Framework.RankSystem.NoCategorySelected>No category selected.</BEWH.Framework.RankSystem.NoCategorySelected>
 
-  <BEWH.RankSystem.CategoryRequiredGene>the {0} gene</BEWH.RankSystem.CategoryRequiredGene>
-  <BEWH.RankSystem.CategoryRequiredHediff>the {0} hediff</BEWH.RankSystem.CategoryRequiredHediff>
-  <BEWH.RankSystem.CategoryRequiredTrait>the {0} trait</BEWH.RankSystem.CategoryRequiredTrait>
-  <BEWH.RankSystem.And> and </BEWH.RankSystem.And>
+  <BEWH.Framework.RankSystem.CategoryRequiredGene>the {0} gene</BEWH.Framework.RankSystem.CategoryRequiredGene>
+  <BEWH.Framework.RankSystem.CategoryRequiredHediff>the {0} hediff</BEWH.Framework.RankSystem.CategoryRequiredHediff>
+  <BEWH.Framework.RankSystem.CategoryRequiredTrait>the {0} trait</BEWH.Framework.RankSystem.CategoryRequiredTrait>
+  <BEWH.Framework.RankSystem.And> and </BEWH.Framework.RankSystem.And>
 
-  <BEWH.RankSystem.NoRankSelected>No rank selected.</BEWH.RankSystem.NoRankSelected>
-  <BEWH.RankSystem.RankDescription>Description</BEWH.RankSystem.RankDescription>
-  <BEWH.RankSystem.RankRequirements>Requirements</BEWH.RankSystem.RankRequirements>
-  <BEWH.RankSystem.RankBonuses>Bonuses from rank</BEWH.RankSystem.RankBonuses>
-  <BEWH.RankSystem.DaysSinceRankGiven>{0} days since rank was given</BEWH.RankSystem.DaysSinceRankGiven>
+  <BEWH.Framework.RankSystem.NoRankSelected>No rank selected.</BEWH.Framework.RankSystem.NoRankSelected>
+  <BEWH.Framework.RankSystem.RankDescription>Description</BEWH.Framework.RankSystem.RankDescription>
+  <BEWH.Framework.RankSystem.RankRequirements>Requirements</BEWH.Framework.RankSystem.RankRequirements>
+  <BEWH.Framework.RankSystem.RankBonuses>Bonuses from rank</BEWH.Framework.RankSystem.RankBonuses>
+  <BEWH.Framework.RankSystem.DaysSinceRankGiven>{0} days since rank was given</BEWH.Framework.RankSystem.DaysSinceRankGiven>
 
 
-  <BEWH.RankSystem.Stats>Stats</BEWH.RankSystem.Stats>
-  <BEWH.RankSystem.Abilities>Abilities</BEWH.RankSystem.Abilities>
-  <BEWH.RankSystem.OtherEffects>Other Effects</BEWH.RankSystem.OtherEffects>
-  <BEWH.RankSystem.UnlockRank>Unlock rank</BEWH.RankSystem.UnlockRank>
+  <BEWH.Framework.RankSystem.Stats>Stats</BEWH.Framework.RankSystem.Stats>
+  <BEWH.Framework.RankSystem.Abilities>Abilities</BEWH.Framework.RankSystem.Abilities>
+  <BEWH.Framework.RankSystem.OtherEffects>Other Effects</BEWH.Framework.RankSystem.OtherEffects>
+  <BEWH.Framework.RankSystem.UnlockRank>Unlock rank</BEWH.Framework.RankSystem.UnlockRank>
 
-  <BEWH.RankSystem.StatsReport_Rank>Relevant ranks</BEWH.RankSystem.StatsReport_Rank>
+  <BEWH.Framework.RankSystem.StatsReport_Rank>Relevant ranks</BEWH.Framework.RankSystem.StatsReport_Rank>
 
-  <BEWH.RankSystem.RequirementsSkills>All of the following skills</BEWH.RankSystem.RequirementsSkills>
-  <BEWH.RankSystem.RequirementsRanks>All of the following ranks</BEWH.RankSystem.RequirementsRanks>
+  <BEWH.Framework.RankSystem.RequirementsSkills>All of the following skills</BEWH.Framework.RankSystem.RequirementsSkills>
+  <BEWH.Framework.RankSystem.RequirementsRanks>All of the following ranks</BEWH.Framework.RankSystem.RequirementsRanks>
 
-  <BEWH.RankSystem.RequirementsTraitAll>All of the following traits</BEWH.RankSystem.RequirementsTraitAll>
-  <BEWH.RankSystem.RequirementsTraitAtLeastOne>At least one of the following traits</BEWH.RankSystem.RequirementsTraitAtLeastOne>
+  <BEWH.Framework.RankSystem.RequirementsTraitAll>All of the following traits</BEWH.Framework.RankSystem.RequirementsTraitAll>
+  <BEWH.Framework.RankSystem.RequirementsTraitAtLeastOne>At least one of the following traits</BEWH.Framework.RankSystem.RequirementsTraitAtLeastOne>
 
-  <BEWH.RankSystem.RequirementsGeneAll>All of the following genes</BEWH.RankSystem.RequirementsGeneAll>
-  <BEWH.RankSystem.RequirementsGeneAtLeastOne>At least one of the following genes</BEWH.RankSystem.RequirementsGeneAtLeastOne>
+  <BEWH.Framework.RankSystem.RequirementsGeneAll>All of the following genes</BEWH.Framework.RankSystem.RequirementsGeneAll>
+  <BEWH.Framework.RankSystem.RequirementsGeneAtLeastOne>At least one of the following genes</BEWH.Framework.RankSystem.RequirementsGeneAtLeastOne>
 
   <!-- "Every{2} colonist" from the text below is on purpose and should stay as so -->
-  <BEWH.RankSystem.RequirementsLimit>Only {0} may have this rank at a time. \nEvery{2} colonist will increase this limit by 1. Currently {1} exists.</BEWH.RankSystem.RequirementsLimit>
-  <BEWH.RankSystem.RequirementsLimitOnlyOneEver>Only {0} may ever have this rank. Currently {1} exists.</BEWH.RankSystem.RequirementsLimitOnlyOneEver>
+  <BEWH.Framework.RankSystem.RequirementsLimit>Only {0} may have this rank at a time. \nEvery{2} colonist will increase this limit by 1. Currently {1} exists.</BEWH.Framework.RankSystem.RequirementsLimit>
+  <BEWH.Framework.RankSystem.RequirementsLimitOnlyOneEver>Only {0} may ever have this rank. Currently {1} exists.</BEWH.Framework.RankSystem.RequirementsLimitOnlyOneEver>
 
-  <BEWH.RankSystem.HaveBeenRankForDays>Must have been a {0} for at least {1} days</BEWH.RankSystem.HaveBeenRankForDays>
-  <BEWH.RankSystem.HaveAchievedRank>Must have achieved the rank of {0}</BEWH.RankSystem.HaveAchievedRank>
+  <BEWH.Framework.RankSystem.HaveBeenRankForDays>Must have been a {0} for at least {1} days</BEWH.Framework.RankSystem.HaveBeenRankForDays>
+  <BEWH.Framework.RankSystem.HaveAchievedRank>Must have achieved the rank of {0}</BEWH.Framework.RankSystem.HaveAchievedRank>
 
-  <BEWH.RankSystem.IncompatibleRank>Incompatible with the following ranks</BEWH.RankSystem.IncompatibleRank>
+  <BEWH.Framework.RankSystem.IncompatibleRank>Incompatible with the following ranks</BEWH.Framework.RankSystem.IncompatibleRank>
 
-  <BEWH.RankSystem.DoesNotHaveRank>{0} incapable of obtaining ranks</BEWH.RankSystem.DoesNotHaveRank>
-  <BEWH.RankSystem.NoUnlockedRanks>{0} does not have any ranks</BEWH.RankSystem.NoUnlockedRanks>
-  <BEWH.RankSystem.NoUnlockedRanksOfCategory>{0} does not have any ranks of category {1}</BEWH.RankSystem.NoUnlockedRanksOfCategory>
-  <BEWH.RankSystem.RankTooHigh>{0} rank is too high to reset</BEWH.RankSystem.RankTooHigh>
+  <BEWH.Framework.RankSystem.DoesNotHaveRank>{0} incapable of obtaining ranks</BEWH.Framework.RankSystem.DoesNotHaveRank>
+  <BEWH.Framework.RankSystem.NoUnlockedRanks>{0} does not have any ranks</BEWH.Framework.RankSystem.NoUnlockedRanks>
+  <BEWH.Framework.RankSystem.NoUnlockedRanksOfCategory>{0} does not have any ranks of category {1}</BEWH.Framework.RankSystem.NoUnlockedRanksOfCategory>
+  <BEWH.Framework.RankSystem.RankTooHigh>{0} rank is too high to reset</BEWH.Framework.RankSystem.RankTooHigh>
 
 
   <!--=== Misc ===-->
   <!-- Unbreakable -->
-  <BEWH.Unbreakable.CannotRecruitLetter>Unbreakable Loyalty</BEWH.Unbreakable.CannotRecruitLetter>
-  <BEWH.Unbreakable.CannotRecruitMessage>{1} tried to recruit {0}, but {0}'s unbreakable loyalty to their faction made them resist all attempts.\n\n{0} cannot be recruited.</BEWH.Unbreakable.CannotRecruitMessage>
-  <BEWH.Unbreakable.CannotEnslaveMessage>{1} tried to enslave {0}, but {0}'s unbreakable loyalty to their faction made them resist all attempts.\n\n{0} cannot be enslaved.</BEWH.Unbreakable.CannotEnslaveMessage>
+  <BEWH.Framework.Unbreakable.CannotRecruitLetter>Unbreakable Loyalty</BEWH.Framework.Unbreakable.CannotRecruitLetter>
+  <BEWH.Framework.Unbreakable.CannotRecruitMessage>{1} tried to recruit {0}, but {0}'s unbreakable loyalty to their faction made them resist all attempts.\n\n{0} cannot be recruited.</BEWH.Framework.Unbreakable.CannotRecruitMessage>
+  <BEWH.Framework.Unbreakable.CannotEnslaveMessage>{1} tried to enslave {0}, but {0}'s unbreakable loyalty to their faction made them resist all attempts.\n\n{0} cannot be enslaved.</BEWH.Framework.Unbreakable.CannotEnslaveMessage>
 
   <!-- Placement Limit -->
-  <BEWH.PlacementLimit.OnlyOneBuildingAllowedPerMap>You may only place one {0} per map.</BEWH.PlacementLimit.OnlyOneBuildingAllowedPerMap>
+  <BEWH.Framework.PlacementLimit.OnlyOneBuildingAllowedPerMap>You may only place one {0} per map.</BEWH.Framework.PlacementLimit.OnlyOneBuildingAllowedPerMap>
 
   <!-- Comp-->
-  <BEWH.Comp.PawnDoesNotHaveRequiredGene>{0} does not have the {1} gene</BEWH.Comp.PawnDoesNotHaveRequiredGene>
+  <BEWH.Framework.Comp.PawnDoesNotHaveRequiredGene>{0} does not have the {1} gene</BEWH.Framework.Comp.PawnDoesNotHaveRequiredGene>
 
 </LanguageData>

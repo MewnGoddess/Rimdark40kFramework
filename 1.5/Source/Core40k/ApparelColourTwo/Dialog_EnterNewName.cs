@@ -29,7 +29,7 @@ namespace Core40k
             {
                 height = viewRect.height * 0.3f
             };
-            Widgets.Label(labelRect, "BEWH.ApparelColourTwo.EnterPresetName".Translate());
+            Widgets.Label(labelRect, "BEWH.Framework.ApparelColourTwo.EnterPresetName".Translate());
             
             var textEntryRect = new Rect(labelRect)
             {
@@ -66,7 +66,7 @@ namespace Core40k
                 
                 Text.Font = GameFont.Tiny;
                 Text.Anchor = TextAnchor.MiddleCenter;
-                Widgets.Label(warningRect, "BEWH.PresetExists".Translate().Colorize(Color.red));
+                Widgets.Label(warningRect, "BEWH.Framework.ApparelColourTwo.PresetExists".Translate().Colorize(Color.red));
                 Text.Font = GameFont.Small;
                 Text.Anchor = TextAnchor.UpperLeft;
             }

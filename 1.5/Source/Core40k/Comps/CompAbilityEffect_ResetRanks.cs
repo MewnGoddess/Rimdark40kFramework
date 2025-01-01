@@ -7,7 +7,7 @@ namespace Core40k
 {
     public class CompAbilityEffect_ResetRanks : CompAbilityEffect
     {
-        public CompProperties_ResetRanks Props => (CompProperties_ResetRanks)props;
+        private new CompProperties_ResetRanks Props => (CompProperties_ResetRanks)props;
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
@@ -47,17 +47,17 @@ namespace Core40k
         {
             if (!target.Pawn.HasComp<CompRankInfo>())
             {
-                return "BEWH.RankSystem.DoesNotHaveRank".Translate(target.Pawn);
+                return "BEWH.Framework.RankSystem.DoesNotHaveRank".Translate(target.Pawn);
             }
             
             if (target.Pawn.GetComp<CompRankInfo>().UnlockedRanks.NullOrEmpty())
             {
-                return "BEWH.RankSystem.NoUnlockedRanks".Translate(target.Pawn);
+                return "BEWH.Framework.RankSystem.NoUnlockedRanks".Translate(target.Pawn);
             }
 
             if (!target.Pawn.GetComp<CompRankInfo>().HasRankOfCategory(Props.rankCategoryDef))
             {
-                return "BEWH.RankSystem.NoUnlockedRanksOfCategory".Translate(target.Pawn, Props.rankCategoryDef);
+                return "BEWH.Framework.RankSystem.NoUnlockedRanksOfCategory".Translate(target.Pawn, Props.rankCategoryDef);
             }
             
             var canDemoteTier = Props.canDemoteToTierInclusive;
@@ -68,7 +68,7 @@ namespace Core40k
 
             if (target.Pawn.GetComp<CompRankInfo>().HighestRank() > canDemoteTier)
             {
-                return "BEWH.RankSystem.RankTooHigh".Translate(target.Pawn);
+                return "BEWH.Framework.RankSystem.RankTooHigh".Translate(target.Pawn);
             }
             
             return null;

@@ -9,7 +9,7 @@ namespace Core40k
         {
             if (map.listerBuildings.ColonistsHaveBuilding((ThingDef)checkingDef))
             {
-                return "BEWH.PlacementLimit.OnlyOneBuildingAllowedPerMap".Translate(((ThingDef)checkingDef).label.CapitalizeFirst());
+                return "BEWH.Framework.PlacementLimit.OnlyOneBuildingAllowedPerMap".Translate(((ThingDef)checkingDef).label.CapitalizeFirst());
             }
             return true;
         }

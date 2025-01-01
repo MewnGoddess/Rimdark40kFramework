@@ -15,10 +15,6 @@ namespace Core40k
     {
         private Pawn pawn;
 
-        private bool showHeadgear;
-
-        private bool showClothes;
-
         Vector3 PortraitOffset = new Vector3(0f, 0f, 0.15f);
 
         private Vector2 apparelColorScrollPosition;
@@ -37,7 +33,7 @@ namespace Core40k
         
         private readonly List<TabRecord> tabs;
 
-        private static readonly string MainTab = "BEWH.ApparelColourTwo.MainTab".Translate();
+        private static readonly string MainTab = "BEWH.Framework.ApparelColourTwo.MainTab".Translate();
 
         private string curTab;
 
@@ -48,8 +44,6 @@ namespace Core40k
         public Dialog_PaintSecondaryColour(Pawn pawn)
         {
             this.pawn = pawn;
-            showClothes = true;
-            showHeadgear = true;
             
             presets = DefDatabase<ColourPresetDef>.AllDefs.ToList();
             
@@ -163,7 +157,7 @@ namespace Core40k
                 var selectPresetRect = new Rect(rect.x, curY, viewRect.width, 30f);
                 selectPresetRect.width /= 5;
                 selectPresetRect.x = nameRect.xMax + nameRect.width/20;
-                if (Widgets.ButtonText(selectPresetRect, "BEWH.ApparelColourTwo.SelectPreset".Translate()))
+                if (Widgets.ButtonText(selectPresetRect, "BEWH.Framework.ApparelColourTwo.SelectPreset".Translate()))
                 {
                     var list = new List<FloatMenuOption>();
                     foreach (var preset in presets)
@@ -199,7 +193,7 @@ namespace Core40k
                 var savePresetRect = new Rect(rect.x, curY, viewRect.width, 30f);
                 savePresetRect.width /= 5;
                 savePresetRect.x = nameRect.xMin - savePresetRect.width - nameRect.width/20;
-                if (Widgets.ButtonText(savePresetRect, "BEWH.ApparelColourTwo.EditPreset".Translate()))
+                if (Widgets.ButtonText(savePresetRect, "BEWH.Framework.ApparelColourTwo.EditPreset".Translate()))
                 {
                     var list = new List<FloatMenuOption>();
                     
@@ -213,12 +207,12 @@ namespace Core40k
                         }, Widgets.PlaceholderIconTex, Color.white);
                         menuOption.extraPartWidth = 30f;
                         menuOption.extraPartOnGUI = rect1 => Core40kUtils.DeletePreset(rect1, gameComp, preset);
-                        menuOption.tooltip = "BEWH.ApparelColourTwo.OverridePreset".Translate(preset.label);
+                        menuOption.tooltip = "BEWH.Framework.ApparelColourTwo.OverridePreset".Translate(preset.label);
                         list.Add(menuOption);
                     }
                     
                     //Create new
-                    var newPreset = new FloatMenuOption("BEWH.ApparelColourTwo.NewPreset".Translate(), delegate
+                    var newPreset = new FloatMenuOption("BEWH.Framework.ApparelColourTwo.NewPreset".Translate(), delegate
                     {
                         var newColourPreset = new ColourPreset
                         {
@@ -250,7 +244,7 @@ namespace Core40k
                     Widgets.DrawMenuSection(colorOneRect.ContractedBy(-1));
                     Widgets.DrawRectFast(colorOneRect, item.DrawColor);
                     Text.Anchor = TextAnchor.MiddleCenter;
-                    Widgets.Label(colorOneRect, "BEWH.ApparelColourTwo.PrimaryColor".Translate());
+                    Widgets.Label(colorOneRect, "BEWH.Framework.ApparelColourTwo.PrimaryColor".Translate());
                     Text.Anchor = TextAnchor.UpperLeft;
                     if (Widgets.ButtonInvisible(colorOneRect))
                     {
@@ -268,7 +262,7 @@ namespace Core40k
                     Widgets.DrawMenuSection(colorTwoRect.ContractedBy(-1));
                     Widgets.DrawRectFast(colorTwoRect, item.DrawColorTwo);
                     Text.Anchor = TextAnchor.MiddleCenter;
-                    Widgets.Label(colorTwoRect, "BEWH.ApparelColourTwo.SecondaryColor".Translate());
+                    Widgets.Label(colorTwoRect, "BEWH.Framework.ApparelColourTwo.SecondaryColor".Translate());
                     Text.Anchor = TextAnchor.UpperLeft;
                     if (Widgets.ButtonInvisible(colorTwoRect))
                     {

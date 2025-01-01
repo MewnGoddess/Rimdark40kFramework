@@ -22,9 +22,9 @@ namespace Core40k
             var listingStandard = new Listing_Standard();
             listingStandard.Begin(inRect);
 
-            listingStandard.CheckboxLabeled("BEWH.ModSettings.Framework.ShowRankTab".Translate(), ref settings.alwaysShowRankTab);
+            listingStandard.CheckboxLabeled("BEWH.Framework.ModSettings.Framework.ShowRankTab".Translate(), ref settings.alwaysShowRankTab);
 
-            listingStandard.Label("\n" + "BEWH.ModSettings.CheckVEFPatches".Translate());
+            listingStandard.Label("\n" + "BEWH.Framework.ModSettings.CheckVEFPatches".Translate());
             
             listingStandard.End();
             base.DoSettingsWindowContents(inRect);
@@ -32,7 +32,7 @@ namespace Core40k
 
         public override string SettingsCategory()
         {
-            return "BEWH.ModSettings.Framework.ModName".Translate();
+            return "BEWH.Framework.ModSettings.ModName".Translate();
         }
     }
 }

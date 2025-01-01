@@ -7,7 +7,7 @@ namespace Core40k
 {
     public class CompAbilityEffect_MustHaveGene : CompAbilityEffect
     {
-        public CompProperties_MustHaveGene Props => (CompProperties_MustHaveGene)props;
+        private new CompProperties_MustHaveGene Props => (CompProperties_MustHaveGene)props;
         
         public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
         {
@@ -21,7 +21,7 @@ namespace Core40k
             base.ExtraLabelMouseAttachment(target);
             if (target.Pawn.genes == null || !target.Pawn.genes.HasActiveGene(Props.geneDef))
             {
-                return "BEWH.Comp.PawnDoesNotHaveRequiredGene".Translate(target.Pawn, Props.geneDef.label);
+                return "BEWH.Framework.Comp.PawnDoesNotHaveRequiredGene".Translate(target.Pawn, Props.geneDef.label);
             }
             
             return null;
