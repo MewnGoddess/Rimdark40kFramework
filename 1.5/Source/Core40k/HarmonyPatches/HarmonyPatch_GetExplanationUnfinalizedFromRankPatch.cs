@@ -52,7 +52,7 @@ namespace Core40k
                 {
                     if (appendOverallRankText)
                     {
-                        stringBuilder.AppendLine("BEWH.StatsReport_Rank".Translate());
+                        stringBuilder.AppendLine("BEWH.RankSystem.StatsReport_Rank".Translate());
                         appendOverallRankText = false;
                     }
                     stringBuilder.AppendLine("    " + rank.LabelCap + ": " + ValueToString(stat, statOffsetFromRank, finalized: false, ToStringNumberSense.Offset));
@@ -62,7 +62,7 @@ namespace Core40k
                 {
                     if (appendOverallRankText)
                     {
-                        stringBuilder.AppendLine("BEWH.StatsReport_Rank".Translate());
+                        stringBuilder.AppendLine("BEWH.RankSystem.StatsReport_Rank".Translate());
                         appendOverallRankText = false;
                     }
                     stringBuilder.AppendLine("    " + rank.LabelCap + ": " + ValueToString(stat, statFactorFromRank, finalized: false, ToStringNumberSense.Factor));
@@ -83,7 +83,7 @@ namespace Core40k
                     {
                         if (appendOverallRankText)
                         {
-                            stringBuilder.AppendLine("BEWH.StatsReport_Rank".Translate());
+                            stringBuilder.AppendLine("BEWH.RankSystem.StatsReport_Rank".Translate());
                             appendOverallRankText = false;
                         }
                         stringBuilder.AppendLine("    " + rank.LabelCap + " (" + conditionalStat.Label + "): " + ValueToString(stat, statOffsetFromRankConditional, finalized: false, ToStringNumberSense.Offset));
@@ -93,7 +93,7 @@ namespace Core40k
                     {
                         if (appendOverallRankText)
                         {
-                            stringBuilder.AppendLine("BEWH.StatsReport_Rank".Translate());
+                            stringBuilder.AppendLine("BEWH.RankSystem.StatsReport_Rank".Translate());
                             appendOverallRankText = false;
                         }
                         stringBuilder.AppendLine("    " + rank.LabelCap + " (" + conditionalStat.Label + "): " + ValueToString(stat, statFactorFromRankConditional, finalized: false, ToStringNumberSense.Factor));

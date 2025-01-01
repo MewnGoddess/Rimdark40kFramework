@@ -61,7 +61,7 @@ namespace Core40k
         public ITab_RankSystem()
         {
             size = new Vector2(UI.screenWidth, UI.screenHeight * 0.75f);
-            labelKey = "BEWH.RankTab";
+            labelKey = "BEWH.RankSystem.RankTab";
             modSettings = LoadedModManager.GetMod<Core40kMod>().GetSettings<Core40kModSettings>();
             UpdateRankCategoryList();
         }
@@ -117,7 +117,7 @@ namespace Core40k
             Text.Anchor = TextAnchor.MiddleCenter;
             
             //Button to switch between rank categories
-            var categoryText = "BEWH.NoCategorySelected".Translate();
+            var categoryText = "BEWH.RankSystem.NoCategorySelected".Translate();
             if (currentlySelectedRankCategory != null)
             {
                 categoryText = currentlySelectedRankCategory.label.CapitalizeFirst();
@@ -388,7 +388,7 @@ namespace Core40k
                 {
                     listingRankInfo.Gap(5);
                     Text.Font = GameFont.Small;
-                    listingRankInfo.Label("BEWH.DaysSinceRankGiven".Translate(daysSpentAs));
+                    listingRankInfo.Label("BEWH.RankSystem.DaysSinceRankGiven".Translate(daysSpentAs));
                     Text.Font = GameFont.Medium;
                 }
                 
@@ -397,7 +397,7 @@ namespace Core40k
                 {   
                     listingRankInfo.Gap();
                     listingRankInfo.Indent(rectRankInfo.width * 0.25f);
-                    if (listingRankInfo.ButtonText("BEWH.UnlockRank".Translate(), widthPct: 0.5f))
+                    if (listingRankInfo.ButtonText("BEWH.RankSystem.UnlockRank".Translate(), widthPct: 0.5f))
                     {
                         UnlockRank(currentlySelectedRank.rankDef);
                     }
@@ -412,14 +412,14 @@ namespace Core40k
                 //Description
                 listingRankInfo.Gap();
                 Text.Anchor = TextAnchor.UpperLeft;
-                listingRankInfo.Label("BEWH.RankDescription".Translate());
+                listingRankInfo.Label("BEWH.RankSystem.RankDescription".Translate());
                 Text.Font = GameFont.Small;
                 listingRankInfo.Label(currentlySelectedRank.rankDef.description);
 
                 //Requirements
                 listingRankInfo.Gap();
                 Text.Font = GameFont.Medium;
-                listingRankInfo.Label("BEWH.RankRequirements".Translate());
+                listingRankInfo.Label("BEWH.RankSystem.RankRequirements".Translate());
                 Text.Font = GameFont.Small;
                 var requirementText = currentlySelectedRank.rankText;
                 listingRankInfo.Label(requirementText);
@@ -427,7 +427,7 @@ namespace Core40k
                 //Given stats
                 listingRankInfo.Gap();
                 Text.Font = GameFont.Medium;
-                listingRankInfo.Label("BEWH.RankBonuses".Translate());
+                listingRankInfo.Label("BEWH.RankSystem.RankBonuses".Translate());
                 Text.Font = GameFont.Small;
                 var rankBonusText = BuildRankBonusString(currentlySelectedRank.rankDef);
                 listingRankInfo.Label(rankBonusText);
@@ -439,7 +439,7 @@ namespace Core40k
             else
             {
                 Text.Anchor = TextAnchor.MiddleCenter;
-                var text = "BEWH.NoRankSelected".Translate();
+                var text = "BEWH.RankSystem.NoRankSelected".Translate();
                 Widgets.Label(rectRankInfo, text);
             }
         }
@@ -520,7 +520,7 @@ namespace Core40k
                 stringBuilder.Append("\n");
                 if (rankDef.colonyLimitOfRank.y == 0)
                 {
-                    stringBuilder.AppendLine("BEWH.RequirementsLimitOnlyOneEver".Translate(allowedAmount, currentAmount).Colorize(requirementColour));
+                    stringBuilder.AppendLine("BEWH.RankSystem.RequirementsLimitOnlyOneEver".Translate(allowedAmount, currentAmount).Colorize(requirementColour));
                 }
                 else
                 {
@@ -541,7 +541,7 @@ namespace Core40k
                             text += "th";
                             break;
                     }
-                    stringBuilder.AppendLine("BEWH.RequirementsLimit".Translate(allowedAmount, currentAmount, text).Colorize(requirementColour));
+                    stringBuilder.AppendLine("BEWH.RankSystem.RequirementsLimit".Translate(allowedAmount, currentAmount, text).Colorize(requirementColour));
                 }
             }
             
@@ -550,7 +550,7 @@ namespace Core40k
             if (!rankDef.requiredSkills.NullOrEmpty())
             {
                 stringBuilder.Append("\n");
-                stringBuilder.AppendLine("BEWH.RequirementsSkills".Translate());
+                stringBuilder.AppendLine("BEWH.RankSystem.RequirementsSkills".Translate());
                 foreach (var aptitude in rankDef.requiredSkills)
                 {
                     var skillRequirementMet = pawn.skills.GetSkill(aptitude.skill).Level >= aptitude.level;
@@ -568,7 +568,7 @@ namespace Core40k
             if (!rankDef.rankRequirements.NullOrEmpty())
             {
                 stringBuilder.Append("\n");
-                stringBuilder.AppendLine("BEWH.RequirementsRanks".Translate());
+                stringBuilder.AppendLine("BEWH.RankSystem.RequirementsRanks".Translate());
                 foreach (var rank in rankDef.rankRequirements)
                 {
                     var rankRequirementMet = compRankInfo.HasRank(rank.rankDef) &&
@@ -583,11 +583,11 @@ namespace Core40k
                     
                     if (rank.daysAs > 0)
                     {
-                        stringBuilder.AppendLine(("    " + "BEWH.HaveBeenRankForDays".Translate(rank.rankDef.label.CapitalizeFirst(), rank.daysAs)).Colorize(requirementColour));
+                        stringBuilder.AppendLine(("    " + "BEWH.RankSystem.HaveBeenRankForDays".Translate(rank.rankDef.label.CapitalizeFirst(), rank.daysAs)).Colorize(requirementColour));
                     }
                     else
                     {
-                        stringBuilder.AppendLine(("    " + "BEWH.HaveAchievedRank".Translate(rank.rankDef.label.CapitalizeFirst())).Colorize(requirementColour));
+                        stringBuilder.AppendLine(("    " + "BEWH.RankSystem.HaveAchievedRank".Translate(rank.rankDef.label.CapitalizeFirst())).Colorize(requirementColour));
                     }
                     
                 }
@@ -599,7 +599,7 @@ namespace Core40k
             if (!rankDef.requiredTraitsAll.NullOrEmpty())
             {
                 stringBuilder.Append("\n");
-                stringBuilder.AppendLine("BEWH.RequirementsTraitAll".Translate());
+                stringBuilder.AppendLine("BEWH.RankSystem.RequirementsTraitAll".Translate());
                 foreach (var trait in rankDef.requiredTraitsAll)
                 {
                     var traitsAllRequirementMet = pawn.story.traits.HasTrait(trait.traitDef, trait.degree);
@@ -618,7 +618,7 @@ namespace Core40k
             if (!rankDef.requiredTraitsOneAmong.NullOrEmpty())
             {
                 stringBuilder.Append("\n");
-                stringBuilder.AppendLine("BEWH.RequirementsTraitAtLeastOne".Translate());
+                stringBuilder.AppendLine("BEWH.RankSystem.RequirementsTraitAtLeastOne".Translate());
                 foreach (var trait in rankDef.requiredTraitsOneAmong)
                 {
                     var traitsAtLeastOneRequirementMet = pawn.story.traits.HasTrait(trait.traitDef, trait.degree);
@@ -643,7 +643,7 @@ namespace Core40k
                 if (!rankDef.requiredGenesAll.NullOrEmpty())
                 {
                     stringBuilder.Append("\n");
-                    stringBuilder.AppendLine("BEWH.RequirementsGeneAll".Translate());
+                    stringBuilder.AppendLine("BEWH.RankSystem.RequirementsGeneAll".Translate());
                     foreach (var gene in rankDef.requiredGenesAll)
                     {
                         var genesAllRequirementMet = pawn.genes.HasActiveGene(gene);
@@ -662,7 +662,7 @@ namespace Core40k
                 if (!rankDef.requiredGenesOneAmong.NullOrEmpty())
                 {
                     stringBuilder.Append("\n");
-                    stringBuilder.AppendLine("BEWH.RequirementsGeneAtLeastOne".Translate());
+                    stringBuilder.AppendLine("BEWH.RankSystem.RequirementsGeneAtLeastOne".Translate());
                     foreach (var gene in rankDef.requiredGenesOneAmong)
                     {
                         var genesAtLeastOneRequirementMet = pawn.genes.HasActiveGene(gene);
@@ -682,7 +682,7 @@ namespace Core40k
             if (!rankDef.incompatibleRanks.NullOrEmpty())
             {
                 stringBuilder.Append("\n");
-                stringBuilder.AppendLine("BEWH.IncompatibleRank".Translate());
+                stringBuilder.AppendLine("BEWH.RankSystem.IncompatibleRank".Translate());
                 foreach (var rank in rankDef.incompatibleRanks)
                 {
                     var isIncompatibleRank = compRankInfo.HasRank(rank);
@@ -701,7 +701,7 @@ namespace Core40k
             var requirementText = stringBuilder.ToString().TrimEnd('\r', '\n').TrimStart('\r', '\n');
             if (requirementText.NullOrEmpty())
             {
-                requirementText = "    " + "BEWH.None".Translate();
+                requirementText = "    " + "BEWH.CommonKeyword.None".Translate();
             }
 
             var requirementsMet = skillRequirementsMet && rankRequirementsMet &&
@@ -728,7 +728,7 @@ namespace Core40k
             var statBonuses = statStringBuilder.ToString();
             if (!statBonuses.NullOrEmpty())
             {
-                statBonuses = "BEWH.Stats".Translate() + "\n" + statBonuses;
+                statBonuses = "BEWH.RankSystem.Stats".Translate() + "\n" + statBonuses;
             }
             
             
@@ -747,7 +747,7 @@ namespace Core40k
             
             if (!abilityBonuses.NullOrEmpty())
             {
-                abilityBonuses = "BEWH.Abilities".Translate() + "\n" + abilityBonuses;
+                abilityBonuses = "BEWH.RankSystem.Abilities".Translate() + "\n" + abilityBonuses;
             }
             
             
@@ -761,14 +761,14 @@ namespace Core40k
             var customEffects = customEffectStringBuilder.ToString();
             if (!customEffects.NullOrEmpty())
             {
-                customEffects = "BEWH.OtherEffects".Translate() + "\n" + customEffects;
+                customEffects = "BEWH.RankSystem.OtherEffects".Translate() + "\n" + customEffects;
             }
 
             var result = statBonuses + "\n" + abilityBonuses + "\n" + customEffects;
             
             if (statBonuses.NullOrEmpty() && abilityBonuses.NullOrEmpty())
             {
-                result = "    " + "BEWH.None".Translate();
+                result = "    " + "BEWH.CommonKeyword.None".Translate();
             }
 
             return result;
@@ -831,17 +831,17 @@ namespace Core40k
             var allRequirement = new List<string>();
             if (pawn.genes != null && rankCategoryDef.unlockedByGene != null && !pawn.genes.HasActiveGene(rankCategoryDef.unlockedByGene))
             {
-                allRequirement.Add("BEWH.CategoryRequiredGene".Translate(rankCategoryDef.unlockedByGene.label.CapitalizeFirst()));
+                allRequirement.Add("BEWH.RankSystem.CategoryRequiredGene".Translate(rankCategoryDef.unlockedByGene.label.CapitalizeFirst()));
             }
             
             if (rankCategoryDef.unlockedByHediff != null && !pawn.health.hediffSet.HasHediff(rankCategoryDef.unlockedByHediff))
             {
-                allRequirement.Add("BEWH.CategoryRequiredHediff".Translate(rankCategoryDef.unlockedByHediff.label.CapitalizeFirst()));
+                allRequirement.Add("BEWH.RankSystem.CategoryRequiredHediff".Translate(rankCategoryDef.unlockedByHediff.label.CapitalizeFirst()));
             }
             
             if (rankCategoryDef.unlockedByTrait != null && !pawn.story.traits.HasTrait(rankCategoryDef.unlockedByTrait, rankCategoryDef.traitDegree))
             {
-                allRequirement.Add("BEWH.CategoryRequiredTrait".Translate(rankCategoryDef.unlockedByTrait.DataAtDegree(rankCategoryDef.traitDegree).label.CapitalizeFirst()));
+                allRequirement.Add("BEWH.RankSystem.CategoryRequiredTrait".Translate(rankCategoryDef.unlockedByTrait.DataAtDegree(rankCategoryDef.traitDegree).label.CapitalizeFirst()));
             }
 
             for (var i = 0; i < allRequirement.Count; i++)
@@ -849,7 +849,7 @@ namespace Core40k
                 stringBuilder.Append(allRequirement[i]);
                 if (i + 2 == allRequirement.Count)
                 {
-                    stringBuilder.Append("BEWH.And".Translate());
+                    stringBuilder.Append("BEWH.RankSystem.And".Translate());
                 }
                 else if (i + 2 < allRequirement.Count)
                 {

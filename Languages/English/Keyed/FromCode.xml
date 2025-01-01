@@ -1,91 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
 
-  <BEWH.ModSettingsNameCore>RimDark 40k - Framework</BEWH.ModSettingsNameCore>
-  <BEWH.ModSettingsShowTabName>Always show Rank tab for player pawns. Will show even if no category or rank is available to the pawn.</BEWH.ModSettingsShowTabName>
+  <!--=== Mod Setting related ===-->
+  <BEWH.ModSettings.Framework.ModName>RimDark 40k - Framework</BEWH.ModSettings.Framework.ModName>
+  <BEWH.ModSettings.Framework.ShowRankTab>Always show Rank tab for player pawns. Will show even if no category or rank is available to the pawn.</BEWH.ModSettings.Framework.ShowRankTab>
 
-  <BEWH.CheckVEFPatches>Remember to check Vanilla Expanded Framework toggable patches for more settings for this mod!</BEWH.CheckVEFPatches>
-
-  <BEWH.TzeentchName>Tzeentch</BEWH.TzeentchName>
-  <BEWH.KhorneName>Khorne</BEWH.KhorneName>
-  <BEWH.NurgleName>Nurgle</BEWH.NurgleName>
-  <BEWH.SlaaneshName>Slaanesh</BEWH.SlaaneshName>
-  <BEWH.UndividedName>Undivided</BEWH.UndividedName>
-
-  <BEWH.CannotRecruitLetter>Unbreakable Loyalty</BEWH.CannotRecruitLetter>
-  <BEWH.CannotRecruitMessage>{1} tried to recruit {0}, but {0}'s unbreakable loyalty to their faction made them resist all attempts.\n\n{0} cannot be recruited.</BEWH.CannotRecruitMessage>
-  <BEWH.CannotEnslaveMessage>{1} tried to enslave {0}, but {0}'s unbreakable loyalty to their faction made them resist all attempts.\n\n{0} cannot be enslaved.</BEWH.CannotEnslaveMessage>
-
-  <BEWH.OnlyOneBuildingAllowedPerMap>You may only place one {0} per map.</BEWH.OnlyOneBuildingAllowedPerMap>
-
-  <BEWH.ChangeSecondaryColour>Change both colours</BEWH.ChangeSecondaryColour>
-  <BEWH.ChangeSecondaryColourDesc>Changes both colours of apparel on {0}.</BEWH.ChangeSecondaryColourDesc>
-  <BEWH.PrimaryColor>Primary</BEWH.PrimaryColor>
-  <BEWH.SecondaryColor>Secondary</BEWH.SecondaryColor>
-
-  <BEWH.MainTab>Main</BEWH.MainTab>
-
-  <BEWH.SelectPreset>Select Preset</BEWH.SelectPreset>
-  <BEWH.EditPreset>Edit Preset</BEWH.EditPreset>
-  <BEWH.NewPreset>[New Preset]</BEWH.NewPreset>
-  <BEWH.EnterPresetName>Enter name of new preset</BEWH.EnterPresetName>
-  <BEWH.OverridePreset>Override {0} with currently selected colours</BEWH.OverridePreset>
-  <BEWH.PresetExists>Already exists!</BEWH.PresetExists>
-
-  <!-- Rank stuff-->
-  <BEWH.RankTab>Ranks</BEWH.RankTab>
-
-  <BEWH.CategoryRequires>Category "{0}"" requires that pawn has {1}</BEWH.CategoryRequires>
-
-  <BEWH.CategoryRequiredGene>the {0} gene</BEWH.CategoryRequiredGene>
-  <BEWH.CategoryRequiredHediff>the {0} hediff</BEWH.CategoryRequiredHediff>
-  <BEWH.CategoryRequiredTrait>the {0} trait</BEWH.CategoryRequiredTrait>
-  <BEWH.And> and </BEWH.And>
+  <BEWH.ModSettings.CheckVEFPatches>Remember to check Vanilla Expanded Framework toggable patches for more settings for this mod!</BEWH.ModSettings.CheckVEFPatches>
 
 
-  <BEWH.NoRankSelected>No rank selected.</BEWH.NoRankSelected>
-  <BEWH.NoCategorySelected>No category selected.</BEWH.NoCategorySelected>
+  <!--=== Common Keywords ===-->
+  <BEWH.CommonKeyword.None>None</BEWH.CommonKeyword.None>
 
-  <BEWH.RankDescription>Description</BEWH.RankDescription>
-  <BEWH.RankRequirements>Requirements</BEWH.RankRequirements>
-  <BEWH.RankBonuses>Bonuses from rank</BEWH.RankBonuses>
-  <BEWH.DaysSinceRankGiven>{0} days since rank was given</BEWH.DaysSinceRankGiven>
 
-  <BEWH.None>None</BEWH.None>
-  <BEWH.Stats>Stats</BEWH.Stats>
-  <BEWH.Abilities>Abilities</BEWH.Abilities>
-  <BEWH.OtherEffects>Other Effects</BEWH.OtherEffects>
-  <BEWH.UnlockRank>Unlock rank</BEWH.UnlockRank>
+  <!--=== Apparel Two ===-->
+  <BEWH.ApparelColourTwo.MainTab>Main</BEWH.ApparelColourTwo.MainTab>
 
-  <BEWH.StatsReport_Rank>Relevant ranks</BEWH.StatsReport_Rank>
+  <BEWH.ApparelColourTwo.PrimaryColor>Primary</BEWH.ApparelColourTwo.PrimaryColor>
+  <BEWH.ApparelColourTwo.SecondaryColor>Secondary</BEWH.ApparelColourTwo.SecondaryColor>
 
-  <BEWH.RequirementsSkills>All of the following skills</BEWH.RequirementsSkills>
-  <BEWH.RequirementsRanks>All of the following ranks</BEWH.RequirementsRanks>
+  <BEWH.ApparelColourTwo.SelectPreset>Select Preset</BEWH.ApparelColourTwo.SelectPreset>
+  <BEWH.ApparelColourTwo.EditPreset>Edit Preset</BEWH.ApparelColourTwo.EditPreset>
+  <BEWH.ApparelColourTwo.NewPreset>[New Preset]</BEWH.ApparelColourTwo.NewPreset>
+  <BEWH.ApparelColourTwo.EnterPresetName>Enter name of new preset</BEWH.ApparelColourTwo.EnterPresetName>
+  <BEWH.ApparelColourTwo.OverridePreset>Override {0} with currently selected colours</BEWH.ApparelColourTwo.OverridePreset>
+  <BEWH.ApparelColourTwo.PresetExists>Already exists!</BEWH.ApparelColourTwo.PresetExists>
 
-  <BEWH.RequirementsTraitAll>All of the following traits</BEWH.RequirementsTraitAll>
-  <BEWH.RequirementsTraitAtLeastOne>At least one of the following traits</BEWH.RequirementsTraitAtLeastOne>
+  <BEWH.ApparelColourTwo.ChangeSecondaryColour>Change both colours</BEWH.ApparelColourTwo.ChangeSecondaryColour>
+  <BEWH.ApparelColourTwo.ChangeSecondaryColourDesc>Changes both colours of apparel on {0}.</BEWH.ApparelColourTwo.ChangeSecondaryColourDesc>
 
-  <BEWH.RequirementsGeneAll>All of the following genes</BEWH.RequirementsGeneAll>
-  <BEWH.RequirementsGeneAtLeastOne>At least one of the following genes</BEWH.RequirementsGeneAtLeastOne>
 
-  <!-- Every{2} colonist from below text is on purpose and should stay as so-->
-  <BEWH.RequirementsLimit>Only {0} may have this rank at a time. \nEvery{2} colonist will increase this limit by 1. Currently {1} exists.</BEWH.RequirementsLimit>
-  <BEWH.RequirementsLimitOnlyOneEver>Only {0} may ever have this rank. Currently {1} exists.</BEWH.RequirementsLimitOnlyOneEver>
+  <!--=== Rank System ===-->
+  <BEWH.RankSystem.RankTab>Ranks</BEWH.RankSystem.RankTab>
 
-  <BEWH.HaveBeenRankForDays>Must have been a {0} for at least {1} days</BEWH.HaveBeenRankForDays>
-  <BEWH.HaveAchievedRank>Must have achieved the rank of {0}</BEWH.HaveAchievedRank>
+  <BEWH.RankSystem.CategoryRequires>Category "{0}"" requires that pawn has {1}</BEWH.RankSystem.CategoryRequires>
+  <BEWH.RankSystem.NoCategorySelected>No category selected.</BEWH.RankSystem.NoCategorySelected>
 
-  <BEWH.IncompatibleRank>Incompatible with the following ranks</BEWH.IncompatibleRank>
+  <BEWH.RankSystem.CategoryRequiredGene>the {0} gene</BEWH.RankSystem.CategoryRequiredGene>
+  <BEWH.RankSystem.CategoryRequiredHediff>the {0} hediff</BEWH.RankSystem.CategoryRequiredHediff>
+  <BEWH.RankSystem.CategoryRequiredTrait>the {0} trait</BEWH.RankSystem.CategoryRequiredTrait>
+  <BEWH.RankSystem.And> and </BEWH.RankSystem.And>
 
-  <BEWH.DoesNotHaveRank>{0} incapable of obtaining ranks</BEWH.DoesNotHaveRank>
+  <BEWH.RankSystem.NoRankSelected>No rank selected.</BEWH.RankSystem.NoRankSelected>
+  <BEWH.RankSystem.RankDescription>Description</BEWH.RankSystem.RankDescription>
+  <BEWH.RankSystem.RankRequirements>Requirements</BEWH.RankSystem.RankRequirements>
+  <BEWH.RankSystem.RankBonuses>Bonuses from rank</BEWH.RankSystem.RankBonuses>
+  <BEWH.RankSystem.DaysSinceRankGiven>{0} days since rank was given</BEWH.RankSystem.DaysSinceRankGiven>
 
-  <BEWH.NoUnlockedRanks>{0} does not have any ranks</BEWH.NoUnlockedRanks>
 
-  <BEWH.NoUnlockedRanksOfCategory>{0} does not have any ranks of category {1}</BEWH.NoUnlockedRanksOfCategory>
+  <BEWH.RankSystem.Stats>Stats</BEWH.RankSystem.Stats>
+  <BEWH.RankSystem.Abilities>Abilities</BEWH.RankSystem.Abilities>
+  <BEWH.RankSystem.OtherEffects>Other Effects</BEWH.RankSystem.OtherEffects>
+  <BEWH.RankSystem.UnlockRank>Unlock rank</BEWH.RankSystem.UnlockRank>
 
-  <BEWH.RankTooHigh>{0} rank is too high to reset</BEWH.RankTooHigh>
+  <BEWH.RankSystem.StatsReport_Rank>Relevant ranks</BEWH.RankSystem.StatsReport_Rank>
 
-  <BEWH.PawnDoesNotHaveRequiredGene>{0} does not have the {1} gene</BEWH.PawnDoesNotHaveRequiredGene>
+  <BEWH.RankSystem.RequirementsSkills>All of the following skills</BEWH.RankSystem.RequirementsSkills>
+  <BEWH.RankSystem.RequirementsRanks>All of the following ranks</BEWH.RankSystem.RequirementsRanks>
 
+  <BEWH.RankSystem.RequirementsTraitAll>All of the following traits</BEWH.RankSystem.RequirementsTraitAll>
+  <BEWH.RankSystem.RequirementsTraitAtLeastOne>At least one of the following traits</BEWH.RankSystem.RequirementsTraitAtLeastOne>
+
+  <BEWH.RankSystem.RequirementsGeneAll>All of the following genes</BEWH.RankSystem.RequirementsGeneAll>
+  <BEWH.RankSystem.RequirementsGeneAtLeastOne>At least one of the following genes</BEWH.RankSystem.RequirementsGeneAtLeastOne>
+
+  <!-- "Every{2} colonist" from the text below is on purpose and should stay as so -->
+  <BEWH.RankSystem.RequirementsLimit>Only {0} may have this rank at a time. \nEvery{2} colonist will increase this limit by 1. Currently {1} exists.</BEWH.RankSystem.RequirementsLimit>
+  <BEWH.RankSystem.RequirementsLimitOnlyOneEver>Only {0} may ever have this rank. Currently {1} exists.</BEWH.RankSystem.RequirementsLimitOnlyOneEver>
+
+  <BEWH.RankSystem.HaveBeenRankForDays>Must have been a {0} for at least {1} days</BEWH.RankSystem.HaveBeenRankForDays>
+  <BEWH.RankSystem.HaveAchievedRank>Must have achieved the rank of {0}</BEWH.RankSystem.HaveAchievedRank>
+
+  <BEWH.RankSystem.IncompatibleRank>Incompatible with the following ranks</BEWH.RankSystem.IncompatibleRank>
+
+  <BEWH.RankSystem.DoesNotHaveRank>{0} incapable of obtaining ranks</BEWH.RankSystem.DoesNotHaveRank>
+  <BEWH.RankSystem.NoUnlockedRanks>{0} does not have any ranks</BEWH.RankSystem.NoUnlockedRanks>
+  <BEWH.RankSystem.NoUnlockedRanksOfCategory>{0} does not have any ranks of category {1}</BEWH.RankSystem.NoUnlockedRanksOfCategory>
+  <BEWH.RankSystem.RankTooHigh>{0} rank is too high to reset</BEWH.RankSystem.RankTooHigh>
+
+
+  <!--=== Misc ===-->
+  <!-- Unbreakable -->
+  <BEWH.Unbreakable.CannotRecruitLetter>Unbreakable Loyalty</BEWH.Unbreakable.CannotRecruitLetter>
+  <BEWH.Unbreakable.CannotRecruitMessage>{1} tried to recruit {0}, but {0}'s unbreakable loyalty to their faction made them resist all attempts.\n\n{0} cannot be recruited.</BEWH.Unbreakable.CannotRecruitMessage>
+  <BEWH.Unbreakable.CannotEnslaveMessage>{1} tried to enslave {0}, but {0}'s unbreakable loyalty to their faction made them resist all attempts.\n\n{0} cannot be enslaved.</BEWH.Unbreakable.CannotEnslaveMessage>
+
+  <!-- Placement Limit -->
+  <BEWH.PlacementLimit.OnlyOneBuildingAllowedPerMap>You may only place one {0} per map.</BEWH.PlacementLimit.OnlyOneBuildingAllowedPerMap>
+
+  <!-- Comp-->
+  <BEWH.Comp.PawnDoesNotHaveRequiredGene>{0} does not have the {1} gene</BEWH.Comp.PawnDoesNotHaveRequiredGene>
 
 </LanguageData>

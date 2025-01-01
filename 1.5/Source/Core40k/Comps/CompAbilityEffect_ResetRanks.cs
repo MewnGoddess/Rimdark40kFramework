@@ -47,17 +47,17 @@ namespace Core40k
         {
             if (!target.Pawn.HasComp<CompRankInfo>())
             {
-                return "BEWH.DoesNotHaveRank".Translate(target.Pawn);
+                return "BEWH.RankSystem.DoesNotHaveRank".Translate(target.Pawn);
             }
             
             if (target.Pawn.GetComp<CompRankInfo>().UnlockedRanks.NullOrEmpty())
             {
-                return "BEWH.NoUnlockedRanks".Translate(target.Pawn);
+                return "BEWH.RankSystem.NoUnlockedRanks".Translate(target.Pawn);
             }
 
             if (!target.Pawn.GetComp<CompRankInfo>().HasRankOfCategory(Props.rankCategoryDef))
             {
-                return "BEWH.NoUnlockedRanksOfCategory".Translate(target.Pawn, Props.rankCategoryDef);
+                return "BEWH.RankSystem.NoUnlockedRanksOfCategory".Translate(target.Pawn, Props.rankCategoryDef);
             }
             
             var canDemoteTier = Props.canDemoteToTierInclusive;
@@ -68,7 +68,7 @@ namespace Core40k
 
             if (target.Pawn.GetComp<CompRankInfo>().HighestRank() > canDemoteTier)
             {
-                return "BEWH.RankTooHigh".Translate(target.Pawn);
+                return "BEWH.RankSystem.RankTooHigh".Translate(target.Pawn);
             }
             
             return null;

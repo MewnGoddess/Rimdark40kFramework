@@ -21,7 +21,7 @@ namespace Core40k
             base.ExtraLabelMouseAttachment(target);
             if (target.Pawn.genes == null || !target.Pawn.genes.HasActiveGene(Props.geneDef))
             {
-                return "BEWH.PawnDoesNotHaveRequiredGene".Translate(target.Pawn, Props.geneDef.label);
+                return "BEWH.Comp.PawnDoesNotHaveRequiredGene".Translate(target.Pawn, Props.geneDef.label);
             }
             
             return null;

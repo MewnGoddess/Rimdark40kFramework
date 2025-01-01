@@ -29,7 +29,7 @@ namespace Core40k
             {
                 height = viewRect.height * 0.3f
             };
-            Widgets.Label(labelRect, "BEWH.EnterPresetName".Translate());
+            Widgets.Label(labelRect, "BEWH.ApparelColourTwo.EnterPresetName".Translate());
             
             var textEntryRect = new Rect(labelRect)
             {
