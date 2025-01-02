@@ -16,16 +16,21 @@ namespace Core40k
         public override void PostAdd()
         {
             base.PostAdd();
-            
-            SelectGeneToGive();
-            SelectTraitToGive();
-            
-            if (chosenGene != null)
+
+            if (chosenGene == null)
+            {
+                SelectGeneToGive();
+            }
+            else
             {
                 pawn.genes.AddGene(chosenGene, true);
             }
 
-            if (chosenTrait != null)
+            if (chosenTrait == null)
+            {
+                SelectTraitToGive();
+            }
+            else
             {
                 var trait = new Trait(chosenTrait, chosenTraitDegree);
                 pawn.story.traits.GainTrait(trait);
