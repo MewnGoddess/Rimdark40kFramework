@@ -27,7 +27,6 @@ namespace Core40k
             {
                 name = "SolidColorTex-" + primaryColor + secondaryColor
             };
-            Log.Message(texture2D.GetPixels().Length);
             texture2D.SetPixel(0, 0, primaryColor);
             texture2D.SetPixel(0, 1, primaryColor);
             texture2D.SetPixel(1, 0, secondaryColor);
