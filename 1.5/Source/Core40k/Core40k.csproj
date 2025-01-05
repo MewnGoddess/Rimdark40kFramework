@@ -82,7 +82,9 @@
     <Compile Include="Comps\CompAbilityEffect_GiveHediffAndMentalBreak.cs" />
     <Compile Include="Comps\CompAbilityEffect_MustHaveGeneTraitOrHediff.cs" />
     <Compile Include="Comps\CompAbilityEffect_ResetRanks.cs" />
+    <Compile Include="Comps\CompAbilityEffect_WaveAttack.cs" />
     <Compile Include="Comps\CompProperties_AbilityGiveHediffAndMental.cs" />
+    <Compile Include="Comps\CompProperties_AbilityWaveAttack.cs" />
     <Compile Include="Comps\CompProperties_MustHaveGeneTraitOrHediff.cs" />
     <Compile Include="Comps\CompProperties_ResetRanks.cs" />
     <Compile Include="Comps\GameComponent_SavedPresets.cs" />
