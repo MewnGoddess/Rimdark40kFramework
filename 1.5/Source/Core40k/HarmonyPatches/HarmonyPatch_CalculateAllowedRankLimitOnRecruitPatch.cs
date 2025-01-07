@@ -17,7 +17,6 @@ namespace Core40k
         ArgumentType.Normal,
         ArgumentType.Normal,
     })]
-    [HarmonyPriority(399)]
     public class CalculateAllowedRankLimitOnRecruit
     {
         public static void Postfix(Pawn recruiter, Pawn recruitee)
