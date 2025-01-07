@@ -22,13 +22,13 @@ namespace Core40k
 
             foreach (var rank in comp.UnlockedRanks.Where(rank => rank.colonyLimitOfRank.x > 0 || (rank.colonyLimitOfRank.x == 0 && rank.colonyLimitOfRank.y > 0)))
             {
-                if (gameComp.rankLimits.ContainsKey(rank))
+                if (gameComp.CanHaveMoreOfRank(rank))
                 {
-                    gameComp.rankLimits[rank] += 1;
+                    gameComp.PawnGainedRank(rank);
                 }
                 else
                 {
-                    gameComp.rankLimits.Add(rank, 1);
+                    comp.RemoveRank(rank, false);
                 }
             }
         }

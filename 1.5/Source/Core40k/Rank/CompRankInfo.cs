@@ -12,6 +12,8 @@ namespace Core40k
         
         private List<RankDef> unlockedRanks = new List<RankDef>();
 
+        public List<RankDef> unlockedRanksAtDeath = new List<RankDef>();
+        
         public List<RankDef> UnlockedRanks => unlockedRanks;
 
         private RankCategoryDef lastOpenedRankCategory = null;
@@ -21,6 +23,10 @@ namespace Core40k
         private Dictionary<RankDef, int> daysAsRank = new Dictionary<RankDef, int>();
         
         public Dictionary<RankDef, int> DaysAsRank => daysAsRank;
+
+        private GameComponent_RankInfo gameComponentRankInfo = null;
+
+        public GameComponent_RankInfo GameComponentRankInfo => gameComponentRankInfo ?? (gameComponentRankInfo = Current.Game.GetComponent<GameComponent_RankInfo>());
 
         public void UnlockRank(RankDef rank)
         {
@@ -73,7 +79,7 @@ namespace Core40k
             }
         }
 
-        public void RemoveRank(RankDef rankDef)
+        public void RemoveRank(RankDef rankDef, bool removeFromRankLimit)
         {
             unlockedRanks.Remove(rankDef);
             daysAsRank.Remove(rankDef);
@@ -102,6 +108,11 @@ namespace Core40k
                     }
                 }
             }
+
+            if (removeFromRankLimit)
+            {
+                GameComponentRankInfo.PawnLostRank(rankDef);
+            }
         }
 
         public int HighestRank()
@@ -123,19 +134,18 @@ namespace Core40k
 
         public void ResetRanks(RankCategoryDef rankCategoryDef)
         {
-            DecreaseRankLimitCountIfNecessary();
             if (rankCategoryDef != null)
             {
                 foreach (var rankDef in unlockedRanks.ToList().Where(rankDef => rankDef.rankCategory == rankCategoryDef))
                 {
-                    RemoveRank(rankDef);
+                    RemoveRank(rankDef, true);
                 }
             }
             else
             {
                 foreach (var rankDef in unlockedRanks)
                 {
-                    RemoveRank(rankDef);
+                    RemoveRank(rankDef, true);
                 }
             }
         }
@@ -153,13 +163,13 @@ namespace Core40k
         public override void Notify_Killed(Map prevMap, DamageInfo? dinfo = null)
         {
             base.Notify_Killed(prevMap, dinfo);
-            DecreaseRankLimitCountIfNecessary();
+            GameComponentRankInfo.PawnResetRanks(UnlockedRanks);
         }
-        
+
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
             base.PostDestroy(mode, previousMap);
-            DecreaseRankLimitCountIfNecessary();
+            GameComponentRankInfo.PawnResetRanks(UnlockedRanks);
         }
         
         public override void CompTick()
@@ -191,31 +201,12 @@ namespace Core40k
         {
             daysAsRank[rankDef]++;
         }
-
-        private void DecreaseRankLimitCountIfNecessary()
-        {
-            var gameComp = Current.Game.GetComponent<GameComponent_RankInfo>();
-            foreach (var rank in UnlockedRanks.Where(rank => rank.colonyLimitOfRank.x > 0 || (rank.colonyLimitOfRank.x == 0 && rank.colonyLimitOfRank.y > 0)))
-            {
-                if (!gameComp.rankLimits.ContainsKey(rank))
-                {
-                    continue;
-                }
-                if (gameComp.rankLimits[rank] == 1)
-                {
-                    gameComp.rankLimits.Remove(rank);
-                }
-                else
-                {
-                    gameComp.rankLimits[rank] -= 1;
-                }
-            }
-        }
         
         public override void PostExposeData()
         {
             base.PostExposeData();
             Scribe_Collections.Look(ref unlockedRanks, "unlockedRanks", LookMode.Def);
+            Scribe_Collections.Look(ref unlockedRanksAtDeath, "unlockedRanksAtDeath", LookMode.Def);
             Scribe_Collections.Look(ref daysAsRank, "daysAsRank");
             Scribe_Defs.Look(ref lastOpenedRankCategory, "lastOpenedRankCategory");
 
@@ -229,5 +220,6 @@ namespace Core40k
                 daysAsRank = new Dictionary<RankDef, int>();
             }
         }
+        
     }
 }

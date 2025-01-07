@@ -49,7 +49,7 @@ namespace Core40k
             get
             {
                 var defaultRes = modSettings.alwaysShowRankTab;
-                if (!(Find.Selector.SingleSelectedThing is Pawn p) || !p.HasComp<CompRankInfo>() || p.Faction == null || !p.Faction.IsPlayer)
+                if (!(Find.Selector.SingleSelectedThing is Pawn p) || !p.HasComp<CompRankInfo>() || p.Faction == null || !p.Faction.IsPlayer || p.IsSlaveOfColony || p.IsPrisonerOfColony)
                 {
                     return defaultRes;
                 }
@@ -502,18 +502,8 @@ namespace Core40k
             var rankLimitRequirementsMet = true;
             if (rankDef.colonyLimitOfRank.x > 0 || (rankDef.colonyLimitOfRank.x == 0 && rankDef.colonyLimitOfRank.y > 0))
             {
-                var playerPawnAmount = GetColonistForCounting();
-                
-                var allowedAmount = rankDef.colonyLimitOfRank.y > 0 ? rankDef.colonyLimitOfRank.x + Math.Floor(playerPawnAmount/rankDef.colonyLimitOfRank.y) : rankDef.colonyLimitOfRank.x;
-                
-                var currentAmount = 0;
-
-                if (gameCompRankInfo.rankLimits.ContainsKey(rankDef))
-                {
-                    currentAmount = gameCompRankInfo.rankLimits.TryGetValue(rankDef);
-                }
-
-                rankLimitRequirementsMet = allowedAmount > currentAmount;
+                var (allowed, allowedAmount, currentAmount) = gameCompRankInfo.CanHaveMoreOfRankWithInfo(rankDef);
+                rankLimitRequirementsMet = allowed;
                 
                 var requirementColour = rankLimitRequirementsMet ? requirementMetColour : requirementNotMetColour;
                 
@@ -793,14 +783,14 @@ namespace Core40k
             return text2;
         }
 
-        private static int GetColonistForCounting()
+        /*private static int GetColonistForCounting()
         {
             var playerPawnAmount = Find.Maps.Sum(map => map.mapPawns.ColonistCount);
             var caravans = Find.WorldObjects.Caravans.Where(c => c.IsPlayerControlled);
             playerPawnAmount += caravans.SelectMany<Caravan, Pawn>(caravan => caravan.pawns).Count(p => p.Faction != null && p.Faction.IsPlayer);
 
             return playerPawnAmount;
-        }
+        }*/
 
         private bool MeetsCategoryRequirements(RankCategoryDef rankCategoryDef)
         {

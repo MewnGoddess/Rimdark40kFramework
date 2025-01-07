@@ -19,9 +19,15 @@ namespace Core40k
             }
             foreach (var gene in recipient.genes.GenesListForReading)
             {
-                if (!gene.def.HasModExtension<DefModExtension_SlaveabilityRecruitability>()) continue;
-                
-                if (gene.def.GetModExtension<DefModExtension_SlaveabilityRecruitability>().canBeRecruited) continue;
+                if (!gene.def.HasModExtension<DefModExtension_SlaveabilityRecruitability>())
+                {
+                    continue;
+                }
+
+                if (gene.def.GetModExtension<DefModExtension_SlaveabilityRecruitability>().canBeRecruited)
+                {
+                    continue;
+                }
                     
                 Find.LetterStack.ReceiveLetter("BEWH.Framework.Unbreakable.CannotRecruitLetter".Translate(), "BEWH.Framework.Unbreakable.CannotRecruitMessage".Translate(recipient.Named("PAWN"), initiator.Named("PAWN")), LetterDefOf.NeutralEvent);
                 return false;

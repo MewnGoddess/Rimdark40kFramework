@@ -111,6 +111,8 @@
     <Compile Include="GeneClasses\Gene_DisabledBy.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_AddedWorldCarryCapacityPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_ApparelColourTwoPatch.cs" />
+    <Compile Include="HarmonyPatches\HarmonyPatch_CalculateAllowedRankLimitOnArrestPatch.cs" />
+    <Compile Include="HarmonyPatches\HarmonyPatch_CalculateAllowedRankLimitOnRecruitPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_DontPlaceProductPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_ColourTwoSelectableOnStylingStation.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_GetExplanationUnfinalizedFromRankPatch.cs" />
