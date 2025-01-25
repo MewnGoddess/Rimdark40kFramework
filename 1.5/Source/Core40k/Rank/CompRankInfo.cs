@@ -40,6 +40,11 @@ namespace Core40k
                 return;
             }
             
+            if (rank.rankTier > HighestRank())
+            {
+                pawn.story.Title = rank.label;
+            }
+            
             unlockedRanks.Add(rank);
             
             if (!daysAsRank.ContainsKey(rank))
@@ -113,10 +118,21 @@ namespace Core40k
             {
                 GameComponentRankInfo.PawnLostRank(rankDef);
             }
+
+            var newHighestRank = HighestRankDef(false);
+            if (newHighestRank != null)
+            {
+                pawn.story.Title = newHighestRank.label;
+            }
         }
 
         public int HighestRank()
         {
+            if (unlockedRanks.NullOrEmpty())
+            {
+                return -1;
+            }
+            
             return unlockedRanks.MaxBy(rank => rank.rankTier).rankTier;
         }
         
