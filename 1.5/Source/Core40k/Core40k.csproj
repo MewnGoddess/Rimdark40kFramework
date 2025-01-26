@@ -106,6 +106,7 @@
     <Compile Include="DefModExtensions\DefModExtension_GeneDisabledBy.cs" />
     <Compile Include="DefModExtensions\DefModExtension_GeneExtension.cs" />
     <Compile Include="DefModExtensions\DefModExtension_DontPlaceProduct.cs" />
+    <Compile Include="DefModExtensions\DefModExtension_HolyDamageExtension.cs" />
     <Compile Include="DefModExtensions\DefModExtension_InheritableArchite.cs" />
     <Compile Include="GeneClasses\Gene_AddRandomGeneAndOrTraitByWeight.cs" />
     <Compile Include="GeneClasses\Gene_DisabledBy.cs" />

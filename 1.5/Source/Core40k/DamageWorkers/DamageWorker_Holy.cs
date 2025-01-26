@@ -1,7 +1,6 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using RimWorld;
 using Verse;
 
 namespace Core40k
@@ -20,10 +19,12 @@ namespace Core40k
                 return damageResult;
             }
 
-            if (victimPawn.Faction == null || !victimPawn.Faction.IsPlayer)
+            var defMod = def.GetModExtension<DefModExtension_HolyDamageExtension>();
+
+            if (victimPawn.HostileTo(Faction.OfPlayer) || victimPawn.HostileTo(dinfo.Instigator))
             {
                 var rnd = new Random();
-                var hitAmount = rnd.Next(2, 5);
+                var hitAmount = rnd.Next(defMod.minHitAmount, defMod.maxHitAmount);
                 
                 var damageAmount = dinfo.Amount;
                 
@@ -34,19 +35,26 @@ namespace Core40k
                         continue;
                     }
                     
-                    base.Apply(new DamageInfo(dinfo.Def, damageAmount, 999f, instigator: dinfo.Instigator), victimPawn);
+                    damageResult = base.Apply(new DamageInfo(dinfo.Def, damageAmount, 999f, instigator: dinfo.Instigator), victimPawn);
+                }
+
+                if (rnd.Next(0, 100) < defMod.chanceToIgnite)
+                {
+                    victimPawn.TryAttachFire(1, dinfo.Instigator);
                 }
             }
-            
-            var healAmount = dinfo.Amount / 2;
-
-            var injuries = victimPawn.health.hediffSet.hediffs.Where(hediff => hediff is Hediff_Injury).Cast<Hediff_Injury>().ToList();
-
-            healAmount /= injuries.Count;
-
-            foreach (var injury in injuries)
+            else
             {
-                injury.Heal(healAmount);
+                var healAmount = dinfo.Amount * defMod.healPercentOfDamageToAllies;
+
+                var injuries = victimPawn.health.hediffSet.hediffs.Where(hediff => hediff is Hediff_Injury).Cast<Hediff_Injury>().ToList();
+
+                healAmount /= injuries.Count;
+
+                foreach (var injury in injuries)
+                {
+                    injury.Heal(healAmount);
+                }
             }
             
             return damageResult;
