@@ -3,7 +3,6 @@ using System.Linq;
 using Verse;
 using VFECore.Abilities;
 
-
 namespace Core40k
 {
     public class CompRankInfo : ThingComp
@@ -134,6 +133,29 @@ namespace Core40k
             }
             
             return unlockedRanks.MaxBy(rank => rank.rankTier).rankTier;
+        }
+        
+        public int HighestRank(RankCategoryDef rankCategoryDef)
+        {
+            if (unlockedRanks.NullOrEmpty())
+            {
+                return -1;
+            }
+            
+            var unlockedRanksOfDef = unlockedRanks.Where(rank => rank.rankCategory == rankCategoryDef).ToList();
+            if (unlockedRanksOfDef.NullOrEmpty())
+            {
+                return -1;
+            }
+            
+            return unlockedRanksOfDef.MaxBy(rank => rank.rankTier).rankTier;
+        }
+        
+        public RankDef HighestRankDef(bool onlySpecialist, RankCategoryDef rankCategoryDef)
+        {
+            var list = unlockedRanks.Where(def => (!onlySpecialist || def.specialistRank) && def.rankCategory == rankCategoryDef).ToList();
+            
+            return list.NullOrEmpty() ? null : list.MaxBy(rank => rank.rankTier);
         }
         
         public RankDef HighestRankDef(bool onlySpecialist)

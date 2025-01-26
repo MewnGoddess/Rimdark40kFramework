@@ -118,7 +118,7 @@ namespace Core40k
             {
                 var tab = allTabs.FirstOrDefault(def => def.label == curTab).tabDrawerClass;
                 var tabDrawer = (ApparelColourTwoTabDrawer)Activator.CreateInstance(tab);
-                tabDrawer.DrawTab(rect3, pawn, viewRectHeight, ref apparelColorScrollPosition);
+                tabDrawer.DrawTab(rect3, pawn, ref apparelColorScrollPosition);
             }
             
             DrawBottomButtons(inRect);
