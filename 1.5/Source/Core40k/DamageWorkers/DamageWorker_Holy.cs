@@ -21,7 +21,7 @@ namespace Core40k
 
             var defMod = def.GetModExtension<DefModExtension_HolyDamageExtension>();
 
-            if (victimPawn.HostileTo(Faction.OfPlayer) || victimPawn.HostileTo(dinfo.Instigator))
+            if (victimPawn.HostileTo(Faction.OfPlayer))
             {
                 var rnd = new Random();
                 var hitAmount = rnd.Next(defMod.minHitAmount, defMod.maxHitAmount);
