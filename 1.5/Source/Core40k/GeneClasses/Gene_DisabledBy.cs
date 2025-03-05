@@ -12,8 +12,10 @@ namespace Core40k
                 if (def.HasModExtension<DefModExtension_GeneDisabledBy>())
                 {
                     var disabledByGenes = def.GetModExtension<DefModExtension_GeneDisabledBy>().geneDisabledBy;
-                    if (Enumerable.Any(disabledByGenes, gene => pawn.genes.HasActiveGene(gene)))
+                    var overriddenGene = Enumerable.FirstOrDefault(disabledByGenes, gene => pawn.genes.HasActiveGene(gene));
+                    if (overriddenGene != null)
                     {
+                        overriddenByGene = pawn.genes.GetGene(overriddenGene);
                         return false;
                     }
                 }
