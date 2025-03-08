@@ -54,7 +54,16 @@ namespace Core40k
                     return defaultRes;
                 }
 
-                return defaultRes || !availableCategories.NullOrEmpty();
+                pawn = (Pawn)Find.Selector.SingleSelectedThing;
+                foreach (var rankCategoryDef in availableCategories)
+                {
+                    if (rankCategoryDef.RankCategoryUnlockedFor(pawn))
+                    {
+                        return true;
+                    }
+                }
+
+                return defaultRes;
             }
         }
 
