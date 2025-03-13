@@ -792,15 +792,6 @@ namespace Core40k
             return text2;
         }
 
-        /*private static int GetColonistForCounting()
-        {
-            var playerPawnAmount = Find.Maps.Sum(map => map.mapPawns.ColonistCount);
-            var caravans = Find.WorldObjects.Caravans.Where(c => c.IsPlayerControlled);
-            playerPawnAmount += caravans.SelectMany<Caravan, Pawn>(caravan => caravan.pawns).Count(p => p.Faction != null && p.Faction.IsPlayer);
-
-            return playerPawnAmount;
-        }*/
-
         private bool MeetsCategoryRequirements(RankCategoryDef rankCategoryDef)
         {
             var geneRequirementMet = true;

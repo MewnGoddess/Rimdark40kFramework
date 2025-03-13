@@ -66,20 +66,24 @@ namespace Core40k
                     continue;
                 }
                 
-                var tabDef = item.def.GetModExtension<DefModExtension_EnableTabDef>().tabDef;
-                if (!allTabs.Contains(tabDef))
-                {
-                    continue;
-                }
-                
-                var tabRecord = new TabRecord(tabDef.label, delegate
-                {
-                    curTab = tabDef.label;
-                }, curTab == tabDef.label);
+                var tabDefs = item.def.GetModExtension<DefModExtension_EnableTabDef>().tabDefs;
 
-                if (!Enumerable.Any(tabs, tab => tab.label == tabRecord.label))
+                foreach (var tabDef in tabDefs)
                 {
-                    tabs.Add(tabRecord);
+                    if (!allTabs.Contains(tabDef))
+                    {
+                        continue;
+                    }
+                
+                    var tabRecord = new TabRecord(tabDef.label, delegate
+                    {
+                        curTab = tabDef.label;
+                    }, curTab == tabDef.label);
+
+                    if (!Enumerable.Any(tabs, tab => tab.label == tabRecord.label))
+                    {
+                        tabs.Add(tabRecord);
+                    }
                 }
             }
 

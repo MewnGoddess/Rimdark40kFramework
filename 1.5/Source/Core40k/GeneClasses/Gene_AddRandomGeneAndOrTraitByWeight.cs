@@ -13,33 +13,40 @@ namespace Core40k
         private static TraitDef chosenTrait = null;
         private static int chosenTraitDegree = 0;
 
+        public override void PostMake()
+        {
+            SelectGeneToGive();
+            SelectTraitToGive();
+        }
         public override void PostAdd()
         {
+            AddSelectedTraitAndGene();
+            
             base.PostAdd();
-
-            if (chosenGene == null)
+        }
+        public override void PostRemove()
+        {
+            RemoveSelectedTraitAndGene();
+            base.PostRemove();
+        }
+        
+        private void AddSelectedTraitAndGene()
+        {
+            if (chosenGene != null)
             {
-                SelectGeneToGive();
-            }
-            else
-            {
+                Log.Message(chosenGene);
                 pawn.genes.AddGene(chosenGene, true);
             }
 
-            if (chosenTrait == null)
-            {
-                SelectTraitToGive();
-            }
-            else
+            if (chosenTrait != null)
             {
                 var trait = new Trait(chosenTrait, chosenTraitDegree);
                 pawn.story.traits.GainTrait(trait);
             }
         }
-
-        public override void PostRemove()
+        
+        private void RemoveSelectedTraitAndGene()
         {
-            base.PostRemove();
             if (chosenGene != null)
             {
                 var gene = pawn.genes.GetGene(chosenGene);
@@ -59,7 +66,7 @@ namespace Core40k
             }
         }
 
-        public virtual void SelectTraitToGive()
+        private void SelectTraitToGive()
         {
             var defMod = def.GetModExtension<DefModExtension_AddRandomTraitByWeight>();
 
@@ -90,13 +97,13 @@ namespace Core40k
             chosenTraitDegree = result.Values.First();
         }
 
-        public virtual void SelectGeneToGive()
+        private void SelectGeneToGive()
         {
             var defMod = def.GetModExtension<DefModExtension_AddRandomGeneByWeight>();
 
             var random = new Random();
 
-            if (defMod == null ||random.Next(0, 100) > defMod.chanceToGrantGene)
+            if (defMod == null || random.Next(0, 100) > defMod.chanceToGrantGene)
             {
                 return;
             }
