@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
@@ -99,6 +100,17 @@
     <Compile Include="DamageWorkers\DamageWorker_Holy.cs" />
     <Compile Include="DataStructs\TraitData.cs" />
     <Compile Include="Debug\DebugActions.cs" />
+    <Compile Include="DecorativeApparel\BodyDecorativeApparelColourTwo.cs" />
+    <Compile Include="DecorativeApparel\DecorativeApparelColourTwo.cs" />
+    <Compile Include="DecorativeApparel\DecorationDef.cs" />
+    <Compile Include="DecorativeApparel\ExtraDecorationDef.cs" />
+    <Compile Include="DecorativeApparel\ExtraDecorationTab.cs" />
+    <Compile Include="DecorativeApparel\HarmonyPatch_PowerArmorBodyDecorationPatch.cs" />
+    <Compile Include="DecorativeApparel\HarmonyPatch_PowerArmorHelmetDecorationPatch.cs" />
+    <Compile Include="DecorativeApparel\HeadDecorativeApparelColourTwo.cs" />
+    <Compile Include="DecorativeApparel\PawnRenderNodeWorker_AttachmentExtraDecorationBody.cs" />
+    <Compile Include="DecorativeApparel\PawnRenderNodeWorker_AttachmentExtraDecorationHelmet.cs" />
+    <Compile Include="DecorativeApparel\PawnRenderNode_AttachmentExtraDecoration.cs" />
     <Compile Include="DefModExtensions\DefModExtension_AddRandomTraitByWeight.cs" />
     <Compile Include="DefModExtensions\DefModExtension_AddRandomGeneByWeight.cs" />
     <Compile Include="DefModExtensions\DefModExtension_BoostQualityCreatedByPawn.cs" />

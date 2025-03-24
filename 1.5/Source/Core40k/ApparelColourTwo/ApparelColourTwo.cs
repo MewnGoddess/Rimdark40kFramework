@@ -7,6 +7,10 @@ namespace Core40k
     [StaticConstructorOnStartup]
     public class ApparelColourTwo : Apparel
     {
+        private bool initialColourSet = false;
+        
+        public bool InitialColourSet => initialColourSet;
+        
         private Color drawColorOne = Color.white;
         
         private Color originalColorOne = Color.white;
@@ -27,6 +31,18 @@ namespace Core40k
 
         public override Color DrawColorTwo => drawColorTwo;
 
+        public virtual void ApplyColourPreset(Color primaryColour, Color secondaryColour)
+        {
+            DrawColor = primaryColour;
+            SetSecondaryColor(secondaryColour);
+            SetInitialColour();
+        }
+        
+        protected void SetInitialColour()
+        {
+            initialColourSet = true;
+        }
+        
         public virtual void SetOriginals()
         {
             originalColorOne = drawColorOne;
@@ -49,6 +65,7 @@ namespace Core40k
         public override void ExposeData()
         {
             base.ExposeData();
+            Scribe_Values.Look(ref initialColourSet, "initialColourSet");
             Scribe_Values.Look(ref originalColorOne, "originalColorOne", Color.black);
             Scribe_Values.Look(ref originalColorTwo, "originalColorTwo", Color.red);
             Scribe_Values.Look(ref drawColorTwo, "drawColorTwo", Color.red);
