@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using VanillaGenesExpanded;
 using Verse;
 
 namespace Genes40k
@@ -12,5 +13,9 @@ namespace Genes40k
         public ShaderTypeDef shaderType = null;
         
         public Dictionary<Rot4, float> layerOffsets = new Dictionary<Rot4, float>();
+
+        public bool colourable = false;
+        
+        public List<string> appliesTo = new List<string>();
     }
 }   

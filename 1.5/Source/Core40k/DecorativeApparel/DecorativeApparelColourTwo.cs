@@ -9,14 +9,20 @@ namespace Genes40k
     {
         private Dictionary<ExtraDecorationDef, bool> originalExtraDecorations = new Dictionary<ExtraDecorationDef, bool>();
         private Dictionary<ExtraDecorationDef, bool> extraDecorations = new Dictionary<ExtraDecorationDef, bool>();
+        
+        private Dictionary<ExtraDecorationDef, Color> originalExtraDecorationsColours = new Dictionary<ExtraDecorationDef, Color>();
+        private Dictionary<ExtraDecorationDef, Color> extraDecorationsColours = new Dictionary<ExtraDecorationDef, Color>();
 
         public Dictionary<ExtraDecorationDef, bool> ExtraDecorationDefs => extraDecorations;
+        
+        public Dictionary<ExtraDecorationDef, Color> ExtraDecorationColours => extraDecorationsColours;
 
         public void AddOrRemoveDecoration(ExtraDecorationDef decoration)
         {
             if (extraDecorations.ContainsKey(decoration) && extraDecorations[decoration])
             {
                 extraDecorations.Remove(decoration);
+                extraDecorationsColours.Remove(decoration);
             }
             else if (extraDecorations.ContainsKey(decoration))
             {
@@ -25,7 +31,14 @@ namespace Genes40k
             else
             {
                 extraDecorations.Add(decoration, false);
+                extraDecorationsColours.Add(decoration, decoration.defaultColour);
             }
+            Notify_ColorChanged();
+        }
+
+        public void UpdateDecorationColour(ExtraDecorationDef decoration, Color colour)
+        {
+            extraDecorationsColours[decoration] = colour;
             Notify_ColorChanged();
         }
 
@@ -45,6 +58,9 @@ namespace Genes40k
         {
             Scribe_Collections.Look(ref extraDecorations, "extraDecorations");
             Scribe_Collections.Look(ref originalExtraDecorations, "originalExtraDecorations");
+            
+            Scribe_Collections.Look(ref extraDecorationsColours, "extraDecorationsColours");
+            Scribe_Collections.Look(ref originalExtraDecorationsColours, "originalExtraDecorationsColours");
             base.ExposeData();
         }
     }

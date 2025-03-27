@@ -11,14 +11,14 @@ namespace Genes40k
     {
         public static void Postfix(Apparel ap, Dictionary<PawnRenderNodeTagDef, PawnRenderNode> ___nodesByTag, Dictionary<PawnRenderNodeTagDef, List<PawnRenderNode>> ___tmpChildTagNodes, PawnRenderTree __instance, Pawn ___pawn)
         {
-            if (ap is not HeadDecorativeApparelColourTwo chapterApparel)
+            if (ap is not HeadDecorativeApparelColourTwo decorativeApparel)
             {
                 return;
             }
 
             var defaultLayerValue = 76f;
             
-            foreach (var decoration in chapterApparel.ExtraDecorationDefs)
+            foreach (var decoration in decorativeApparel.ExtraDecorationDefs)
             {
                 var defaultLayer = new DrawData.RotationalData
                 {
@@ -67,7 +67,7 @@ namespace Genes40k
                     parentTagDef = PawnRenderNodeTagDefOf.Head,
                     drawData = DrawData.NewWithData(rotationalData),
                     flipGraphic = decoration.Value,
-                    color = decoration.Key.defaultColour,
+                    color = decorativeApparel.ExtraDecorationColours[decoration.Key],
                 };
                 
                 var pawnRenderNode = (PawnRenderNode_AttachmentExtraDecoration)Activator.CreateInstance(typeof(PawnRenderNode_AttachmentExtraDecoration), ___pawn, pawnRenderNodeProperty, __instance);
