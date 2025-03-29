@@ -105,11 +105,10 @@
     <Compile Include="DecorativeApparel\DecorationDef.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationDef.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationTab.cs" />
-    <Compile Include="DecorativeApparel\HarmonyPatch_PowerArmorBodyDecorationPatch.cs" />
-    <Compile Include="DecorativeApparel\HarmonyPatch_PowerArmorHelmetDecorationPatch.cs" />
+    <Compile Include="DecorativeApparel\HarmonyPatch_ExtraDecorationPatch.cs" />
     <Compile Include="DecorativeApparel\HeadDecorativeApparelColourTwo.cs" />
     <Compile Include="DecorativeApparel\PawnRenderNodeWorker_AttachmentExtraDecorationBody.cs" />
-    <Compile Include="DecorativeApparel\PawnRenderNodeWorker_AttachmentExtraDecorationHelmet.cs" />
+    <Compile Include="DecorativeApparel\PawnRenderNodeWorker_AttachmentExtraDecorationHead.cs" />
     <Compile Include="DecorativeApparel\PawnRenderNode_AttachmentExtraDecoration.cs" />
     <Compile Include="DefModExtensions\DefModExtension_AddRandomTraitByWeight.cs" />
     <Compile Include="DefModExtensions\DefModExtension_AddRandomGeneByWeight.cs" />

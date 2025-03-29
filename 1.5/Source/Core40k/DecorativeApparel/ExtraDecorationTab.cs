@@ -14,8 +14,8 @@ namespace Genes40k
         private bool setupDone = false;
 
         private static float listScrollViewHeight = 0f;
-        
-        public static readonly Texture2D FlippedIconTex = ContentFinder<Texture2D>.Get("UI/Decoration/flipIcon");
+
+        private float curY;
         
         private List<ExtraDecorationDef> extraDecorationDefsBody = new List<ExtraDecorationDef>();
         private List<ExtraDecorationDef> extraDecorationDefsHelmet = new List<ExtraDecorationDef>();
@@ -42,6 +42,99 @@ namespace Genes40k
             extraDecorationDefsBody.SortBy(def => def.sortOrder);
             extraDecorationDefsHelmet.SortBy(def => def.sortOrder);
         }
+
+        private void DrawRowContent(DecorativeApparelColourTwo apparel, List<ExtraDecorationDef> extraDecorationDefs, ref Vector2 position, ref Rect viewRect)
+        {
+            var iconSize = new Vector2(viewRect.width/RowAmount, viewRect.width/RowAmount);
+            var smallIconSize = new Vector2(iconSize.x / 4, iconSize.y / 4);
+            
+            var currentDecorations = apparel.ExtraDecorationDefs;
+            var currentDecorationColours = apparel.ExtraDecorationColours;
+
+            var colourButtonExtraSize = 0f;
+
+            var curX = position.x;
+            
+            var setY = curY;
+            
+            for (var i = 0; i < extraDecorationDefs.Count; i++)
+            {
+                if (!extraDecorationDefs[i].appliesTo.Contains(apparel.def.defName) && !extraDecorationDefs[i].appliesToAll)
+                {
+                    continue;
+                }
+                
+                position = new Vector2(curX, curY);
+                var iconRect = new Rect(position, iconSize);
+                    
+                curX += iconRect.width;
+
+                if (i != 0 && (i+1) % RowAmount == 0)
+                {
+                    curY += iconRect.height + colourButtonExtraSize;
+                    curX = viewRect.position.x;
+                }
+                else if (i == extraDecorationDefs.Count - 1)
+                {
+                    curY += iconRect.height + colourButtonExtraSize;
+                }
+                    
+                iconRect = iconRect.ContractedBy(5f);
+                var hasDeco = currentDecorations.ContainsKey(extraDecorationDefs[i]);
+                    
+                if (hasDeco)
+                {
+                    Widgets.DrawStrongHighlight(iconRect.ExpandedBy(3f));
+                }
+                    
+                var color = Mouse.IsOver(iconRect) ? GenUI.MouseoverColor : Color.white;
+                GUI.color = color;
+                GUI.DrawTexture(iconRect, Command.BGTexShrunk);
+                GUI.color = Color.white;
+                GUI.DrawTexture(iconRect, extraDecorationDefs[i].Icon);
+                    
+                if (hasDeco)
+                {
+                    if (currentDecorations[extraDecorationDefs[i]])
+                    {
+                        var flippedIconRect = new Rect(new Vector2(position.x + 7f, position.y + 5f), smallIconSize);
+                        GUI.DrawTexture(flippedIconRect, Core40kUtils.FlippedIconTex);
+                    }
+                }
+                    
+                TooltipHandler.TipRegion(iconRect, extraDecorationDefs[i].label);
+                    
+                if (Widgets.ButtonInvisible(iconRect))
+                {
+                    apparel.AddOrRemoveDecoration(extraDecorationDefs[i]);
+                }
+
+                var buttonRect = new Rect(new Vector2(iconRect.x, iconRect.yMax + 3f), iconRect.size);
+                buttonRect.height /= 3;
+                var butHeight = buttonRect.height;
+                buttonRect = buttonRect.ContractedBy(2f);
+                    
+                setY = iconRect.yMax;
+                
+                if (extraDecorationDefs[i].colourable && currentDecorationColours.ContainsKey(extraDecorationDefs[i]))
+                {
+                    colourButtonExtraSize = butHeight;
+                    setY += colourButtonExtraSize;
+                    Widgets.DrawMenuSection(buttonRect);
+                    var i1 = i;
+                    Widgets.DrawRectFast(buttonRect, apparel.ExtraDecorationColours[extraDecorationDefs[i1]]);
+                    if (Widgets.ButtonInvisible(buttonRect))
+                    {
+                        Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorationColours[extraDecorationDefs[i1]], ( newColour ) =>
+                        {
+                            apparel.UpdateDecorationColour(extraDecorationDefs[i1], newColour);
+                        } ) );
+                    }
+                }
+            }
+
+            curY = setY + 34f;
+        }
         
         public override void DrawTab(Rect rect, Pawn pawn, ref Vector2 apparelColorScrollPosition)
         {
@@ -57,13 +150,8 @@ namespace Genes40k
             Widgets.BeginScrollView(outRect, ref apparelColorScrollPosition, viewRect);
             
             var bodyApparel = (BodyDecorativeApparelColourTwo)pawn.apparel.WornApparel.FirstOrFallback(a => a is BodyDecorativeApparelColourTwo);
-
-            float curX;
-            var curY = viewRect.y;
             
-            var iconSize = new Vector2(viewRect.width/RowAmount, viewRect.width/RowAmount);
-            var smallIconSize = new Vector2(iconSize.x / 4, iconSize.y / 4);
-            var colourButtonExtraSize = 0f;
+            curY = viewRect.y;
             
             if (bodyApparel != null)
             {
@@ -82,88 +170,9 @@ namespace Genes40k
                 
                 var position = new Vector2(viewRect.x, resetChapterIconRect.yMax);
                 
-                curX = position.x;
                 curY = position.y;
                 
-                var currentDecorations = bodyApparel.ExtraDecorationDefs;
-                var currentDecorationColours = bodyApparel.ExtraDecorationColours;
-                
-                for (var i = 0; i < extraDecorationDefsBody.Count; i++)
-                {
-                    if (!extraDecorationDefsBody[i].appliesTo.Contains(bodyApparel.def.defName))
-                    {
-                        continue;
-                    }
-                    position = new Vector2(curX, curY);
-                    var iconRect = new Rect(position, iconSize);
-                    
-                    curX += iconRect.width;
-
-                    if (i != 0 && (i+1) % RowAmount == 0)
-                    {
-                        curY += iconRect.height + colourButtonExtraSize;
-                        curX = viewRect.position.x;
-                    }
-                    else if (i == extraDecorationDefsBody.Count - 1)
-                    {
-                        curY += iconRect.height;
-                    }
-                    
-                    iconRect = iconRect.ContractedBy(5f);
-                    var hasDeco = currentDecorations.ContainsKey(extraDecorationDefsBody[i]);
-                    
-                    if (hasDeco)
-                    {
-                        Widgets.DrawStrongHighlight(iconRect.ExpandedBy(3f));
-                    }
-                    
-                    var color = Mouse.IsOver(iconRect) ? GenUI.MouseoverColor : Color.white;
-                    GUI.color = color;
-                    GUI.DrawTexture(iconRect, Command.BGTexShrunk);
-                    GUI.color = Color.white;
-                    GUI.DrawTexture(iconRect, extraDecorationDefsBody[i].Icon);
-                    
-                    if (hasDeco)
-                    {
-                        if (currentDecorations[extraDecorationDefsBody[i]])
-                        {
-                            var flippedIconRect = new Rect(new Vector2(position.x + 7f, position.y + 5f), smallIconSize);
-                            GUI.DrawTexture(flippedIconRect, FlippedIconTex);
-                        }
-                    }
-                    
-                    TooltipHandler.TipRegion(iconRect, extraDecorationDefsBody[i].label);
-                    
-                    if (Widgets.ButtonInvisible(iconRect))
-                    {
-                        bodyApparel.AddOrRemoveDecoration(extraDecorationDefsBody[i]);
-                    }
-
-                    var buttonRect = new Rect(new Vector2(iconRect.x, iconRect.yMax + 1f), iconRect.size);
-                    buttonRect.height /= 3;
-                    colourButtonExtraSize = buttonRect.height + 3f;
-                    buttonRect = buttonRect.ContractedBy(2f);
-                    
-                    if (extraDecorationDefsBody[i].colourable && currentDecorationColours.ContainsKey(extraDecorationDefsBody[i]))
-                    {
-                        Widgets.DrawMenuSection(buttonRect.ExpandedBy(1f));
-                        var i1 = i;
-                        Widgets.DrawRectFast(buttonRect, bodyApparel.ExtraDecorationColours[extraDecorationDefsBody[i1]]);
-                        if (Widgets.ButtonInvisible(buttonRect))
-                        {
-                            Find.WindowStack.Add( new Dialog_ColourPicker( bodyApparel.ExtraDecorationColours[extraDecorationDefsBody[i1]], ( newColour ) =>
-                            {
-                                bodyApparel.UpdateDecorationColour(extraDecorationDefsBody[i1], newColour);
-                            } ) );
-                        }
-                    }
-                    else
-                    {
-                        Widgets.DrawMenuSection(buttonRect);
-                        Widgets.DrawRectFast(buttonRect, Color.gray);
-                        //Make rect have cross texture like cheese showed
-                    }
-                }
+                DrawRowContent(bodyApparel, extraDecorationDefsBody, ref position, ref viewRect);
             }
             
             var helmetApparel = (HeadDecorativeApparelColourTwo)pawn.apparel.WornApparel.FirstOrFallback(a => a is HeadDecorativeApparelColourTwo);
@@ -183,90 +192,11 @@ namespace Genes40k
                 resetChapterIconRect.width /= 5;
                 resetChapterIconRect.x = nameRect.xMin - resetChapterIconRect.width - nameRect.width/20;
                 
-                var position = new Vector2(viewRect.x, resetChapterIconRect.yMax);
+                var position = new Vector2(viewRect.x, curY + resetChapterIconRect.height);
                 
-                curX = position.x;
                 curY = position.y;
                 
-                var currentDecorations = helmetApparel.ExtraDecorationDefs;
-                var currentDecorationColours = helmetApparel.ExtraDecorationColours;
-                
-                for (var i = 0; i < extraDecorationDefsHelmet.Count; i++)
-                {
-                    if (!extraDecorationDefsBody[i].appliesTo.Contains(helmetApparel.def.defName))
-                    {
-                        continue;
-                    }
-                    position = new Vector2(curX, curY);
-                    var iconRect = new Rect(position, iconSize);
-                    
-                    curX += iconRect.width;
-
-                    if (i != 0 && (i+1) % RowAmount == 0)
-                    {
-                        curY += iconRect.height + colourButtonExtraSize;
-                        curX = viewRect.position.x;
-                    }
-                    else if (i == extraDecorationDefsHelmet.Count - 1)
-                    {
-                        curY += iconRect.height;
-                    }
-                    
-                    iconRect = iconRect.ContractedBy(5f);
-                    var hasDeco = currentDecorations.ContainsKey(extraDecorationDefsBody[i]);
-                    
-                    if (hasDeco)
-                    {
-                        Widgets.DrawStrongHighlight(iconRect.ExpandedBy(3f));
-                    }
-                    
-                    var color = Mouse.IsOver(iconRect) ? GenUI.MouseoverColor : Color.white;
-                    GUI.color = color;
-                    GUI.DrawTexture(iconRect, Command.BGTexShrunk);
-                    GUI.color = Color.white;
-                    GUI.DrawTexture(iconRect, extraDecorationDefsHelmet[i].Icon);
-                    
-                    if (hasDeco)
-                    {
-                        if (currentDecorations[extraDecorationDefsBody[i]])
-                        {
-                            var flippedIconRect = new Rect(new Vector2(position.x + 7f, position.y + 5f), smallIconSize);
-                            GUI.DrawTexture(flippedIconRect, FlippedIconTex);
-                        }
-                    }
-                    
-                    TooltipHandler.TipRegion(iconRect, extraDecorationDefsHelmet[i].label);
-                    
-                    if (Widgets.ButtonInvisible(iconRect))
-                    {
-                        helmetApparel.AddOrRemoveDecoration(extraDecorationDefsHelmet[i]);
-                    }
-                    
-                    var buttonRect = new Rect(new Vector2(iconRect.x, iconRect.yMax + 1f), iconRect.size);
-                    buttonRect.height /= 3;
-                    colourButtonExtraSize = buttonRect.height + 3f;
-                    buttonRect = buttonRect.ContractedBy(2f);
-                    
-                    if (extraDecorationDefsBody[i].colourable && currentDecorationColours.ContainsKey(extraDecorationDefsBody[i]))
-                    {
-                        Widgets.DrawMenuSection(buttonRect);
-                        var i1 = i;
-                        Widgets.DrawRectFast(buttonRect, helmetApparel.ExtraDecorationColours[extraDecorationDefsBody[i1]]);
-                        if (Widgets.ButtonInvisible(buttonRect))
-                        {
-                            Find.WindowStack.Add( new Dialog_ColourPicker( helmetApparel.ExtraDecorationColours[extraDecorationDefsBody[i1]], ( newColour ) =>
-                            {
-                                helmetApparel.UpdateDecorationColour(extraDecorationDefsBody[i1], newColour);
-                            } ) );
-                        }
-                    }
-                    else
-                    {
-                        Widgets.DrawMenuSection(buttonRect.ExpandedBy(1f));
-                        Widgets.DrawRectFast(buttonRect, Color.gray);
-                        //Make rect have cross texture like cheese showed
-                    }
-                }
+                DrawRowContent(helmetApparel, extraDecorationDefsHelmet, ref position, ref viewRect);
             }
             
             Widgets.EndScrollView();

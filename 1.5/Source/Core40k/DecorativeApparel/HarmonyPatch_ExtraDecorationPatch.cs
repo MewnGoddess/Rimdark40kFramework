@@ -6,16 +6,35 @@ using Verse;
 
 namespace Genes40k
 {
+    enum DecorationType
+    {
+        None,
+        Body,
+        Head,
+        Other,
+    }
+    
     [HarmonyPatch(typeof(PawnRenderTree), "ProcessApparel")]
-    public class PowerArmorHelmetDecorationPatch
+    public class ExtraDecorationPatch
     {
         public static void Postfix(Apparel ap, Dictionary<PawnRenderNodeTagDef, PawnRenderNode> ___nodesByTag, Dictionary<PawnRenderNodeTagDef, List<PawnRenderNode>> ___tmpChildTagNodes, PawnRenderTree __instance, Pawn ___pawn)
         {
-            if (ap is not HeadDecorativeApparelColourTwo decorativeApparel)
+            DecorationType type;
+            
+            switch (ap)
             {
-                return;
+                case BodyDecorativeApparelColourTwo:
+                    type = DecorationType.Body;
+                    break;
+                case HeadDecorativeApparelColourTwo:
+                    type = DecorationType.Head;
+                    break;
+                default:
+                    return;
             }
 
+            var decorativeApparel = (DecorativeApparelColourTwo)ap;
+            
             var defaultLayerValue = 76f;
             
             foreach (var decoration in decorativeApparel.ExtraDecorationDefs)
@@ -61,17 +80,31 @@ namespace Genes40k
                 var pawnRenderNodeProperty = new PawnRenderNodeProperties
                 {
                     nodeClass = typeof(PawnRenderNode_AttachmentExtraDecoration),
-                    workerClass = typeof(PawnRenderNodeWorker_AttachmentExtraDecorationHelmet),
+                    workerClass = typeof(PawnRenderNodeWorker_AttachmentExtraDecorationBody),
                     texPath = decoration.Key.drawnTextureIconPath,
                     shaderTypeDef = decoration.Key.shaderType,                                                                      
-                    parentTagDef = PawnRenderNodeTagDefOf.Head,
+                    parentTagDef = PawnRenderNodeTagDefOf.Body,
                     drawData = DrawData.NewWithData(rotationalData),
                     flipGraphic = decoration.Value,
                     color = decorativeApparel.ExtraDecorationColours[decoration.Key],
                 };
+
+                switch (type)
+                {
+                    case DecorationType.Body:
+                        pawnRenderNodeProperty.parentTagDef = PawnRenderNodeTagDefOf.Body;
+                        pawnRenderNodeProperty.workerClass = typeof(PawnRenderNodeWorker_AttachmentExtraDecorationBody);
+                        break;
+                    case DecorationType.Head:
+                        pawnRenderNodeProperty.parentTagDef = PawnRenderNodeTagDefOf.Head;
+                        pawnRenderNodeProperty.workerClass = typeof(PawnRenderNodeWorker_AttachmentExtraDecorationHead);
+                        break;
+                }
                 
                 var pawnRenderNode = (PawnRenderNode_AttachmentExtraDecoration)Activator.CreateInstance(typeof(PawnRenderNode_AttachmentExtraDecoration), ___pawn, pawnRenderNodeProperty, __instance);
-                pawnRenderNode.Props.parentTagDef = PawnRenderNodeTagDefOf.Head;
+
+                //___tmpChildTagNodes ??= new Dictionary<PawnRenderNodeTagDef, List<PawnRenderNode>>();
+                //___nodesByTag ??= new Dictionary<PawnRenderNodeTagDef, PawnRenderNode>();
                 
                 AddChild(pawnRenderNode, null, ___nodesByTag, ___tmpChildTagNodes, __instance.rootNode);
             }

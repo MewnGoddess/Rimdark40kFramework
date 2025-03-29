@@ -4,10 +4,12 @@ using Verse;
 
 namespace Core40k
 {
+    [StaticConstructorOnStartup]
     public static class Core40kUtils
     {
         public const string MankindsFinestPackageId = "Phonicmas.RimDark.MankindsFinest";
-
+        
+        public static readonly Texture2D FlippedIconTex = ContentFinder<Texture2D>.Get("UI/Decoration/flipIcon");
 
         public static bool DeletePreset(Rect rect, GameComponent_SavedPresets gameComp, ColourPresetDef preset)
         {

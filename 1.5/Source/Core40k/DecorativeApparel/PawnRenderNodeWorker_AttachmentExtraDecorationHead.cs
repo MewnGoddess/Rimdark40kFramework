@@ -5,7 +5,7 @@ using Verse;
 
 namespace Genes40k
 {
-    public class PawnRenderNodeWorker_AttachmentExtraDecorationHelmet : PawnRenderNodeWorker
+    public class PawnRenderNodeWorker_AttachmentExtraDecorationHead : PawnRenderNodeWorker
     {
         public override bool CanDrawNow(PawnRenderNode node, PawnDrawParms parms)
         {
