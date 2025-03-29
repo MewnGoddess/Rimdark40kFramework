@@ -36,9 +36,29 @@ namespace Genes40k
             Notify_ColorChanged();
         }
 
+        public void RemoveAllDecorations()
+        {
+            extraDecorations = new Dictionary<ExtraDecorationDef, bool>();
+            extraDecorationsColours = new Dictionary<ExtraDecorationDef, Color>();
+            Notify_ColorChanged();
+        }
+
         public void UpdateDecorationColour(ExtraDecorationDef decoration, Color colour)
         {
             extraDecorationsColours[decoration] = colour;
+            Notify_ColorChanged();
+        }
+
+        public void UpdateAllDecorationColours(Color colour)
+        {
+            var newExtraDecorationsColours = new Dictionary<ExtraDecorationDef, Color>();
+            
+            foreach (var extraDecoration in extraDecorationsColours)
+            {
+                newExtraDecorationsColours.Add(extraDecoration.Key, colour);
+            }
+            
+            extraDecorationsColours = newExtraDecorationsColours;
             Notify_ColorChanged();
         }
 

@@ -20,6 +20,8 @@ namespace Genes40k
         private List<ExtraDecorationDef> extraDecorationDefsBody = new List<ExtraDecorationDef>();
         private List<ExtraDecorationDef> extraDecorationDefsHelmet = new List<ExtraDecorationDef>();
         
+        private List<ColourPresetDef> presets;
+        
         private void Setup(Pawn pawn)
         {
             var allExtraDecorations = DefDatabase<ExtraDecorationDef>.AllDefs.ToList();
@@ -41,6 +43,8 @@ namespace Genes40k
 
             extraDecorationDefsBody.SortBy(def => def.sortOrder);
             extraDecorationDefsHelmet.SortBy(def => def.sortOrder);
+            
+            presets = DefDatabase<ColourPresetDef>.AllDefs.ToList();
         }
 
         private void DrawRowContent(DecorativeApparelColourTwo apparel, List<ExtraDecorationDef> extraDecorationDefs, ref Vector2 position, ref Rect viewRect)
@@ -135,6 +139,34 @@ namespace Genes40k
 
             curY = setY + 34f;
         }
+
+        private void SelectPreset(DecorativeApparelColourTwo apparel)
+        {
+            var list = new List<FloatMenuOption>();
+            foreach (var preset in presets)
+            {
+                var menuOption = new FloatMenuOption(preset.label, delegate
+                {
+                    apparel.UpdateAllDecorationColours(preset.primaryColour);
+                }, Core40kUtils.ColourPreview(preset.primaryColour, preset.secondaryColour), Color.white);
+                list.Add(menuOption);
+            }
+                    
+            var gameComp = Current.Game.GetComponent<GameComponent_SavedPresets>();
+            foreach (var preset in gameComp.colourPresetDefs)
+            {
+                var menuOption = new FloatMenuOption(preset.label.CapitalizeFirst(), delegate
+                {
+                    apparel.UpdateAllDecorationColours(preset.primaryColour);
+                }, Core40kUtils.ColourPreview(preset.primaryColour, preset.secondaryColour), Color.white);
+                list.Add(menuOption);
+            }
+                
+            if (!list.NullOrEmpty())
+            {
+                Find.WindowStack.Add(new FloatMenu(list));
+            }
+        }
         
         public override void DrawTab(Rect rect, Pawn pawn, ref Vector2 apparelColorScrollPosition)
         {
@@ -164,11 +196,26 @@ namespace Genes40k
                 Widgets.Label(nameRect, "BEWH.Framework.ExtraDecoration.BodyDecoration".Translate());
                 Text.Anchor = TextAnchor.UpperLeft;
                 
-                var resetChapterIconRect = new Rect(viewRect.x, viewRect.y, viewRect.width, 30f);
-                resetChapterIconRect.width /= 5;
-                resetChapterIconRect.x = nameRect.xMin - resetChapterIconRect.width - nameRect.width/20;
+                var resetAllDecorations = new Rect(viewRect.x, viewRect.y, viewRect.width, 30f);
+                resetAllDecorations.width /= 5;
+                resetAllDecorations.x = nameRect.xMin - resetAllDecorations.width - nameRect.width/20;
                 
-                var position = new Vector2(viewRect.x, resetChapterIconRect.yMax);
+                if (Widgets.ButtonText(resetAllDecorations, "BEWH.Framework.ExtraDecoration.RemoveAllDecorations".Translate()))
+                {
+                    bodyApparel.RemoveAllDecorations();
+                }
+                
+                var selectPreset = new Rect(resetAllDecorations)
+                {
+                    x = nameRect.xMax + nameRect.width/20
+                };
+
+                if (Widgets.ButtonText(selectPreset, "BEWH.Framework.ApparelColourTwo.SelectPreset".Translate()))
+                {
+                    SelectPreset(bodyApparel);
+                }
+
+                var position = new Vector2(viewRect.x, resetAllDecorations.yMax);
                 
                 curY = position.y;
                 
@@ -188,11 +235,26 @@ namespace Genes40k
                 Widgets.Label(nameRect, "BEWH.Framework.ExtraDecoration.HelmetDecoration".Translate());
                 Text.Anchor = TextAnchor.UpperLeft;
                 
-                var resetChapterIconRect = new Rect(viewRect.x, curY, viewRect.width, 30f);
-                resetChapterIconRect.width /= 5;
-                resetChapterIconRect.x = nameRect.xMin - resetChapterIconRect.width - nameRect.width/20;
+                var resetAllDecorations = new Rect(viewRect.x, curY, viewRect.width, 30f);
+                resetAllDecorations.width /= 5;
+                resetAllDecorations.x = nameRect.xMin - resetAllDecorations.width - nameRect.width/20;
                 
-                var position = new Vector2(viewRect.x, curY + resetChapterIconRect.height);
+                if (Widgets.ButtonText(resetAllDecorations, "BEWH.Framework.ExtraDecoration.RemoveAllDecorations".Translate()))
+                {
+                    helmetApparel.RemoveAllDecorations();
+                }
+                
+                var selectPreset = new Rect(resetAllDecorations)
+                {
+                    x = nameRect.xMax + nameRect.width/20
+                };
+
+                if (Widgets.ButtonText(selectPreset, "BEWH.Framework.ApparelColourTwo.SelectPreset".Translate()))
+                {
+                    SelectPreset(helmetApparel);
+                }
+                
+                var position = new Vector2(viewRect.x, curY + resetAllDecorations.height);
                 
                 curY = position.y;
                 
