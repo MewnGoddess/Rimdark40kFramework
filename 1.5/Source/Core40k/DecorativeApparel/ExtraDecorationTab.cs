@@ -124,15 +124,37 @@ namespace Genes40k
                 {
                     colourButtonExtraSize = butHeight;
                     setY += colourButtonExtraSize;
-                    Widgets.DrawMenuSection(buttonRect);
+                    
+                    var colourSelection = new Rect(buttonRect);
+                    colourSelection.width /= 3;
+                    colourSelection.width -= 3;
+                    
+                    Widgets.DrawMenuSection(colourSelection);
+                    colourSelection = colourSelection.ContractedBy(1f);
+                    
                     var i1 = i;
-                    Widgets.DrawRectFast(buttonRect, apparel.ExtraDecorationColours[extraDecorationDefs[i1]]);
-                    if (Widgets.ButtonInvisible(buttonRect))
+                    
+                    Widgets.DrawRectFast(colourSelection, apparel.ExtraDecorationColours[extraDecorationDefs[i1]]);
+                    if (Widgets.ButtonInvisible(colourSelection))
                     {
                         Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorationColours[extraDecorationDefs[i1]], ( newColour ) =>
                         {
                             apparel.UpdateDecorationColour(extraDecorationDefs[i1], newColour);
                         } ) );
+                    }
+                    
+                    var presetSelection = new Rect(buttonRect)
+                    {
+                        x = colourSelection.xMax + 6f,
+                    };
+                    presetSelection.width *= 0.66f;
+                    presetSelection.width -= 3f;;
+                    
+                    presetSelection = presetSelection.ExpandedBy(1f);
+
+                    if (Widgets.ButtonText(presetSelection, "Preset"))
+                    {
+                        SelectPreset(apparel);
                     }
                 }
             }
@@ -204,16 +226,6 @@ namespace Genes40k
                 {
                     bodyApparel.RemoveAllDecorations();
                 }
-                
-                var selectPreset = new Rect(resetAllDecorations)
-                {
-                    x = nameRect.xMax + nameRect.width/20
-                };
-
-                if (Widgets.ButtonText(selectPreset, "BEWH.Framework.ApparelColourTwo.SelectPreset".Translate()))
-                {
-                    SelectPreset(bodyApparel);
-                }
 
                 var position = new Vector2(viewRect.x, resetAllDecorations.yMax);
                 
@@ -244,16 +256,6 @@ namespace Genes40k
                     helmetApparel.RemoveAllDecorations();
                 }
                 
-                var selectPreset = new Rect(resetAllDecorations)
-                {
-                    x = nameRect.xMax + nameRect.width/20
-                };
-
-                if (Widgets.ButtonText(selectPreset, "BEWH.Framework.ApparelColourTwo.SelectPreset".Translate()))
-                {
-                    SelectPreset(helmetApparel);
-                }
-                
                 var position = new Vector2(viewRect.x, curY + resetAllDecorations.height);
                 
                 curY = position.y;
@@ -264,15 +266,5 @@ namespace Genes40k
             Widgets.EndScrollView();
             GUI.EndGroup();
         }
-
-        /*public override void OnClose(bool closeOnCancel, bool closeOnClickedOutside)
-        {
-            
-        }
-
-        public override void OnAccept()
-        {
-            
-        }*/
     }
 }   

@@ -19,7 +19,7 @@ namespace Genes40k
 
         public void AddOrRemoveDecoration(ExtraDecorationDef decoration)
         {
-            if (extraDecorations.ContainsKey(decoration) && extraDecorations[decoration])
+            if (extraDecorations.ContainsKey(decoration) && (extraDecorations[decoration] || !decoration.flipable))
             {
                 extraDecorations.Remove(decoration);
                 extraDecorationsColours.Remove(decoration);
@@ -31,7 +31,8 @@ namespace Genes40k
             else
             {
                 extraDecorations.Add(decoration, false);
-                extraDecorationsColours.Add(decoration, decoration.defaultColour);
+                var color = decoration.useArmorColourAsDefault ? DrawColor : decoration.defaultColour;
+                extraDecorationsColours.Add(decoration, color);
             }
             Notify_ColorChanged();
         }
