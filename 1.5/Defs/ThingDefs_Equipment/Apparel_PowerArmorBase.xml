@@ -61,7 +61,9 @@
                 <li>EVA</li>
             </tags>
         </apparel>
-        <tradeTags Inherit="False" />
+        <tradeTags>
+            <li>HiTechArmor</li>
+        </tradeTags>
         <thingSetMakerTags Inherit="False" />
         <smeltable>false</smeltable>
         <burnableByRecipe>true</burnableByRecipe>
@@ -120,7 +122,9 @@
                 <li>Soldier</li>
             </defaultOutfitTags>
         </apparel>
-        <tradeTags Inherit="False" />
+        <tradeTags>
+            <li>HiTechArmor</li>
+        </tradeTags>
         <thingSetMakerTags Inherit="False" />
         <smeltable>false</smeltable>
         <burnableByRecipe>true</burnableByRecipe>
