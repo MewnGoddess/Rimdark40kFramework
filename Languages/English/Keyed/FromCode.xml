@@ -10,7 +10,7 @@
 
   <!--=== Common Keywords ===-->
   <BEWH.Framework.CommonKeyword.None>None</BEWH.Framework.CommonKeyword.None>
-
+  <BEWH.Framework.CommonKeywords.ModSettings>mod settings</BEWH.Framework.CommonKeywords.ModSettings>
 
   <!--=== Apparel Two ===-->
   <BEWH.Framework.ApparelColourTwo.MainTab>Main</BEWH.Framework.ApparelColourTwo.MainTab>
