@@ -34,7 +34,6 @@ namespace Core40k
         {
             if (chosenGene != null)
             {
-                Log.Message(chosenGene);
                 pawn.genes.AddGene(chosenGene, true);
             }
 
