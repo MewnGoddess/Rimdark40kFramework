@@ -1,4 +1,5 @@
-﻿using Core40k;
+﻿using System.Collections.Generic;
+using Core40k;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -33,6 +34,8 @@ namespace Genes40k
         public float sortOrder = 0f;
         
         public Color defaultColour = Color.white;
+        
+        public List<DecorationColourPresetDef> availablePresets = new List<DecorationColourPresetDef>();
         
         public RankDef mustHaveRank = null;
         

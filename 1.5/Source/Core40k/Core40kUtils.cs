@@ -23,7 +23,7 @@ namespace Core40k
             return true;
         }
 
-        public static Texture2D ColourPreview(Color primaryColor, Color secondaryColor)
+        public static Texture2D TwoColourPreview(Color primaryColor, Color secondaryColor)
         {
             var texture2D = new Texture2D(2, 2)
             {
@@ -35,6 +35,20 @@ namespace Core40k
             texture2D.SetPixel(1, 1, secondaryColor);
             texture2D.wrapMode = TextureWrapMode.Clamp;
             texture2D.filterMode = FilterMode.Bilinear;
+            texture2D.Apply();
+            
+            return texture2D;
+        }
+        
+        public static Texture2D ColourPreview(Color primaryColor)
+        {
+            var texture2D = new Texture2D(1, 1)
+            {
+                name = "SolidColorTex-" + primaryColor
+            };
+            texture2D.SetPixel(0, 0, primaryColor);
+            //texture2D.wrapMode = TextureWrapMode.Clamp;
+            //texture2D.filterMode = FilterMode.Bilinear;
             texture2D.Apply();
             
             return texture2D;

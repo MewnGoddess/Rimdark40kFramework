@@ -171,7 +171,7 @@ namespace Core40k
                             item.DrawColor = preset.primaryColour;
                             item.SetSecondaryColor(preset.secondaryColour);
                             
-                        }, Core40kUtils.ColourPreview(preset.primaryColour, preset.secondaryColour), Color.white);
+                        }, Core40kUtils.TwoColourPreview(preset.primaryColour, preset.secondaryColour), Color.white);
                         list.Add(menuOption);
                     }
                     
@@ -183,7 +183,7 @@ namespace Core40k
                             item.DrawColor = preset.primaryColour;
                             item.SetSecondaryColor(preset.secondaryColour);
                             
-                        }, Core40kUtils.ColourPreview(preset.primaryColour, preset.secondaryColour), Color.white);
+                        }, Core40kUtils.TwoColourPreview(preset.primaryColour, preset.secondaryColour), Color.white);
                         list.Add(menuOption);
                     }
                 

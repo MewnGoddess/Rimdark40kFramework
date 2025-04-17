@@ -78,6 +78,7 @@
     <Compile Include="ApparelColourTwo\ApparelColourTwoTabDrawer.cs" />
     <Compile Include="ApparelColourTwo\ColourPreset.cs" />
     <Compile Include="ApparelColourTwo\ColourPresetDef.cs" />
+    <Compile Include="ApparelColourTwo\DecorationColourPresetDef.cs" />
     <Compile Include="ApparelColourTwo\Dialog_EnterNewName.cs" />
     <Compile Include="ApparelColourTwo\Dialog_PaintSecondaryColour.cs" />
     <Compile Include="Comps\CompAbilityEffect_GiveHediffAndMentalBreak.cs" />

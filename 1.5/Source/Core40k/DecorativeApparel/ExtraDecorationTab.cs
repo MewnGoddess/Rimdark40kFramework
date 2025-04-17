@@ -20,8 +20,6 @@ namespace Genes40k
         private List<ExtraDecorationDef> extraDecorationDefsBody = new List<ExtraDecorationDef>();
         private List<ExtraDecorationDef> extraDecorationDefsHelmet = new List<ExtraDecorationDef>();
         
-        private List<ColourPresetDef> presets;
-        
         private void Setup(Pawn pawn)
         {
             var allExtraDecorations = DefDatabase<ExtraDecorationDef>.AllDefs.ToList();
@@ -43,8 +41,6 @@ namespace Genes40k
 
             extraDecorationDefsBody.SortBy(def => def.sortOrder);
             extraDecorationDefsHelmet.SortBy(def => def.sortOrder);
-            
-            presets = DefDatabase<ColourPresetDef>.AllDefs.ToList();
         }
 
         private void DrawRowContent(DecorativeApparelColourTwo apparel, List<ExtraDecorationDef> extraDecorationDefs, ref Vector2 position, ref Rect viewRect)
@@ -154,7 +150,7 @@ namespace Genes40k
 
                     if (Widgets.ButtonText(presetSelection, "Preset"))
                     {
-                        SelectPreset(apparel);
+                        SelectPreset(apparel, extraDecorationDefs[i1]);
                     }
                 }
             }
@@ -162,25 +158,16 @@ namespace Genes40k
             curY = setY + 34f;
         }
 
-        private void SelectPreset(DecorativeApparelColourTwo apparel)
+        private void SelectPreset(DecorativeApparelColourTwo apparel, ExtraDecorationDef extraDecoration)
         {
+            var presets = extraDecoration.availablePresets;
             var list = new List<FloatMenuOption>();
             foreach (var preset in presets)
             {
                 var menuOption = new FloatMenuOption(preset.label, delegate
                 {
-                    apparel.UpdateAllDecorationColours(preset.primaryColour);
-                }, Core40kUtils.ColourPreview(preset.primaryColour, preset.secondaryColour), Color.white);
-                list.Add(menuOption);
-            }
-                    
-            var gameComp = Current.Game.GetComponent<GameComponent_SavedPresets>();
-            foreach (var preset in gameComp.colourPresetDefs)
-            {
-                var menuOption = new FloatMenuOption(preset.label.CapitalizeFirst(), delegate
-                {
-                    apparel.UpdateAllDecorationColours(preset.primaryColour);
-                }, Core40kUtils.ColourPreview(preset.primaryColour, preset.secondaryColour), Color.white);
+                    apparel.UpdateDecorationColour(extraDecoration, preset.colour);
+                }, Core40kUtils.ColourPreview(preset.colour), Color.white);
                 list.Add(menuOption);
             }
                 

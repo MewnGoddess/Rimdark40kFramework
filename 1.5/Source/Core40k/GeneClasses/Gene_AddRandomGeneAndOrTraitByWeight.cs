@@ -29,7 +29,7 @@ namespace Core40k
             RemoveSelectedTraitAndGene();
             base.PostRemove();
         }
-        
+            
         private void AddSelectedTraitAndGene()
         {
             if (chosenGene != null)
