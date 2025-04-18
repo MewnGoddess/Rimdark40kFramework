@@ -38,7 +38,7 @@
   <!--=== Rank System ===-->
   <BEWH.Framework.RankSystem.RankTab>Ranks</BEWH.Framework.RankSystem.RankTab>
 
-  <BEWH.Framework.RankSystem.CategoryRequires>Category "{0}"" requires that pawn has {1}</BEWH.Framework.RankSystem.CategoryRequires>
+  <BEWH.Framework.RankSystem.CategoryRequires>Category "{0}" requires that pawn has {1}</BEWH.Framework.RankSystem.CategoryRequires>
   <BEWH.Framework.RankSystem.NoCategorySelected>No category selected.</BEWH.Framework.RankSystem.NoCategorySelected>
 
   <BEWH.Framework.RankSystem.CategoryRequiredGene>the {0} gene</BEWH.Framework.RankSystem.CategoryRequiredGene>

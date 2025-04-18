@@ -184,6 +184,12 @@ namespace Genes40k
             {
                 Find.WindowStack.Add(new FloatMenu(list));
             }
+            else
+            {
+                var menuOptionNone = new FloatMenuOption("NoneBrackets".Translate(), null);
+                list.Add(menuOptionNone);
+                Find.WindowStack.Add(new FloatMenu(list));
+            }
         }
         
         public override void DrawTab(Rect rect, Pawn pawn, ref Vector2 apparelColorScrollPosition)
