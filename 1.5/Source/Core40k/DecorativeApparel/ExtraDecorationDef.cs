@@ -18,6 +18,8 @@ namespace Genes40k
         
         public bool flipable = false;
 
+        public bool hasArmorColourPaletteOption = false;
+        
         public bool useArmorColourAsDefault = false;
         
         public List<string> appliesTo = new List<string>();

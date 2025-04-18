@@ -170,6 +170,15 @@ namespace Genes40k
                 }, Core40kUtils.ColourPreview(preset.colour), Color.white);
                 list.Add(menuOption);
             }
+
+            if (extraDecoration.hasArmorColourPaletteOption)
+            {
+                var menuOptionMatch = new FloatMenuOption("BEWH.Framework.ExtraDecoration.UseArmourColour".Translate(), delegate
+                {
+                    apparel.UpdateDecorationColour(extraDecoration, apparel.DrawColor);
+                }, Core40kUtils.ColourPreview(apparel.DrawColor), Color.white);
+                list.Add(menuOptionMatch);
+            }
                 
             if (!list.NullOrEmpty())
             {

@@ -33,6 +33,8 @@
 
   <BEWH.Framework.ExtraDecoration.RemoveAllDecorations>Remove All</BEWH.Framework.ExtraDecoration.RemoveAllDecorations>
 
+  <BEWH.Framework.ExtraDecoration.UseArmourColour>Use Armour Colour</BEWH.Framework.ExtraDecoration.UseArmourColour>
+
   <!--=== Rank System ===-->
   <BEWH.Framework.RankSystem.RankTab>Ranks</BEWH.Framework.RankSystem.RankTab>
 
