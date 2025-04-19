@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using VanillaGenesExpanded;
 using Verse;
 
 namespace Genes40k
@@ -25,5 +24,7 @@ namespace Genes40k
         public List<string> appliesTo = new List<string>();
         
         public bool appliesToAll = false;
+
+        public bool useMask = false;
     }
 }   

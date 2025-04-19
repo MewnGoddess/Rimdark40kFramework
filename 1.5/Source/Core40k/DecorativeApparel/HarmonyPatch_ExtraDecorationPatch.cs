@@ -8,10 +8,8 @@ namespace Genes40k
 {
     enum DecorationType
     {
-        None,
         Body,
         Head,
-        Other,
     }
     
     [HarmonyPatch(typeof(PawnRenderTree), "ProcessApparel")]
@@ -102,9 +100,7 @@ namespace Genes40k
                 }
                 
                 var pawnRenderNode = (PawnRenderNode_AttachmentExtraDecoration)Activator.CreateInstance(typeof(PawnRenderNode_AttachmentExtraDecoration), ___pawn, pawnRenderNodeProperty, __instance);
-
-                //___tmpChildTagNodes ??= new Dictionary<PawnRenderNodeTagDef, List<PawnRenderNode>>();
-                //___nodesByTag ??= new Dictionary<PawnRenderNodeTagDef, PawnRenderNode>();
+                pawnRenderNode.ExtraDecorationDef = decoration.Key;
                 
                 AddChild(pawnRenderNode, null, ___nodesByTag, ___tmpChildTagNodes, __instance.rootNode);
             }

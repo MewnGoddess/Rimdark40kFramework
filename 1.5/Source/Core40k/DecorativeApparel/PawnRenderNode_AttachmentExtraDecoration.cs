@@ -5,6 +5,7 @@ namespace Genes40k
 {
     public class PawnRenderNode_AttachmentExtraDecoration : PawnRenderNode
     {
+        public ExtraDecorationDef ExtraDecorationDef;
         public PawnRenderNode_AttachmentExtraDecoration(Pawn pawn, PawnRenderNodeProperties props, PawnRenderTree tree) : base(pawn, props, tree)
         {
         }
@@ -12,6 +13,11 @@ namespace Genes40k
         public override Graphic GraphicFor(Pawn pawn)
         {
             Props.color ??= Color.white;
+
+            if (ExtraDecorationDef.useMask)
+            {
+                return GraphicDatabase.Get<Graphic_Multi>(Props.texPath, ShaderFor(pawn), Props.drawSize, Props.color.Value, Props.color.Value, null, Props.texPath);
+            }
             
             return GraphicDatabase.Get<Graphic_Multi>(Props.texPath, ShaderFor(pawn), Props.drawSize, Props.color.Value);
         }
