@@ -26,5 +26,7 @@ namespace Genes40k
         public bool appliesToAll = false;
 
         public bool useMask = false;
+        
+        public bool drawInHeadSpace = false;
     }
 }   

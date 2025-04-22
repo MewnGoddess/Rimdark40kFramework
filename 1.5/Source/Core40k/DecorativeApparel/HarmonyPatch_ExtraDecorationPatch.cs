@@ -90,7 +90,15 @@ namespace Genes40k
                 switch (type)
                 {
                     case DecorationType.Body:
-                        pawnRenderNodeProperty.parentTagDef = PawnRenderNodeTagDefOf.Body;
+                        if (decoration.Key.drawInHeadSpace)
+                        {
+                            pawnRenderNodeProperty.parentTagDef = PawnRenderNodeTagDefOf.Head;
+                        }
+                        else
+                        {
+                            pawnRenderNodeProperty.parentTagDef = PawnRenderNodeTagDefOf.Body;
+                        }
+                        
                         pawnRenderNodeProperty.workerClass = typeof(PawnRenderNodeWorker_AttachmentExtraDecorationBody);
                         break;
                     case DecorationType.Head:
