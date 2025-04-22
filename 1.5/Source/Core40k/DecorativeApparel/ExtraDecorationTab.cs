@@ -43,7 +43,7 @@ namespace Genes40k
             extraDecorationDefsHelmet.SortBy(def => def.sortOrder);
         }
 
-        private void DrawRowContent(DecorativeApparelColourTwo apparel, List<ExtraDecorationDef> extraDecorationDefs, ref Vector2 position, ref Rect viewRect)
+        private void DrawRowContent(DecorativeApparelColourTwo apparel, List<ExtraDecorationDef> extraDecorationDefs, Vector2 position, ref Rect viewRect)
         {
             var iconSize = new Vector2(viewRect.width/RowAmount, viewRect.width/RowAmount);
             var smallIconSize = new Vector2(iconSize.x / 4, iconSize.y / 4);
@@ -52,23 +52,21 @@ namespace Genes40k
             var currentDecorationColours = apparel.ExtraDecorationColours;
 
             var colourButtonExtraSize = 0f;
-
+            
             var curX = position.x;
             
             var setY = curY;
+
+            extraDecorationDefs = extraDecorationDefs.Where(deco => deco.appliesToAll || deco.appliesTo.Contains(apparel.def.defName)).ToList();
             
             for (var i = 0; i < extraDecorationDefs.Count; i++)
             {
-                if (!extraDecorationDefs[i].appliesTo.Contains(apparel.def.defName) && !extraDecorationDefs[i].appliesToAll)
-                {
-                    continue;
-                }
-                
+
                 position = new Vector2(curX, curY);
                 var iconRect = new Rect(position, iconSize);
                     
                 curX += iconRect.width;
-
+                
                 if (i != 0 && (i+1) % RowAmount == 0)
                 {
                     curY += iconRect.height + colourButtonExtraSize;
@@ -148,7 +146,7 @@ namespace Genes40k
                     
                     presetSelection = presetSelection.ExpandedBy(1f);
 
-                    if (Widgets.ButtonText(presetSelection, "Preset"))
+                    if (Widgets.ButtonText(presetSelection, "BEWH.Framework.CommonKeyword.Preset".Translate()))
                     {
                         SelectPreset(apparel, extraDecorationDefs[i1]);
                     }
@@ -233,7 +231,7 @@ namespace Genes40k
                 
                 curY = position.y;
                 
-                DrawRowContent(bodyApparel, extraDecorationDefsBody, ref position, ref viewRect);
+                DrawRowContent(bodyApparel, extraDecorationDefsBody, position, ref viewRect);
             }
             
             var helmetApparel = (HeadDecorativeApparelColourTwo)pawn.apparel.WornApparel.FirstOrFallback(a => a is HeadDecorativeApparelColourTwo);
@@ -262,7 +260,7 @@ namespace Genes40k
                 
                 curY = position.y;
                 
-                DrawRowContent(helmetApparel, extraDecorationDefsHelmet, ref position, ref viewRect);
+                DrawRowContent(helmetApparel, extraDecorationDefsHelmet, position, ref viewRect);
             }
             
             Widgets.EndScrollView();

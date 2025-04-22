@@ -10,6 +10,7 @@
 
   <!--=== Common Keywords ===-->
   <BEWH.Framework.CommonKeyword.None>None</BEWH.Framework.CommonKeyword.None>
+  <BEWH.Framework.CommonKeyword.Preset>Preset</BEWH.Framework.CommonKeyword.Preset>
   <BEWH.Framework.CommonKeywords.ModSettings>mod settings</BEWH.Framework.CommonKeywords.ModSettings>
 
   <!--=== Apparel Two ===-->
