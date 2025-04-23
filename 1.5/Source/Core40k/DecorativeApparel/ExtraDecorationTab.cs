@@ -43,7 +43,7 @@ namespace Genes40k
             extraDecorationDefsHelmet.SortBy(def => def.sortOrder);
         }
 
-        private void DrawRowContent(DecorativeApparelColourTwo apparel, List<ExtraDecorationDef> extraDecorationDefs, Vector2 position, ref Rect viewRect)
+        private void DrawRowContent(DecorativeApparelColourTwo apparel, List<ExtraDecorationDef> extraDecorationDefs, ref Vector2 position, ref Rect viewRect)
         {
             var iconSize = new Vector2(viewRect.width/RowAmount, viewRect.width/RowAmount);
             var smallIconSize = new Vector2(iconSize.x / 4, iconSize.y / 4);
@@ -231,7 +231,9 @@ namespace Genes40k
                 
                 curY = position.y;
                 
-                DrawRowContent(bodyApparel, extraDecorationDefsBody, position, ref viewRect);
+                DrawRowContent(bodyApparel, extraDecorationDefsBody, ref position, ref viewRect);
+                
+                listScrollViewHeight = position.y + 10f;
             }
             
             var helmetApparel = (HeadDecorativeApparelColourTwo)pawn.apparel.WornApparel.FirstOrFallback(a => a is HeadDecorativeApparelColourTwo);
@@ -260,7 +262,9 @@ namespace Genes40k
                 
                 curY = position.y;
                 
-                DrawRowContent(helmetApparel, extraDecorationDefsHelmet, position, ref viewRect);
+                DrawRowContent(helmetApparel, extraDecorationDefsHelmet, ref position, ref viewRect);
+                
+                listScrollViewHeight = curY + 10f;
             }
             
             Widgets.EndScrollView();
