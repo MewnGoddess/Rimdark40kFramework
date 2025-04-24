@@ -1,10 +1,7 @@
-﻿using RimWorld;
-using System.Collections.Generic;
-using Verse;
+﻿using Verse;
 
-namespace Core40k
+namespace Core40k;
+
+public class DefModExtension_LostHeartSurvival : DefModExtension
 {
-    public class DefModExtension_LostHeartSurvival : DefModExtension
-    {
-    }
-}   
+}

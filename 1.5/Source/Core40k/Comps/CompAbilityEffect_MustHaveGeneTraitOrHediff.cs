@@ -1,30 +1,27 @@
 ﻿using RimWorld;
-using System.Collections.Generic;
-using System.Linq;
 using Verse;
 
-namespace Core40k
-{
-    public class CompAbilityEffect_MustHaveGene : CompAbilityEffect
-    {
-        private new CompProperties_MustHaveGene Props => (CompProperties_MustHaveGene)props;
-        
-        public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
-        {
-            base.Valid(target, throwMessages);
+namespace Core40k;
 
-            return target.Pawn.genes != null && target.Pawn.genes.HasActiveGene(Props.geneDef);
-        }
+public class CompAbilityEffect_MustHaveGene : CompAbilityEffect
+{
+    private new CompProperties_MustHaveGene Props => (CompProperties_MustHaveGene)props;
         
-        public override string ExtraLabelMouseAttachment(LocalTargetInfo target)
+    public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
+    {
+        base.Valid(target, throwMessages);
+
+        return target.Pawn.genes != null && target.Pawn.genes.HasActiveGene(Props.geneDef);
+    }
+        
+    public override string ExtraLabelMouseAttachment(LocalTargetInfo target)
+    {
+        base.ExtraLabelMouseAttachment(target);
+        if (target.Pawn.genes == null || !target.Pawn.genes.HasActiveGene(Props.geneDef))
         {
-            base.ExtraLabelMouseAttachment(target);
-            if (target.Pawn.genes == null || !target.Pawn.genes.HasActiveGene(Props.geneDef))
-            {
-                return "BEWH.Framework.Comp.PawnDoesNotHaveRequiredGene".Translate(target.Pawn, Props.geneDef.label);
-            }
-            
-            return null;
+            return "BEWH.Framework.Comp.PawnDoesNotHaveRequiredGene".Translate(target.Pawn, Props.geneDef.label);
         }
+            
+        return null;
     }
 }

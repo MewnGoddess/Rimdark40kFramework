@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using Verse;
 
-namespace Core40k
+namespace Core40k;
+
+public class DefModExtension_EnableTabDef : DefModExtension
 {
-    public class DefModExtension_EnableTabDef : DefModExtension
-    {
-        public List<ApparelColourTwoTabDef> tabDefs;
-    }
-}   
+    public List<ApparelColourTwoTabDef> tabDefs;
+}

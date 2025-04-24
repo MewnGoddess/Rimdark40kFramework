@@ -1,26 +1,25 @@
 ﻿using System.Linq;
 using Verse;
 
-namespace Core40k
+namespace Core40k;
+
+public class Gene_DisabledBy : Gene
 {
-    public class Gene_DisabledBy : Gene
+    public override bool Active
     {
-        public override bool Active
+        get
         {
-            get
+            if (def.HasModExtension<DefModExtension_GeneDisabledBy>())
             {
-                if (def.HasModExtension<DefModExtension_GeneDisabledBy>())
+                var disabledByGenes = def.GetModExtension<DefModExtension_GeneDisabledBy>().geneDisabledBy;
+                var overriddenGene = Enumerable.FirstOrDefault(disabledByGenes, gene => pawn.genes.HasActiveGene(gene));
+                if (overriddenGene != null)
                 {
-                    var disabledByGenes = def.GetModExtension<DefModExtension_GeneDisabledBy>().geneDisabledBy;
-                    var overriddenGene = Enumerable.FirstOrDefault(disabledByGenes, gene => pawn.genes.HasActiveGene(gene));
-                    if (overriddenGene != null)
-                    {
-                        overriddenByGene = pawn.genes.GetGene(overriddenGene);
-                        return false;
-                    }
+                    overriddenByGene = pawn.genes.GetGene(overriddenGene);
+                    return false;
                 }
-                return base.Active;
             }
+            return base.Active;
         }
     }
 }

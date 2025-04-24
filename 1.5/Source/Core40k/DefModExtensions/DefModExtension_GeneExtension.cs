@@ -1,11 +1,8 @@
-﻿using RimWorld;
-using System.Collections.Generic;
-using Verse;
+﻿using Verse;
 
-namespace Core40k
+namespace Core40k;
+
+public class DefModExtension_GeneExtension : DefModExtension
 {
-    public class DefModExtension_GeneExtension : DefModExtension
-    {
-        public float addedWorldCarryCapacity = 0f;
-    }
-}   
+    public float addedWorldCarryCapacity = 0f;
+}

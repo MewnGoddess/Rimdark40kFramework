@@ -1,22 +1,17 @@
-﻿using HarmonyLib;
-using RimWorld;
-using System.Collections.Generic;
+﻿using RimWorld;
 using Verse;
-using VFECore;
 
+namespace Core40k;
 
-namespace Core40k
+public class Recipe_InstallImplantRequiringHediff : Recipe_InstallImplant
 {
-    public class Recipe_InstallImplantRequiringHediff : Recipe_InstallImplant
+    public override bool AvailableOnNow(Thing thing, BodyPartRecord part = null)
     {
-        public override bool AvailableOnNow(Thing thing, BodyPartRecord part = null)
+        if (!(thing is Pawn pawn && pawn.health.hediffSet.HasHediff(recipe.GetModExtension<DefModExtension_RequiresHediff>().hediffDef)) || !recipe.HasModExtension<DefModExtension_RequiresHediff>())
         {
-            if (!(thing is Pawn pawn && pawn.health.hediffSet.HasHediff(recipe.GetModExtension<DefModExtension_RequiresHediff>().hediffDef)) || !recipe.HasModExtension<DefModExtension_RequiresHediff>())
-            {
-                return false;
-            }
-
-            return base.AvailableOnNow(thing, part);
+            return false;
         }
+
+        return base.AvailableOnNow(thing, part);
     }
 }

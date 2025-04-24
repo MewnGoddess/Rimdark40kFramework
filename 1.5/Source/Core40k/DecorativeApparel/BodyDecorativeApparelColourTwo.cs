@@ -1,6 +1,5 @@
-﻿namespace Core40k
+﻿namespace Core40k;
+
+public class BodyDecorativeApparelColourTwo : DecorativeApparelColourTwo
 {
-    public class BodyDecorativeApparelColourTwo : DecorativeApparelColourTwo
-    {
-    }
 }

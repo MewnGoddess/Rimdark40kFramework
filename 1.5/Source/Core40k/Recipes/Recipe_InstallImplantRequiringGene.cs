@@ -1,22 +1,17 @@
-﻿using HarmonyLib;
-using RimWorld;
-using System.Collections.Generic;
+﻿using RimWorld;
 using Verse;
-using VFECore;
 
+namespace Core40k;
 
-namespace Core40k
+public class Recipe_InstallImplantRequiringGene : Recipe_InstallImplant
 {
-    public class Recipe_InstallImplantRequiringGene : Recipe_InstallImplant
+    public override bool AvailableOnNow(Thing thing, BodyPartRecord part = null)
     {
-        public override bool AvailableOnNow(Thing thing, BodyPartRecord part = null)
+        if (!(thing is Pawn pawn && (pawn.genes != null) && recipe.HasModExtension<DefModExtension_RequiresGene>() && pawn.genes.HasActiveGene(recipe.GetModExtension<DefModExtension_RequiresGene>().geneDef)))
         {
-            if (!(thing is Pawn pawn && (pawn.genes != null) && recipe.HasModExtension<DefModExtension_RequiresGene>() && pawn.genes.HasActiveGene(recipe.GetModExtension<DefModExtension_RequiresGene>().geneDef)))
-            {
-                return false;
-            }
-
-            return base.AvailableOnNow(thing, part);
+            return false;
         }
+
+        return base.AvailableOnNow(thing, part);
     }
 }

@@ -1,23 +1,20 @@
 ﻿using HarmonyLib;
-using System;
 using System.Collections.Generic;
-using VanillaGenesExpanded;
 using Verse;
 
-namespace Core40k
+namespace Core40k;
+
+[HarmonyPatch(typeof(GenRecipe), "MakeRecipeProducts")]
+public class DontPlaceProductPatch
 {
-    [HarmonyPatch(typeof(GenRecipe), "MakeRecipeProducts")]
-    public class DontPlaceProductPatch
+    public static bool Prefix(ref IEnumerable<Thing> __result, RecipeDef recipeDef)
     {
-        public static bool Prefix(ref IEnumerable<Thing> __result, RecipeDef recipeDef)
+        if (!recipeDef.HasModExtension<DefModExtension_DontPlaceProduct>())
         {
-            if (!recipeDef.HasModExtension<DefModExtension_DontPlaceProduct>())
-            {
-                return true;
-            }
-            
-            __result = new List<Thing>();
-            return false;
+            return true;
         }
+            
+        __result = new List<Thing>();
+        return false;
     }
-}   
+}

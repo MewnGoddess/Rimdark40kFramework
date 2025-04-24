@@ -1,22 +1,21 @@
 ﻿using Verse;
 
-namespace Core40k
+namespace Core40k;
+
+public class HediffCompProperties_SendLetterAtSeverity : HediffCompProperties
 {
-    public class HediffCompProperties_SendLetterAtSeverity : HediffCompProperties
+    public bool onlySendOnce = true;
+
+    public float severitySendAt = 1f;
+
+    public string letter = "";
+
+    public string message = "";
+
+    public LetterDef letterDef = null;
+
+    public HediffCompProperties_SendLetterAtSeverity()
     {
-        public bool onlySendOnce = true;
-
-        public float severitySendAt = 1f;
-
-        public string letter = "";
-
-        public string message = "";
-
-        public LetterDef letterDef = null;
-
-        public HediffCompProperties_SendLetterAtSeverity()
-        {
-            compClass = typeof(Hediff_SendLetterAtSeverity);
-        }
+        compClass = typeof(Hediff_SendLetterAtSeverity);
     }
 }

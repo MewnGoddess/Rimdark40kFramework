@@ -164,7 +164,6 @@
     <Compile Include="Recipes\Recipe_InstallImplantRequiringGene.cs" />
     <Compile Include="Letters\Letter_JumpTo.cs" />
     <Compile Include="WeightedSelection.cs" />
-    <Compile Include="DefModExtensions\DefModExtension_Geneseed.cs" />
     <Compile Include="DefModExtensions\DefModExtension_UntradeablePawn.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_NoSlavesPatch.cs" />
     <Compile Include="DamageWorkers\DamageWorker_WarpFlame.cs" />

@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using Verse;
 
-namespace Core40k
+namespace Core40k;
+
+public class ColourPresetDef : Def
 {
-    public class ColourPresetDef : Def
-    {
-        public Color primaryColour = Color.white;
-        public Color secondaryColour = Color.white;
-    }
+    public Color primaryColour = Color.white;
+    public Color secondaryColour = Color.white;
 }

@@ -1,8 +1,5 @@
 ﻿using Verse;
 
+namespace Core40k;
 
-namespace Core40k
-{
-    public class DefModExtension_UntradeablePawn : DefModExtension {}
-
-}
+public class DefModExtension_UntradeablePawn : DefModExtension {}

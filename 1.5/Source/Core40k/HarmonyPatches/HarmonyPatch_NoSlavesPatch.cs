@@ -3,37 +3,35 @@ using RimWorld;
 using System.Collections.Generic;
 using Verse;
 
+namespace Core40k;
 
-namespace Core40k
+[HarmonyPatch(typeof(StockGenerator_Slaves), "GenerateThings")]
+public class DisallowSlaveBuyingPatch
 {
-    [HarmonyPatch(typeof(StockGenerator_Slaves), "GenerateThings")]
-    public class DisallowSlaveBuyingPatch
-    {
-        public static IEnumerable<Thing> Postfix(IEnumerable<Thing> __result)
-        {
-	        var newResult = new List<Thing>();
+	public static IEnumerable<Thing> Postfix(IEnumerable<Thing> __result)
+	{
+		var newResult = new List<Thing>();
 
-            foreach (var thing in __result)
-            {
-	            var addThing = true;
-				if (thing is Pawn pawn)
+		foreach (var thing in __result)
+		{
+			var addThing = true;
+			if (thing is Pawn pawn)
+			{
+				if (pawn.genes == null)
 				{
-					if (pawn.genes == null)
-					{
-						continue;
-					}
-                    if (pawn.genes.Xenotype.HasModExtension<DefModExtension_UntradeablePawn>())
-					{
-						addThing = false;
-					}
+					continue;
 				}
-				if (addThing)
+				if (pawn.genes.Xenotype.HasModExtension<DefModExtension_UntradeablePawn>())
 				{
-					newResult.Add(thing);
+					addThing = false;
 				}
 			}
+			if (addThing)
+			{
+				newResult.Add(thing);
+			}
+		}
 
-			return newResult.NullOrEmpty() ? __result : newResult;
-        }
-    }
+		return newResult.NullOrEmpty() ? __result : newResult;
+	}
 }

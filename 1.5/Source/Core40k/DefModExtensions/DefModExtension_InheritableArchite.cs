@@ -1,10 +1,8 @@
-﻿using RimWorld;
-using Verse;
+﻿using Verse;
 
-namespace Core40k
+namespace Core40k;
+
+public class DefModExtension_InheritableArchite : DefModExtension
 {
-    public class DefModExtension_InheritableArchite : DefModExtension
-    {
-        public bool presentOnBothParentsRequired = true;
-    }
+    public bool presentOnBothParentsRequired = true;
 }

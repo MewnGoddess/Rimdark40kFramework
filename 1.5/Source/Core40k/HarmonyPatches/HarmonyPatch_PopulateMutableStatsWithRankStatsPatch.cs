@@ -4,36 +4,35 @@ using System.Linq;
 using RimWorld;
 using Verse;
 
-namespace Core40k
+namespace Core40k;
+
+[HarmonyPatch(typeof(StatDef), "PopulateMutableStats")]
+public class PopulateMutableStatsWithRankStatsPatch
 {
-    [HarmonyPatch(typeof(StatDef), "PopulateMutableStats")]
-    public class PopulateMutableStatsWithRankStatsPatch
+    public static void Postfix(ref HashSet<StatDef> ___mutableStats)
     {
-        public static void Postfix(ref HashSet<StatDef> ___mutableStats)
+        foreach (var rank in DefDatabase<RankDef>.AllDefsListForReading)
         {
-            foreach (var rank in DefDatabase<RankDef>.AllDefsListForReading)
+            if (rank.statFactors != null)
             {
-                if (rank.statFactors != null)
-                {
-                    ___mutableStats.AddRange(rank.statFactors.Select((StatModifier mod) => mod.stat));
-                }
-                if (rank.statOffsets != null)
-                {
-                    ___mutableStats.AddRange(rank.statOffsets.Select((StatModifier mod) => mod.stat));
-                }
+                ___mutableStats.AddRange(rank.statFactors.Select((StatModifier mod) => mod.stat));
+            }
+            if (rank.statOffsets != null)
+            {
+                ___mutableStats.AddRange(rank.statOffsets.Select((StatModifier mod) => mod.stat));
+            }
                 
-                foreach (var conditionalStatAffecter in rank.conditionalStatAffecters)
+            foreach (var conditionalStatAffecter in rank.conditionalStatAffecters)
+            {
+                if (conditionalStatAffecter.statFactors != null)
                 {
-                    if (conditionalStatAffecter.statFactors != null)
-                    {
-                        ___mutableStats.AddRange(conditionalStatAffecter.statFactors.Select((StatModifier mod) => mod.stat));
-                    }
-                    if (conditionalStatAffecter.statOffsets != null)
-                    {
-                        ___mutableStats.AddRange(conditionalStatAffecter.statOffsets.Select((StatModifier mod) => mod.stat));
-                    }
+                    ___mutableStats.AddRange(conditionalStatAffecter.statFactors.Select((StatModifier mod) => mod.stat));
+                }
+                if (conditionalStatAffecter.statOffsets != null)
+                {
+                    ___mutableStats.AddRange(conditionalStatAffecter.statOffsets.Select((StatModifier mod) => mod.stat));
                 }
             }
         }
     }
-}   
+}

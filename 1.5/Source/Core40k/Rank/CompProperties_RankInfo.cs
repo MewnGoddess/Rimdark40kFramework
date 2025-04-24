@@ -1,12 +1,11 @@
 ﻿using Verse;
 
-namespace Core40k
+namespace Core40k;
+
+public class CompProperties_RankInfo : CompProperties
 {
-    public class CompProperties_RankInfo : CompProperties
+    public CompProperties_RankInfo()
     {
-        public CompProperties_RankInfo()
-        {
-            compClass = typeof(CompRankInfo);
-        }
+        compClass = typeof(CompRankInfo);
     }
 }

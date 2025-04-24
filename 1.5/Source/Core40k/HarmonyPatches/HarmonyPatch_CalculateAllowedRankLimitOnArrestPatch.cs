@@ -1,28 +1,25 @@
-﻿using System;
-using HarmonyLib;
+﻿using HarmonyLib;
 using RimWorld;
 using Verse;
 
-namespace Core40k
+namespace Core40k;
+
+[HarmonyPatch(typeof(Pawn_GuestTracker), "CapturedBy")]
+public class CalculateAllowedRankLimitOnArrest
 {
-    [HarmonyPatch(typeof(Pawn_GuestTracker), "CapturedBy")]
-    public class CalculateAllowedRankLimitOnArrest
+    public static void Postfix(Pawn ___pawn, Faction by)
     {
-        public static void Postfix(Pawn ___pawn, Faction by)
+        if (by == null || !by.IsPlayer)
         {
-            if (by == null || !by.IsPlayer)
-            {
-                return;
-            }
-            
-            if (!___pawn.HasComp<CompRankInfo>() || ___pawn.IsSlaveOfColony)
-            {
-                return;
-            }
-
-            var comp = ___pawn.GetComp<CompRankInfo>();
-            Current.Game.GetComponent<GameComponent_RankInfo>().PawnResetRanks(comp.UnlockedRanks);
+            return;
         }
-    }
+            
+        if (!___pawn.HasComp<CompRankInfo>() || ___pawn.IsSlaveOfColony)
+        {
+            return;
+        }
 
-}   
+        var comp = ___pawn.GetComp<CompRankInfo>();
+        Current.Game.GetComponent<GameComponent_RankInfo>().PawnResetRanks(comp.UnlockedRanks);
+    }
+}

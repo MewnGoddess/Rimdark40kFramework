@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using Verse;
 
-namespace Core40k
+namespace Core40k;
+
+public class DefModExtension_GeneDisabledBy : DefModExtension
 {
-    public class DefModExtension_GeneDisabledBy : DefModExtension
-    {
-        public List<GeneDef> geneDisabledBy = new List<GeneDef>();
-    }
+    public List<GeneDef> geneDisabledBy = new List<GeneDef>();
 }

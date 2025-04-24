@@ -1,20 +1,19 @@
 ﻿using Verse;
 
-namespace Core40k
-{
-    public class Hediff_RemoveMentalStateOnHediffEnd : HediffComp
-    {
-        private HediffCompProperties_RemoveMentalStateOnHediffEnd Props => (HediffCompProperties_RemoveMentalStateOnHediffEnd)props;
+namespace Core40k;
 
-        public override void CompPostPostRemoved()
-        {
-            base.CompPostPostRemoved();
-            if (!Pawn.InMentalState) return;
+public class Hediff_RemoveMentalStateOnHediffEnd : HediffComp
+{
+    private HediffCompProperties_RemoveMentalStateOnHediffEnd Props => (HediffCompProperties_RemoveMentalStateOnHediffEnd)props;
+
+    public override void CompPostPostRemoved()
+    {
+        base.CompPostPostRemoved();
+        if (!Pawn.InMentalState) return;
             
-            if (Props.specificMentalState == null || Props.specificMentalState == Pawn.MentalStateDef)
-            {
-                Pawn.mindState.mentalStateHandler.Reset();
-            }
+        if (Props.specificMentalState == null || Props.specificMentalState == Pawn.MentalStateDef)
+        {
+            Pawn.mindState.mentalStateHandler.Reset();
         }
     }
 }
