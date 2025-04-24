@@ -79,7 +79,7 @@
     <Compile Include="ApparelColourTwo\ColourPreset.cs" />
     <Compile Include="ApparelColourTwo\ColourPresetDef.cs" />
     <Compile Include="ApparelColourTwo\DecorationColourPresetDef.cs" />
-    <Compile Include="ApparelColourTwo\Dialog_EnterNewName.cs" />
+    <Compile Include="ApparelColourTwo\Dialog_EditColourPresets.cs" />
     <Compile Include="ApparelColourTwo\Dialog_PaintSecondaryColour.cs" />
     <Compile Include="Comps\CompAbilityEffect_GiveHediffAndMentalBreak.cs" />
     <Compile Include="Comps\CompAbilityEffect_MustHaveGeneTraitOrHediff.cs" />
@@ -89,7 +89,6 @@
     <Compile Include="Comps\CompProperties_AbilityWaveAttack.cs" />
     <Compile Include="Comps\CompProperties_MustHaveGeneTraitOrHediff.cs" />
     <Compile Include="Comps\CompProperties_ResetRanks.cs" />
-    <Compile Include="Comps\GameComponent_SavedPresets.cs" />
     <Compile Include="Comps\HediffCompProperties_RemoveMentalStateOnHediffEnd.cs" />
     <Compile Include="Comps\Hediff_RemoveMentalStateOnHediffEnd.cs" />
     <Compile Include="Comps\Hediff_SendLetterAtSeverity.cs" />
@@ -104,7 +103,10 @@
     <Compile Include="DecorativeApparel\BodyDecorativeApparelColourTwo.cs" />
     <Compile Include="DecorativeApparel\DecorativeApparelColourTwo.cs" />
     <Compile Include="DecorativeApparel\DecorationDef.cs" />
+    <Compile Include="DecorativeApparel\Dialog_EditExtraDecorationPresets.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationDef.cs" />
+    <Compile Include="DecorativeApparel\ExtraDecorationPresetParts.cs" />
+    <Compile Include="DecorativeApparel\ExtraDecorationPreset.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationTab.cs" />
     <Compile Include="DecorativeApparel\HarmonyPatch_ExtraDecorationPatch.cs" />
     <Compile Include="DecorativeApparel\HeadDecorativeApparelColourTwo.cs" />

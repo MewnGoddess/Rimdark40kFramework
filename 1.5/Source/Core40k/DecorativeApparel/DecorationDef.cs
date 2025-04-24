@@ -4,7 +4,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace Genes40k
+namespace Core40k
 {
     public class DecorationDef : Def
     {

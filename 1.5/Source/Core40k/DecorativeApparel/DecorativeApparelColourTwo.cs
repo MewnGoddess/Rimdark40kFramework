@@ -3,7 +3,7 @@ using Core40k;
 using UnityEngine;
 using Verse;
 
-namespace Genes40k
+namespace Core40k
 {
     public class DecorativeApparelColourTwo : ApparelColourTwo
     {
@@ -14,7 +14,6 @@ namespace Genes40k
         private Dictionary<ExtraDecorationDef, Color> extraDecorationsColours = new Dictionary<ExtraDecorationDef, Color>();
 
         public Dictionary<ExtraDecorationDef, bool> ExtraDecorationDefs => extraDecorations;
-        
         public Dictionary<ExtraDecorationDef, Color> ExtraDecorationColours => extraDecorationsColours;
 
         public void AddOrRemoveDecoration(ExtraDecorationDef decoration)
@@ -44,6 +43,15 @@ namespace Genes40k
             Notify_ColorChanged();
         }
 
+        public void LoadFromPreset(ExtraDecorationPreset preset)
+        {
+            foreach (var presetPart in preset.extraDecorationPresetParts)
+            {
+                extraDecorations.Add(Core40kUtils.GetDefFromString(presetPart.extraDecorationDefs), presetPart.isFlipped);
+                extraDecorationsColours.Add(Core40kUtils.GetDefFromString(presetPart.extraDecorationDefs), presetPart.colour);
+            }
+        }
+        
         public void UpdateDecorationColour(ExtraDecorationDef decoration, Color colour)
         {
             extraDecorationsColours[decoration] = colour;

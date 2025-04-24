@@ -3,22 +3,22 @@ using Verse;
 
 namespace Core40k
 {
-    public class Dialog_EnterNewName : Window
+    public class Dialog_EditExtraDecorationPresets : Window
     {
         public override Vector2 InitialSize => new Vector2(300f, 120f);
 
-        private GameComponent_SavedPresets gameComp;
-
-        private ColourPreset colourPreset;
+        private ExtraDecorationPreset decorationPreset;
 
         private string textEntry = "";
 
         private bool showWarningText = false;
         
-        public Dialog_EnterNewName(GameComponent_SavedPresets gameComp, ColourPreset colourPreset)
+        private static Core40kModSettings modSettings = null;
+        public static Core40kModSettings ModSettings => modSettings ??= LoadedModManager.GetMod<Core40kMod>().GetSettings<Core40kModSettings>();
+        
+        public Dialog_EditExtraDecorationPresets(ExtraDecorationPreset decorationPreset)
         {
-            this.gameComp = gameComp;
-            this.colourPreset = colourPreset;
+            this.decorationPreset = decorationPreset;
         }
         
         public override void DoWindowContents(Rect inRect)
@@ -47,8 +47,8 @@ namespace Core40k
             };
             if (Widgets.ButtonText(acceptRect, "Accept".Translate()))
             {
-                colourPreset.name = newName;
-                if (gameComp.AddPreset(colourPreset))
+                decorationPreset.name = newName;
+                if (ModSettings.AddPreset(decorationPreset))
                 {
                     Close();
                 }

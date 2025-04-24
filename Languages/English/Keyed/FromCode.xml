@@ -10,7 +10,6 @@
 
   <!--=== Common Keywords ===-->
   <BEWH.Framework.CommonKeyword.None>None</BEWH.Framework.CommonKeyword.None>
-  <BEWH.Framework.CommonKeyword.Preset>Preset</BEWH.Framework.CommonKeyword.Preset>
   <BEWH.Framework.CommonKeywords.ModSettings>mod settings</BEWH.Framework.CommonKeywords.ModSettings>
 
   <!--=== Apparel Two ===-->
@@ -20,7 +19,7 @@
   <BEWH.Framework.ApparelColourTwo.SecondaryColor>Secondary</BEWH.Framework.ApparelColourTwo.SecondaryColor>
 
   <BEWH.Framework.ApparelColourTwo.SelectPreset>Select Preset</BEWH.Framework.ApparelColourTwo.SelectPreset>
-  <BEWH.Framework.ApparelColourTwo.EditPreset>Edit Preset</BEWH.Framework.ApparelColourTwo.EditPreset>
+  <BEWH.Framework.ApparelColourTwo.EditPreset>Edit Presets</BEWH.Framework.ApparelColourTwo.EditPreset>
   <BEWH.Framework.ApparelColourTwo.NewPreset>[New Preset]</BEWH.Framework.ApparelColourTwo.NewPreset>
   <BEWH.Framework.ApparelColourTwo.EnterPresetName>Enter name of new preset</BEWH.Framework.ApparelColourTwo.EnterPresetName>
   <BEWH.Framework.ApparelColourTwo.OverridePreset>Override {0} with currently selected colours</BEWH.Framework.ApparelColourTwo.OverridePreset>
@@ -29,12 +28,23 @@
   <BEWH.Framework.ApparelColourTwo.ChangeSecondaryColour>Change both colours</BEWH.Framework.ApparelColourTwo.ChangeSecondaryColour>
   <BEWH.Framework.ApparelColourTwo.ChangeSecondaryColourDesc>Changes both colours of apparel on {0}.</BEWH.Framework.ApparelColourTwo.ChangeSecondaryColourDesc>
 
+  <BEWH.Framework.ApparelColourTwo.ChooseCustomColour>Click to select custom colour</BEWH.Framework.ApparelColourTwo.ChooseCustomColour>
+
   <BEWH.Framework.ExtraDecoration.BodyDecoration>Body Decorations</BEWH.Framework.ExtraDecoration.BodyDecoration>
   <BEWH.Framework.ExtraDecoration.HelmetDecoration>Helmet Decorations</BEWH.Framework.ExtraDecoration.HelmetDecoration>
 
   <BEWH.Framework.ExtraDecoration.RemoveAllDecorations>Remove All</BEWH.Framework.ExtraDecoration.RemoveAllDecorations>
 
   <BEWH.Framework.ExtraDecoration.UseArmourColour>Use Armour Colour</BEWH.Framework.ExtraDecoration.UseArmourColour>
+
+  <BEWH.Framework.ExtraDecoration.Preset>Preset</BEWH.Framework.ExtraDecoration.Preset>
+  <BEWH.Framework.ExtraDecoration.PresetDesc>Select a colour preset</BEWH.Framework.ExtraDecoration.PresetDesc>
+
+  <BEWH.Framework.ExtraDecoration.Select>Select</BEWH.Framework.ExtraDecoration.Select>
+  <BEWH.Framework.ExtraDecoration.SelectDesc>Select a decoration preset</BEWH.Framework.ExtraDecoration.SelectDesc>
+
+  <BEWH.Framework.ExtraDecoration.Edit>Edit</BEWH.Framework.ExtraDecoration.Edit>
+  <BEWH.Framework.ExtraDecoration.EditDesc>Create, overwrite or remove a preset</BEWH.Framework.ExtraDecoration.EditDesc>
 
   <!--=== Rank System ===-->
   <BEWH.Framework.RankSystem.RankTab>Ranks</BEWH.Framework.RankSystem.RankTab>

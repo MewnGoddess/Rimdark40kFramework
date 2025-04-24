@@ -3,7 +3,7 @@ using System.Linq;
 using RimWorld;
 using Verse;
 
-namespace Genes40k
+namespace Core40k
 {
     public class PawnRenderNodeWorker_AttachmentExtraDecorationHead : PawnRenderNodeWorker
     {

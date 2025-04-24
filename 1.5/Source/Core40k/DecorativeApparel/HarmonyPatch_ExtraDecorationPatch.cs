@@ -4,7 +4,7 @@ using HarmonyLib;
 using RimWorld;
 using Verse;
 
-namespace Genes40k
+namespace Core40k
 {
     enum DecorationType
     {

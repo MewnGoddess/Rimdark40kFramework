@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ColourPicker;
-using Core40k;
 using UnityEngine;
 using Verse;
 
-namespace Genes40k
+namespace Core40k
 {
     public class ExtraDecorationTab : ApparelColourTwoTabDrawer
     {
+        private static Core40kModSettings modSettings = null;
+        public static Core40kModSettings ModSettings => modSettings ??= LoadedModManager.GetMod<Core40kMod>().GetSettings<Core40kModSettings>();
+        
         private const int RowAmount = 6;
 
         private bool setupDone = false;
@@ -61,7 +63,6 @@ namespace Genes40k
             
             for (var i = 0; i < extraDecorationDefs.Count; i++)
             {
-
                 position = new Vector2(curX, curY);
                 var iconRect = new Rect(position, iconSize);
                     
@@ -129,6 +130,7 @@ namespace Genes40k
                     var i1 = i;
                     
                     Widgets.DrawRectFast(colourSelection, apparel.ExtraDecorationColours[extraDecorationDefs[i1]]);
+                    TooltipHandler.TipRegion(colourSelection, "BEWH.Framework.ApparelColourTwo.ChooseCustomColour".Translate());
                     if (Widgets.ButtonInvisible(colourSelection))
                     {
                         Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorationColours[extraDecorationDefs[i1]], ( newColour ) =>
@@ -145,8 +147,9 @@ namespace Genes40k
                     presetSelection.width -= 3f;;
                     
                     presetSelection = presetSelection.ExpandedBy(1f);
-
-                    if (Widgets.ButtonText(presetSelection, "BEWH.Framework.CommonKeyword.Preset".Translate()))
+                    
+                    TooltipHandler.TipRegion(presetSelection, "BEWH.Framework.ExtraDecoration.PresetDesc".Translate());
+                    if (Widgets.ButtonText(presetSelection, "BEWH.Framework.ExtraDecoration.Preset".Translate()))
                     {
                         SelectPreset(apparel, extraDecorationDefs[i1]);
                     }
@@ -189,6 +192,94 @@ namespace Genes40k
                 Find.WindowStack.Add(new FloatMenu(list));
             }
         }
+
+        private ExtraDecorationPreset GetCurrentPreset(DecorativeApparelColourTwo apparel, string presetName)
+        {
+            var extraDecorationPresetParts = new List<ExtraDecorationPresetParts>();
+
+            foreach (var decoration in apparel.ExtraDecorationDefs)
+            {
+                var presetPart = new ExtraDecorationPresetParts()
+                {
+                    extraDecorationDefs = decoration.Key.defName,
+                    isFlipped = decoration.Value,
+                    colour = apparel.ExtraDecorationColours[decoration.Key],
+                };
+                
+                extraDecorationPresetParts.Add(presetPart);
+            }
+
+            var extraDecorationPreset = new ExtraDecorationPreset()
+            {
+                extraDecorationPresetParts = extraDecorationPresetParts,
+                appliesTo = apparel.def.defName,
+                name = presetName
+            };
+
+            return extraDecorationPreset;
+        }
+        
+        private void EditDecorationPreset(DecorativeApparelColourTwo apparel)
+        {
+            var floatMenuOptions = new List<FloatMenuOption>();
+            
+            var currentPreset = GetCurrentPreset(apparel, "");
+            
+            var presets = ModSettings.ExtraDecorationPresets.Where(deco => deco.appliesTo == apparel.def.defName);
+            
+            //Delete or override existing
+            foreach (var preset in presets)
+            {
+                var menuOption = new FloatMenuOption(preset.name, delegate
+                {
+                    currentPreset.name = preset.name;
+                    ModSettings.UpdatePreset(preset, currentPreset);
+                }, Widgets.PlaceholderIconTex, Color.white);
+                menuOption.extraPartWidth = 30f;
+                menuOption.extraPartOnGUI = rect1 => Core40kUtils.DeletePreset(rect1, preset);
+                menuOption.tooltip = "BEWH.Framework.ApparelColourTwo.OverridePreset".Translate(preset.name);
+                floatMenuOptions.Add(menuOption);
+            }
+            
+            //Create new
+            var newPreset = new FloatMenuOption("BEWH.Framework.ApparelColourTwo.NewPreset".Translate(), delegate
+            {
+                Find.WindowStack.Add( new Dialog_EditExtraDecorationPresets(currentPreset));
+            }, Widgets.PlaceholderIconTex, Color.white);
+            floatMenuOptions.Add(newPreset);
+                
+            if (!floatMenuOptions.NullOrEmpty())
+            {
+                Find.WindowStack.Add(new FloatMenu(floatMenuOptions));
+            }
+        }
+
+        private void SelectDecorationPreset(DecorativeApparelColourTwo apparel)
+        {
+            var presets = ModSettings.ExtraDecorationPresets.Where(deco => deco.appliesTo == apparel.def.defName);
+            var list = new List<FloatMenuOption>();
+            
+            foreach (var preset in presets)
+            {
+                var menuOption = new FloatMenuOption(preset.name, delegate
+                {
+                    apparel.RemoveAllDecorations();
+                    apparel.LoadFromPreset(preset);
+                });
+                list.Add(menuOption);
+            }
+                
+            if (!list.NullOrEmpty())
+            {
+                Find.WindowStack.Add(new FloatMenu(list));
+            }
+            else
+            {
+                var menuOptionNone = new FloatMenuOption("NoneBrackets".Translate(), null);
+                list.Add(menuOptionNone);
+                Find.WindowStack.Add(new FloatMenu(list));
+            }
+        }
         
         public override void DrawTab(Rect rect, Pawn pawn, ref Vector2 apparelColorScrollPosition)
         {
@@ -204,13 +295,15 @@ namespace Genes40k
             Widgets.BeginScrollView(outRect, ref apparelColorScrollPosition, viewRect);
             
             var bodyApparel = (BodyDecorativeApparelColourTwo)pawn.apparel.WornApparel.FirstOrFallback(a => a is BodyDecorativeApparelColourTwo);
+            var helmetApparel = (HeadDecorativeApparelColourTwo)pawn.apparel.WornApparel.FirstOrFallback(a => a is HeadDecorativeApparelColourTwo);
             
             curY = viewRect.y;
             
+            //Body Decorations
             if (bodyApparel != null)
             {
                 //Extra decoration title
-                var nameRect = new Rect(viewRect.x, viewRect.y, viewRect.width, 30f);
+                var nameRect = new Rect(viewRect.x, curY, viewRect.width, 30f);
                 nameRect.width /= 2;
                 nameRect.x += nameRect.width / 2;
                 Widgets.DrawMenuSection(nameRect);
@@ -218,17 +311,39 @@ namespace Genes40k
                 Widgets.Label(nameRect, "BEWH.Framework.ExtraDecoration.BodyDecoration".Translate());
                 Text.Anchor = TextAnchor.UpperLeft;
                 
-                var resetAllDecorations = new Rect(viewRect.x, viewRect.y, viewRect.width, 30f);
+                //Remove All
+                var resetAllDecorations = new Rect(nameRect.xMin, curY, viewRect.width, 30f);
                 resetAllDecorations.width /= 5;
-                resetAllDecorations.x = nameRect.xMin - resetAllDecorations.width - nameRect.width/20;
-                
+                resetAllDecorations.x -= resetAllDecorations.width + nameRect.width/20;
                 if (Widgets.ButtonText(resetAllDecorations, "BEWH.Framework.ExtraDecoration.RemoveAllDecorations".Translate()))
                 {
                     bodyApparel.RemoveAllDecorations();
                 }
-
-                var position = new Vector2(viewRect.x, resetAllDecorations.yMax);
                 
+                //Preset Tab
+                var presetSelectRect = new Rect(nameRect.xMax, curY, viewRect.width, 30f);
+                presetSelectRect.x += nameRect.width/20;
+                presetSelectRect.width /= 10;
+                presetSelectRect.width -= 2;
+
+                var presetEditRect = new Rect(presetSelectRect);
+                presetEditRect.x += presetSelectRect.width + 4;
+                
+                //Select Preset
+                TooltipHandler.TipRegion(presetSelectRect, "BEWH.Framework.ExtraDecoration.SelectDesc".Translate());
+                if (Widgets.ButtonText(presetSelectRect, "BEWH.Framework.ExtraDecoration.Select".Translate()))
+                {
+                    SelectDecorationPreset(bodyApparel);
+                }
+                
+                //Edit Presets
+                TooltipHandler.TipRegion(presetEditRect, "BEWH.Framework.ExtraDecoration.EditDesc".Translate());
+                if (Widgets.ButtonText(presetEditRect, "BEWH.Framework.ExtraDecoration.Edit".Translate()))
+                {
+                    EditDecorationPreset(bodyApparel);
+                }
+                
+                var position = new Vector2(viewRect.x, resetAllDecorations.yMax);
                 curY = position.y;
                 
                 DrawRowContent(bodyApparel, extraDecorationDefsBody, ref position, ref viewRect);
@@ -236,8 +351,7 @@ namespace Genes40k
                 listScrollViewHeight = position.y + 10f;
             }
             
-            var helmetApparel = (HeadDecorativeApparelColourTwo)pawn.apparel.WornApparel.FirstOrFallback(a => a is HeadDecorativeApparelColourTwo);
-
+            //Head Decorations
             if (helmetApparel != null)
             {
                 //Extra decoration title
@@ -249,17 +363,39 @@ namespace Genes40k
                 Widgets.Label(nameRect, "BEWH.Framework.ExtraDecoration.HelmetDecoration".Translate());
                 Text.Anchor = TextAnchor.UpperLeft;
                 
-                var resetAllDecorations = new Rect(viewRect.x, curY, viewRect.width, 30f);
+                //Remove All
+                var resetAllDecorations = new Rect(nameRect.xMin, curY, viewRect.width, 30f);
                 resetAllDecorations.width /= 5;
-                resetAllDecorations.x = nameRect.xMin - resetAllDecorations.width - nameRect.width/20;
-                
+                resetAllDecorations.x -= resetAllDecorations.width + nameRect.width/20;
                 if (Widgets.ButtonText(resetAllDecorations, "BEWH.Framework.ExtraDecoration.RemoveAllDecorations".Translate()))
                 {
                     helmetApparel.RemoveAllDecorations();
                 }
                 
-                var position = new Vector2(viewRect.x, curY + resetAllDecorations.height);
+                //Preset Tab
+                var presetSelectRect = new Rect(nameRect.xMax, curY, viewRect.width, 30f);
+                presetSelectRect.x += nameRect.width/20;
+                presetSelectRect.width /= 10;
+                presetSelectRect.width -= 2;
+
+                var presetEditRect = new Rect(presetSelectRect);
+                presetEditRect.x += presetSelectRect.width + 4;
                 
+                //Select Preset
+                TooltipHandler.TipRegion(presetSelectRect, "BEWH.Framework.ExtraDecoration.SelectDesc".Translate());
+                if (Widgets.ButtonText(presetSelectRect, "BEWH.Framework.ExtraDecoration.Select".Translate()))
+                {
+                    SelectDecorationPreset(helmetApparel);
+                }
+                
+                //Edit Presets
+                TooltipHandler.TipRegion(presetEditRect, "BEWH.Framework.ExtraDecoration.EditDesc".Translate());
+                if (Widgets.ButtonText(presetEditRect, "BEWH.Framework.ExtraDecoration.Edit".Translate()))
+                {
+                    EditDecorationPreset(helmetApparel);
+                }
+                
+                var position = new Vector2(viewRect.x, curY + resetAllDecorations.height);
                 curY = position.y;
                 
                 DrawRowContent(helmetApparel, extraDecorationDefsHelmet, ref position, ref viewRect);

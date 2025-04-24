@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Verse;
 
-namespace Genes40k
+namespace Core40k
 {
     public class PawnRenderNode_AttachmentExtraDecoration : PawnRenderNode
     {

@@ -36,6 +36,10 @@ namespace Core40k
         private static readonly string MainTab = "BEWH.Framework.ApparelColourTwo.MainTab".Translate();
 
         private string curTab;
+        
+        private static Core40kModSettings modSettings = null;
+
+        public static Core40kModSettings ModSettings => modSettings ??= LoadedModManager.GetMod<Core40kMod>().GetSettings<Core40kModSettings>();
 
         public Dialog_PaintSecondaryColour()
         {
@@ -175,10 +179,9 @@ namespace Core40k
                         list.Add(menuOption);
                     }
                     
-                    var gameComp = Current.Game.GetComponent<GameComponent_SavedPresets>();
-                    foreach (var preset in gameComp.colourPresetDefs)
+                    foreach (var preset in ModSettings.ColourPresets)
                     {
-                        var menuOption = new FloatMenuOption(preset.label.CapitalizeFirst(), delegate
+                        var menuOption = new FloatMenuOption(preset.name.CapitalizeFirst(), delegate
                         {
                             item.DrawColor = preset.primaryColour;
                             item.SetSecondaryColor(preset.secondaryColour);
@@ -201,17 +204,16 @@ namespace Core40k
                 {
                     var list = new List<FloatMenuOption>();
                     
-                    var gameComp = Current.Game.GetComponent<GameComponent_SavedPresets>();
                     //Delete or override existing
-                    foreach (var preset in gameComp.colourPresetDefs)
+                    foreach (var preset in ModSettings.ColourPresets)
                     {
-                        var menuOption = new FloatMenuOption(preset.label, delegate
+                        var menuOption = new FloatMenuOption(preset.name, delegate
                         {
-                            gameComp.UpdatePreset(preset, item.DrawColor, item.DrawColorTwo);
+                            ModSettings.UpdatePreset(preset, item.DrawColor, item.DrawColorTwo);
                         }, Widgets.PlaceholderIconTex, Color.white);
                         menuOption.extraPartWidth = 30f;
-                        menuOption.extraPartOnGUI = rect1 => Core40kUtils.DeletePreset(rect1, gameComp, preset);
-                        menuOption.tooltip = "BEWH.Framework.ApparelColourTwo.OverridePreset".Translate(preset.label);
+                        menuOption.extraPartOnGUI = rect1 => Core40kUtils.DeletePreset(rect1, preset);
+                        menuOption.tooltip = "BEWH.Framework.ApparelColourTwo.OverridePreset".Translate(preset.name);
                         list.Add(menuOption);
                     }
                     
@@ -223,7 +225,7 @@ namespace Core40k
                             primaryColour = item.DrawColor,
                             secondaryColour = item.DrawColorTwo,
                         };
-                        Find.WindowStack.Add( new Dialog_EnterNewName(gameComp, newColourPreset));
+                        Find.WindowStack.Add( new Dialog_EditColourPresets(newColourPreset));
                     }, Widgets.PlaceholderIconTex, Color.white);
                     list.Add(newPreset);
                 
@@ -250,6 +252,7 @@ namespace Core40k
                     Text.Anchor = TextAnchor.MiddleCenter;
                     Widgets.Label(colorOneRect, "BEWH.Framework.ApparelColourTwo.PrimaryColor".Translate());
                     Text.Anchor = TextAnchor.UpperLeft;
+                    TooltipHandler.TipRegion(colorOneRect, "BEWH.Framework.ApparelColourTwo.ChooseCustomColour".Translate());
                     if (Widgets.ButtonInvisible(colorOneRect))
                     {
                         Find.WindowStack.Add( new Dialog_ColourPicker( item.DrawColor, ( newColour ) =>
@@ -267,6 +270,7 @@ namespace Core40k
                     Widgets.DrawRectFast(colorTwoRect, item.DrawColorTwo);
                     Text.Anchor = TextAnchor.MiddleCenter;
                     Widgets.Label(colorTwoRect, "BEWH.Framework.ApparelColourTwo.SecondaryColor".Translate());
+                    TooltipHandler.TipRegion(colorTwoRect, "BEWH.Framework.ApparelColourTwo.ChooseCustomColour".Translate());
                     Text.Anchor = TextAnchor.UpperLeft;
                     if (Widgets.ButtonInvisible(colorTwoRect))
                     {
