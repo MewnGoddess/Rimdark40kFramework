@@ -16,7 +16,7 @@ public class PawnRenderNode_AttachmentExtraDecoration : PawnRenderNode
 
         if (ExtraDecorationDef.useMask)
         {
-            return GraphicDatabase.Get<Graphic_Multi>(Props.texPath, ShaderFor(pawn), Props.drawSize, Props.color.Value, Props.color.Value, null, Props.texPath + "_m");
+            return GraphicDatabase.Get<Graphic_Multi>(Props.texPath, ShaderFor(pawn), Props.drawSize, Props.color.Value, Props.color.Value, null, Props.texPath + "_mask");
         }
             
         return GraphicDatabase.Get<Graphic_Multi>(Props.texPath, ShaderFor(pawn), Props.drawSize, Props.color.Value);
