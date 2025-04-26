@@ -5,6 +5,6 @@ namespace Core40k;
 
 public class ExtraDecorationPresetDef : Def
 {
-    public ThingDef appliesTo = null;
+    public List<ThingDef> appliesTo = new List<ThingDef>();
     public List<PresetData> presetData = new();
 }

@@ -57,7 +57,8 @@ public class DecorativeApparelColourTwo : ApparelColourTwo
         foreach (var presetPart in preset.presetData)
         {
             extraDecorations.Add(presetPart.extraDecorationDef, presetPart.flipped);
-            extraDecorationsColours.Add(presetPart.extraDecorationDef, presetPart.colour);
+            var colour = presetPart.colour ?? (presetPart.extraDecorationDef.useArmorColourAsDefault ? DrawColor : Color.white);
+            extraDecorationsColours.Add(presetPart.extraDecorationDef, colour);
         }
     }
         

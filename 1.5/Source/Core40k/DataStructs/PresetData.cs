@@ -10,7 +10,7 @@ public class PresetData
     public ExtraDecorationDef extraDecorationDef;
 
     public bool flipped = false;
-    public Color colour = Color.white;
+    public Color? colour = null;
 
     public PresetData()
     {

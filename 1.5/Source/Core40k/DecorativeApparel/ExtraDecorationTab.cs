@@ -276,7 +276,7 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
             list.Add(menuOption);
         }
 
-        foreach (var extraDecorationPreset in extraDecorationPresets.Where(deco => deco.appliesTo == apparel.def))
+        foreach (var extraDecorationPreset in extraDecorationPresets.Where(deco => deco.appliesTo.Contains(apparel.def)))
         {
             var menuOption = new FloatMenuOption(extraDecorationPreset.label, delegate
             {
