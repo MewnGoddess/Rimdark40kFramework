@@ -51,6 +51,15 @@ public class DecorativeApparelColourTwo : ApparelColourTwo
             extraDecorationsColours.Add(Core40kUtils.GetDefFromString(presetPart.extraDecorationDefs), presetPart.colour);
         }
     }
+    
+    public void LoadFromPreset(ExtraDecorationPresetDef preset)
+    {
+        foreach (var presetPart in preset.presetData)
+        {
+            extraDecorations.Add(presetPart.extraDecorationDef, presetPart.flipped);
+            extraDecorationsColours.Add(presetPart.extraDecorationDef, presetPart.colour);
+        }
+    }
         
     public void UpdateDecorationColour(ExtraDecorationDef decoration, Color colour)
     {

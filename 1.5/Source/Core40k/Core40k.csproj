@@ -98,6 +98,7 @@
     <Compile Include="Core40kModSettings.cs" />
     <Compile Include="Core40kUtils.cs" />
     <Compile Include="DamageWorkers\DamageWorker_Holy.cs" />
+    <Compile Include="DataStructs\PresetData.cs" />
     <Compile Include="DataStructs\TraitData.cs" />
     <Compile Include="Debug\DebugActions.cs" />
     <Compile Include="DecorativeApparel\BodyDecorativeApparelColourTwo.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="DecorativeApparel\DecorationDef.cs" />
     <Compile Include="DecorativeApparel\Dialog_EditExtraDecorationPresets.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationDef.cs" />
+    <Compile Include="DecorativeApparel\ExtraDecorationPresetDef.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationPresetParts.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationPreset.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationTab.cs" />

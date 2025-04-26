@@ -21,6 +21,8 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
         
     private List<ExtraDecorationDef> extraDecorationDefsBody = new List<ExtraDecorationDef>();
     private List<ExtraDecorationDef> extraDecorationDefsHelmet = new List<ExtraDecorationDef>();
+    
+    private List<ExtraDecorationPresetDef> extraDecorationPresets = new List<ExtraDecorationPresetDef>();
         
     private void Setup(Pawn pawn)
     {
@@ -43,6 +45,11 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
 
         extraDecorationDefsBody.SortBy(def => def.sortOrder);
         extraDecorationDefsHelmet.SortBy(def => def.sortOrder);
+
+        foreach (var extraDecorationPresetDef in DefDatabase<ExtraDecorationPresetDef>.AllDefs)
+        {
+            extraDecorationPresets.Add(extraDecorationPresetDef);
+        }
     }
 
     private void DrawRowContent(DecorativeApparelColourTwo apparel, List<ExtraDecorationDef> extraDecorationDefs, ref Vector2 position, ref Rect viewRect)
@@ -265,6 +272,16 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
             {
                 apparel.RemoveAllDecorations();
                 apparel.LoadFromPreset(preset);
+            });
+            list.Add(menuOption);
+        }
+
+        foreach (var extraDecorationPreset in extraDecorationPresets.Where(deco => deco.appliesTo == apparel.def))
+        {
+            var menuOption = new FloatMenuOption(extraDecorationPreset.label, delegate
+            {
+                apparel.RemoveAllDecorations();
+                apparel.LoadFromPreset(extraDecorationPreset);
             });
             list.Add(menuOption);
         }
