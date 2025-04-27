@@ -10,12 +10,17 @@ public class ApparelColourTwoTabDrawer
             
     }
 
-    public virtual void OnClose(bool closeOnCancel, bool closeOnClickedOutside)
+    public virtual void OnClose(Pawn pawn, bool closeOnCancel, bool closeOnClickedOutside)
     {
             
     }
 
-    public virtual void OnAccept()
+    public virtual void OnAccept(Pawn pawn)
+    {
+            
+    }
+    
+    public virtual void OnReset(Pawn pawn)
     {
             
     }

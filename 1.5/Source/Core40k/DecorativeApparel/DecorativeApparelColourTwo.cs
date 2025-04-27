@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Core40k;
 using UnityEngine;
 using Verse;
 
@@ -68,28 +67,17 @@ public class DecorativeApparelColourTwo : ApparelColourTwo
         Notify_ColorChanged();
     }
 
-    public void UpdateAllDecorationColours(Color colour)
-    {
-        var newExtraDecorationsColours = new Dictionary<ExtraDecorationDef, Color>();
-            
-        foreach (var extraDecoration in extraDecorationsColours)
-        {
-            newExtraDecorationsColours.Add(extraDecoration.Key, colour);
-        }
-            
-        extraDecorationsColours = newExtraDecorationsColours;
-        Notify_ColorChanged();
-    }
-
     public override void SetOriginals()
     {
         originalExtraDecorations = extraDecorations;
+        originalExtraDecorationsColours = extraDecorationsColours;
         base.SetOriginals();
     }
 
     public override void Reset()
     {
         extraDecorations = originalExtraDecorations;
+        extraDecorationsColours = originalExtraDecorationsColours;
         base.Reset();
     }
 

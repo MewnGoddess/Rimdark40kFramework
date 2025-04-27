@@ -63,8 +63,8 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
         var colourButtonExtraSize = 0f;
             
         var curX = position.x;
-            
-        var setY = curY;
+
+        var rowExpanded = false;
 
         extraDecorationDefs = extraDecorationDefs.Where(deco => deco.appliesToAll || deco.appliesTo.Contains(apparel.def.defName)).ToList();
             
@@ -74,18 +74,9 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
             var iconRect = new Rect(position, iconSize);
                     
             curX += iconRect.width;
-                
-            if (i != 0 && (i+1) % RowAmount == 0)
-            {
-                curY += iconRect.height + colourButtonExtraSize;
-                curX = viewRect.position.x;
-            }
-            else if (i == extraDecorationDefs.Count - 1)
-            {
-                curY += iconRect.height + colourButtonExtraSize;
-            }
                     
             iconRect = iconRect.ContractedBy(5f);
+            
             var hasDeco = currentDecorations.ContainsKey(extraDecorationDefs[i]);
                     
             if (hasDeco)
@@ -114,28 +105,23 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
             {
                 apparel.AddOrRemoveDecoration(extraDecorationDefs[i]);
             }
-
-            var buttonRect = new Rect(new Vector2(iconRect.x, iconRect.yMax + 3f), iconRect.size);
-            buttonRect.height /= 3;
-            var butHeight = buttonRect.height;
-            buttonRect = buttonRect.ContractedBy(2f);
-                    
-            setY = iconRect.yMax;
                 
             if (extraDecorationDefs[i].colourable && currentDecorationColours.ContainsKey(extraDecorationDefs[i]))
             {
-                colourButtonExtraSize = butHeight;
-                setY += colourButtonExtraSize;
+                rowExpanded = true;
+                var i1 = i;
+                
+                var bottomRect = new Rect(new Vector2(iconRect.x, iconRect.yMax + 3f), iconRect.size);
+                bottomRect.height /= 3;
+                bottomRect = bottomRect.ContractedBy(2f);
+                
+                colourButtonExtraSize = bottomRect.height;
                     
-                var colourSelection = new Rect(buttonRect);
+                var colourSelection = new Rect(bottomRect);
                 colourSelection.width /= 3;
                 colourSelection.width -= 3;
-                    
                 Widgets.DrawMenuSection(colourSelection);
                 colourSelection = colourSelection.ContractedBy(1f);
-                    
-                var i1 = i;
-                    
                 Widgets.DrawRectFast(colourSelection, apparel.ExtraDecorationColours[extraDecorationDefs[i1]]);
                 TooltipHandler.TipRegion(colourSelection, "BEWH.Framework.ApparelColourTwo.ChooseCustomColour".Translate());
                 if (Widgets.ButtonInvisible(colourSelection))
@@ -146,24 +132,43 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
                     } ) );
                 }
                     
-                var presetSelection = new Rect(buttonRect)
+                var presetSelection = new Rect(bottomRect)
                 {
                     x = colourSelection.xMax + 6f,
                 };
                 presetSelection.width *= 0.66f;
                 presetSelection.width -= 3f;;
-                    
                 presetSelection = presetSelection.ExpandedBy(1f);
-                    
                 TooltipHandler.TipRegion(presetSelection, "BEWH.Framework.ExtraDecoration.PresetDesc".Translate());
                 if (Widgets.ButtonText(presetSelection, "BEWH.Framework.ExtraDecoration.Preset".Translate()))
                 {
                     SelectPreset(apparel, extraDecorationDefs[i1]);
                 }
             }
+            
+            if (i != 0 && (i+1) % RowAmount == 0)
+            {
+                curY += iconRect.height + 5f;
+                if (rowExpanded)
+                {
+                    rowExpanded = false;
+                    curY += colourButtonExtraSize + 5f;
+                }
+                
+                curX = viewRect.position.x;
+            }
+            else if (i == extraDecorationDefs.Count - 1)
+            {
+                curY += iconRect.height + 5f;
+                if (rowExpanded)
+                {
+                    rowExpanded = false;
+                    curY += colourButtonExtraSize + 5f;
+                }
+            }
         }
 
-        curY = setY + 34f;
+        curY += 34f;
     }
 
     private void SelectPreset(DecorativeApparelColourTwo apparel, ExtraDecorationDef extraDecoration)

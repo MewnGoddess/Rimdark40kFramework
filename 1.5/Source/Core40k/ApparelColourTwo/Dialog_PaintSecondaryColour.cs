@@ -302,7 +302,6 @@ public class Dialog_PaintSecondaryColour : Window
         if (Widgets.ButtonText(new Rect(inRect.x, inRect.yMax - ButSize.y, ButSize.x, ButSize.y), "Cancel".Translate()))
         {
             Close();
-            Reset();
         }
         if (Widgets.ButtonText(new Rect(inRect.xMin + inRect.width / 2f - ButSize.x / 2f, inRect.yMax - ButSize.y, ButSize.x, ButSize.y), "Reset".Translate()))
         {
@@ -311,7 +310,7 @@ public class Dialog_PaintSecondaryColour : Window
         }
         if (Widgets.ButtonText(new Rect(inRect.xMax - ButSize.x, inRect.yMax - ButSize.y, ButSize.x, ButSize.y), "Accept".Translate()))
         {
-            ApplyApparelColors();
+            Accept();
             Close();
         }
     }
@@ -330,25 +329,33 @@ public class Dialog_PaintSecondaryColour : Window
                 continue;
             }
             var tabDrawer = (ApparelColourTwoTabDrawer)Activator.CreateInstance(tab.tabDrawerClass);
-            tabDrawer.OnClose(closeOnCancel, closeOnClickedOutside);
+            tabDrawer.OnClose(pawn, closeOnCancel, closeOnClickedOutside);
         }
             
         base.Close(doCloseSound);
     }
 
-    private void Reset(bool resetColors = true)
+    private void Reset()
     {
-        if (resetColors)
+        foreach (var item in pawn.apparel.WornApparel.Where(a => a is ApparelColourTwo).Cast<ApparelColourTwo>())
         {
-            foreach (var item in pawn.apparel.WornApparel.Where(a => a is ApparelColourTwo).Cast<ApparelColourTwo>())
-            {
-                item.Reset();
-            }
+            item.Reset();
         }
+        
+        foreach (var tab in allTabs)
+        {
+            if (tab.label == MainTab)
+            {
+                continue;
+            }
+            var tabDrawer = (ApparelColourTwoTabDrawer)Activator.CreateInstance(tab.tabDrawerClass);
+            tabDrawer.OnReset(pawn);
+        }
+        
         pawn.Drawer.renderer.SetAllGraphicsDirty();
     }
 
-    private void ApplyApparelColors()
+    private void Accept()
     {
         foreach (var item in pawn.apparel.WornApparel.Where(a => a is ApparelColourTwo).Cast<ApparelColourTwo>())
         {
@@ -363,7 +370,7 @@ public class Dialog_PaintSecondaryColour : Window
                 continue;
             }
             var tabDrawer = (ApparelColourTwoTabDrawer)Activator.CreateInstance(tab.tabDrawerClass);
-            tabDrawer.OnAccept();
+            tabDrawer.OnAccept(pawn);
         }
     }
 }
