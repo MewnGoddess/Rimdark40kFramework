@@ -21,7 +21,7 @@ public class ColourTwoSelectableOnStylingStation
             yield break;
         }
             
-        var secondColourChangeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.Framework.ApparelColourTwo.ChangeSecondaryColour".Translate().CapitalizeFirst(), delegate
+        var secondColourChangeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.Framework.ApparelColourTwo.ArmourDecorationFeature".Translate().CapitalizeFirst(), delegate
         {
             selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(Core40kDefOf.BEWH_OpenStylingStationDialogForSecondColour, __instance), JobTag.Misc);
         }), selPawn, __instance);

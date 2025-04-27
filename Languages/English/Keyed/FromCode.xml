@@ -25,8 +25,7 @@
   <BEWH.Framework.ApparelColourTwo.OverridePreset>Override {0} with currently selected colours</BEWH.Framework.ApparelColourTwo.OverridePreset>
   <BEWH.Framework.ApparelColourTwo.PresetExists>Already exists!</BEWH.Framework.ApparelColourTwo.PresetExists>
 
-  <BEWH.Framework.ApparelColourTwo.ChangeSecondaryColour>Change both colours</BEWH.Framework.ApparelColourTwo.ChangeSecondaryColour>
-  <BEWH.Framework.ApparelColourTwo.ChangeSecondaryColourDesc>Changes both colours of apparel on {0}.</BEWH.Framework.ApparelColourTwo.ChangeSecondaryColourDesc>
+  <BEWH.Framework.ApparelColourTwo.ArmourDecorationFeature>Decorate armour</BEWH.Framework.ApparelColourTwo.ArmourDecorationFeature>
 
   <BEWH.Framework.ApparelColourTwo.ChooseCustomColour>Click to select custom colour</BEWH.Framework.ApparelColourTwo.ChooseCustomColour>
 
