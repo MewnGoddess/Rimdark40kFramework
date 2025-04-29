@@ -9,7 +9,7 @@ public class LostHeartSurvivalPatch
 {
     public static float Postfix(float originalResult, HediffSet __0)
     {
-        if (originalResult <= 0)
+        if (originalResult > 0)
         {
             return originalResult;
         }
