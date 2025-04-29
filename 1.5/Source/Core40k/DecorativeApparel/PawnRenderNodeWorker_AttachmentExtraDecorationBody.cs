@@ -35,6 +35,11 @@ public class PawnRenderNodeWorker_AttachmentExtraDecorationBody : PawnRenderNode
             {
                 return false;
             }
+            
+            if ((parms.flags & PawnRenderFlags.Clothes) != PawnRenderFlags.Clothes)
+            {
+                return false;
+            }
         }
         else
         {

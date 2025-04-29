@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace Core40k;
@@ -32,6 +33,16 @@ public class PawnRenderNodeWorker_AttachmentExtraDecorationHead : PawnRenderNode
         if (parms.Portrait)
         {
             if (!showWhenFacing.Contains(parms.facing))
+            {
+                return false;
+            }
+
+            if ((parms.flags & PawnRenderFlags.Headgear) != PawnRenderFlags.Headgear)
+            {
+                return false;
+            }
+            
+            if ((parms.flags & PawnRenderFlags.Clothes) != PawnRenderFlags.Clothes)
             {
                 return false;
             }
