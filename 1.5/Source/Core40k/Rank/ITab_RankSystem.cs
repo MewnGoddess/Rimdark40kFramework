@@ -47,16 +47,20 @@ public class ITab_RankSystem : ITab
     {
         get
         {
+            if (SelPawn == null)
+            {
+                return false;
+            }
+            
             var defaultRes = ModSettings.alwaysShowRankTab;
             if (!(Find.Selector.SingleSelectedThing is Pawn p) || !p.HasComp<CompRankInfo>() || p.Faction == null || !p.Faction.IsPlayer || p.IsSlaveOfColony || p.IsPrisonerOfColony)
             {
                 return defaultRes;
             }
-
-            pawn = (Pawn)Find.Selector.SingleSelectedThing;
+            
             foreach (var rankCategoryDef in availableCategories)
             {
-                if (rankCategoryDef.RankCategoryUnlockedFor(pawn))
+                if (rankCategoryDef.RankCategoryUnlockedFor(SelPawn))
                 {
                     return true;
                 }
@@ -76,7 +80,7 @@ public class ITab_RankSystem : ITab
     public override void OnOpen()
     {
         base.OnOpen();
-        pawn = (Pawn)Find.Selector.SingleSelectedThing;
+        pawn = SelPawn;
         compRankInfo = pawn.GetComp<CompRankInfo>();
         if (compRankInfo == null)
         {
@@ -105,16 +109,17 @@ public class ITab_RankSystem : ITab
             currentlySelectedRank = availableRanksForCategory.FirstOrFallback(rank => rank.rankDef.defaultFirstRank, fallback: null);
         }
         
-        Find.TickManager.Pause();
+        //Find.TickManager.Pause();
     }
 
-    protected override void FillTab()   
+    protected override void FillTab()
     {
         if (pawn != SelPawn)
         {
             CloseTab();
+            return;
         }
-            
+
         var font = Text.Font;
         var anchor = Text.Anchor;
             
@@ -175,6 +180,7 @@ public class ITab_RankSystem : ITab
             Text.Font = GameFont.Medium;
         }
 
+        //Select rank category
         if (Widgets.ButtonText(categoryTextRect,categoryText))
         {
             var list = new List<FloatMenuOption>();
@@ -200,18 +206,20 @@ public class ITab_RankSystem : ITab
                 }
                 list.Add(menuOption);
             }
-            if (!list.NullOrEmpty())
+
+            if (list.NullOrEmpty())
             {
-                Find.WindowStack.Add(new FloatMenu(list));
+                var menuOptionNone = new FloatMenuOption("NoneBrackets".Translate(), null);
+                list.Add(menuOptionNone);
             }
+            
+            Find.WindowStack.Add(new FloatMenu(list));
         }
             
         var toolTip = currentlySelectedRankCategory != null ? currentlySelectedRankCategory.label.CapitalizeFirst() : "BEWH.Framework.CommonKeyword.None".Translate().ToString();
         TooltipHandler.TipRegion(categoryTextRect, toolTip);
 
         curY += 12f;
-
-        UpdateRanksForCategory();
             
         //Rank info
         var rectRankInfo = new Rect(rect2);
@@ -461,6 +469,7 @@ public class ITab_RankSystem : ITab
 
     private void GetRanksForCategory()
     {
+        availableRanksForCategory.Clear();
         var ranksForCategory = DefDatabase<RankDef>.AllDefsListForReading.Where(rank => rank.rankCategory == currentlySelectedRankCategory).ToList();
 
         foreach (var rank in ranksForCategory)
@@ -470,7 +479,7 @@ public class ITab_RankSystem : ITab
         }
     }
 
-    private void UpdateRanksForCategory()
+    /*private void UpdateRanksForCategory()
     {
         foreach (var rank in availableRanksForCategory)
         {
@@ -483,6 +492,14 @@ public class ITab_RankSystem : ITab
             UpdateRankInfoForCategory(ref currentlySelectedRank);
         }
     }
+    
+    private void UpdateRankInfoForCategory(ref RankInfoForTab rankInfoForTab)
+    {
+        var res = RequirementMetAndText(rankInfoForTab.rankDef);
+
+        rankInfoForTab.requirementsMet = res.requirementMet;
+        rankInfoForTab.rankText = res.requirementText;
+    }*/
         
     private RankInfoForTab BuildRankInfoForCategory(RankDef rankDef)
     {
@@ -495,15 +512,7 @@ public class ITab_RankSystem : ITab
             rankText = res.requirementText,
         };
     }
-
-    private void UpdateRankInfoForCategory(ref RankInfoForTab rankInfoForTab)
-    {
-        var res = RequirementMetAndText(rankInfoForTab.rankDef);
-
-        rankInfoForTab.requirementsMet = res.requirementMet;
-        rankInfoForTab.rankText = res.requirementText;
-    }
-
+    
     private (bool requirementMet, string requirementText) RequirementMetAndText(RankDef rankDef)
     {
         var stringBuilder = new StringBuilder();

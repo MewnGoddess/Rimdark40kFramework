@@ -193,16 +193,13 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
             list.Add(menuOptionMatch);
         }
                 
-        if (!list.NullOrEmpty())
-        {
-            Find.WindowStack.Add(new FloatMenu(list));
-        }
-        else
+        if (list.NullOrEmpty())
         {
             var menuOptionNone = new FloatMenuOption("NoneBrackets".Translate(), null);
             list.Add(menuOptionNone);
-            Find.WindowStack.Add(new FloatMenu(list));
         }
+        
+        Find.WindowStack.Add(new FloatMenu(list));
     }
 
     private ExtraDecorationPreset GetCurrentPreset(DecorativeApparelColourTwo apparel, string presetName)
@@ -291,16 +288,13 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
             list.Add(menuOption);
         }
                 
-        if (!list.NullOrEmpty())
-        {
-            Find.WindowStack.Add(new FloatMenu(list));
-        }
-        else
+        if (list.NullOrEmpty())
         {
             var menuOptionNone = new FloatMenuOption("NoneBrackets".Translate(), null);
             list.Add(menuOptionNone);
-            Find.WindowStack.Add(new FloatMenu(list));
         }
+        
+        Find.WindowStack.Add(new FloatMenu(list));
     }
         
     public override void DrawTab(Rect rect, Pawn pawn, ref Vector2 apparelColorScrollPosition)
