@@ -27,6 +27,7 @@ public class ITab_RankSystem : ITab
     Dictionary<RankDef, Vector2> rankPos = new Dictionary<RankDef, Vector2>();
 
     private Core40kModSettings modSettings;
+    private Core40kModSettings ModSettings => modSettings ??= LoadedModManager.GetMod<Core40kMod>().GetSettings<Core40kModSettings>();
         
     private GameComponent_RankInfo gameCompRankInfo;
         
@@ -46,7 +47,7 @@ public class ITab_RankSystem : ITab
     {
         get
         {
-            var defaultRes = modSettings.alwaysShowRankTab;
+            var defaultRes = ModSettings.alwaysShowRankTab;
             if (!(Find.Selector.SingleSelectedThing is Pawn p) || !p.HasComp<CompRankInfo>() || p.Faction == null || !p.Faction.IsPlayer || p.IsSlaveOfColony || p.IsPrisonerOfColony)
             {
                 return defaultRes;
@@ -69,7 +70,6 @@ public class ITab_RankSystem : ITab
     {
         size = new Vector2(UI.screenWidth, UI.screenHeight * 0.75f);
         labelKey = "BEWH.Framework.RankSystem.RankTab";
-        modSettings = LoadedModManager.GetMod<Core40kMod>().GetSettings<Core40kModSettings>();
         UpdateRankCategoryList();
     }
         
@@ -78,11 +78,13 @@ public class ITab_RankSystem : ITab
         base.OnOpen();
         pawn = (Pawn)Find.Selector.SingleSelectedThing;
         compRankInfo = pawn.GetComp<CompRankInfo>();
-        rankPos.Clear();
-        if (gameCompRankInfo == null)
+        if (compRankInfo == null)
         {
-            gameCompRankInfo = Current.Game.GetComponent<GameComponent_RankInfo>();
+            CloseTab();
+            return;
         }
+        rankPos.Clear();
+        gameCompRankInfo ??= Current.Game.GetComponent<GameComponent_RankInfo>();
         UpdateRankCategoryList();
         if (compRankInfo.LastOpenedRankCategory != null)
         {
@@ -102,14 +104,15 @@ public class ITab_RankSystem : ITab
         {
             currentlySelectedRank = availableRanksForCategory.FirstOrFallback(rank => rank.rankDef.defaultFirstRank, fallback: null);
         }
+        
+        Find.TickManager.Pause();
     }
 
     protected override void FillTab()   
     {
         if (pawn != SelPawn)
         {
-            pawn = SelPawn;
-            compRankInfo = pawn.GetComp<CompRankInfo>();
+            CloseTab();
         }
             
         var font = Text.Font;
