@@ -72,7 +72,12 @@ public class ITab_RankSystem : ITab
 
     public ITab_RankSystem()
     {
-        size = new Vector2(UI.screenWidth, UI.screenHeight * 0.75f);
+        var heightMult = 0.75f;
+        if (ModsConfig.IsActive("jaxe.rimhud"))
+        {
+            heightMult = 0.7f;
+        }
+        size = new Vector2(UI.screenWidth, UI.screenHeight * heightMult);
         labelKey = "BEWH.Framework.RankSystem.RankTab";
         UpdateRankCategoryList();
     }
@@ -108,8 +113,6 @@ public class ITab_RankSystem : ITab
         {
             currentlySelectedRank = availableRanksForCategory.FirstOrFallback(rank => rank.rankDef.defaultFirstRank, fallback: null);
         }
-        
-        //Find.TickManager.Pause();
     }
 
     protected override void FillTab()
@@ -147,6 +150,7 @@ public class ITab_RankSystem : ITab
 
         curY += categoryTextRect.height;
             
+        //Dev Options
         if (Prefs.DevMode)
         {
             const float width = 80f;
@@ -384,75 +388,104 @@ public class ITab_RankSystem : ITab
         Widgets.EndScrollView();
     }
         
+    private Vector2 scrollPosRankInfo;
+    private float scrollViewHeightRankInfo = 0f;
     private void FillRankInfo(Rect rect)
     {
         var rectRankInfo = new Rect(rect);
         rectRankInfo.ContractedBy(20f);
+        
         if (currentlySelectedRank != null)
         {
+            const float listingHeightIncreaseMedium = 30f;
+            const float listingHeightIncreaseSmall = 24f;
+            const float listingHeightIncreaseGap = 12f;
+            
+            var viewRect = new Rect(rectRankInfo.x, rectRankInfo.y, rectRankInfo.width - 16f, scrollViewHeightRankInfo);
+            scrollViewHeightRankInfo = 0f;
+            
             var listingRankInfo = new Listing_Standard();
             //Start
-            listingRankInfo.Begin(rectRankInfo);
+            Widgets.BeginScrollView(rectRankInfo, ref scrollPosRankInfo, viewRect);
+            listingRankInfo.Begin(viewRect);
                 
             Text.Font = GameFont.Medium;
             Text.Anchor = TextAnchor.UpperCenter;
                 
             //Name
             listingRankInfo.Gap(5);
+            scrollViewHeightRankInfo += 5f;
             var rankLabel = currentlySelectedRank.rankDef.label.CapitalizeFirst();
             listingRankInfo.Label(rankLabel);
+            scrollViewHeightRankInfo += listingHeightIncreaseMedium;
                 
+            //Show day as rank
             if (compRankInfo.DaysAsRank.TryGetValue(currentlySelectedRank.rankDef, out var daysSpentAs))
             {
                 listingRankInfo.Gap(5);
+                scrollViewHeightRankInfo += 5f;
                 Text.Font = GameFont.Small;
                 listingRankInfo.Label("BEWH.Framework.RankSystem.DaysSinceRankGiven".Translate(daysSpentAs));
+                scrollViewHeightRankInfo += listingHeightIncreaseSmall;
                 Text.Font = GameFont.Medium;
             }
-                
             //Unlock button
-            if (currentlySelectedRank.requirementsMet && !AlreadyUnlocked(currentlySelectedRank.rankDef))
+            else if (currentlySelectedRank.requirementsMet && !AlreadyUnlocked(currentlySelectedRank.rankDef))
             {   
                 listingRankInfo.Gap();
-                listingRankInfo.Indent(rectRankInfo.width * 0.25f);
+                scrollViewHeightRankInfo += listingHeightIncreaseGap;
+                listingRankInfo.Indent(viewRect.width * 0.25f);
                 if (listingRankInfo.ButtonText("BEWH.Framework.RankSystem.UnlockRank".Translate(), widthPct: 0.5f))
                 {
                     UnlockRank(currentlySelectedRank.rankDef);
                 }
-                listingRankInfo.Outdent(rectRankInfo.width * 0.25f);
+                scrollViewHeightRankInfo += 30f;
+                listingRankInfo.Outdent(viewRect.width * 0.25f);
             }
                 
             listingRankInfo.GapLine(1f);
-            listingRankInfo.Indent(rectRankInfo.width * 0.02f);
-                
-                
-                
+            listingRankInfo.Indent(viewRect.width * 0.02f);
+            
             //Description
             listingRankInfo.Gap();
+            scrollViewHeightRankInfo += listingHeightIncreaseGap;
             Text.Anchor = TextAnchor.UpperLeft;
             listingRankInfo.Label("BEWH.Framework.RankSystem.RankDescription".Translate());
+            scrollViewHeightRankInfo += listingHeightIncreaseMedium;
             Text.Font = GameFont.Small;
             listingRankInfo.Label(currentlySelectedRank.rankDef.description);
+            scrollViewHeightRankInfo += listingHeightIncreaseSmall * (currentlySelectedRank.rankDef.description.Split('\n').Length - 1);
 
             //Requirements
             listingRankInfo.Gap();
+            scrollViewHeightRankInfo += listingHeightIncreaseGap;
             Text.Font = GameFont.Medium;
             listingRankInfo.Label("BEWH.Framework.RankSystem.RankRequirements".Translate());
+            scrollViewHeightRankInfo += listingHeightIncreaseMedium;
             Text.Font = GameFont.Small;
-            var requirementText = currentlySelectedRank.rankText;
-            listingRankInfo.Label(requirementText);
+            listingRankInfo.Label(currentlySelectedRank.rankText);
+            scrollViewHeightRankInfo += listingHeightIncreaseSmall * (currentlySelectedRank.rankText.Split('\n').Length - 1);
                 
             //Given stats
             listingRankInfo.Gap();
+            scrollViewHeightRankInfo += listingHeightIncreaseGap;
             Text.Font = GameFont.Medium;
             listingRankInfo.Label("BEWH.Framework.RankSystem.RankBonuses".Translate());
+            scrollViewHeightRankInfo += listingHeightIncreaseMedium;
             Text.Font = GameFont.Small;
             var rankBonusText = BuildRankBonusString(currentlySelectedRank.rankDef);
             listingRankInfo.Label(rankBonusText);
-                
+            scrollViewHeightRankInfo += listingHeightIncreaseSmall * (rankBonusText.Split('\n').Length - 1);
+
+            if (scrollViewHeightRankInfo < rectRankInfo.height - 4)
+            {
+                scrollViewHeightRankInfo = rectRankInfo.height - 4;
+            }
+            
             //End
-            listingRankInfo.Outdent(rectRankInfo.width * 0.02f);
+            listingRankInfo.Outdent(viewRect.width * 0.02f);
             listingRankInfo.End();
+            Widgets.EndScrollView();
         }
         else
         {
@@ -758,8 +791,7 @@ public class ITab_RankSystem : ITab
         {
             abilityBonuses = "BEWH.Framework.RankSystem.Abilities".Translate() + "\n" + abilityBonuses;
         }
-            
-            
+        
         var customEffectStringBuilder = new StringBuilder();
 
         foreach (var customEffect in rankDef.customEffectDescriptions)
@@ -773,7 +805,35 @@ public class ITab_RankSystem : ITab
             customEffects = "BEWH.Framework.RankSystem.OtherEffects".Translate() + "\n" + customEffects;
         }
 
-        var result = statBonuses + "\n" + abilityBonuses + "\n" + customEffects;
+        var result = "";
+        if (!statBonuses.NullOrEmpty())
+        {
+            result = statBonuses;
+        }
+
+        if (!abilityBonuses.NullOrEmpty())
+        {
+            if (result.NullOrEmpty())
+            {
+                result = abilityBonuses;
+            }
+            else
+            {
+                result += "\n" + abilityBonuses;
+            }
+        }
+        
+        if (!customEffects.NullOrEmpty())
+        {
+            if (result.NullOrEmpty())
+            {
+                result = customEffects;
+            }
+            else
+            {
+                result += "\n" + customEffects;
+            }
+        }
             
         if (statBonuses.NullOrEmpty() && abilityBonuses.NullOrEmpty())
         {
