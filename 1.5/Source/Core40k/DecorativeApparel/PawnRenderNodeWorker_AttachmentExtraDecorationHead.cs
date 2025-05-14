@@ -14,7 +14,7 @@ public class PawnRenderNodeWorker_AttachmentExtraDecorationHead : PawnRenderNode
             
         var apparelColourTwo = (HeadDecorativeApparelColourTwo)pawn.apparel.WornApparel.FirstOrDefault(wornApparel => wornApparel is HeadDecorativeApparelColourTwo);
 
-        var decoration = apparelColourTwo.ExtraDecorationDefs.Keys.FirstOrFallback(def => def.drawnTextureIconPath == node.Props.texPath);
+        var decoration = apparelColourTwo.ExtraDecorations.Keys.FirstOrFallback(def => def.drawnTextureIconPath == node.Props.texPath);
 
         if (decoration == null)
         {

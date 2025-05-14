@@ -57,8 +57,7 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
         var iconSize = new Vector2(viewRect.width/RowAmount, viewRect.width/RowAmount);
         var smallIconSize = new Vector2(iconSize.x / 4, iconSize.y / 4);
             
-        var currentDecorations = apparel.ExtraDecorationDefs;
-        var currentDecorationColours = apparel.ExtraDecorationColours;
+        var currentDecorations = apparel.ExtraDecorations;
 
         var colourButtonExtraSize = 0f;
             
@@ -92,7 +91,7 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
                     
             if (hasDeco)
             {
-                if (currentDecorations[extraDecorationDefs[i]])
+                if (currentDecorations[extraDecorationDefs[i]].Flipped)
                 {
                     var flippedIconRect = new Rect(new Vector2(position.x + 7f, position.y + 5f), smallIconSize);
                     GUI.DrawTexture(flippedIconRect, Core40kUtils.FlippedIconTex);
@@ -106,7 +105,7 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
                 apparel.AddOrRemoveDecoration(extraDecorationDefs[i]);
             }
                 
-            if (extraDecorationDefs[i].colourable && currentDecorationColours.ContainsKey(extraDecorationDefs[i]))
+            if (extraDecorationDefs[i].colourable && currentDecorations.ContainsKey(extraDecorationDefs[i]))
             {
                 rowExpanded = true;
                 var i1 = i;
@@ -122,11 +121,11 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
                 colourSelection.width -= 3;
                 Widgets.DrawMenuSection(colourSelection);
                 colourSelection = colourSelection.ContractedBy(1f);
-                Widgets.DrawRectFast(colourSelection, apparel.ExtraDecorationColours[extraDecorationDefs[i1]]);
+                Widgets.DrawRectFast(colourSelection, apparel.ExtraDecorations[extraDecorationDefs[i1]].Color);
                 TooltipHandler.TipRegion(colourSelection, "BEWH.Framework.ApparelColourTwo.ChooseCustomColour".Translate());
                 if (Widgets.ButtonInvisible(colourSelection))
                 {
-                    Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorationColours[extraDecorationDefs[i1]], ( newColour ) =>
+                    Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].Color, ( newColour ) =>
                     {
                         apparel.UpdateDecorationColour(extraDecorationDefs[i1], newColour);
                     } ) );
@@ -206,13 +205,13 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
     {
         var extraDecorationPresetParts = new List<ExtraDecorationPresetParts>();
 
-        foreach (var decoration in apparel.ExtraDecorationDefs)
+        foreach (var decoration in apparel.ExtraDecorations)
         {
             var presetPart = new ExtraDecorationPresetParts()
             {
                 extraDecorationDefs = decoration.Key.defName,
-                isFlipped = decoration.Value,
-                colour = apparel.ExtraDecorationColours[decoration.Key],
+                flipped = decoration.Value.Flipped,
+                colour = decoration.Value.Color,
             };
                 
             extraDecorationPresetParts.Add(presetPart);

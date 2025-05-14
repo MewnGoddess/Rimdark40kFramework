@@ -109,6 +109,7 @@
     <Compile Include="DecorativeApparel\ExtraDecorationPresetDef.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationPresetParts.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationPreset.cs" />
+    <Compile Include="DecorativeApparel\ExtraDecorationSettings.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationTab.cs" />
     <Compile Include="DecorativeApparel\HarmonyPatch_ExtraDecorationPatch.cs" />
     <Compile Include="DecorativeApparel\HeadDecorativeApparelColourTwo.cs" />

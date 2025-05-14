@@ -6,39 +6,37 @@ namespace Core40k;
 
 public class DecorativeApparelColourTwo : ApparelColourTwo
 {
-    private Dictionary<ExtraDecorationDef, bool> originalExtraDecorations = new Dictionary<ExtraDecorationDef, bool>();
-    private Dictionary<ExtraDecorationDef, bool> extraDecorations = new Dictionary<ExtraDecorationDef, bool>();
-        
-    private Dictionary<ExtraDecorationDef, Color> originalExtraDecorationsColours = new Dictionary<ExtraDecorationDef, Color>();
-    private Dictionary<ExtraDecorationDef, Color> extraDecorationsColours = new Dictionary<ExtraDecorationDef, Color>();
-
-    public Dictionary<ExtraDecorationDef, bool> ExtraDecorationDefs => extraDecorations;
-    public Dictionary<ExtraDecorationDef, Color> ExtraDecorationColours => extraDecorationsColours;
+    private Dictionary<ExtraDecorationDef, ExtraDecorationSettings> originalExtraDecorations = new ();
+    private Dictionary<ExtraDecorationDef, ExtraDecorationSettings> extraDecorations = new ();
+    
+    public Dictionary<ExtraDecorationDef, ExtraDecorationSettings> ExtraDecorations => extraDecorations;
 
     public void AddOrRemoveDecoration(ExtraDecorationDef decoration)
     {
-        if (extraDecorations.ContainsKey(decoration) && (extraDecorations[decoration] || !decoration.flipable))
+        if (extraDecorations.ContainsKey(decoration) && (extraDecorations[decoration].Flipped || !decoration.flipable))
         {
             extraDecorations.Remove(decoration);
-            extraDecorationsColours.Remove(decoration);
         }
-        else if (extraDecorations.ContainsKey(decoration))
+        else if (extraDecorations.TryGetValue(decoration, out var setting))
         {
-            extraDecorations[decoration] = true;
+            setting.Flipped = true;
         }
         else
         {
-            extraDecorations.Add(decoration, false);
-            var color = decoration.useArmorColourAsDefault ? DrawColor : decoration.defaultColour;
-            extraDecorationsColours.Add(decoration, color);
+            var extraDecorationsSetting = new ExtraDecorationSettings()
+            {
+                Flipped = false,
+                Color = decoration.useArmorColourAsDefault ? DrawColor : decoration.defaultColour,
+            };
+            
+            extraDecorations.Add(decoration, extraDecorationsSetting);
         }
         Notify_ColorChanged();
     }
 
     public void RemoveAllDecorations()
     {
-        extraDecorations = new Dictionary<ExtraDecorationDef, bool>();
-        extraDecorationsColours = new Dictionary<ExtraDecorationDef, Color>();
+        extraDecorations = new Dictionary<ExtraDecorationDef, ExtraDecorationSettings>();
         Notify_ColorChanged();
     }
 
@@ -46,8 +44,14 @@ public class DecorativeApparelColourTwo : ApparelColourTwo
     {
         foreach (var presetPart in preset.extraDecorationPresetParts)
         {
-            extraDecorations.Add(Core40kUtils.GetDefFromString(presetPart.extraDecorationDefs), presetPart.isFlipped);
-            extraDecorationsColours.Add(Core40kUtils.GetDefFromString(presetPart.extraDecorationDefs), presetPart.colour);
+            var decoDef = Core40kUtils.GetDefFromString(presetPart.extraDecorationDefs);
+            var extraDecorationsSetting = new ExtraDecorationSettings()
+            {
+                Flipped = presetPart.flipped,
+                Color = presetPart.colour,
+            };
+            
+            extraDecorations.Add(decoDef, extraDecorationsSetting);
         }
     }
     
@@ -55,29 +59,31 @@ public class DecorativeApparelColourTwo : ApparelColourTwo
     {
         foreach (var presetPart in preset.presetData)
         {
-            extraDecorations.Add(presetPart.extraDecorationDef, presetPart.flipped);
-            var colour = presetPart.colour ?? (presetPart.extraDecorationDef.useArmorColourAsDefault ? DrawColor : Color.white);
-            extraDecorationsColours.Add(presetPart.extraDecorationDef, colour);
+            var extraDecorationsSetting = new ExtraDecorationSettings()
+            {
+                Flipped = presetPart.flipped,
+                Color = presetPart.colour ?? (presetPart.extraDecorationDef.useArmorColourAsDefault ? DrawColor : Color.white),
+            };
+            
+            extraDecorations.Add(presetPart.extraDecorationDef, extraDecorationsSetting);
         }
     }
         
     public void UpdateDecorationColour(ExtraDecorationDef decoration, Color colour)
     {
-        extraDecorationsColours[decoration] = colour;
+        extraDecorations[decoration].Color = colour;
         Notify_ColorChanged();
     }
 
     public override void SetOriginals()
     {
         originalExtraDecorations = extraDecorations;
-        originalExtraDecorationsColours = extraDecorationsColours;
         base.SetOriginals();
     }
 
     public override void Reset()
     {
         extraDecorations = originalExtraDecorations;
-        extraDecorationsColours = originalExtraDecorationsColours;
         base.Reset();
     }
 
@@ -85,9 +91,6 @@ public class DecorativeApparelColourTwo : ApparelColourTwo
     {
         Scribe_Collections.Look(ref extraDecorations, "extraDecorations");
         Scribe_Collections.Look(ref originalExtraDecorations, "originalExtraDecorations");
-            
-        Scribe_Collections.Look(ref extraDecorationsColours, "extraDecorationsColours");
-        Scribe_Collections.Look(ref originalExtraDecorationsColours, "originalExtraDecorationsColours");
         base.ExposeData();
     }
 }

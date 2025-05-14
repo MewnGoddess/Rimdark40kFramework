@@ -35,7 +35,7 @@ public class ExtraDecorationPatch
             
         var defaultLayerValue = 76f;
             
-        foreach (var decoration in decorativeApparel.ExtraDecorationDefs)
+        foreach (var decoration in decorativeApparel.ExtraDecorations)
         {
             var defaultLayer = new DrawData.RotationalData
             {
@@ -46,14 +46,14 @@ public class ExtraDecorationPatch
             {
                 layer = defaultLayerValue + decoration.Key.layerOffsets.TryGetValue(Rot4.East),
                 rotation = Rot4.East,
-                flip = decoration.Value,
+                flip = decoration.Value.Flipped,
             };
                 
             var westLayer = new DrawData.RotationalData
             {
                 layer = defaultLayerValue + decoration.Key.layerOffsets.TryGetValue(Rot4.West),
                 rotation = Rot4.West,
-                flip = decoration.Value,
+                flip = decoration.Value.Flipped,
             };
 
             var southLayer = new DrawData.RotationalData
@@ -83,8 +83,8 @@ public class ExtraDecorationPatch
                 shaderTypeDef = decoration.Key.shaderType,                                                                      
                 parentTagDef = PawnRenderNodeTagDefOf.Body,
                 drawData = DrawData.NewWithData(rotationalData),
-                flipGraphic = decoration.Value,
-                color = decorativeApparel.ExtraDecorationColours[decoration.Key],
+                flipGraphic = decoration.Value.Flipped,
+                color = decoration.Value.Color,
             };
 
             switch (type)
