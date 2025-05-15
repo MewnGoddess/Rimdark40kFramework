@@ -90,15 +90,7 @@ public class ExtraDecorationPatch
             switch (type)
             {
                 case DecorationType.Body:
-                    if (decoration.Key.drawInHeadSpace)
-                    {
-                        pawnRenderNodeProperty.parentTagDef = PawnRenderNodeTagDefOf.Head;
-                    }
-                    else
-                    {
-                        pawnRenderNodeProperty.parentTagDef = PawnRenderNodeTagDefOf.Body;
-                    }
-                        
+                    pawnRenderNodeProperty.parentTagDef = decoration.Key.drawInHeadSpace ? PawnRenderNodeTagDefOf.Head : PawnRenderNodeTagDefOf.Body;
                     pawnRenderNodeProperty.workerClass = typeof(PawnRenderNodeWorker_AttachmentExtraDecorationBody);
                     break;
                 case DecorationType.Head:
