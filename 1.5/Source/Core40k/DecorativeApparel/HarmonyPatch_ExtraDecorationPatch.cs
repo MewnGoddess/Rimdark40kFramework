@@ -44,27 +44,27 @@ public class ExtraDecorationPatch
                 
             var eastLayer = new DrawData.RotationalData
             {
-                layer = defaultLayerValue + decoration.Key.layerOffsets.TryGetValue(Rot4.East),
+                layer = defaultLayerValue + decoration.Key.layerOffsets.TryGetValue(Rot4.East, fallback: 0f),
                 rotation = Rot4.East,
                 flip = decoration.Value.Flipped,
             };
                 
             var westLayer = new DrawData.RotationalData
             {
-                layer = defaultLayerValue + decoration.Key.layerOffsets.TryGetValue(Rot4.West),
+                layer = defaultLayerValue + decoration.Key.layerOffsets.TryGetValue(Rot4.West, fallback: 0f),
                 rotation = Rot4.West,
                 flip = decoration.Value.Flipped,
             };
 
             var southLayer = new DrawData.RotationalData
             {
-                layer = defaultLayerValue + decoration.Key.layerOffsets.TryGetValue(Rot4.South),
+                layer = defaultLayerValue + decoration.Key.layerOffsets.TryGetValue(Rot4.South, fallback: 0f),
                 rotation = Rot4.South,
             };
                 
             var northLayer = new DrawData.RotationalData
             {
-                layer = defaultLayerValue + decoration.Key.layerOffsets.TryGetValue(Rot4.North),
+                layer = defaultLayerValue + decoration.Key.layerOffsets.TryGetValue(Rot4.North, fallback: 0f),
                 rotation = Rot4.North,
             };
                 
