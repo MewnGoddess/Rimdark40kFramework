@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 using Verse;
 
 namespace Core40k;
@@ -10,8 +11,8 @@ public class ExtraDecorationDef : DecorationDef
     public List<Rot4> defaultShowRotation = new() {Rot4.North, Rot4.South, Rot4.East, Rot4.West};
 
     public ShaderTypeDef shaderType = null;
-        
-    public Dictionary<Rot4, float> layerOffsets = new Dictionary<Rot4, float>();
+
+    public DrawData drawData = new();
 
     public bool colourable = false;
         
@@ -28,4 +29,6 @@ public class ExtraDecorationDef : DecorationDef
     public bool useMask = false;
         
     public bool drawInHeadSpace = false;
+    
+    public Vector2 drawSize = Vector2.one;
 }
