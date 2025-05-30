@@ -20,14 +20,13 @@ public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
     }
     public override void PostAdd()
     {
-        AddSelectedTraitAndGene();
-            
         base.PostAdd();
+        AddSelectedTraitAndGene();
     }
     public override void PostRemove()
     {
-        RemoveSelectedTraitAndGene();
         base.PostRemove();
+        RemoveSelectedTraitAndGene();
     }
             
     private void AddSelectedTraitAndGene()
