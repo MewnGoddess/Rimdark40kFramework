@@ -38,7 +38,7 @@ public class ApparelColourTwo : Apparel
         SetInitialColour();
     }
         
-    protected void SetInitialColour()
+    protected virtual void SetInitialColour()
     {
         initialColourSet = true;
     }
