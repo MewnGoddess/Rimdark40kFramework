@@ -4,11 +4,9 @@ using Verse;
 
 namespace Core40k;
 
-[StaticConstructorOnStartup]
 public class ApparelColourTwo : Apparel
 {
-    private bool initialColourSet = false;
-        
+    private bool initialColourSet;
     public bool InitialColourSet => initialColourSet;
         
     private Color drawColorOne = Color.white;
