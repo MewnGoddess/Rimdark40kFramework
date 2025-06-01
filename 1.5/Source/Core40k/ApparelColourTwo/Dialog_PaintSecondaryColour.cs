@@ -168,7 +168,7 @@ public class Dialog_PaintSecondaryColour : Window
             if (Widgets.ButtonText(selectPresetRect, "BEWH.Framework.ApparelColourTwo.SelectPreset".Translate()))
             {
                 var list = new List<FloatMenuOption>();
-                foreach (var preset in presets)
+                foreach (var preset in presets.Where(p => p.appliesTo.Contains(item.def.defName) || p.appliesTo.Empty()))
                 {
                     var menuOption = new FloatMenuOption(preset.label, delegate
                     {

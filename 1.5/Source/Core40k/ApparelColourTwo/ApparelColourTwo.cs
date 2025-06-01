@@ -30,16 +30,12 @@ public class ApparelColourTwo : Apparel
     }
 
     public override Color DrawColorTwo => drawColorTwo;
-
-    public virtual void ApplyColourPreset(Color primaryColour, Color secondaryColour)
+    
+    public void SetInitialColours(Color colorOne, Color colorTwo)
     {
-        DrawColor = primaryColour;
-        SetSecondaryColor(secondaryColour);
-        SetInitialColour();
-    }
-        
-    protected virtual void SetInitialColour()
-    {
+        drawColorOne = colorOne;
+        drawColorTwo = colorTwo;
+        SetOriginals();
         initialColourSet = true;
     }
         
