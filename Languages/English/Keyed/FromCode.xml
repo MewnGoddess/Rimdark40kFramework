@@ -25,19 +25,19 @@
   <BEWH.Framework.ApparelColourTwo.OverridePreset>Override {0} with currently selected colours</BEWH.Framework.ApparelColourTwo.OverridePreset>
   <BEWH.Framework.ApparelColourTwo.PresetExists>Already exists!</BEWH.Framework.ApparelColourTwo.PresetExists>
 
-  <BEWH.Framework.ApparelColourTwo.ArmourDecorationFeature>Decorate armour</BEWH.Framework.ApparelColourTwo.ArmourDecorationFeature>
+  <BEWH.Framework.ApparelColourTwo.ArmourDecorationFeature>Decorate armor</BEWH.Framework.ApparelColourTwo.ArmourDecorationFeature>
 
-  <BEWH.Framework.ApparelColourTwo.ChooseCustomColour>Click to select custom colour</BEWH.Framework.ApparelColourTwo.ChooseCustomColour>
+  <BEWH.Framework.ApparelColourTwo.ChooseCustomColour>Click to select custom color</BEWH.Framework.ApparelColourTwo.ChooseCustomColour>
 
   <BEWH.Framework.ExtraDecoration.BodyDecoration>Body Decorations</BEWH.Framework.ExtraDecoration.BodyDecoration>
   <BEWH.Framework.ExtraDecoration.HelmetDecoration>Helmet Decorations</BEWH.Framework.ExtraDecoration.HelmetDecoration>
 
   <BEWH.Framework.ExtraDecoration.RemoveAllDecorations>Remove All</BEWH.Framework.ExtraDecoration.RemoveAllDecorations>
 
-  <BEWH.Framework.ExtraDecoration.UseArmourColour>Use Armour Colour</BEWH.Framework.ExtraDecoration.UseArmourColour>
+  <BEWH.Framework.ExtraDecoration.UseArmourColour>Use Armor Color</BEWH.Framework.ExtraDecoration.UseArmourColour>
 
   <BEWH.Framework.ExtraDecoration.Preset>Preset</BEWH.Framework.ExtraDecoration.Preset>
-  <BEWH.Framework.ExtraDecoration.PresetDesc>Select a colour preset</BEWH.Framework.ExtraDecoration.PresetDesc>
+  <BEWH.Framework.ExtraDecoration.PresetDesc>Select a color preset</BEWH.Framework.ExtraDecoration.PresetDesc>
 
   <BEWH.Framework.ExtraDecoration.Select>Select</BEWH.Framework.ExtraDecoration.Select>
   <BEWH.Framework.ExtraDecoration.SelectDesc>Select a decoration preset</BEWH.Framework.ExtraDecoration.SelectDesc>
