@@ -60,7 +60,7 @@ public class ApparelColourTwo : Apparel
     {
         base.ExposeData();
         Scribe_Values.Look(ref initialColourSet, "initialColourSet");
-        Scribe_Values.Look(ref originalColorOne, "originalColorOne", Color.black);
+        Scribe_Values.Look(ref originalColorOne, "originalColorOne", Color.white);
         Scribe_Values.Look(ref originalColorTwo, "originalColorTwo", Color.red);
         Scribe_Values.Look(ref drawColorTwo, "drawColorTwo", Color.red);
         Scribe_Values.Look(ref drawColorOne, "drawColorOne", Color.white);
