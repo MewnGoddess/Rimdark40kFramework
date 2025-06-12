@@ -251,8 +251,8 @@ public class Dialog_PaintSecondaryColour : Window
                 Widgets.DrawRectFast(colorOneRect, item.DrawColor);
                 Text.Anchor = TextAnchor.MiddleCenter;
                 Widgets.Label(colorOneRect, "BEWH.Framework.ApparelColourTwo.PrimaryColor".Translate());
-                Text.Anchor = TextAnchor.UpperLeft;
                 TooltipHandler.TipRegion(colorOneRect, "BEWH.Framework.ApparelColourTwo.ChooseCustomColour".Translate());
+                Text.Anchor = TextAnchor.UpperLeft;
                 if (Widgets.ButtonInvisible(colorOneRect))
                 {
                     Find.WindowStack.Add( new Dialog_ColourPicker( item.DrawColor, ( newColour ) =>
