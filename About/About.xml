@@ -7,7 +7,7 @@
 	</supportedVersions>
 	<packageId>Phonicmas.RimDark.Framework</packageId>
 	<description>
-		RimDark 40k - Framework.
+    RimDark 40k - Framework.
 	</description>
 	<modDependencies>
 		<li>

@@ -26,7 +26,7 @@
         <label>warp burn</label>
         <workerClass>DamageWorker_AddInjury</workerClass>
         <externalViolence>true</externalViolence>
-        <deathMessage>{0} has been horribly killed by exposure to the warp.</deathMessage>
+        <deathMessage>{0} has been horribly killed by exposure to the Warp.</deathMessage>
         <hediff>BEWH_WarpEnergyBurn</hediff>
         <hediffSolid>Crack</hediffSolid>
         <armorCategory>Blunt</armorCategory>
