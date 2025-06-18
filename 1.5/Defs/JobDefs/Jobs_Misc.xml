@@ -4,7 +4,7 @@
   <JobDef>
     <defName>BEWH_OpenStylingStationDialogForSecondColour</defName>
     <driverClass>Core40k.JobDriver_OpenStylingStationDialogForSecondColour</driverClass>
-    <reportString>changing secondary colour at TargetA.</reportString>
+    <reportString>Changing secondary color at TargetA.</reportString>
   </JobDef>
 
 </Defs>

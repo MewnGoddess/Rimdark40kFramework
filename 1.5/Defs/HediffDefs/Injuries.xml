@@ -31,7 +31,7 @@
         <defName>BEWH_WarpEnergyBurn</defName>
         <label>warp burn</label>
         <labelNoun>a warp burn</labelNoun>
-        <description>A burn cause by exposure to the warp.</description>
+        <description>A burn cause by exposure to the Warp.</description>
         <comps>
             <li Class="HediffCompProperties_TendDuration">
                 <labelTendedWell>bandaged</labelTendedWell>

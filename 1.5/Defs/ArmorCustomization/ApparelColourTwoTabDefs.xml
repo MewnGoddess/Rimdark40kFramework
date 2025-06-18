@@ -4,7 +4,7 @@
     <Core40k.ApparelColourTwoTabDef>
         <defName>BEWH_ExtraDecoration</defName>
         <label>Extra Decoration</label>
-        <description>Extra deocration for armor</description>
+        <description>Extra deocration for armor.</description>
         <tabDrawerClass>Core40k.ExtraDecorationTab</tabDrawerClass>
     </Core40k.ApparelColourTwoTabDef>
 
