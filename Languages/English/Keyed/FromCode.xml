@@ -5,7 +5,7 @@
   <BEWH.Framework.ModSettings.ModName>RimDark 40k - Framework</BEWH.Framework.ModSettings.ModName>
   <BEWH.Framework.ModSettings.ShowRankTab>Always show Rank tab for player pawns. Will show even if no category or rank is available to the pawn.</BEWH.Framework.ModSettings.ShowRankTab>
 
-  <BEWH.ModSettings.CheckVEFPatches>Remember to check Vanilla Expanded Framework toggable patches for more settings for this mod!</BEWH.ModSettings.CheckVEFPatches>
+  <BEWH.ModSettings.CheckVEFPatches>Remember to check Vanilla Expanded Framework toggleable patches for more settings for this mod!</BEWH.ModSettings.CheckVEFPatches>
 
 
   <!--=== Common Keywords ===-->
@@ -22,7 +22,7 @@
   <BEWH.Framework.ApparelColourTwo.EditPreset>Edit Presets</BEWH.Framework.ApparelColourTwo.EditPreset>
   <BEWH.Framework.ApparelColourTwo.NewPreset>[New Preset]</BEWH.Framework.ApparelColourTwo.NewPreset>
   <BEWH.Framework.ApparelColourTwo.EnterPresetName>Enter name of new preset</BEWH.Framework.ApparelColourTwo.EnterPresetName>
-  <BEWH.Framework.ApparelColourTwo.OverridePreset>Override {0} with currently selected colours</BEWH.Framework.ApparelColourTwo.OverridePreset>
+  <BEWH.Framework.ApparelColourTwo.OverridePreset>Override {0} with currently selected colors</BEWH.Framework.ApparelColourTwo.OverridePreset>
   <BEWH.Framework.ApparelColourTwo.PresetExists>Already exists!</BEWH.Framework.ApparelColourTwo.PresetExists>
 
   <BEWH.Framework.ApparelColourTwo.ArmourDecorationFeature>Decorate armor</BEWH.Framework.ApparelColourTwo.ArmourDecorationFeature>
