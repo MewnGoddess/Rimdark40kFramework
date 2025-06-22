@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Verse;
 
 namespace Core40k;
@@ -11,7 +12,7 @@ public class Gene_DisabledBy : Gene
         {
             if (def.HasModExtension<DefModExtension_GeneDisabledBy>())
             {
-                var disabledByGenes = def.GetModExtension<DefModExtension_GeneDisabledBy>().geneDisabledBy;
+                var disabledByGenes = def.GetModExtension<DefModExtension_GeneDisabledBy>().geneDisabledBy ?? new List<GeneDef>();
                 var overriddenGene = Enumerable.FirstOrDefault(disabledByGenes, gene => pawn.genes.HasActiveGene(gene));
                 if (overriddenGene != null)
                 {
