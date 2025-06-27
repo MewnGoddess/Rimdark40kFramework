@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <JobDef>
+    <defName>BEWH_OpenStylingStationDialogForSecondColour</defName>
+    <driverClass>Core40k.JobDriver_OpenStylingStationDialogForSecondColour</driverClass>
+    <reportString>Changing secondary color at TargetA.</reportString>
+  </JobDef>
+
+</Defs>
