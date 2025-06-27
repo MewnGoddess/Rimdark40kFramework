@@ -105,14 +105,14 @@
     <Compile Include="DecorativeApparel\DecorativeApparelColourTwo.cs" />
     <Compile Include="DecorativeApparel\DecorationDef.cs" />
     <Compile Include="DecorativeApparel\Dialog_EditExtraDecorationPresets.cs" />
-    <Compile Include="DecorativeApparel\DynamicPawnRenderNodeSetup_DecorativeApparel.cs" />
+    <Compile Include="DecorativeApparel\DynamicPawnRenderNodeSetup_DecorativeApparelBody.cs" />
+    <Compile Include="DecorativeApparel\DynamicPawnRenderNodeSetup_DecorativeApparelHead.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationDef.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationPresetDef.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationPresetParts.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationPreset.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationSettings.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationTab.cs" />
-    <Content Include="DecorativeApparel\HarmonyPatch_ExtraDecorationPatch.cs.txt" />
     <Compile Include="DecorativeApparel\HeadDecorativeApparelColourTwo.cs" />
     <Compile Include="DecorativeApparel\PawnRenderNodeWorker_AttachmentExtraDecorationBody.cs" />
     <Compile Include="DecorativeApparel\PawnRenderNodeWorker_AttachmentExtraDecorationHead.cs" />
