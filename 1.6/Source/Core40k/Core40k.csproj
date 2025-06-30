@@ -32,10 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0ColourPicker">
-      <HintPath>..\..\Assemblies\0ColourPicker.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="0Harmony">
       <HintPath>..\..\..\..\..\..\..\workshop\content\294100\2009463077\Current\Assemblies\0Harmony.dll</HintPath>
       <Private>False</Private>
@@ -61,6 +57,10 @@
       <HintPath>..\..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>..\..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
@@ -81,6 +81,9 @@
     <Compile Include="ApparelColourTwo\DecorationColourPresetDef.cs" />
     <Compile Include="ApparelColourTwo\Dialog_EditColourPresets.cs" />
     <Compile Include="ApparelColourTwo\Dialog_PaintSecondaryColour.cs" />
+    <Compile Include="ColourPicker\Dialog_ColourPicker.cs" />
+    <Compile Include="ColourPicker\RecentColours.cs" />
+    <Compile Include="ColourPicker\TextField.cs" />
     <Compile Include="Comps\CompAbilityEffect_GiveHediffAndMentalBreak.cs" />
     <Compile Include="Comps\CompAbilityEffect_MustHaveGeneTraitOrHediff.cs" />
     <Compile Include="Comps\CompAbilityEffect_ResetRanks.cs" />
