@@ -25,7 +25,7 @@ public class CompRankInfo : ThingComp
 
     private GameComponent_RankInfo gameComponentRankInfo = null;
 
-    public GameComponent_RankInfo GameComponentRankInfo => gameComponentRankInfo ?? (gameComponentRankInfo = Current.Game.GetComponent<GameComponent_RankInfo>());
+    public GameComponent_RankInfo GameComponentRankInfo => gameComponentRankInfo ??= Current.Game.GetComponent<GameComponent_RankInfo>();
 
     public void UnlockRank(RankDef rank)
     {
@@ -34,7 +34,7 @@ public class CompRankInfo : ThingComp
             return;
         }
 
-        if (!(parent is Pawn pawn))
+        if (parent is not Pawn pawn)
         {
             return;
         }
@@ -253,10 +253,7 @@ public class CompRankInfo : ThingComp
             return;
         }
             
-        if (daysAsRank == null)
-        {
-            daysAsRank = new Dictionary<RankDef, int>();
-        }
+        daysAsRank ??= new Dictionary<RankDef, int>();
     }
         
 }

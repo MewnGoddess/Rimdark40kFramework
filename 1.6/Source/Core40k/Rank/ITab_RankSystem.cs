@@ -437,7 +437,9 @@ public class ITab_RankSystem : ITab
                 listingRankInfo.Indent(viewRect.width * 0.25f);
                 if (listingRankInfo.ButtonText("BEWH.Framework.RankSystem.UnlockRank".Translate(), widthPct: 0.5f))
                 {
-                    UnlockRank(currentlySelectedRank.rankDef);
+                    void Action() => UnlockRank(currentlySelectedRank.rankDef);
+                    var window = Dialog_MessageBox.CreateConfirmation("BEWH.Framework.RankSystem.UnlockRankConfirm".Translate(pawn, currentlySelectedRank.rankDef.label), Action, destructive: true);
+                    Find.WindowStack.Add(window);
                 }
                 scrollViewHeightRankInfo += 30f;
                 listingRankInfo.Outdent(viewRect.width * 0.25f);
@@ -512,28 +514,6 @@ public class ITab_RankSystem : ITab
         }
     }
 
-    /*private void UpdateRanksForCategory()
-    {
-        foreach (var rank in availableRanksForCategory)
-        {
-            var rankInfoForTab = rank;
-            UpdateRankInfoForCategory(ref rankInfoForTab);
-        }
-
-        if (currentlySelectedRank != null)
-        {
-            UpdateRankInfoForCategory(ref currentlySelectedRank);
-        }
-    }
-    
-    private void UpdateRankInfoForCategory(ref RankInfoForTab rankInfoForTab)
-    {
-        var res = RequirementMetAndText(rankInfoForTab.rankDef);
-
-        rankInfoForTab.requirementsMet = res.requirementMet;
-        rankInfoForTab.rankText = res.requirementText;
-    }*/
-        
     private RankInfoForTab BuildRankInfoForCategory(RankDef rankDef)
     {
         var res = RequirementMetAndText(rankDef);
