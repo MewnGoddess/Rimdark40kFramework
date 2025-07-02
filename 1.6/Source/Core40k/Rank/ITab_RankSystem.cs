@@ -438,8 +438,15 @@ public class ITab_RankSystem : ITab
                 if (listingRankInfo.ButtonText("BEWH.Framework.RankSystem.UnlockRank".Translate(), widthPct: 0.5f))
                 {
                     void Action() => UnlockRank(currentlySelectedRank.rankDef);
-                    var window = Dialog_MessageBox.CreateConfirmation("BEWH.Framework.RankSystem.UnlockRankConfirm".Translate(pawn, currentlySelectedRank.rankDef.label), Action, destructive: true);
-                    Find.WindowStack.Add(window);
+                    if (ModSettings.confirmRankUnlock)
+                    {
+                        var window = Dialog_MessageBox.CreateConfirmation("BEWH.Framework.RankSystem.UnlockRankConfirm".Translate(pawn, currentlySelectedRank.rankDef.label), Action, destructive: true);
+                        Find.WindowStack.Add(window);
+                    }
+                    else
+                    {
+                        Action();
+                    }
                 }
                 scrollViewHeightRankInfo += 30f;
                 listingRankInfo.Outdent(viewRect.width * 0.25f);

@@ -22,6 +22,8 @@ public class Core40kMod : Mod
         listingStandard.Begin(inRect);
 
         listingStandard.CheckboxLabeled("BEWH.Framework.ModSettings.ShowRankTab".Translate(), ref settings.alwaysShowRankTab);
+        
+        listingStandard.CheckboxLabeled("BEWH.Framework.ModSettings.ConfirmRankUnlock".Translate(), ref settings.confirmRankUnlock);
 
         listingStandard.Label("\n" + "BEWH.ModSettings.CheckVEFPatches".Translate());
             
