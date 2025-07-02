@@ -9,7 +9,7 @@ public class Core40kModSettings : ModSettings
 {
     public bool alwaysShowRankTab = false;
 
-    public bool confirmRankUnlock = true;
+    public bool confirmRankUnlock = false;
 
     public bool showAllRankCategories = false;
         
