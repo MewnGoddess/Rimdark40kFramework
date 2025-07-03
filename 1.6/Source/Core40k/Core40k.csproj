@@ -107,6 +107,8 @@
     <Compile Include="DecorativeApparel\BodyDecorativeApparelColourTwo.cs" />
     <Compile Include="DecorativeApparel\DecorativeApparelColourTwo.cs" />
     <Compile Include="DecorativeApparel\DecorationDef.cs" />
+    <Compile Include="DecorativeApparel\DefModExtension_ApplyStandardDecorations.cs" />
+    <Compile Include="DecorativeApparel\DefModExtension_ForcesBodyType.cs" />
     <Compile Include="DecorativeApparel\Dialog_EditExtraDecorationPresets.cs" />
     <Compile Include="DecorativeApparel\DynamicPawnRenderNodeSetup_DecorativeApparelBody.cs" />
     <Compile Include="DecorativeApparel\DynamicPawnRenderNodeSetup_DecorativeApparelHead.cs" />

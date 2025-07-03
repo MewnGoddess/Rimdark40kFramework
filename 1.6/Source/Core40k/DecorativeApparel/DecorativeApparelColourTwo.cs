@@ -11,6 +11,26 @@ public class DecorativeApparelColourTwo : ApparelColourTwo
     
     public Dictionary<ExtraDecorationDef, ExtraDecorationSettings> ExtraDecorations => extraDecorations;
 
+    private bool extraDecoSetup = false;
+
+    public override void SpawnSetup(Map map, bool respawningAfterLoad)
+    {
+        base.SpawnSetup(map, respawningAfterLoad);
+        
+        if (!def.HasModExtension<DefModExtension_StandardDecorations>() || extraDecoSetup)
+        {
+            return;
+        }
+        
+        extraDecoSetup = true;
+        var defMod = def.GetModExtension<DefModExtension_StandardDecorations>();
+        SetInitialColours(defMod.defaultPrimaryColor ?? DrawColor, defMod.defaultSecondaryColor ?? DrawColorTwo);
+        foreach (var extraDecoration in defMod.extraDecorations)
+        {
+            AddOrRemoveDecoration(extraDecoration);
+        }
+    }
+    
     public void AddOrRemoveDecoration(ExtraDecorationDef decoration)
     {
         if (extraDecorations.ContainsKey(decoration) && (extraDecorations[decoration].Flipped || !decoration.flipable))
@@ -91,6 +111,7 @@ public class DecorativeApparelColourTwo : ApparelColourTwo
     {
         Scribe_Collections.Look(ref extraDecorations, "extraDecorations");
         Scribe_Collections.Look(ref originalExtraDecorations, "originalExtraDecorations");
+        Scribe_Values.Look(ref extraDecoSetup, "extraDecoSetup");
         base.ExposeData();
     }
 }
