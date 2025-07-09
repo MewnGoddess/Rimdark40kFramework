@@ -234,7 +234,7 @@ namespace ColourPicker
 
         public void NotifyHSVUpdated()
         {
-            Debug( $"HSV updated: ({_h}, {_s}, {_v})" );
+           //Debug( $"HSV updated: ({_h}, {_s}, {_v})" );
 
             // update rgb colour 
             var color = Color.HSVToRGB( H, S, V );
@@ -259,7 +259,7 @@ namespace ColourPicker
 
         public void NotifyRGBUpdated()
         {
-            Debug($"RGB updated: ({R}, {G}, {B})");
+            //Debug($"RGB updated: ({R}, {G}, {B})");
 
             // Set HSV from RGB
             Color.RGBToHSV( tempColour, out _h, out _s, out _v );
@@ -284,7 +284,7 @@ namespace ColourPicker
 
         public void NotifyHexUpdated()
         {
-            Debug( $"HEX updated ({Hex})");
+            //Debug( $"HEX updated ({Hex})");
 
             if (ColorUtility.TryParseHtmlString( _hex, out var color))
             {
@@ -817,10 +817,10 @@ namespace ColourPicker
             SetColor();
         }
 
-        [Conditional("DEBUG")]
+        /*[Conditional("DEBUG")]
         public static void Debug( string msg )
         {
             Log.Message( "ColourPicker :: " + msg);
-        }
+        }*/
     }
 }
