@@ -61,7 +61,7 @@ public static class GetValueUnfinalizedFromRankPatch
             num += rank.statOffsets.GetStatOffsetFromList(stat);
             foreach (var conditional in rank.conditionalStatAffecters)
             {
-                if (conditional.Applies(req))
+                if (!conditional.statOffsets.NullOrEmpty() && conditional.Applies(req))
                 {
                     num += conditional.statOffsets.GetStatOffsetFromList(stat);
                 }
@@ -73,7 +73,7 @@ public static class GetValueUnfinalizedFromRankPatch
 
     public static float GetStatFactorForRank(float num, StatRequest req, StatDef stat)
     {
-        if (!(req.Thing is Pawn pawn))
+        if (req.Thing is not Pawn pawn)
         {
             return num;
         }
@@ -90,7 +90,7 @@ public static class GetValueUnfinalizedFromRankPatch
             num *= rank.statFactors.GetStatFactorFromList(stat);
             foreach (var conditional in rank.conditionalStatAffecters)
             {
-                if (conditional.Applies(req))
+                if (!conditional.statFactors.NullOrEmpty() && conditional.Applies(req))
                 {
                     num *= conditional.statFactors.GetStatFactorFromList(stat);
                 }
