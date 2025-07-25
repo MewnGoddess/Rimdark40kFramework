@@ -10,6 +10,11 @@ public class Gene_DisabledBy : Gene
     {
         get
         {
+            if (pawn?.genes == null)
+            {
+                return base.Active;
+            }
+            
             if (def.HasModExtension<DefModExtension_GeneDisabledBy>())
             {
                 var disabledByGenes = def.GetModExtension<DefModExtension_GeneDisabledBy>().geneDisabledBy ?? new List<GeneDef>();

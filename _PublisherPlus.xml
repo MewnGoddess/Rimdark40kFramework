@@ -3,7 +3,7 @@
   <Excluded>
     <exclude>.git</exclude>
     <exclude>1.5\Source</exclude>
-    <exclude>README.md</exclude>
+    <exclude>1.6\Source</exclude>
     <exclude>TODOLIST.md</exclude>
   </Excluded>
 </Configuration>
