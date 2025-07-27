@@ -359,11 +359,11 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
             }
                 
             var position = new Vector2(viewRect.x, resetAllDecorations.yMax);
-            curY = position.y;
-                
+            curY = position.y;    
+            
             DrawRowContent(bodyApparel, extraDecorationDefsBody, ref position, ref viewRect);
-                
-            listScrollViewHeight = position.y + 10f;
+            
+            listScrollViewHeight = curY + 10f;
         }
             
         //Head Decorations
@@ -411,10 +411,10 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
             }
                 
             var position = new Vector2(viewRect.x, curY + resetAllDecorations.height);
-            curY = position.y;
-                
+            curY = position.y;   
+            
             DrawRowContent(helmetApparel, extraDecorationDefsHelmet, ref position, ref viewRect);
-                
+            
             listScrollViewHeight = curY + 10f;
         }
             
