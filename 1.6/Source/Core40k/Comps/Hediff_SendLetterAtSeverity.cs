@@ -28,7 +28,7 @@ public class Hediff_SendLetterAtSeverity : HediffComp
             return;
         }
             
-        var letter = new Letter_JumpTo
+        var letter = new StandardLetter
         {
             lookTargets = Pawn,
             def = Props.letterDef,

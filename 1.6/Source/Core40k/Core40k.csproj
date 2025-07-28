@@ -171,7 +171,6 @@
     <Compile Include="DefModExtensions\DefModExtension_RequiresGene.cs" />
     <Compile Include="Recipes\Recipe_InstallImplantRequiringHediff.cs" />
     <Compile Include="Recipes\Recipe_InstallImplantRequiringGene.cs" />
-    <Compile Include="Letters\Letter_JumpTo.cs" />
     <Compile Include="WeightedSelection.cs" />
     <Compile Include="DefModExtensions\DefModExtension_UntradeablePawn.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_NoSlavesPatch.cs" />
