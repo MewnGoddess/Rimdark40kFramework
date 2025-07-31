@@ -10,6 +10,8 @@ public static class Core40kDefOf
 
     public static JobDef BEWH_OpenStylingStationDialogForSecondColour;
 
+    public static ShaderTypeDef BEWH_CutoutThreeColor;
+
     static Core40kDefOf()
     {
         DefOfHelper.EnsureInitializedInCtor(typeof(Core40kDefOf));

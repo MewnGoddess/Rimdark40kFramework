@@ -32,11 +32,12 @@ public class Core40kModSettings : ModSettings
         Mod.WriteSettings();
         return true;
     }
-    public void UpdatePreset(ColourPreset preset, Color primaryColour, Color secondaryColour)
+    public void UpdatePreset(ColourPreset preset, Color primaryColour, Color secondaryColour, Color tertiaryColour)
     {
         var existingPreset = colourPresets.Find(cPreset => cPreset.name == preset.name);
         existingPreset.primaryColour = primaryColour;
         existingPreset.secondaryColour = secondaryColour;
+        existingPreset.tertiaryColour = tertiaryColour;
         Mod.WriteSettings();
     }
     public void RemovePreset(ColourPreset preset)

@@ -4,7 +4,7 @@ using Verse;
 
 namespace Core40k;
 
-public class DecorativeApparelColourTwo : ApparelColourTwo
+public class DecorativeApparelMultiColor : ApparelMultiColor
 {
     private Dictionary<ExtraDecorationDef, ExtraDecorationSettings> originalExtraDecorations = new ();
     private Dictionary<ExtraDecorationDef, ExtraDecorationSettings> extraDecorations = new ();
@@ -24,7 +24,7 @@ public class DecorativeApparelColourTwo : ApparelColourTwo
         
         extraDecoSetup = true;
         var defMod = def.GetModExtension<DefModExtension_StandardDecorations>();
-        SetInitialColours(defMod.defaultPrimaryColor ?? DrawColor, defMod.defaultSecondaryColor ?? DrawColorTwo);
+        SetInitialColours(defMod.defaultPrimaryColor ?? DrawColor, defMod.defaultSecondaryColor ?? DrawColorTwo, defMod.defaultTertiaryColor ?? DrawColorThree);
         foreach (var extraDecoration in defMod.extraDecorations)
         {
             AddOrRemoveDecoration(extraDecoration);

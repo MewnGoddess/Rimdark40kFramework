@@ -816,11 +816,5 @@ namespace ColourPicker
             base.OnAcceptKeyPressed();
             SetColor();
         }
-
-        /*[Conditional("DEBUG")]
-        public static void Debug( string msg )
-        {
-            Log.Message( "ColourPicker :: " + msg);
-        }*/
     }
 }

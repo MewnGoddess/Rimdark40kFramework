@@ -17,10 +17,10 @@ public class DynamicPawnRenderNodeSetup_DecorativeApparelHead : DynamicPawnRende
             yield break;
         }
         
-        var decorativeApparels = pawn.apparel.WornApparel.Where(apparel => apparel is HeadDecorativeApparelColourTwo).Cast<HeadDecorativeApparelColourTwo>();
+        var decorativeApparels = pawn.apparel.WornApparel.Where(apparel => apparel is HeadDecorativeApparelMultiColor).Cast<HeadDecorativeApparelMultiColor>();
         foreach (var decorativeApparel in decorativeApparels)
         {
-            foreach (var decoration in ((DecorativeApparelColourTwo)decorativeApparel).ExtraDecorations)
+            foreach (var decoration in ((DecorativeApparelMultiColor)decorativeApparel).ExtraDecorations)
             {
                 var pawnRenderNodeProperty = new PawnRenderNodeProperties
                 {

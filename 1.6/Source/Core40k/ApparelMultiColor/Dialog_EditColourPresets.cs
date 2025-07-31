@@ -30,7 +30,7 @@ public class Dialog_EditColourPresets : Window
         {
             height = viewRect.height * 0.3f
         };
-        Widgets.Label(labelRect, "BEWH.Framework.ApparelColourTwo.EnterPresetName".Translate());
+        Widgets.Label(labelRect, "BEWH.Framework.ApparelMultiColor.EnterPresetName".Translate());
             
         var textEntryRect = new Rect(labelRect)
         {
@@ -67,7 +67,7 @@ public class Dialog_EditColourPresets : Window
                 
             Text.Font = GameFont.Tiny;
             Text.Anchor = TextAnchor.MiddleCenter;
-            Widgets.Label(warningRect, "BEWH.Framework.ApparelColourTwo.PresetExists".Translate().Colorize(Color.red));
+            Widgets.Label(warningRect, "BEWH.Framework.ApparelMultiColor.PresetExists".Translate().Colorize(Color.red));
             Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.UpperLeft;
         }

@@ -42,19 +42,42 @@ public static class Core40kUtils
     }
         
     //Colour Preview
-    public static Texture2D TwoColourPreview(Color primaryColor, Color secondaryColor)
+    public static Texture2D ThreeColourPreview(Color primaryColor, Color secondaryColor, Color? tertiaryColor)
     {
-        var texture2D = new Texture2D(2, 2)
+        Texture2D texture2D;
+        if (tertiaryColor.HasValue && tertiaryColor.Value.a != 0)
         {
-            name = "SolidColorTex-" + primaryColor + secondaryColor
-        };
-        texture2D.SetPixel(0, 0, primaryColor);
-        texture2D.SetPixel(0, 1, primaryColor);
-        texture2D.SetPixel(1, 0, secondaryColor);
-        texture2D.SetPixel(1, 1, secondaryColor);
-        texture2D.wrapMode = TextureWrapMode.Clamp;
-        texture2D.filterMode = FilterMode.Bilinear;
-        texture2D.Apply();
+            texture2D = new Texture2D(3,3)
+            {
+                name = "SolidColorTex-" + primaryColor + secondaryColor
+            };
+            texture2D.SetPixel(0, 0, primaryColor);
+            texture2D.SetPixel(0, 1, primaryColor);
+            texture2D.SetPixel(0, 2, primaryColor);
+            texture2D.SetPixel(1, 0, secondaryColor);
+            texture2D.SetPixel(1, 1, secondaryColor);
+            texture2D.SetPixel(1, 2, secondaryColor);
+            texture2D.SetPixel(2, 0, tertiaryColor.Value);
+            texture2D.SetPixel(2, 1, tertiaryColor.Value);
+            texture2D.SetPixel(2, 2, tertiaryColor.Value);
+            texture2D.wrapMode = TextureWrapMode.Clamp;
+            texture2D.filterMode = FilterMode.Bilinear;
+            texture2D.Apply();
+        }
+        else
+        {
+            texture2D = new Texture2D(2 , 2)
+            {
+                name = "SolidColorTex-" + primaryColor + secondaryColor
+            };
+            texture2D.SetPixel(0, 0, primaryColor);
+            texture2D.SetPixel(0, 1, primaryColor);
+            texture2D.SetPixel(1, 0, secondaryColor);
+            texture2D.SetPixel(1, 1, secondaryColor);
+            texture2D.wrapMode = TextureWrapMode.Clamp;
+            texture2D.filterMode = FilterMode.Bilinear;
+            texture2D.Apply();
+        }
             
         return texture2D;
     }

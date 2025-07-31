@@ -6,7 +6,7 @@ using Verse;
 
 namespace Core40k;
 
-public class ExtraDecorationTab : ApparelColourTwoTabDrawer
+public class ExtraDecorationTab : ApparelMultiColorTabDrawer
 {
     private static Core40kModSettings modSettings = null;
     public static Core40kModSettings ModSettings => modSettings ??= LoadedModManager.GetMod<Core40kMod>().GetSettings<Core40kModSettings>();
@@ -52,7 +52,7 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
         }
     }
 
-    private void DrawRowContent(DecorativeApparelColourTwo apparel, List<ExtraDecorationDef> extraDecorationDefs, ref Vector2 position, ref Rect viewRect)
+    private void DrawRowContent(DecorativeApparelMultiColor apparel, List<ExtraDecorationDef> extraDecorationDefs, ref Vector2 position, ref Rect viewRect)
     {
         var iconSize = new Vector2(viewRect.width/RowAmount, viewRect.width/RowAmount);
         var smallIconSize = new Vector2(iconSize.x / 4, iconSize.y / 4);
@@ -122,7 +122,7 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
                 Widgets.DrawMenuSection(colourSelection);
                 colourSelection = colourSelection.ContractedBy(1f);
                 Widgets.DrawRectFast(colourSelection, apparel.ExtraDecorations[extraDecorationDefs[i1]].Color);
-                TooltipHandler.TipRegion(colourSelection, "BEWH.Framework.ApparelColourTwo.ChooseCustomColour".Translate());
+                TooltipHandler.TipRegion(colourSelection, "BEWH.Framework.apparelMultiColor.ChooseCustomColour".Translate());
                 if (Widgets.ButtonInvisible(colourSelection))
                 {
                     Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].Color, ( newColour ) =>
@@ -170,7 +170,7 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
         curY += 34f;
     }
 
-    private void SelectPreset(DecorativeApparelColourTwo apparel, ExtraDecorationDef extraDecoration)
+    private void SelectPreset(DecorativeApparelMultiColor apparel, ExtraDecorationDef extraDecoration)
     {
         var presets = extraDecoration.availablePresets;
         var list = new List<FloatMenuOption>();
@@ -201,7 +201,7 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
         Find.WindowStack.Add(new FloatMenu(list));
     }
 
-    private ExtraDecorationPreset GetCurrentPreset(DecorativeApparelColourTwo apparel, string presetName)
+    private ExtraDecorationPreset GetCurrentPreset(DecorativeApparelMultiColor apparel, string presetName)
     {
         var extraDecorationPresetParts = new List<ExtraDecorationPresetParts>();
 
@@ -227,7 +227,7 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
         return extraDecorationPreset;
     }
         
-    private void EditDecorationPreset(DecorativeApparelColourTwo apparel)
+    private void EditDecorationPreset(DecorativeApparelMultiColor apparel)
     {
         var floatMenuOptions = new List<FloatMenuOption>();
             
@@ -245,12 +245,12 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
             }, Widgets.PlaceholderIconTex, Color.white);
             menuOption.extraPartWidth = 30f;
             menuOption.extraPartOnGUI = rect1 => Core40kUtils.DeletePreset(rect1, preset);
-            menuOption.tooltip = "BEWH.Framework.ApparelColourTwo.OverridePreset".Translate(preset.name);
+            menuOption.tooltip = "BEWH.Framework.ApparelMultiColor.OverridePreset".Translate(preset.name);
             floatMenuOptions.Add(menuOption);
         }
             
         //Create new
-        var newPreset = new FloatMenuOption("BEWH.Framework.ApparelColourTwo.NewPreset".Translate(), delegate
+        var newPreset = new FloatMenuOption("BEWH.Framework.ApparelMultiColor.NewPreset".Translate(), delegate
         {
             Find.WindowStack.Add( new Dialog_EditExtraDecorationPresets(currentPreset));
         }, Widgets.PlaceholderIconTex, Color.white);
@@ -262,7 +262,7 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
         }
     }
 
-    private void SelectDecorationPreset(DecorativeApparelColourTwo apparel)
+    private void SelectDecorationPreset(DecorativeApparelMultiColor apparel)
     {
         var presets = ModSettings.ExtraDecorationPresets.Where(deco => deco.appliesTo == apparel.def.defName);
         var list = new List<FloatMenuOption>();
@@ -309,8 +309,8 @@ public class ExtraDecorationTab : ApparelColourTwoTabDrawer
         var viewRect = new Rect(0f, 0f, rect.width - 16f, listScrollViewHeight);
         Widgets.BeginScrollView(outRect, ref apparelColorScrollPosition, viewRect);
             
-        var bodyApparel = (BodyDecorativeApparelColourTwo)pawn.apparel.WornApparel.FirstOrFallback(a => a is BodyDecorativeApparelColourTwo);
-        var helmetApparel = (HeadDecorativeApparelColourTwo)pawn.apparel.WornApparel.FirstOrFallback(a => a is HeadDecorativeApparelColourTwo);
+        var bodyApparel = (BodyDecorativeApparelMultiColor)pawn.apparel.WornApparel.FirstOrFallback(a => a is BodyDecorativeApparelMultiColor);
+        var helmetApparel = (HeadDecorativeApparelMultiColor)pawn.apparel.WornApparel.FirstOrFallback(a => a is HeadDecorativeApparelMultiColor);
             
         curY = viewRect.y;
             

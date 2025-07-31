@@ -17,7 +17,7 @@ public class DynamicPawnRenderNodeSetup_DecorativeApparelBody : DynamicPawnRende
             yield break;
         }
         
-        var decorativeApparels = pawn.apparel.WornApparel.Where(apparel => apparel is BodyDecorativeApparelColourTwo).Cast<BodyDecorativeApparelColourTwo>();
+        var decorativeApparels = pawn.apparel.WornApparel.Where(apparel => apparel is BodyDecorativeApparelMultiColor).Cast<BodyDecorativeApparelMultiColor>();
         foreach (var decorativeApparel in decorativeApparels)
         {
             foreach (var decoration in decorativeApparel.ExtraDecorations)
