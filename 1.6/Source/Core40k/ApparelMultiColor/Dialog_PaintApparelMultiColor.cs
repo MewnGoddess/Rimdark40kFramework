@@ -48,6 +48,8 @@ public class Dialog_PaintApparelMultiColor : Window
 
     private static readonly CachedTexture ScrollForwardIcon = new ("UI/Misc/ScrollForwardIcon");
     private static readonly CachedTexture ScrollBackwardIcon = new ("UI/Misc/ScrollBackwardIcon");
+
+    private bool recache = true;
     public Dialog_PaintApparelMultiColor()
     {
     }
@@ -194,6 +196,7 @@ public class Dialog_PaintApparelMultiColor : Window
                         item.DrawColor = preset.primaryColour;
                         item.SetSecondaryColor(preset.secondaryColour);
                         item.SetTertiaryColor(preset.tertiaryColour);
+                        recache = true;
                             
                     }, Core40kUtils.ThreeColourPreview(preset.primaryColour, preset.secondaryColour, preset.tertiaryColour), Color.white);
                     list.Add(menuOption);
@@ -206,6 +209,7 @@ public class Dialog_PaintApparelMultiColor : Window
                         item.DrawColor = preset.primaryColour;
                         item.SetSecondaryColor(preset.secondaryColour);
                         item.SetTertiaryColor(preset.tertiaryColour);
+                        recache = true;
                             
                     }, Core40kUtils.ThreeColourPreview(preset.primaryColour, preset.secondaryColour, preset.tertiaryColour), Color.white);
                     list.Add(menuOption);
@@ -295,6 +299,7 @@ public class Dialog_PaintApparelMultiColor : Window
                     Find.WindowStack.Add( new Dialog_ColourPicker( item.DrawColor, ( newColour ) =>
                     {
                         item.DrawColor = newColour;
+                        recache = true;
                     } ) );
                 }
                     
@@ -310,6 +315,7 @@ public class Dialog_PaintApparelMultiColor : Window
                     Find.WindowStack.Add( new Dialog_ColourPicker( item.DrawColorTwo, ( newColour ) =>
                     {
                         item.SetSecondaryColor(newColour);
+                        recache = true;
                     } ) );
                 }
                 
@@ -325,9 +331,11 @@ public class Dialog_PaintApparelMultiColor : Window
                     Find.WindowStack.Add( new Dialog_ColourPicker( item.DrawColorThree, ( newColour ) =>
                     {
                         item.SetTertiaryColor(newColour);
+                        recache = true;
                     } ) );
                 }
 
+                //Mask Stuff
                 if (masks.ContainsKey(item.def) && masks[item.def].Any())
                 {
                     var maskRect = new Rect(itemRect)
@@ -356,13 +364,18 @@ public class Dialog_PaintApparelMultiColor : Window
                         curPosRect.x += curPosRect.width * i;
                         
                         curPosRect = curPosRect.ContractedBy(15);
-                        if (!cachedMaterials.ContainsKey((item.def, curPageMasks[i])))
+                        if (!cachedMaterials.ContainsKey((item.def, curPageMasks[i])) || recache)
                         {
+                            if (recache)
+                            {
+                                cachedMaterials = new Dictionary<(ThingDef, MaskDef), Material>();
+                            }
                             var path = ((item.def.apparel.LastLayer != ApparelLayerDefOf.Overhead && item.def.apparel.LastLayer != ApparelLayerDefOf.EyeCover && !item.RenderAsPack() && item.WornGraphicPath != BaseContent.PlaceholderImagePath && item.WornGraphicPath != BaseContent.PlaceholderGearImagePath) ? (item.WornGraphicPath + "_" + pawn.story.bodyType.defName) : item.WornGraphicPath);
                             var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
-                            var graphic = ApparelMultiColorUtils.GetGraphic<Graphic_Multi>(path, shader, item.def.graphicData.drawSize, item.DrawColor, item.DrawColorTwo, item.DrawColorThree, item.Graphic.data, curPageMasks[i]?.maskPath);
+                            var graphic = MultiColorUtils.GetGraphic<Graphic_Multi>(path, shader, item.def.graphicData.drawSize, item.DrawColor, item.DrawColorTwo, item.DrawColorThree, item.Graphic.data, curPageMasks[i]?.maskPath);
                             var material = graphic.MatSouth;
                             cachedMaterials.Add((item.def, curPageMasks[i]), material);
+                            recache = false;
                         }
 
                         if (item.MaskDef == curPageMasks[i] || (item.MaskDef == null && curPageMasks[i].setsNull))
@@ -489,6 +502,8 @@ public class Dialog_PaintApparelMultiColor : Window
             var tabDrawer = (ApparelMultiColorTabDrawer)Activator.CreateInstance(tab.tabDrawerClass);
             tabDrawer.OnReset(pawn);
         }
+        
+        recache = true;
         
         pawn.Drawer.renderer.SetAllGraphicsDirty();
     }

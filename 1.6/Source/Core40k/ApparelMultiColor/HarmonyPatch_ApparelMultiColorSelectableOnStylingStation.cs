@@ -23,7 +23,7 @@ public class ApparelMultiColorSelectableOnStylingStation
             
         var secondColourChangeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.Framework.ApparelMultiColor.ArmourDecorationFeature".Translate().CapitalizeFirst(), delegate
         {
-            selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(Core40kDefOf.BEWH_OpenStylingStationDialogForSecondColour, __instance), JobTag.Misc);
+            selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(Core40kDefOf.BEWH_OpenStylingStationDialogForApparelMultiColor, __instance), JobTag.Misc);
         }), selPawn, __instance);
         yield return secondColourChangeFloatMenu;
     }

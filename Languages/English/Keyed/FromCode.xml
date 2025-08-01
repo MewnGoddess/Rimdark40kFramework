@@ -13,7 +13,7 @@
   <BEWH.Framework.CommonKeyword.None>None</BEWH.Framework.CommonKeyword.None>
   <BEWH.Framework.CommonKeywords.ModSettings>mod settings</BEWH.Framework.CommonKeywords.ModSettings>
 
-  <!--=== Apparel Two ===-->
+  <!--=== Apparel Multi Color ===-->
   <BEWH.Framework.ApparelMultiColor.MainTab>Coloring</BEWH.Framework.ApparelMultiColor.MainTab>
 
   <BEWH.Framework.ApparelMultiColor.PrimaryColor>Primary</BEWH.Framework.ApparelMultiColor.PrimaryColor>
@@ -46,6 +46,9 @@
 
   <BEWH.Framework.ExtraDecoration.Edit>Edit</BEWH.Framework.ExtraDecoration.Edit>
   <BEWH.Framework.ExtraDecoration.EditDesc>Create, overwrite or remove a preset</BEWH.Framework.ExtraDecoration.EditDesc>
+
+  <!--=== Weapon Multi Color ===-->
+  <BEWH.Framework.WeaponMultiColor.WeaponDecorationFeature>Decorate weapon</BEWH.Framework.WeaponMultiColor.WeaponDecorationFeature>
 
   <!--=== Rank System ===-->
   <BEWH.Framework.RankSystem.RankTab>Ranks</BEWH.Framework.RankSystem.RankTab>

@@ -76,13 +76,14 @@
     <Compile Include="ApparelMultiColor\ApparelMultiColor.cs" />
     <Compile Include="ApparelMultiColor\ApparelMultiColorTabDef.cs" />
     <Compile Include="ApparelMultiColor\ApparelMultiColorTabDrawer.cs" />
-    <Compile Include="ApparelMultiColor\ApparelMultiColorUtils.cs" />
     <Compile Include="ApparelMultiColor\ColourPreset.cs" />
     <Compile Include="ApparelMultiColor\ColourPresetDef.cs" />
     <Compile Include="ApparelMultiColor\DecorationColourPresetDef.cs" />
     <Compile Include="ApparelMultiColor\Dialog_EditColourPresets.cs" />
     <Compile Include="ApparelMultiColor\Dialog_PaintApparelMultiColor.cs" />
     <Compile Include="ApparelMultiColor\HarmonyPatch_ApparelMultiColorPatch.cs" />
+    <Compile Include="ApparelMultiColor\HarmonyPatch_ApparelMultiColorSelectableOnStylingStation.cs" />
+    <Compile Include="ApparelMultiColor\JobDriver_OpenStylingStationDialogForApparelMultiColor.cs" />
     <Compile Include="ApparelMultiColor\MaskDef.cs" />
     <Compile Include="ChangeableBullets\CompProperties_AmmoChanger.cs" />
     <Compile Include="ChangeableBullets\Comp_AmmoChanger.cs" />
@@ -146,7 +147,6 @@
     <Compile Include="HarmonyPatches\HarmonyPatch_CalculateAllowedRankLimitOnArrestPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_CalculateAllowedRankLimitOnRecruitPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_DontPlaceProductPatch.cs" />
-    <Compile Include="HarmonyPatches\HarmonyPatch_ApparelMultiColorSelectableOnStylingStation.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_GetExplanationUnfinalizedFromRankPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_GetValueUnfinalizedFromRankPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_LockedByResearch.cs" />
@@ -154,7 +154,7 @@
     <Compile Include="HarmonyPatches\HarmonyPatch_QualityCreatedBoostFromGenePatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_RankLimitResurrectionReAdd.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_SpecificInheritableArchiteGenes.cs" />
-    <Compile Include="JobDriver\JobDriver_OpenStylingStationDialogForSecondColour.cs" />
+    <Compile Include="MultiColorUtils.cs" />
     <Compile Include="PlaceWorkers\PlaceWorker_OnlyOnePerMap.cs" />
     <Compile Include="Rank\CompProperties_RankInfo.cs" />
     <Compile Include="Rank\CompRankInfo.cs" />
@@ -180,6 +180,11 @@
     <Compile Include="DefModExtensions\DefModExtension_RequiresGene.cs" />
     <Compile Include="Recipes\Recipe_InstallImplantRequiringHediff.cs" />
     <Compile Include="Recipes\Recipe_InstallImplantRequiringGene.cs" />
+    <Compile Include="WeaponMultiColor\Dialog_PaintWeaponMultiColor.cs" />
+    <Compile Include="WeaponMultiColor\HarmonyPatch_WeaponMultiColorPatch.cs" />
+    <Compile Include="WeaponMultiColor\HarmonyPatch_WeaponMultiColorSelectableOnStylingStation.cs" />
+    <Compile Include="WeaponMultiColor\JobDriver_OpenStylingStationDialogForWeaponMultiColor.cs" />
+    <Compile Include="WeaponMultiColor\WeaponMultiColor.cs" />
     <Compile Include="WeightedSelection.cs" />
     <Compile Include="DefModExtensions\DefModExtension_UntradeablePawn.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_NoSlavesPatch.cs" />

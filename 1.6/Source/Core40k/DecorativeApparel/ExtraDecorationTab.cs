@@ -122,7 +122,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                 Widgets.DrawMenuSection(colourSelection);
                 colourSelection = colourSelection.ContractedBy(1f);
                 Widgets.DrawRectFast(colourSelection, apparel.ExtraDecorations[extraDecorationDefs[i1]].Color);
-                TooltipHandler.TipRegion(colourSelection, "BEWH.Framework.apparelMultiColor.ChooseCustomColour".Translate());
+                TooltipHandler.TipRegion(colourSelection, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
                 if (Widgets.ButtonInvisible(colourSelection))
                 {
                     Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].Color, ( newColour ) =>

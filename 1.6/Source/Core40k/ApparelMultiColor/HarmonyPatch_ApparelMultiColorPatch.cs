@@ -35,7 +35,7 @@ public static class ApparelMultiColorPatch
 
         var apparelMultiColor = (ApparelMultiColor)apparel;
         var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
-        var graphic = ApparelMultiColorUtils.GetGraphic<Graphic_Multi>(path, shader, apparel.def.graphicData.drawSize, apparelMultiColor.DrawColor, apparelMultiColor.DrawColorTwo, apparelMultiColor.DrawColorThree, apparelMultiColor.Graphic.data, apparelMultiColor.MaskDef?.maskPath);
+        var graphic = MultiColorUtils.GetGraphic<Graphic_Multi>(path, shader, apparel.def.graphicData.drawSize, apparelMultiColor.DrawColor, apparelMultiColor.DrawColorTwo, apparelMultiColor.DrawColorThree, apparelMultiColor.Graphic.data, apparelMultiColor.MaskDef?.maskPath);
         rec = new ApparelGraphicRecord(graphic, apparel);
         return true;
     }

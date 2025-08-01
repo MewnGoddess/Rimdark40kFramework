@@ -5,7 +5,7 @@ using Verse;
 
 namespace Core40k;
 
-public static class ApparelMultiColorUtils
+public static class MultiColorUtils
 {
     public static T GetGraphic<T>(string path, Shader shader, Vector2 drawSize, Color colorOne, Color colorTwo, Color colorThree, GraphicData data, string maskPath = null) where T : Graphic
     {
