@@ -37,6 +37,8 @@
   <BEWH.Framework.ExtraDecoration.RemoveAllDecorations>Remove All</BEWH.Framework.ExtraDecoration.RemoveAllDecorations>
 
   <BEWH.Framework.ExtraDecoration.UseArmourColour>Use Armor Color</BEWH.Framework.ExtraDecoration.UseArmourColour>
+  <BEWH.Framework.ExtraDecoration.SetDefaultColor>Set Default Colors</BEWH.Framework.ExtraDecoration.SetDefaultColor>
+
 
   <BEWH.Framework.ExtraDecoration.Preset>Preset</BEWH.Framework.ExtraDecoration.Preset>
   <BEWH.Framework.ExtraDecoration.PresetDesc>Select a color preset</BEWH.Framework.ExtraDecoration.PresetDesc>

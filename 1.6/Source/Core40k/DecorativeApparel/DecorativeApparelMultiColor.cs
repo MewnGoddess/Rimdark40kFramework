@@ -43,14 +43,25 @@ public class DecorativeApparelMultiColor : ApparelMultiColor
         }
         else
         {
-            var extraDecorationsSetting = new ExtraDecorationSettings()
-            {
-                Flipped = false,
-                Color = decoration.useArmorColourAsDefault ? DrawColor : decoration.defaultColour,
-            };
-            
-            extraDecorations.Add(decoration, extraDecorationsSetting);
+            extraDecorations.Add(decoration, new ExtraDecorationSettings());
+            SetDefaultColors(decoration);
         }
+        Notify_ColorChanged();
+    }
+
+    public void SetDefaultColors(ExtraDecorationDef decoration)
+    {
+        extraDecorations[decoration].Color = decoration.defaultColour ?? (decoration.useArmorColourAsDefault ? DrawColor : Color.white);
+        extraDecorations[decoration].ColorTwo = decoration.defaultColourTwo ?? (decoration.useArmorColourAsDefault ? DrawColorTwo : Color.white);
+        extraDecorations[decoration].ColorThree = decoration.defaultColourThree ?? (decoration.useArmorColourAsDefault ? DrawColorThree : Color.white);
+        Notify_ColorChanged();
+    }
+    
+    public void SetArmorColors(ExtraDecorationDef decoration)
+    {
+        extraDecorations[decoration].Color = DrawColor;
+        extraDecorations[decoration].ColorTwo = DrawColorTwo;
+        extraDecorations[decoration].ColorThree = DrawColorThree;
         Notify_ColorChanged();
     }
 
@@ -69,6 +80,8 @@ public class DecorativeApparelMultiColor : ApparelMultiColor
             {
                 Flipped = presetPart.flipped,
                 Color = presetPart.colour,
+                ColorTwo = presetPart.colourTwo,
+                ColorThree = presetPart.colourThree,
             };
             
             extraDecorations.Add(decoDef, extraDecorationsSetting);
@@ -83,15 +96,29 @@ public class DecorativeApparelMultiColor : ApparelMultiColor
             {
                 Flipped = presetPart.flipped,
                 Color = presetPart.colour ?? (presetPart.extraDecorationDef.useArmorColourAsDefault ? DrawColor : Color.white),
+                ColorTwo = presetPart.colourTwo ?? Color.white,
+                ColorThree = presetPart.colourThree ?? Color.white
             };
             
             extraDecorations.Add(presetPart.extraDecorationDef, extraDecorationsSetting);
         }
     }
         
-    public void UpdateDecorationColour(ExtraDecorationDef decoration, Color colour)
+    public void UpdateDecorationColourOne(ExtraDecorationDef decoration, Color colour)
     {
         extraDecorations[decoration].Color = colour;
+        Notify_ColorChanged();
+    }
+    
+    public void UpdateDecorationColourTwo(ExtraDecorationDef decoration, Color colour)
+    {
+        extraDecorations[decoration].ColorTwo = colour;
+        Notify_ColorChanged();
+    }
+    
+    public void UpdateDecorationColourThree(ExtraDecorationDef decoration, Color colour)
+    {
+        extraDecorations[decoration].ColorThree = colour;
         Notify_ColorChanged();
     }
 

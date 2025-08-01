@@ -14,10 +14,6 @@ public class Dialog_PaintWeaponMultiColor : Window
 {
     private Pawn pawn;
 
-    private Vector2 weaponColorScrollPosition;
-
-    private float viewRectHeight;
-
     private static readonly Vector2 ButSize = new Vector2(200f, 40f);
 
     public override Vector2 InitialSize => new Vector2(950f, 750f);
@@ -59,14 +55,13 @@ public class Dialog_PaintWeaponMultiColor : Window
         {
             height = Text.LineHeight * 2f
         }; 
-        Widgets.Label(rect, "Test");
+        Widgets.Label(rect, weapon.Label.CapitalizeFirst());
         Text.Anchor = TextAnchor.UpperLeft;
         Text.Font = GameFont.Small;
         inRect.yMin = rect.yMax + 4f;
         var rect2 = inRect;
         rect2.yMax -= ButSize.y + 4f;
-            
-        //Widgets.DrawMenuSection(rect2);
+        
         DrawWeaponColoring(rect2);
             
         DrawBottomButtons(inRect);
@@ -124,7 +119,7 @@ public class Dialog_PaintWeaponMultiColor : Window
                     weapon.SetTertiaryColor(preset.tertiaryColour);
                     recache = true;
                             
-                }, Core40kUtils.ThreeColourPreview(preset.primaryColour, preset.secondaryColour, preset.tertiaryColour), Color.white);
+                }, Core40kUtils.ThreeColourPreview(preset.primaryColour, preset.secondaryColour, preset.tertiaryColour, preset.colorAmount), Color.white);
                 list.Add(menuOption);
             }
                     
@@ -137,7 +132,7 @@ public class Dialog_PaintWeaponMultiColor : Window
                     weapon.SetTertiaryColor(preset.tertiaryColour);
                     recache = true;
                             
-                }, Core40kUtils.ThreeColourPreview(preset.primaryColour, preset.secondaryColour, preset.tertiaryColour), Color.white);
+                }, Core40kUtils.ThreeColourPreview(preset.primaryColour, preset.secondaryColour, preset.tertiaryColour, 3), Color.white);
                 list.Add(menuOption);
             }
                 

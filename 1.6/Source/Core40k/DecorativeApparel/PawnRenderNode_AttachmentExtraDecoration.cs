@@ -12,13 +12,15 @@ public class PawnRenderNode_AttachmentExtraDecoration : PawnRenderNode
 
     public override Graphic GraphicFor(Pawn pawn)
     {
-        Props.color ??= Color.white;
+        var propsMulti = (PawnRenderNodePropertiesMultiColor)Props;
 
-        if (ExtraDecorationDef.useMask)
+        if (!ExtraDecorationDef.useMask)
         {
-            return GraphicDatabase.Get<Graphic_Multi>(Props.texPath, ShaderFor(pawn), Props.drawSize, Props.color.Value, Props.color.Value, null, Props.texPath + "_mask");
+            return GraphicDatabase.Get<Graphic_Multi>(Props.texPath, ShaderFor(pawn), Props.drawSize, Props.color ?? Color.white);
         }
             
-        return GraphicDatabase.Get<Graphic_Multi>(Props.texPath, ShaderFor(pawn), Props.drawSize, Props.color.Value);
+        var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
+        return MultiColorUtils.GetGraphic<Graphic_Multi>(propsMulti.texPath, shader, propsMulti.drawSize, propsMulti.color ?? Color.white, propsMulti.colorTwo ?? Color.white, propsMulti.colorThree ?? Color.white, null, Props.texPath + "_mask");
+
     }
 }

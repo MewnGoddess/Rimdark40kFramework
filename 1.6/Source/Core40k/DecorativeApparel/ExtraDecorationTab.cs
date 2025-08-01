@@ -114,35 +114,155 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                 bottomRect.height /= 3;
                 bottomRect = bottomRect.ContractedBy(2f);
                 
-                colourButtonExtraSize = bottomRect.height;
-                    
-                var colourSelection = new Rect(bottomRect);
-                colourSelection.width /= 3;
-                colourSelection.width -= 3;
-                Widgets.DrawMenuSection(colourSelection);
-                colourSelection = colourSelection.ContractedBy(1f);
-                Widgets.DrawRectFast(colourSelection, apparel.ExtraDecorations[extraDecorationDefs[i1]].Color);
-                TooltipHandler.TipRegion(colourSelection, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
-                if (Widgets.ButtonInvisible(colourSelection))
+                colourButtonExtraSize = bottomRect.height*2;
+
+                Rect colourSelection;
+                Rect colourSelectionTwo;
+                Rect colourSelectionThree;
+                Rect presetSelection;
+                
+                switch (extraDecorationDefs[i].colorAmount)
                 {
-                    Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].Color, ( newColour ) =>
-                    {
-                        apparel.UpdateDecorationColour(extraDecorationDefs[i1], newColour);
-                    } ) );
+                    case 1:
+                        colourSelection = new Rect(bottomRect);
+                        presetSelection = new Rect(colourSelection)
+                        {
+                            y = colourSelection.yMax
+                        };
+                        
+                        colourSelection = colourSelection.ContractedBy(2f);
+                        Widgets.DrawMenuSection(colourSelection);
+                        colourSelection = colourSelection.ContractedBy(1f);
+                        Widgets.DrawRectFast(colourSelection, apparel.ExtraDecorations[extraDecorationDefs[i1]].Color);
+                        TooltipHandler.TipRegion(colourSelection, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+                        if (Widgets.ButtonInvisible(colourSelection))
+                        {
+                            Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].Color, ( newColour ) =>
+                            {
+                                apparel.UpdateDecorationColourOne(extraDecorationDefs[i1], newColour);
+                            } ) );
+                        }
+                        
+                        presetSelection = presetSelection.ContractedBy(1f);
+                        TooltipHandler.TipRegion(presetSelection, "BEWH.Framework.ExtraDecoration.PresetDesc".Translate());
+                        if (Widgets.ButtonText(presetSelection, "BEWH.Framework.ExtraDecoration.Preset".Translate()))
+                        {
+                            SelectPreset(apparel, extraDecorationDefs[i1]);
+                        }
+                        break;
+                    case 2:
+                        colourSelection = new Rect(bottomRect);
+                        presetSelection = new Rect(colourSelection)
+                        {
+                            y = colourSelection.yMax
+                        };
+                        colourSelection.width /= 2;
+                        colourSelectionTwo = new Rect(colourSelection)
+                        {
+                            x = colourSelection.xMax
+                        };
+
+                        colourSelection = colourSelection.ContractedBy(2f);
+                        Widgets.DrawMenuSection(colourSelection);
+                        colourSelection = colourSelection.ContractedBy(1f);
+                        Widgets.DrawRectFast(colourSelection, apparel.ExtraDecorations[extraDecorationDefs[i1]].Color);
+                        TooltipHandler.TipRegion(colourSelection, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+                        if (Widgets.ButtonInvisible(colourSelection))
+                        {
+                            Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].Color, ( newColour ) =>
+                            {
+                                apparel.UpdateDecorationColourOne(extraDecorationDefs[i1], newColour);
+                            } ) );
+                        }
+                        
+                        colourSelectionTwo = colourSelectionTwo.ContractedBy(2f);
+                        Widgets.DrawMenuSection(colourSelectionTwo);
+                        colourSelectionTwo = colourSelectionTwo.ContractedBy(1f);
+                        Widgets.DrawRectFast(colourSelectionTwo, apparel.ExtraDecorations[extraDecorationDefs[i1]].ColorTwo);
+                        TooltipHandler.TipRegion(colourSelectionTwo, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+                        if (Widgets.ButtonInvisible(colourSelectionTwo))
+                        {
+                            Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].ColorTwo, ( newColour ) =>
+                            {
+                                apparel.UpdateDecorationColourTwo(extraDecorationDefs[i1], newColour);
+                            } ) );
+                        }
+                        
+                        presetSelection = presetSelection.ContractedBy(1f);
+                        TooltipHandler.TipRegion(presetSelection, "BEWH.Framework.ExtraDecoration.PresetDesc".Translate());
+                        if (Widgets.ButtonText(presetSelection, "BEWH.Framework.ExtraDecoration.Preset".Translate()))
+                        {
+                            SelectPreset(apparel, extraDecorationDefs[i1]);
+                        }
+                        break;
+                    case 3:
+                        colourSelection = new Rect(bottomRect);
+                        presetSelection = new Rect(colourSelection)
+                        {
+                            y = colourSelection.yMax
+                        };
+                        colourSelection.width /= 3;
+                        colourSelectionTwo = new Rect(colourSelection)
+                        {
+                            x = colourSelection.xMax
+                        };
+                        colourSelectionThree = new Rect(colourSelectionTwo)
+                        {
+                            x = colourSelectionTwo.xMax
+                        };
+
+                        colourSelection = colourSelection.ContractedBy(2f);
+                        Widgets.DrawMenuSection(colourSelection);
+                        colourSelection = colourSelection.ContractedBy(1f);
+                        Widgets.DrawRectFast(colourSelection, apparel.ExtraDecorations[extraDecorationDefs[i1]].Color);
+                        TooltipHandler.TipRegion(colourSelection, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+                        if (Widgets.ButtonInvisible(colourSelection))
+                        {
+                            Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].Color, ( newColour ) =>
+                            {
+                                apparel.UpdateDecorationColourOne(extraDecorationDefs[i1], newColour);
+                            } ) );
+                        }
+                        
+                        colourSelectionTwo = colourSelectionTwo.ContractedBy(2f);
+                        Widgets.DrawMenuSection(colourSelectionTwo);
+                        colourSelectionTwo = colourSelectionTwo.ContractedBy(1f);
+                        Widgets.DrawRectFast(colourSelectionTwo, apparel.ExtraDecorations[extraDecorationDefs[i1]].ColorTwo);
+                        TooltipHandler.TipRegion(colourSelectionTwo, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+                        if (Widgets.ButtonInvisible(colourSelectionTwo))
+                        {
+                            Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].ColorTwo, ( newColour ) =>
+                            {
+                                apparel.UpdateDecorationColourTwo(extraDecorationDefs[i1], newColour);
+                            } ) );
+                        }
+                        
+                        colourSelectionThree = colourSelectionThree.ContractedBy(2f);
+                        Widgets.DrawMenuSection(colourSelectionThree);
+                        colourSelectionThree = colourSelectionThree.ContractedBy(1f);
+                        Widgets.DrawRectFast(colourSelectionThree, apparel.ExtraDecorations[extraDecorationDefs[i1]].ColorThree);
+                        TooltipHandler.TipRegion(colourSelectionThree, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+                        if (Widgets.ButtonInvisible(colourSelectionThree))
+                        {
+                            Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].ColorThree, ( newColour ) =>
+                            {
+                                apparel.UpdateDecorationColourThree(extraDecorationDefs[i1], newColour);
+                            } ) );
+                        }
+                        
+                        presetSelection = presetSelection.ContractedBy(1f);
+                        TooltipHandler.TipRegion(presetSelection, "BEWH.Framework.ExtraDecoration.PresetDesc".Translate());
+                        if (Widgets.ButtonText(presetSelection, "BEWH.Framework.ExtraDecoration.Preset".Translate()))
+                        {
+                            SelectPreset(apparel, extraDecorationDefs[i1]);
+                        }
+                        break;
+                    default:
+                        Log.Warning("Wrong setup in " + extraDecorationDefs[i] + "colorAmount is more than 3 or less than 1");
+                        break;
                 }
-                    
-                var presetSelection = new Rect(bottomRect)
-                {
-                    x = colourSelection.xMax + 6f,
-                };
-                presetSelection.width *= 0.66f;
-                presetSelection.width -= 3f;;
-                presetSelection = presetSelection.ExpandedBy(1f);
-                TooltipHandler.TipRegion(presetSelection, "BEWH.Framework.ExtraDecoration.PresetDesc".Translate());
-                if (Widgets.ButtonText(presetSelection, "BEWH.Framework.ExtraDecoration.Preset".Translate()))
-                {
-                    SelectPreset(apparel, extraDecorationDefs[i1]);
-                }
+                
+                
             }
             
             if (i != 0 && (i+1) % RowAmount == 0)
@@ -178,8 +298,10 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         {
             var menuOption = new FloatMenuOption(preset.label, delegate
             {
-                apparel.UpdateDecorationColour(extraDecoration, preset.colour);
-            }, Core40kUtils.ColourPreview(preset.colour), Color.white);
+                apparel.UpdateDecorationColourOne(extraDecoration, preset.colour);
+                apparel.UpdateDecorationColourTwo(extraDecoration, preset.colourTwo ?? Color.white);
+                apparel.UpdateDecorationColourThree(extraDecoration, preset.colourThree ?? Color.white);
+            }, Core40kUtils.ThreeColourPreview(preset.colour, preset.colourTwo, preset.colourThree, extraDecoration.colorAmount), Color.white);
             list.Add(menuOption);
         }
 
@@ -187,10 +309,20 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         {
             var menuOptionMatch = new FloatMenuOption("BEWH.Framework.ExtraDecoration.UseArmourColour".Translate(), delegate
             {
-                apparel.UpdateDecorationColour(extraDecoration, apparel.DrawColor);
-            }, Core40kUtils.ColourPreview(apparel.DrawColor), Color.white);
+                apparel.SetArmorColors(extraDecoration);
+            }, Core40kUtils.ThreeColourPreview(apparel.DrawColor, apparel.DrawColorTwo, apparel.DrawColorThree, extraDecoration.colorAmount), Color.white);
             list.Add(menuOptionMatch);
         }
+
+        var col1 = extraDecoration.defaultColour ?? (extraDecoration.useArmorColourAsDefault ? apparel.DrawColor : Color.white);
+        var col2 = extraDecoration.defaultColourTwo ?? (extraDecoration.useArmorColourAsDefault ? apparel.DrawColorTwo : Color.white);
+        var col3 = extraDecoration.defaultColourThree ?? (extraDecoration.useArmorColourAsDefault ? apparel.DrawColorThree : Color.white);
+        
+        var menuOptionDefault = new FloatMenuOption("BEWH.Framework.ExtraDecoration.SetDefaultColor".Translate(), delegate
+        {
+            apparel.SetDefaultColors(extraDecoration);
+        }, Core40kUtils.ThreeColourPreview(col1, col2, col3,extraDecoration.colorAmount), Color.white);
+        list.Add(menuOptionDefault);
                 
         if (list.NullOrEmpty())
         {

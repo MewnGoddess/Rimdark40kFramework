@@ -198,7 +198,7 @@ public class Dialog_PaintApparelMultiColor : Window
                         item.SetTertiaryColor(preset.tertiaryColour);
                         recache = true;
                             
-                    }, Core40kUtils.ThreeColourPreview(preset.primaryColour, preset.secondaryColour, preset.tertiaryColour), Color.white);
+                    }, Core40kUtils.ThreeColourPreview(preset.primaryColour, preset.secondaryColour, preset.tertiaryColour, preset.colorAmount), Color.white);
                     list.Add(menuOption);
                 }
                     
@@ -211,7 +211,7 @@ public class Dialog_PaintApparelMultiColor : Window
                         item.SetTertiaryColor(preset.tertiaryColour);
                         recache = true;
                             
-                    }, Core40kUtils.ThreeColourPreview(preset.primaryColour, preset.secondaryColour, preset.tertiaryColour), Color.white);
+                    }, Core40kUtils.ThreeColourPreview(preset.primaryColour, preset.secondaryColour, preset.tertiaryColour, 3), Color.white);
                     list.Add(menuOption);
                 }
                 
