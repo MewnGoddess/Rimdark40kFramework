@@ -124,13 +124,15 @@ public class DecorativeApparelMultiColor : ApparelMultiColor
 
     public override void SetOriginals()
     {
-        originalExtraDecorations = extraDecorations;
+        originalExtraDecorations = new Dictionary<ExtraDecorationDef, ExtraDecorationSettings>();
+        originalExtraDecorations.AddRange(extraDecorations);
         base.SetOriginals();
     }
 
     public override void Reset()
     {
-        extraDecorations = originalExtraDecorations;
+        extraDecorations = new Dictionary<ExtraDecorationDef, ExtraDecorationSettings>();
+        extraDecorations.AddRange(originalExtraDecorations);
         base.Reset();
     }
 
