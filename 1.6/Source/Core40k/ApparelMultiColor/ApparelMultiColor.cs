@@ -46,6 +46,17 @@ public class ApparelMultiColor : Apparel
         } 
     }
     
+    public override Graphic Graphic
+    {
+        get
+        {
+            var path = def.graphicData.texPath;
+            var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
+            var graphic = MultiColorUtils.GetGraphic<Graphic_Single>(path, shader, def.graphicData.drawSize*0.8f, DrawColor, DrawColorTwo, DrawColorThree, def.graphicData, maskDef?.maskPath);
+            return graphic;
+        }
+    }
+    
     public void SetInitialColours(Color colorOne, Color colorTwo, Color? colorThree)
     {
         drawColorOne = colorOne;
