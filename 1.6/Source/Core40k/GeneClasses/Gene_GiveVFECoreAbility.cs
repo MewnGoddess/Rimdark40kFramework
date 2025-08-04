@@ -10,9 +10,9 @@ public class Gene_GiveVEFAbility : Gene
         var comp = pawn.GetComp<CompAbilities>();
         if (comp != null)
         {
-            if (def.HasModExtension<DefModExtension_GivesVFEAbility>())
+            if (def.HasModExtension<DefModExtension_GivesVEFAbility>())
             {
-                var defModExtension = def.GetModExtension<DefModExtension_GivesVFEAbility>();
+                var defModExtension = def.GetModExtension<DefModExtension_GivesVEFAbility>();
                 foreach (var abilityDef in defModExtension.abilityDefs)
                 {
                     comp.GiveAbility(abilityDef);
@@ -28,9 +28,9 @@ public class Gene_GiveVEFAbility : Gene
         var comp = pawn.GetComp<CompAbilities>();
         if (comp != null)
         {
-            if (def.HasModExtension<DefModExtension_GivesVFEAbility>())
+            if (def.HasModExtension<DefModExtension_GivesVEFAbility>())
             {
-                var defModExtension = def.GetModExtension<DefModExtension_GivesVFEAbility>();
+                var defModExtension = def.GetModExtension<DefModExtension_GivesVEFAbility>();
                 for (var i = 0; i < comp.LearnedAbilities.Count; i++)
                 {
                     foreach (var abilityDef in defModExtension.abilityDefs)
