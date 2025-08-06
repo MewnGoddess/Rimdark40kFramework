@@ -44,14 +44,19 @@ public class WeaponMultiColor : ThingWithComps
     public override void SpawnSetup(Map map, bool respawningAfterLoad)
     {
         base.SpawnSetup(map, respawningAfterLoad);
-        SetInitialColours(def.GetColorForStuff(Stuff));
+        if (initialColourSet)
+        {
+            return;
+        }
+        SetInitialColours();
     }
 
-    public void SetInitialColours(Color colorOne, Color? colorTwo = null, Color? colorThree = null)
+    public void SetInitialColours()
     {
-        drawColorOne = colorOne;
-        drawColorTwo = colorTwo ?? Color.white;
-        drawColorThree = colorThree ?? Color.white;
+        var defMod = def.GetModExtension<DefModExtension_WeaponMultiColor>();
+        drawColorOne = defMod?.defaultPrimaryColor ?? (def.IsStuff ? def.GetColorForStuff(Stuff) : Color.white);
+        drawColorTwo = defMod?.defaultSecondaryColor ?? Color.white;
+        drawColorThree = defMod?.defaultTertiaryColor ?? Color.white;
         SetOriginals();
         initialColourSet = true;
     }

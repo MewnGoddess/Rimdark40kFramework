@@ -181,8 +181,8 @@
     <Compile Include="DefModExtensions\DefModExtension_RequiresGene.cs" />
     <Compile Include="Recipes\Recipe_InstallImplantRequiringHediff.cs" />
     <Compile Include="Recipes\Recipe_InstallImplantRequiringGene.cs" />
+    <Compile Include="WeaponMultiColor\DefModExtension_WeaponMultiColor.cs" />
     <Compile Include="WeaponMultiColor\Dialog_PaintWeaponMultiColor.cs" />
-    <Compile Include="WeaponMultiColor\HarmonyPatch_WeaponMultiColorPatch.cs" />
     <Compile Include="WeaponMultiColor\HarmonyPatch_WeaponMultiColorSelectableOnStylingStation.cs" />
     <Compile Include="WeaponMultiColor\JobDriver_OpenStylingStationDialogForWeaponMultiColor.cs" />
     <Compile Include="WeaponMultiColor\WeaponMultiColor.cs" />
