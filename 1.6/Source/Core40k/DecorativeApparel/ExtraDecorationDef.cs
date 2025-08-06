@@ -27,6 +27,8 @@ public class ExtraDecorationDef : DecorationDef
     public bool appliesToAll = false;
 
     public bool useMask = false;
+
+    public int colorAmount = 1;
         
     public bool drawInHeadSpace = false;
     

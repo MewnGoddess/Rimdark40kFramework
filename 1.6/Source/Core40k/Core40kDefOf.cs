@@ -8,7 +8,10 @@ public static class Core40kDefOf
 {
     public static DamageDef BEWH_WarpFlame;
 
-    public static JobDef BEWH_OpenStylingStationDialogForSecondColour;
+    public static JobDef BEWH_OpenStylingStationDialogForApparelMultiColor;
+    public static JobDef BEWH_OpenStylingStationDialogForWeaponMultiColor;
+
+    public static ShaderTypeDef BEWH_CutoutThreeColor;
 
     static Core40kDefOf()
     {

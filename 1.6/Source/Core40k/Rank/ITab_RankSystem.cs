@@ -95,7 +95,7 @@ public class ITab_RankSystem : ITab
         rankPos.Clear();
         gameCompRankInfo ??= Current.Game.GetComponent<GameComponent_RankInfo>();
         UpdateRankCategoryList();
-        if (compRankInfo.LastOpenedRankCategory != null)
+        if (compRankInfo.LastOpenedRankCategory != null && compRankInfo.LastOpenedRankCategory.RankCategoryUnlockedFor(SelPawn))
         {
             currentlySelectedRankCategory = compRankInfo.LastOpenedRankCategory;
         }

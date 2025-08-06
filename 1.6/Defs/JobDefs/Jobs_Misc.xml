@@ -2,9 +2,15 @@
 <Defs>
 
   <JobDef>
-    <defName>BEWH_OpenStylingStationDialogForSecondColour</defName>
-    <driverClass>Core40k.JobDriver_OpenStylingStationDialogForSecondColour</driverClass>
-    <reportString>Changing secondary color at TargetA.</reportString>
+    <defName>BEWH_OpenStylingStationDialogForApparelMultiColor</defName>
+    <driverClass>Core40k.JobDriver_OpenStylingStationDialogForApparelMultiColor</driverClass>
+    <reportString>Changing apparel colors at TargetA.</reportString>
+  </JobDef>
+
+  <JobDef>
+    <defName>BEWH_OpenStylingStationDialogForWeaponMultiColor</defName>
+    <driverClass>Core40k.JobDriver_OpenStylingStationDialogForWeaponMultiColor</driverClass>
+    <reportString>Changing weapon colors at TargetA.</reportString>
   </JobDef>
 
 </Defs>

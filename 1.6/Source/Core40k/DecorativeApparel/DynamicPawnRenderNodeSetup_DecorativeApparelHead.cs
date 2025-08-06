@@ -17,12 +17,12 @@ public class DynamicPawnRenderNodeSetup_DecorativeApparelHead : DynamicPawnRende
             yield break;
         }
         
-        var decorativeApparels = pawn.apparel.WornApparel.Where(apparel => apparel is HeadDecorativeApparelColourTwo).Cast<HeadDecorativeApparelColourTwo>();
+        var decorativeApparels = pawn.apparel.WornApparel.Where(apparel => apparel is HeadDecorativeApparelMultiColor).Cast<HeadDecorativeApparelMultiColor>();
         foreach (var decorativeApparel in decorativeApparels)
         {
-            foreach (var decoration in ((DecorativeApparelColourTwo)decorativeApparel).ExtraDecorations)
+            foreach (var decoration in ((DecorativeApparelMultiColor)decorativeApparel).ExtraDecorations)
             {
-                var pawnRenderNodeProperty = new PawnRenderNodeProperties
+                var pawnRenderNodeProperty = new PawnRenderNodePropertiesMultiColor
                 {
                     nodeClass = typeof(PawnRenderNode_AttachmentExtraDecoration),
                     texPath = decoration.Key.drawnTextureIconPath,
@@ -31,6 +31,8 @@ public class DynamicPawnRenderNodeSetup_DecorativeApparelHead : DynamicPawnRende
                     drawSize = decoration.Key.drawSize,
                     flipGraphic = decoration.Value.Flipped,
                     color = decoration.Value.Color,
+                    colorTwo = decoration.Value.ColorTwo,
+                    colorThree = decoration.Value.ColorThree,
                     parentTagDef = PawnRenderNodeTagDefOf.Head,
                     workerClass = typeof(PawnRenderNodeWorker_AttachmentExtraDecorationHead),
                 };

@@ -11,9 +11,9 @@ public class PawnRenderNodeWorker_AttachmentExtraDecorationBody : PawnRenderNode
     {
         var pawn = parms.pawn;
             
-        var apparelColourTwo = (BodyDecorativeApparelColourTwo)pawn.apparel.WornApparel.FirstOrDefault(wornApparel => wornApparel is BodyDecorativeApparelColourTwo);
+        var apparelMultiColor = (BodyDecorativeApparelMultiColor)pawn.apparel.WornApparel.FirstOrDefault(wornApparel => wornApparel is BodyDecorativeApparelMultiColor);
 
-        var decoration = apparelColourTwo.ExtraDecorations.Keys.FirstOrFallback(def => def.drawnTextureIconPath == node.Props.texPath);
+        var decoration = apparelMultiColor.ExtraDecorations.Keys.FirstOrFallback(def => def.drawnTextureIconPath == node.Props.texPath);
             
         if (decoration == null)
         {

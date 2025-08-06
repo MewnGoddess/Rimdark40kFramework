@@ -33,7 +33,9 @@ public class DecorationDef : Def
         
     public float sortOrder = 0f;
         
-    public Color defaultColour = Color.white;
+    public Color? defaultColour;
+    public Color? defaultColourTwo;
+    public Color? defaultColourThree;
         
     public List<DecorationColourPresetDef> availablePresets = new List<DecorationColourPresetDef>();
         

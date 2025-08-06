@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Defs>
 
-    <Core40k.ApparelColourTwoTabDef>
+    <Core40k.ApparelMultiColorTabDef>
         <defName>BEWH_ExtraDecoration</defName>
         <label>Extra Decoration</label>
         <description>Extra deocration for armor.</description>
         <tabDrawerClass>Core40k.ExtraDecorationTab</tabDrawerClass>
-    </Core40k.ApparelColourTwoTabDef>
+    </Core40k.ApparelMultiColorTabDef>
 
 </Defs>

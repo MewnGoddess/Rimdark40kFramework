@@ -11,16 +11,20 @@ public class PresetData
 
     public bool flipped = false;
     public Color? colour = null;
+    public Color? colourTwo = null;
+    public Color? colourThree = null;
 
     public PresetData()
     {
     }
 
-    public PresetData(ExtraDecorationDef extraDecorationDef, bool flipped, Color colour)
+    public PresetData(ExtraDecorationDef extraDecorationDef, bool flipped, Color colour, Color colourTwo, Color colourThree)
     {
         this.extraDecorationDef = extraDecorationDef;
         this.flipped = flipped;
         this.colour = colour;
+        this.colourTwo = colourTwo;
+        this.colourThree = colourThree;
     }
 
     public void LoadDataFromXmlCustom(XmlNode xmlRoot)

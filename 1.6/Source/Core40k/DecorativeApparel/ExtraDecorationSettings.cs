@@ -6,11 +6,28 @@ namespace Core40k;
 public class ExtraDecorationSettings : IExposable
 {
     public Color Color = Color.white;
+    public Color ColorTwo = Color.white;
+    public Color ColorThree = Color.white;
     public bool Flipped = false;
+
+    public ExtraDecorationSettings()
+    {
+        
+    }
+
+    public ExtraDecorationSettings(ExtraDecorationSettings extraDecorationSettings)
+    {
+        Flipped = extraDecorationSettings.Flipped;
+        Color = extraDecorationSettings.Color;
+        ColorTwo = extraDecorationSettings.ColorTwo;
+        ColorThree = extraDecorationSettings.ColorThree;
+    }
     
     public virtual void ExposeData()
     {
         Scribe_Values.Look(ref Color, "Color");
+        Scribe_Values.Look(ref ColorTwo, "ColorTwo");
+        Scribe_Values.Look(ref ColorThree, "ColorThree");
         Scribe_Values.Look(ref Flipped, "Flipped");
     }
 }

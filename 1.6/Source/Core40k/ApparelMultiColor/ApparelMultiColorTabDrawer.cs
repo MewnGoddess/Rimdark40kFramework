@@ -3,7 +3,7 @@ using Verse;
 
 namespace Core40k;
 
-public class ApparelColourTwoTabDrawer
+public class ApparelMultiColorTabDrawer
 {
     public virtual void DrawTab(Rect rect, Pawn pawn, ref Vector2 apparelColorScrollPosition)
     {

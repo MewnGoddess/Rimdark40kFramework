@@ -13,22 +13,23 @@
   <BEWH.Framework.CommonKeyword.None>None</BEWH.Framework.CommonKeyword.None>
   <BEWH.Framework.CommonKeywords.ModSettings>mod settings</BEWH.Framework.CommonKeywords.ModSettings>
 
-  <!--=== Apparel Two ===-->
-  <BEWH.Framework.ApparelColourTwo.MainTab>Main</BEWH.Framework.ApparelColourTwo.MainTab>
+  <!--=== Apparel Multi Color ===-->
+  <BEWH.Framework.ApparelMultiColor.MainTab>Coloring</BEWH.Framework.ApparelMultiColor.MainTab>
 
-  <BEWH.Framework.ApparelColourTwo.PrimaryColor>Primary</BEWH.Framework.ApparelColourTwo.PrimaryColor>
-  <BEWH.Framework.ApparelColourTwo.SecondaryColor>Secondary</BEWH.Framework.ApparelColourTwo.SecondaryColor>
+  <BEWH.Framework.ApparelMultiColor.PrimaryColor>Primary</BEWH.Framework.ApparelMultiColor.PrimaryColor>
+  <BEWH.Framework.ApparelMultiColor.SecondaryColor>Secondary</BEWH.Framework.ApparelMultiColor.SecondaryColor>
+  <BEWH.Framework.ApparelMultiColor.TertiaryColor>Tertiary</BEWH.Framework.ApparelMultiColor.TertiaryColor>
 
-  <BEWH.Framework.ApparelColourTwo.SelectPreset>Select Preset</BEWH.Framework.ApparelColourTwo.SelectPreset>
-  <BEWH.Framework.ApparelColourTwo.EditPreset>Edit Presets</BEWH.Framework.ApparelColourTwo.EditPreset>
-  <BEWH.Framework.ApparelColourTwo.NewPreset>[New Preset]</BEWH.Framework.ApparelColourTwo.NewPreset>
-  <BEWH.Framework.ApparelColourTwo.EnterPresetName>Enter name of new preset</BEWH.Framework.ApparelColourTwo.EnterPresetName>
-  <BEWH.Framework.ApparelColourTwo.OverridePreset>Override {0} with currently selected colors</BEWH.Framework.ApparelColourTwo.OverridePreset>
-  <BEWH.Framework.ApparelColourTwo.PresetExists>Already exists!</BEWH.Framework.ApparelColourTwo.PresetExists>
+  <BEWH.Framework.ApparelMultiColor.SelectPreset>Select Preset</BEWH.Framework.ApparelMultiColor.SelectPreset>
+  <BEWH.Framework.ApparelMultiColor.EditPreset>Edit Presets</BEWH.Framework.ApparelMultiColor.EditPreset>
+  <BEWH.Framework.ApparelMultiColor.NewPreset>[New Preset]</BEWH.Framework.ApparelMultiColor.NewPreset>
+  <BEWH.Framework.ApparelMultiColor.EnterPresetName>Enter name of new preset</BEWH.Framework.ApparelMultiColor.EnterPresetName>
+  <BEWH.Framework.ApparelMultiColor.OverridePreset>Override {0} with currently selected colors</BEWH.Framework.ApparelMultiColor.OverridePreset>
+  <BEWH.Framework.ApparelMultiColor.PresetExists>Already exists!</BEWH.Framework.ApparelMultiColor.PresetExists>
 
-  <BEWH.Framework.ApparelColourTwo.ArmourDecorationFeature>Decorate armor</BEWH.Framework.ApparelColourTwo.ArmourDecorationFeature>
+  <BEWH.Framework.ApparelMultiColor.ArmourDecorationFeature>Decorate armor</BEWH.Framework.ApparelMultiColor.ArmourDecorationFeature>
 
-  <BEWH.Framework.ApparelColourTwo.ChooseCustomColour>Click to select custom color</BEWH.Framework.ApparelColourTwo.ChooseCustomColour>
+  <BEWH.Framework.ApparelMultiColor.ChooseCustomColour>Click to select custom color</BEWH.Framework.ApparelMultiColor.ChooseCustomColour>
 
   <BEWH.Framework.ExtraDecoration.BodyDecoration>Body Decorations</BEWH.Framework.ExtraDecoration.BodyDecoration>
   <BEWH.Framework.ExtraDecoration.HelmetDecoration>Helmet Decorations</BEWH.Framework.ExtraDecoration.HelmetDecoration>
@@ -36,6 +37,8 @@
   <BEWH.Framework.ExtraDecoration.RemoveAllDecorations>Remove All</BEWH.Framework.ExtraDecoration.RemoveAllDecorations>
 
   <BEWH.Framework.ExtraDecoration.UseArmourColour>Use Armor Color</BEWH.Framework.ExtraDecoration.UseArmourColour>
+  <BEWH.Framework.ExtraDecoration.SetDefaultColor>Set Default Colors</BEWH.Framework.ExtraDecoration.SetDefaultColor>
+
 
   <BEWH.Framework.ExtraDecoration.Preset>Preset</BEWH.Framework.ExtraDecoration.Preset>
   <BEWH.Framework.ExtraDecoration.PresetDesc>Select a color preset</BEWH.Framework.ExtraDecoration.PresetDesc>
@@ -45,6 +48,9 @@
 
   <BEWH.Framework.ExtraDecoration.Edit>Edit</BEWH.Framework.ExtraDecoration.Edit>
   <BEWH.Framework.ExtraDecoration.EditDesc>Create, overwrite or remove a preset</BEWH.Framework.ExtraDecoration.EditDesc>
+
+  <!--=== Weapon Multi Color ===-->
+  <BEWH.Framework.WeaponMultiColor.WeaponDecorationFeature>Decorate weapon</BEWH.Framework.WeaponMultiColor.WeaponDecorationFeature>
 
   <!--=== Rank System ===-->
   <BEWH.Framework.RankSystem.RankTab>Ranks</BEWH.Framework.RankSystem.RankTab>
@@ -96,6 +102,10 @@
   <BEWH.Framework.RankSystem.NoUnlockedRanksOfCategory>{0} does not have any ranks of category {1}</BEWH.Framework.RankSystem.NoUnlockedRanksOfCategory>
   <BEWH.Framework.RankSystem.RankTooHigh>{0} rank is too high to reset</BEWH.Framework.RankSystem.RankTooHigh>
 
+  <!--=== Rank System ===-->
+  <BEWH.Framework.AmmoChanger.GizmoInfo>Currently Equipped Ammo: {0}\n Click to change ammo type</BEWH.Framework.AmmoChanger.GizmoInfo>
+  <BEWH.Framework.AmmoChanger.CurrentlyEquipped>Currently Equipped</BEWH.Framework.AmmoChanger.CurrentlyEquipped>
+  <BEWH.Framework.AmmoChanger.MissingResearch>Missing Research: {0}</BEWH.Framework.AmmoChanger.MissingResearch>
 
   <!--=== Misc ===-->
   <!-- Unbreakable -->

@@ -12,7 +12,7 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
@@ -73,14 +73,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abilities\Ability_MapWideHediff.cs" />
-    <Compile Include="ApparelColourTwo\ApparelColourTwo.cs" />
-    <Compile Include="ApparelColourTwo\ApparelColourTwoTabDef.cs" />
-    <Compile Include="ApparelColourTwo\ApparelColourTwoTabDrawer.cs" />
-    <Compile Include="ApparelColourTwo\ColourPreset.cs" />
-    <Compile Include="ApparelColourTwo\ColourPresetDef.cs" />
-    <Compile Include="ApparelColourTwo\DecorationColourPresetDef.cs" />
-    <Compile Include="ApparelColourTwo\Dialog_EditColourPresets.cs" />
-    <Compile Include="ApparelColourTwo\Dialog_PaintSecondaryColour.cs" />
+    <Compile Include="ApparelMultiColor\ApparelMultiColor.cs" />
+    <Compile Include="ApparelMultiColor\ApparelMultiColorTabDef.cs" />
+    <Compile Include="ApparelMultiColor\ApparelMultiColorTabDrawer.cs" />
+    <Compile Include="ApparelMultiColor\ColourPreset.cs" />
+    <Compile Include="ApparelMultiColor\ColourPresetDef.cs" />
+    <Compile Include="ApparelMultiColor\DecorationColourPresetDef.cs" />
+    <Compile Include="ApparelMultiColor\Dialog_EditColourPresets.cs" />
+    <Compile Include="ApparelMultiColor\Dialog_PaintApparelMultiColor.cs" />
+    <Compile Include="ApparelMultiColor\HarmonyPatch_ApparelMultiColorPatch.cs" />
+    <Compile Include="ApparelMultiColor\HarmonyPatch_ApparelMultiColorSelectableOnStylingStation.cs" />
+    <Compile Include="ApparelMultiColor\JobDriver_OpenStylingStationDialogForApparelMultiColor.cs" />
+    <Compile Include="ApparelMultiColor\MaskDef.cs" />
+    <Compile Include="ChangeableBullets\CompProperties_AmmoChanger.cs" />
+    <Compile Include="ChangeableBullets\Comp_AmmoChanger.cs" />
+    <Compile Include="ChangeableBullets\DefModExtension_AmmoChanger.cs" />
+    <Compile Include="ChangeableBullets\Gizmo_AmmoChanger.cs" />
+    <Compile Include="ChangeableBullets\Verb_ShootChangeableBullets.cs" />
     <Compile Include="ColourPicker\Dialog_ColourPicker.cs" />
     <Compile Include="ColourPicker\RecentColours.cs" />
     <Compile Include="ColourPicker\TextField.cs" />
@@ -104,8 +113,8 @@
     <Compile Include="DataStructs\PresetData.cs" />
     <Compile Include="DataStructs\TraitData.cs" />
     <Compile Include="Debug\DebugActions.cs" />
-    <Compile Include="DecorativeApparel\BodyDecorativeApparelColourTwo.cs" />
-    <Compile Include="DecorativeApparel\DecorativeApparelColourTwo.cs" />
+    <Compile Include="DecorativeApparel\BodyDecorativeApparelMultiColor.cs" />
+    <Compile Include="DecorativeApparel\DecorativeApparelMultiColor.cs" />
     <Compile Include="DecorativeApparel\DecorationDef.cs" />
     <Compile Include="DecorativeApparel\DefModExtension_ApplyStandardDecorations.cs" />
     <Compile Include="DecorativeApparel\DefModExtension_ForcesBodyType.cs" />
@@ -118,7 +127,8 @@
     <Compile Include="DecorativeApparel\ExtraDecorationPreset.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationSettings.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationTab.cs" />
-    <Compile Include="DecorativeApparel\HeadDecorativeApparelColourTwo.cs" />
+    <Compile Include="DecorativeApparel\HeadDecorativeApparelMultiColor.cs" />
+    <Compile Include="DecorativeApparel\PawnRenderNodePropertiesMultiColor.cs" />
     <Compile Include="DecorativeApparel\PawnRenderNodeWorker_AttachmentExtraDecorationBody.cs" />
     <Compile Include="DecorativeApparel\PawnRenderNodeWorker_AttachmentExtraDecorationHead.cs" />
     <Compile Include="DecorativeApparel\PawnRenderNode_AttachmentExtraDecoration.cs" />
@@ -131,21 +141,21 @@
     <Compile Include="DefModExtensions\DefModExtension_DontPlaceProduct.cs" />
     <Compile Include="DefModExtensions\DefModExtension_HolyDamageExtension.cs" />
     <Compile Include="DefModExtensions\DefModExtension_InheritableArchite.cs" />
+    <Compile Include="DefModExtensions\DefModExtension_LockedByResearch.cs" />
     <Compile Include="GeneClasses\Gene_AddRandomGeneAndOrTraitByWeight.cs" />
     <Compile Include="GeneClasses\Gene_DisabledBy.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_AddedWorldCarryCapacityPatch.cs" />
-    <Compile Include="HarmonyPatches\HarmonyPatch_ApparelColourTwoPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_CalculateAllowedRankLimitOnArrestPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_CalculateAllowedRankLimitOnRecruitPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_DontPlaceProductPatch.cs" />
-    <Compile Include="HarmonyPatches\HarmonyPatch_ColourTwoSelectableOnStylingStation.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_GetExplanationUnfinalizedFromRankPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_GetValueUnfinalizedFromRankPatch.cs" />
+    <Compile Include="HarmonyPatches\HarmonyPatch_LockedByResearch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_PopulateMutableStatsWithRankStatsPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_QualityCreatedBoostFromGenePatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_RankLimitResurrectionReAdd.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_SpecificInheritableArchiteGenes.cs" />
-    <Compile Include="JobDriver\JobDriver_OpenStylingStationDialogForSecondColour.cs" />
+    <Compile Include="MultiColorUtils.cs" />
     <Compile Include="PlaceWorkers\PlaceWorker_OnlyOnePerMap.cs" />
     <Compile Include="Rank\CompProperties_RankInfo.cs" />
     <Compile Include="Rank\CompRankInfo.cs" />
@@ -171,6 +181,11 @@
     <Compile Include="DefModExtensions\DefModExtension_RequiresGene.cs" />
     <Compile Include="Recipes\Recipe_InstallImplantRequiringHediff.cs" />
     <Compile Include="Recipes\Recipe_InstallImplantRequiringGene.cs" />
+    <Compile Include="WeaponMultiColor\Dialog_PaintWeaponMultiColor.cs" />
+    <Compile Include="WeaponMultiColor\HarmonyPatch_WeaponMultiColorPatch.cs" />
+    <Compile Include="WeaponMultiColor\HarmonyPatch_WeaponMultiColorSelectableOnStylingStation.cs" />
+    <Compile Include="WeaponMultiColor\JobDriver_OpenStylingStationDialogForWeaponMultiColor.cs" />
+    <Compile Include="WeaponMultiColor\WeaponMultiColor.cs" />
     <Compile Include="WeightedSelection.cs" />
     <Compile Include="DefModExtensions\DefModExtension_UntradeablePawn.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_NoSlavesPatch.cs" />

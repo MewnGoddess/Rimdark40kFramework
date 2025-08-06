@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions.Must;
 using Verse;
 
 namespace Core40k;
@@ -42,31 +43,39 @@ public static class Core40kUtils
     }
         
     //Colour Preview
-    public static Texture2D TwoColourPreview(Color primaryColor, Color secondaryColor)
+    public static Texture2D ThreeColourPreview(Color primaryColor, Color? secondaryColor, Color? tertiaryColor, int colorAmount)
     {
-        var texture2D = new Texture2D(2, 2)
+        var texture2D = new Texture2D(3,3)
         {
             name = "SolidColorTex-" + primaryColor + secondaryColor
         };
         texture2D.SetPixel(0, 0, primaryColor);
         texture2D.SetPixel(0, 1, primaryColor);
-        texture2D.SetPixel(1, 0, secondaryColor);
-        texture2D.SetPixel(1, 1, secondaryColor);
+        texture2D.SetPixel(0, 2, primaryColor);
+
+        var secondRowPixel = primaryColor;
+        var thirdRowPixel = primaryColor;
+        
+        if (secondaryColor.HasValue && secondaryColor.Value.a != 0 && colorAmount > 1)
+        {
+            secondRowPixel = secondaryColor.Value;
+            thirdRowPixel = secondaryColor.Value;
+        }
+        if (tertiaryColor.HasValue && tertiaryColor.Value.a != 0 && colorAmount > 2)
+        {
+            thirdRowPixel = tertiaryColor.Value;
+        }
+        
+        texture2D.SetPixel(1, 0, secondRowPixel);
+        texture2D.SetPixel(1, 1, secondRowPixel);
+        texture2D.SetPixel(1, 2, secondRowPixel);
+        texture2D.SetPixel(2, 0, thirdRowPixel);
+        texture2D.SetPixel(2, 1, thirdRowPixel);
+        texture2D.SetPixel(2, 2, thirdRowPixel);
         texture2D.wrapMode = TextureWrapMode.Clamp;
         texture2D.filterMode = FilterMode.Bilinear;
         texture2D.Apply();
-            
-        return texture2D;
-    }
-    public static Texture2D ColourPreview(Color primaryColor)
-    {
-        var texture2D = new Texture2D(1, 1)
-        {
-            name = "SolidColorTex-" + primaryColor
-        };
-        texture2D.SetPixel(0, 0, primaryColor);
-        texture2D.Apply();
-            
+
         return texture2D;
     }
 }
