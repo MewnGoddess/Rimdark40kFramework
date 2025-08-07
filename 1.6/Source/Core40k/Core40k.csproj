@@ -79,10 +79,12 @@
     <Compile Include="ApparelMultiColor\ColourPreset.cs" />
     <Compile Include="ApparelMultiColor\ColourPresetDef.cs" />
     <Compile Include="ApparelMultiColor\DecorationColourPresetDef.cs" />
+    <Compile Include="ApparelMultiColor\DefModExtension_ForcesBodyType.cs" />
     <Compile Include="ApparelMultiColor\Dialog_EditColourPresets.cs" />
     <Compile Include="ApparelMultiColor\Dialog_PaintApparelMultiColor.cs" />
     <Compile Include="ApparelMultiColor\HarmonyPatch_ApparelMultiColorPatch.cs" />
     <Compile Include="ApparelMultiColor\HarmonyPatch_ApparelMultiColorSelectableOnStylingStation.cs" />
+    <Compile Include="ApparelMultiColor\HarmonyPatch_HideBodyPatch.cs" />
     <Compile Include="ApparelMultiColor\JobDriver_OpenStylingStationDialogForApparelMultiColor.cs" />
     <Compile Include="ApparelMultiColor\MaskDef.cs" />
     <Compile Include="ChangeableBullets\CompProperties_AmmoChanger.cs" />
@@ -118,7 +120,6 @@
     <Compile Include="DecorativeApparel\DecorativeApparelMultiColor.cs" />
     <Compile Include="DecorativeApparel\DecorationDef.cs" />
     <Compile Include="DecorativeApparel\DefModExtension_ApplyStandardDecorations.cs" />
-    <Compile Include="DecorativeApparel\DefModExtension_ForcesBodyType.cs" />
     <Compile Include="DecorativeApparel\Dialog_EditExtraDecorationPresets.cs" />
     <Compile Include="DecorativeApparel\DynamicPawnRenderNodeSetup_DecorativeApparelBody.cs" />
     <Compile Include="DecorativeApparel\DynamicPawnRenderNodeSetup_DecorativeApparelHead.cs" />

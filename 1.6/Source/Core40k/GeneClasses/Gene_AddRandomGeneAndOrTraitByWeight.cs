@@ -74,22 +74,15 @@ public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
         {
             return;
         }
-
-        var weightedSelection = new WeightedSelection<TraitData>();
-        var possibleTraits = defMod.possibleTraitsToGive.Where(g => !pawn.story.traits.HasTrait(g.Key.traitDef, g.Key.degree)).ToList();
+        
+        var possibleTraits = defMod.possibleTraitsToGive.Where(g => !pawn.story.traits.HasTrait(g.traitDef, g.degree)).ToList();
 
         if (possibleTraits.NullOrEmpty())
         {
             return;
         }
-
-        foreach (var trait in possibleTraits)
-        {
-            weightedSelection.AddEntry(trait.Key, trait.Value);
-        }
-
-        var result = weightedSelection.GetRandom();
-
+        var result = possibleTraits.RandomElement();
+        
         chosenTrait = result.traitDef;
 
         chosenTraitDegree = result.degree;

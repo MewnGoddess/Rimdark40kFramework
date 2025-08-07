@@ -6,7 +6,7 @@ namespace Core40k;
 
 public class DefModExtension_AddRandomTraitByWeight : DefModExtension
 {
-    public Dictionary<TraitData, float> possibleTraitsToGive = new Dictionary<TraitData, float>();
+    public List<TraitData> possibleTraitsToGive = new List<TraitData>();
 
     public int chanceToGrantTrait = 100;
 }

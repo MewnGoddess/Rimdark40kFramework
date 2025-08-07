@@ -31,6 +31,12 @@ public static class ApparelMultiColorPatch
             rec = new ApparelGraphicRecord(null, null);
             return false;
         }
+
+        if (apparel.def.GetModExtension<DefModExtension_ForcesBodyType>()?.forcedBodyType != null)
+        {
+            bodyType = apparel.def.GetModExtension<DefModExtension_ForcesBodyType>().forcedBodyType; //Might need other places to patch check vatgrown hate
+        }
+        
         var path = ((apparel.def.apparel.LastLayer != ApparelLayerDefOf.Overhead && apparel.def.apparel.LastLayer != ApparelLayerDefOf.EyeCover && !apparel.RenderAsPack() && apparel.WornGraphicPath != BaseContent.PlaceholderImagePath && apparel.WornGraphicPath != BaseContent.PlaceholderGearImagePath) ? (apparel.WornGraphicPath + "_" + bodyType.defName) : apparel.WornGraphicPath);
 
         var apparelMultiColor = (ApparelMultiColor)apparel;
