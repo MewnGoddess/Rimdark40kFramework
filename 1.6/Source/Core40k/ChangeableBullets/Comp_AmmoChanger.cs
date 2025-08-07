@@ -10,11 +10,22 @@ public class Comp_AmmoChanger : CompEquippable
 
     public List<ThingDef> AvailableProjectiles => Props.availableProjectiles;
 
+    private ThingDef nextProjectile;
     private ThingDef currentlySelectedProjectile;
-    public ThingDef CurrentlySelectedProjectile
+    public ThingDef CurrentlySelectedProjectile => currentlySelectedProjectile ??= AvailableProjectiles.FirstOrFallback(def => HasResearchForAmmo(def, out _)) ?? PrimaryVerb.verbProps.defaultProjectile;
+
+    public Pawn pawn => Holder;
+    public ThingWithComps Weapon => parent;
+    
+    public void LoadNextProjectile()
     {
-        get => currentlySelectedProjectile ??= AvailableProjectiles.FirstOrFallback(def => HasResearchForAmmo(def, out _)) ?? PrimaryVerb.verbProps.defaultProjectile;
-        set => currentlySelectedProjectile = value;
+        currentlySelectedProjectile = nextProjectile;
+        nextProjectile = null;
+    }
+
+    public void SetNextProjectile(ThingDef projectile)
+    {
+        nextProjectile = projectile;
     }
     
     public bool HasResearchForAmmo(ThingDef ammoDef, out ResearchProjectDef researchDef)

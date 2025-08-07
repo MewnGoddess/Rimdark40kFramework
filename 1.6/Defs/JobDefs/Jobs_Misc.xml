@@ -13,4 +13,10 @@
     <reportString>Changing weapon colors at TargetA.</reportString>
   </JobDef>
 
+  <JobDef>
+    <defName>BEWH_ChangeAmmo</defName>
+    <driverClass>Core40k.JobDriver_ChangeAmmo</driverClass>
+    <reportString>Changing ammo for TargetA.</reportString>
+  </JobDef>
+
 </Defs>

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
+using Verse.AI;
 
 namespace Core40k;
 
@@ -29,7 +30,8 @@ public class Gizmo_AmmoChanger : Gizmo
             {
                 var menuOption = new FloatMenuOption(availableProjectile.label.CapitalizeFirst(), delegate
                 {
-                    compAmmoChanger.CurrentlySelectedProjectile = availableProjectile;
+                    compAmmoChanger.SetNextProjectile(availableProjectile);
+                    compAmmoChanger.pawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(Core40kDefOf.BEWH_ChangeAmmo, compAmmoChanger.Weapon), JobTag.Misc);
                 }, Widgets.PlaceholderIconTex, Color.white);
                 if (!compAmmoChanger.HasResearchForAmmo(availableProjectile, out var researchDef))
                 {

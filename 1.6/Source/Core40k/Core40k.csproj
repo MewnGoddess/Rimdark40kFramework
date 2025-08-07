@@ -89,6 +89,7 @@
     <Compile Include="ChangeableBullets\Comp_AmmoChanger.cs" />
     <Compile Include="ChangeableBullets\DefModExtension_AmmoChanger.cs" />
     <Compile Include="ChangeableBullets\Gizmo_AmmoChanger.cs" />
+    <Compile Include="ChangeableBullets\JobDriver_ChangeAmmo.cs" />
     <Compile Include="ChangeableBullets\Verb_ShootChangeableBullets.cs" />
     <Compile Include="ColourPicker\Dialog_ColourPicker.cs" />
     <Compile Include="ColourPicker\RecentColours.cs" />

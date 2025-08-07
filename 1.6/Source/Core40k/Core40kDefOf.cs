@@ -10,6 +10,7 @@ public static class Core40kDefOf
 
     public static JobDef BEWH_OpenStylingStationDialogForApparelMultiColor;
     public static JobDef BEWH_OpenStylingStationDialogForWeaponMultiColor;
+    public static JobDef BEWH_ChangeAmmo;
 
     public static ShaderTypeDef BEWH_CutoutThreeColor;
 
