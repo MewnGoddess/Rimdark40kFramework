@@ -49,6 +49,7 @@ public class Comp_AmmoChanger : CompEquippable
         }
         
         var gizmo_AmmoChanger = new Gizmo_AmmoChanger(this);
+        gizmo_AmmoChanger.defaultLabel = CurrentlySelectedProjectile.label;
         
         yield return gizmo_AmmoChanger;
     }

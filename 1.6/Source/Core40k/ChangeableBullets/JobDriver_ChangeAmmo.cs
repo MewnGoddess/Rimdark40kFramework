@@ -17,7 +17,7 @@ public class JobDriver_ChangeAmmo : JobDriver
     {
         var pawnManipulation = pawn.health.capacities.GetLevel(PawnCapacityDefOf.Manipulation);
         var manipulation = pawnManipulation < 1 ? pawnManipulation : Math.Max(pawnManipulation / 2, 1);
-        var reloadTime = (int)Math.Min(100 / manipulation, 20);
+        var reloadTime = (int)Math.Max(100 / manipulation, 20);
         yield return Toils_General.Wait(reloadTime).WithProgressBarToilDelay(TargetIndex.A);
         yield return Toils_General.Do(delegate
         {

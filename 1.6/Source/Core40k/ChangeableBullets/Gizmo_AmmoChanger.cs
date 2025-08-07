@@ -6,7 +6,7 @@ using Verse.AI;
 namespace Core40k;
 
 [StaticConstructorOnStartup]
-public class Gizmo_AmmoChanger : Gizmo
+public class Gizmo_AmmoChanger : Command
 {
     private float Width => 75f;
 
@@ -33,16 +33,20 @@ public class Gizmo_AmmoChanger : Gizmo
                     compAmmoChanger.SetNextProjectile(availableProjectile);
                     compAmmoChanger.pawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(Core40kDefOf.BEWH_ChangeAmmo, compAmmoChanger.Weapon), JobTag.Misc);
                 }, Widgets.PlaceholderIconTex, Color.white);
-                if (!compAmmoChanger.HasResearchForAmmo(availableProjectile, out var researchDef))
-                {
-                    menuOption.Disabled = true;
-                    menuOption.tooltip = "BEWH.Framework.AmmoChanger.MissingResearch".Translate(researchDef.label.CapitalizeFirst());
-                }
-
+                
                 if (availableProjectile == compAmmoChanger.CurrentlySelectedProjectile)
                 {
                     menuOption.Disabled = true;
                     menuOption.tooltip = "BEWH.Framework.AmmoChanger.CurrentlyEquipped".Translate();
+                }
+                else if (!compAmmoChanger.HasResearchForAmmo(availableProjectile, out var researchDef))
+                {
+                    menuOption.Disabled = true;
+                    menuOption.tooltip = "BEWH.Framework.AmmoChanger.MissingResearch".Translate(researchDef.label.CapitalizeFirst());
+                }
+                else
+                {
+                    menuOption.tooltip = availableProjectile.description.CapitalizeFirst();
                 }
                 list.Add(menuOption);
             }
@@ -54,6 +58,15 @@ public class Gizmo_AmmoChanger : Gizmo
             
             Find.WindowStack.Add(new FloatMenu(list));
         }
+        
+        Text.Font = GameFont.Tiny;
+        var num = Text.CalcHeight(LabelCap, rect.width + 0.1f);
+        var rect3 = new Rect(rect.x, rect.yMax - num + 12f, rect.width, num);
+        GUI.DrawTexture(rect3, TexUI.GrayTextBG);
+        Text.Anchor = TextAnchor.UpperCenter;
+        Widgets.Label(rect3, LabelCap);
+        Text.Anchor = TextAnchor.UpperLeft;
+        Text.Font = GameFont.Small;
         
         return new GizmoResult(GizmoState.Clear);;
     }
