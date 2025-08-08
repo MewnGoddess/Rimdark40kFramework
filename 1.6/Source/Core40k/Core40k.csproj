@@ -82,7 +82,7 @@
     <Compile Include="ApparelMultiColor\DefModExtension_ForcesBodyType.cs" />
     <Compile Include="ApparelMultiColor\Dialog_EditColourPresets.cs" />
     <Compile Include="ApparelMultiColor\Dialog_PaintApparelMultiColor.cs" />
-    <Compile Include="ApparelMultiColor\HarmonyPatch_ApparelMultiColorPatch.cs" />
+    <Compile Include="ApparelMultiColor\HarmonyPatch_ApparelMultiColor.cs" />
     <Compile Include="ApparelMultiColor\HarmonyPatch_ApparelMultiColorSelectableOnStylingStation.cs" />
     <Compile Include="ApparelMultiColor\HarmonyPatch_HideBodyPatch.cs" />
     <Compile Include="ApparelMultiColor\JobDriver_OpenStylingStationDialogForApparelMultiColor.cs" />
@@ -113,6 +113,7 @@
     <Compile Include="Core40kModSettings.cs" />
     <Compile Include="Core40kUtils.cs" />
     <Compile Include="DamageWorkers\DamageWorker_Holy.cs" />
+    <Compile Include="DataStructs\CachedGraphicRenderInfo.cs" />
     <Compile Include="DataStructs\PresetData.cs" />
     <Compile Include="DataStructs\TraitData.cs" />
     <Compile Include="Debug\DebugActions.cs" />
