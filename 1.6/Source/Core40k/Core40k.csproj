@@ -130,6 +130,7 @@
     <Compile Include="DecorativeApparel\ExtraDecorationPreset.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationSettings.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationTab.cs" />
+    <Compile Include="DecorativeApparel\HarmonyPatch_OutfitStandExtraDecos.cs" />
     <Compile Include="DecorativeApparel\HeadDecorativeApparelMultiColor.cs" />
     <Compile Include="DecorativeApparel\PawnRenderNodePropertiesMultiColor.cs" />
     <Compile Include="DecorativeApparel\PawnRenderNodeWorker_AttachmentExtraDecorationBody.cs" />

@@ -54,7 +54,7 @@ public class WeaponMultiColor : ThingWithComps
     public void SetInitialColours()
     {
         var defMod = def.GetModExtension<DefModExtension_WeaponMultiColor>();
-        drawColorOne = defMod?.defaultPrimaryColor ?? (def.IsStuff ? def.GetColorForStuff(Stuff) : Color.white);
+        drawColorOne = defMod?.defaultPrimaryColor ?? (def.MadeFromStuff ? def.GetColorForStuff(Stuff) : Color.white);
         drawColorTwo = defMod?.defaultSecondaryColor ?? Color.white;
         drawColorThree = defMod?.defaultTertiaryColor ?? Color.white;
         SetOriginals();
