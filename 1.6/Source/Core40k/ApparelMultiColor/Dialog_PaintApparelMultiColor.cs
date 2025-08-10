@@ -58,7 +58,7 @@ public class Dialog_PaintApparelMultiColor : Window
     {
         this.pawn = pawn;
             
-        presets = DefDatabase<ColourPresetDef>.AllDefs.ToList();
+        presets = DefDatabase<ColourPresetDef>.AllDefs.Where(preset => preset.appliesToKind is PresetType.Armor or PresetType.All).ToList();
             
         allTabs = DefDatabase<ApparelMultiColorTabDef>.AllDefsListForReading;
             
@@ -202,7 +202,7 @@ public class Dialog_PaintApparelMultiColor : Window
                     list.Add(menuOption);
                 }
                     
-                foreach (var preset in ModSettings.ColourPresets)
+                foreach (var preset in ModSettings.ColourPresets.Where(preset => preset.appliesToKind is PresetType.Armor or PresetType.All))
                 {
                     var menuOption = new FloatMenuOption(preset.name.CapitalizeFirst(), delegate
                     {
@@ -234,7 +234,8 @@ public class Dialog_PaintApparelMultiColor : Window
                 {
                     var menuOption = new FloatMenuOption(preset.name, delegate
                     {
-                        ModSettings.UpdatePreset(preset, item.DrawColor, item.DrawColorTwo, item.DrawColorThree);
+                        Find.WindowStack.Add(new Dialog_ConfirmPresetOverride(preset, item.DrawColor, item.DrawColorTwo, item.DrawColorThree));
+                        //ModSettings.UpdatePreset(preset, item.DrawColor, item.DrawColorTwo, item.DrawColorThree);
                     }, Widgets.PlaceholderIconTex, Color.white);
                     menuOption.extraPartWidth = 30f;
                     menuOption.extraPartOnGUI = rect1 => Core40kUtils.DeletePreset(rect1, preset);
@@ -249,7 +250,8 @@ public class Dialog_PaintApparelMultiColor : Window
                     {
                         primaryColour = item.DrawColor,
                         secondaryColour = item.DrawColorTwo,
-                        tertiaryColour = item.DrawColorThree
+                        tertiaryColour = item.DrawColorThree,
+                        appliesToKind = PresetType.Armor,
                     };
                     Find.WindowStack.Add( new Dialog_EditColourPresets(newColourPreset));
                 }, Widgets.PlaceholderIconTex, Color.white);

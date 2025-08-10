@@ -46,6 +46,8 @@ public class Dialog_PaintWeaponMultiColor : Window
     
     private bool recache = true;
     
+    private (Color col1, Color col2, Color col3) originalColor = (Color.white, Color.white, Color.white);
+    
     public Dialog_PaintWeaponMultiColor()
     {
     }
@@ -54,9 +56,11 @@ public class Dialog_PaintWeaponMultiColor : Window
     {
         this.pawn = pawn;
             
-        presets = DefDatabase<ColourPresetDef>.AllDefs.ToList();
+        presets = DefDatabase<ColourPresetDef>.AllDefs.Where(preset => preset.appliesToKind is PresetType.Weapon or PresetType.All).ToList();
 
         weapon = weaponMultiColor;
+
+        originalColor = (weapon.DrawColor, weapon.DrawColorTwo, weapon.DrawColorThree);
 
         Find.TickManager.Pause();
     }
@@ -124,6 +128,15 @@ public class Dialog_PaintWeaponMultiColor : Window
         if (Widgets.ButtonText(selectPresetRect, "BEWH.Framework.ApparelMultiColor.SelectPreset".Translate()))
         {
             var list = new List<FloatMenuOption>();
+            var defaultMenuOption = new FloatMenuOption("BEWH.Framework.CommonKeyword.Default".Translate(), delegate
+            {
+                weapon.DrawColor = originalColor.col1;
+                weapon.SetSecondaryColor(originalColor.col2);
+                weapon.SetTertiaryColor(originalColor.col3);
+                recache = true;
+                            
+            }, Core40kUtils.ThreeColourPreview(originalColor.col1, originalColor.col2, originalColor.col3, 3), Color.white);
+            list.Add(defaultMenuOption);
             foreach (var preset in presets.Where(p => p.appliesTo.Contains(weapon.def.defName) || p.appliesTo.Empty()))
             {
                 var menuOption = new FloatMenuOption(preset.label, delegate
@@ -137,7 +150,7 @@ public class Dialog_PaintWeaponMultiColor : Window
                 list.Add(menuOption);
             }
                     
-            foreach (var preset in ModSettings.ColourPresets)
+            foreach (var preset in ModSettings.ColourPresets.Where(preset => preset.appliesToKind is PresetType.Weapon or PresetType.All))
             {
                 var menuOption = new FloatMenuOption(preset.name.CapitalizeFirst(), delegate
                 {
@@ -181,7 +194,8 @@ public class Dialog_PaintWeaponMultiColor : Window
                 {
                     primaryColour = weapon.DrawColor,
                     secondaryColour = weapon.DrawColorTwo,
-                    tertiaryColour = weapon.DrawColorThree
+                    tertiaryColour = weapon.DrawColorThree,
+                    appliesToKind = PresetType.Weapon,
                 };
                 Find.WindowStack.Add( new Dialog_EditColourPresets(newColourPreset));
             }, Widgets.PlaceholderIconTex, Color.white);

@@ -11,6 +11,16 @@ public class ColourPresetDef : Def
     public Color tertiaryColour = new Color(0,0,0,0);
     
     public int colorAmount = 1;
+
+    public PresetType appliesToKind = PresetType.All;
     
     public List<string> appliesTo = new List<string>();
+}
+
+public enum PresetType
+{
+    None,
+    All,
+    Armor,
+    Weapon,
 }

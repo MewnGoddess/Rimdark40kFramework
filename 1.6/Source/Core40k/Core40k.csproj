@@ -80,6 +80,7 @@
     <Compile Include="ApparelMultiColor\ColourPresetDef.cs" />
     <Compile Include="ApparelMultiColor\DecorationColourPresetDef.cs" />
     <Compile Include="ApparelMultiColor\DefModExtension_ForcesBodyType.cs" />
+    <Compile Include="ApparelMultiColor\Dialog_ConfirmPresetOverride.cs" />
     <Compile Include="ApparelMultiColor\Dialog_EditColourPresets.cs" />
     <Compile Include="ApparelMultiColor\Dialog_PaintApparelMultiColor.cs" />
     <Compile Include="ApparelMultiColor\HarmonyPatch_ApparelMultiColor.cs" />

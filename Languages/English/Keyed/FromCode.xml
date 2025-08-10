@@ -11,6 +11,7 @@
 
   <!--=== Common Keywords ===-->
   <BEWH.Framework.CommonKeyword.None>None</BEWH.Framework.CommonKeyword.None>
+  <BEWH.Framework.CommonKeyword.Default>Default</BEWH.Framework.CommonKeyword.Default>
   <BEWH.Framework.CommonKeywords.ModSettings>mod settings</BEWH.Framework.CommonKeywords.ModSettings>
 
   <!--=== Apparel Multi Color ===-->
@@ -25,6 +26,7 @@
   <BEWH.Framework.ApparelMultiColor.NewPreset>[New Preset]</BEWH.Framework.ApparelMultiColor.NewPreset>
   <BEWH.Framework.ApparelMultiColor.EnterPresetName>Enter name of new preset</BEWH.Framework.ApparelMultiColor.EnterPresetName>
   <BEWH.Framework.ApparelMultiColor.OverridePreset>Override {0} with currently selected colors</BEWH.Framework.ApparelMultiColor.OverridePreset>
+  <BEWH.Framework.ApparelMultiColor.ConfirmOverride>Are you sure you want to override this preset?</BEWH.Framework.ApparelMultiColor.ConfirmOverride>
   <BEWH.Framework.ApparelMultiColor.PresetExists>Already exists!</BEWH.Framework.ApparelMultiColor.PresetExists>
 
   <BEWH.Framework.ApparelMultiColor.ArmourDecorationFeature>Decorate armor</BEWH.Framework.ApparelMultiColor.ArmourDecorationFeature>

@@ -40,28 +40,22 @@ public class Dialog_EditColourPresets : Window
         var newName = Widgets.TextArea(textEntryRect, textEntry);
         textEntry = newName;
             
-        var acceptRect = new Rect(textEntryRect)
+        var closeRect = new Rect(textEntryRect)
         {
             yMin = textEntryRect.yMax + 5f,
             height = textEntryRect.height,
             width = textEntryRect.width / 4,
         };
-        if (Widgets.ButtonText(acceptRect, "Accept".Translate()))
+        if (Widgets.ButtonText(closeRect, "Close".Translate()))
         {
-            colourPreset.name = newName;
-            if (ModSettings.AddPreset(colourPreset))
-            {
-                Close();
-            }
-
-            showWarningText = true;
+            Close();
         }
 
         if (showWarningText)
         {
-            var warningRect = new Rect(acceptRect)
+            var warningRect = new Rect(closeRect)
             {
-                xMin = acceptRect.xMax + viewRect.width / 50f,
+                xMin = closeRect.xMax + viewRect.width / 50f,
                 width = textEntryRect.width * 0.46f,
             };
                 
@@ -72,14 +66,20 @@ public class Dialog_EditColourPresets : Window
             Text.Anchor = TextAnchor.UpperLeft;
         }
             
-        var closeRect = new Rect(acceptRect)
+        var acceptRect = new Rect(closeRect)
         {
-            xMin = viewRect.xMax - acceptRect.width,
-            width = acceptRect.width,
+            xMin = viewRect.xMax - closeRect.width,
+            width = closeRect.width,
         };
-        if (Widgets.ButtonText(closeRect, "Close".Translate()))
+        if (Widgets.ButtonText(acceptRect, "Accept".Translate()))
         {
-            Close();
+            colourPreset.name = newName;
+            if (ModSettings.AddPreset(colourPreset))
+            {
+                Close();
+            }
+
+            showWarningText = true;
         }
     }
 }
