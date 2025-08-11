@@ -14,14 +14,13 @@ public class Dialog_EditColourPresets : Window
     private bool showWarningText = false;
         
     private static Core40kModSettings modSettings = null;
-
     public static Core40kModSettings ModSettings => modSettings ??= LoadedModManager.GetMod<Core40kMod>().GetSettings<Core40kModSettings>();
         
     public Dialog_EditColourPresets(ColourPreset colourPreset)
     {
         this.colourPreset = colourPreset;
     }
-        
+
     public override void DoWindowContents(Rect inRect)
     {
         var viewRect = inRect.ContractedBy(5f);
@@ -31,7 +30,7 @@ public class Dialog_EditColourPresets : Window
             height = viewRect.height * 0.3f
         };
         Widgets.Label(labelRect, "BEWH.Framework.ApparelMultiColor.EnterPresetName".Translate());
-            
+        
         var textEntryRect = new Rect(labelRect)
         {
             yMin = labelRect.yMax,
@@ -50,21 +49,6 @@ public class Dialog_EditColourPresets : Window
         {
             Close();
         }
-
-        if (showWarningText)
-        {
-            var warningRect = new Rect(closeRect)
-            {
-                xMin = closeRect.xMax + viewRect.width / 50f,
-                width = textEntryRect.width * 0.46f,
-            };
-                
-            Text.Font = GameFont.Tiny;
-            Text.Anchor = TextAnchor.MiddleCenter;
-            Widgets.Label(warningRect, "BEWH.Framework.ApparelMultiColor.PresetExists".Translate().Colorize(Color.red));
-            Text.Font = GameFont.Small;
-            Text.Anchor = TextAnchor.UpperLeft;
-        }
             
         var acceptRect = new Rect(closeRect)
         {
@@ -80,6 +64,21 @@ public class Dialog_EditColourPresets : Window
             }
 
             showWarningText = true;
+        }
+        
+        if (showWarningText)
+        {
+            var warningRect = new Rect(closeRect)
+            {
+                xMin = closeRect.xMax + viewRect.width / 50f,
+                width = textEntryRect.width * 0.46f,
+            };
+                
+            Text.Font = GameFont.Tiny;
+            Text.Anchor = TextAnchor.MiddleCenter;
+            Widgets.Label(warningRect, "BEWH.Framework.ApparelMultiColor.PresetExists".Translate().Colorize(Color.red));
+            Text.Font = GameFont.Small;
+            Text.Anchor = TextAnchor.UpperLeft;
         }
     }
 }

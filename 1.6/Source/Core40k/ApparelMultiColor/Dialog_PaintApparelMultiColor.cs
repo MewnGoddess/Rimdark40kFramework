@@ -230,12 +230,11 @@ public class Dialog_PaintApparelMultiColor : Window
                 var list = new List<FloatMenuOption>();
                     
                 //Delete or override existing
-                foreach (var preset in ModSettings.ColourPresets)
+                foreach (var preset in ModSettings.ColourPresets.Where(preset => preset.appliesToKind is PresetType.Armor or PresetType.All))
                 {
                     var menuOption = new FloatMenuOption(preset.name, delegate
                     {
-                        Find.WindowStack.Add(new Dialog_ConfirmPresetOverride(preset, item.DrawColor, item.DrawColorTwo, item.DrawColorThree));
-                        //ModSettings.UpdatePreset(preset, item.DrawColor, item.DrawColorTwo, item.DrawColorThree);
+                        Find.WindowStack.Add(new Dialog_ConfirmColorPresetOverride(preset, item.DrawColor, item.DrawColorTwo, item.DrawColorThree));
                     }, Widgets.PlaceholderIconTex, Color.white);
                     menuOption.extraPartWidth = 30f;
                     menuOption.extraPartOnGUI = rect1 => Core40kUtils.DeletePreset(rect1, preset);

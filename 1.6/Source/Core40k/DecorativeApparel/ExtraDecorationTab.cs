@@ -372,8 +372,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         {
             var menuOption = new FloatMenuOption(preset.name, delegate
             {
-                currentPreset.name = preset.name;
-                ModSettings.UpdatePreset(preset, currentPreset);
+                Find.WindowStack.Add(new Dialog_ConfirmDecorationPresetOverride(preset, currentPreset));
             }, Widgets.PlaceholderIconTex, Color.white);
             menuOption.extraPartWidth = 30f;
             menuOption.extraPartOnGUI = rect1 => Core40kUtils.DeletePreset(rect1, preset);

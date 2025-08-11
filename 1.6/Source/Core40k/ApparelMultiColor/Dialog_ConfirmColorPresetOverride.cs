@@ -3,7 +3,7 @@ using Verse;
 
 namespace Core40k;
 
-public class Dialog_ConfirmPresetOverride : Window
+public class Dialog_ConfirmColorPresetOverride : Window
 {
     public override Vector2 InitialSize => new Vector2(300f, 120f);
 
@@ -16,7 +16,7 @@ public class Dialog_ConfirmPresetOverride : Window
 
     public static Core40kModSettings ModSettings => modSettings ??= LoadedModManager.GetMod<Core40kMod>().GetSettings<Core40kModSettings>();
         
-    public Dialog_ConfirmPresetOverride(ColourPreset colourPreset, Color colorOne, Color colorTwo, Color colorThree)
+    public Dialog_ConfirmColorPresetOverride(ColourPreset colourPreset, Color colorOne, Color colorTwo, Color colorThree)
     {
         this.colourPreset = colourPreset;
         this.colorOne = colorOne;
@@ -38,10 +38,10 @@ public class Dialog_ConfirmPresetOverride : Window
             
         var closeRect = new Rect(labelRect)
         {
-            yMin = labelRect.yMax + 5f,
-            height = labelRect.height,
+            height = viewRect.height * 0.3f,
             width = labelRect.width / 4,
         };
+        closeRect.y = viewRect.yMax - closeRect.height;
         if (Widgets.ButtonText(closeRect, "Close".Translate()))
         {
             Close();

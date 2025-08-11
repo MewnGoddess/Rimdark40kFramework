@@ -60,7 +60,9 @@ public class Dialog_PaintWeaponMultiColor : Window
 
         weapon = weaponMultiColor;
 
-        originalColor = (weapon.DrawColor, weapon.DrawColorTwo, weapon.DrawColorThree);
+        var defMod = weapon.def.GetModExtension<DefModExtension_WeaponMultiColor>();
+
+        originalColor = (defMod?.defaultPrimaryColor ?? (weapon.def.MadeFromStuff ? weapon.def.GetColorForStuff(weapon.Stuff) : Color.white), defMod?.defaultSecondaryColor ?? Color.white, defMod?.defaultTertiaryColor ?? Color.white);
 
         Find.TickManager.Pause();
     }
@@ -128,6 +130,7 @@ public class Dialog_PaintWeaponMultiColor : Window
         if (Widgets.ButtonText(selectPresetRect, "BEWH.Framework.ApparelMultiColor.SelectPreset".Translate()))
         {
             var list = new List<FloatMenuOption>();
+            //Default Color of weapon
             var defaultMenuOption = new FloatMenuOption("BEWH.Framework.CommonKeyword.Default".Translate(), delegate
             {
                 weapon.DrawColor = originalColor.col1;
@@ -175,7 +178,7 @@ public class Dialog_PaintWeaponMultiColor : Window
             var list = new List<FloatMenuOption>();
                     
             //Delete or override existing
-            foreach (var preset in ModSettings.ColourPresets)
+            foreach (var preset in ModSettings.ColourPresets.Where(preset => preset.appliesToKind is PresetType.Weapon or PresetType.All))
             {
                 var menuOption = new FloatMenuOption(preset.name, delegate
                 {
@@ -197,6 +200,7 @@ public class Dialog_PaintWeaponMultiColor : Window
                     tertiaryColour = weapon.DrawColorThree,
                     appliesToKind = PresetType.Weapon,
                 };
+                GUI.SetNextControlName("BEWH_Preset_Window");
                 Find.WindowStack.Add( new Dialog_EditColourPresets(newColourPreset));
             }, Widgets.PlaceholderIconTex, Color.white);
             list.Add(newPreset);

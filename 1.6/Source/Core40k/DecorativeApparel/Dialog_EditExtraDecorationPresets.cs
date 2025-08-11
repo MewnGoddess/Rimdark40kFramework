@@ -30,7 +30,7 @@ public class Dialog_EditExtraDecorationPresets : Window
             height = viewRect.height * 0.3f
         };
         Widgets.Label(labelRect, "BEWH.Framework.ApparelMultiColor.EnterPresetName".Translate());
-            
+        
         var textEntryRect = new Rect(labelRect)
         {
             yMin = labelRect.yMax,
@@ -38,12 +38,22 @@ public class Dialog_EditExtraDecorationPresets : Window
         };
         var newName = Widgets.TextArea(textEntryRect, textEntry);
         textEntry = newName;
-            
-        var acceptRect = new Rect(textEntryRect)
+        
+        var closeRect = new Rect(textEntryRect)
         {
             yMin = textEntryRect.yMax + 5f,
             height = textEntryRect.height,
             width = textEntryRect.width / 4,
+        };
+        if (Widgets.ButtonText(closeRect, "Close".Translate()))
+        {
+            Close();
+        }
+            
+        var acceptRect = new Rect(closeRect)
+        {
+            xMin = viewRect.xMax - closeRect.width,
+            width = closeRect.width,
         };
         if (Widgets.ButtonText(acceptRect, "Accept".Translate()))
         {
@@ -55,12 +65,12 @@ public class Dialog_EditExtraDecorationPresets : Window
 
             showWarningText = true;
         }
-
+        
         if (showWarningText)
         {
-            var warningRect = new Rect(acceptRect)
+            var warningRect = new Rect(closeRect)
             {
-                xMin = acceptRect.xMax + viewRect.width / 50f,
+                xMin = closeRect.xMax + viewRect.width / 50f,
                 width = textEntryRect.width * 0.46f,
             };
                 
@@ -69,16 +79,6 @@ public class Dialog_EditExtraDecorationPresets : Window
             Widgets.Label(warningRect, "BEWH.Framework.ApparelMultiColor.PresetExists".Translate().Colorize(Color.red));
             Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.UpperLeft;
-        }
-            
-        var closeRect = new Rect(acceptRect)
-        {
-            xMin = viewRect.xMax - acceptRect.width,
-            width = acceptRect.width,
-        };
-        if (Widgets.ButtonText(closeRect, "Close".Translate()))
-        {
-            Close();
         }
     }
 }
