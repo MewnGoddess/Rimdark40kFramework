@@ -45,6 +45,9 @@
   <BEWH.Framework.ExtraDecoration.Preset>Preset</BEWH.Framework.ExtraDecoration.Preset>
   <BEWH.Framework.ExtraDecoration.PresetDesc>Select a color preset</BEWH.Framework.ExtraDecoration.PresetDesc>
 
+  <BEWH.Framework.ExtraDecoration.Mask>Masks</BEWH.Framework.ExtraDecoration.Mask>
+  <BEWH.Framework.ExtraDecoration.MaskDesc>Select a mask</BEWH.Framework.ExtraDecoration.MaskDesc>
+
   <BEWH.Framework.ExtraDecoration.Select>Select</BEWH.Framework.ExtraDecoration.Select>
   <BEWH.Framework.ExtraDecoration.SelectDesc>Select a decoration preset</BEWH.Framework.ExtraDecoration.SelectDesc>
 

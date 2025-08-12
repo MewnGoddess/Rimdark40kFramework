@@ -9,6 +9,7 @@ public class ExtraDecorationSettings : IExposable
     public Color ColorTwo = Color.white;
     public Color ColorThree = Color.white;
     public bool Flipped = false;
+    public MaskDef maskDef;
 
     public ExtraDecorationSettings()
     {
@@ -21,6 +22,7 @@ public class ExtraDecorationSettings : IExposable
         Color = extraDecorationSettings.Color;
         ColorTwo = extraDecorationSettings.ColorTwo;
         ColorThree = extraDecorationSettings.ColorThree;
+        maskDef = extraDecorationSettings.maskDef;
     }
     
     public virtual void ExposeData()
@@ -29,5 +31,6 @@ public class ExtraDecorationSettings : IExposable
         Scribe_Values.Look(ref ColorTwo, "ColorTwo");
         Scribe_Values.Look(ref ColorThree, "ColorThree");
         Scribe_Values.Look(ref Flipped, "Flipped");
+        Scribe_Defs.Look(ref maskDef, "maskDef");
     }
 }

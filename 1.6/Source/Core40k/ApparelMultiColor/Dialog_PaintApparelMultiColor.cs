@@ -71,7 +71,7 @@ public class Dialog_PaintApparelMultiColor : Window
             
         tabs.Add(mainTabRecord);
         
-        var masksTemp = DefDatabase<MaskDef>.AllDefs.ToList();
+        var masksTemp = DefDatabase<MaskDef>.AllDefs.Where(def => def.appliesToKind is AppliesToKind.Thing or AppliesToKind.All).ToList();
             
         foreach (var item in pawn.apparel.WornApparel.Where(a => a is ApparelMultiColor).Cast<ApparelMultiColor>())
         {

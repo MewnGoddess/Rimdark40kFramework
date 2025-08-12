@@ -35,10 +35,10 @@ public class DynamicPawnRenderNodeSetup_DecorativeApparelHead : DynamicPawnRende
                     colorThree = decoration.Value.ColorThree,
                     parentTagDef = PawnRenderNodeTagDefOf.Head,
                     workerClass = typeof(PawnRenderNodeWorker_AttachmentExtraDecorationHead),
+                    maskDef = decoration.Value.maskDef
                 };
                 
                 var pawnRenderNode = (PawnRenderNode_AttachmentExtraDecoration)Activator.CreateInstance(typeof(PawnRenderNode_AttachmentExtraDecoration), pawn, pawnRenderNodeProperty, tree);
-                pawnRenderNode.ExtraDecorationDef = decoration.Key;
 
                 PawnRenderNode node = (tree.TryGetNodeByTag(PawnRenderNodeTagDefOf.ApparelHead, out node) ? node : null) ??
                                       (tree.TryGetNodeByTag(PawnRenderNodeTagDefOf.Head, out node) ? node : null);

@@ -7,4 +7,5 @@ public class PawnRenderNodePropertiesMultiColor : PawnRenderNodeProperties
 {
     public Color? colorTwo;
     public Color? colorThree;
+    public MaskDef maskDef;
 }

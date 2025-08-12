@@ -26,7 +26,7 @@ public class ExtraDecorationDef : DecorationDef
         
     public bool appliesToAll = false;
 
-    public bool useMask = false;
+    public MaskDef defaultMask;
 
     public int colorAmount = 1;
         

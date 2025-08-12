@@ -54,6 +54,7 @@ public class DecorativeApparelMultiColor : ApparelMultiColor
         extraDecorations[decoration].Color = decoration.defaultColour ?? (decoration.useArmorColourAsDefault ? DrawColor : Color.white);
         extraDecorations[decoration].ColorTwo = decoration.defaultColourTwo ?? (decoration.useArmorColourAsDefault ? DrawColorTwo : Color.white);
         extraDecorations[decoration].ColorThree = decoration.defaultColourThree ?? (decoration.useArmorColourAsDefault ? DrawColorThree : Color.white);
+        extraDecorations[decoration].maskDef = decoration.defaultMask;
         Notify_ColorChanged();
     }
     
@@ -119,6 +120,12 @@ public class DecorativeApparelMultiColor : ApparelMultiColor
     public void UpdateDecorationColourThree(ExtraDecorationDef decoration, Color colour)
     {
         extraDecorations[decoration].ColorThree = colour;
+        Notify_ColorChanged();
+    }
+
+    public void UpdateDecorationMask(ExtraDecorationDef decoration, MaskDef maskDef)
+    {
+        extraDecorations[decoration].maskDef = maskDef;
         Notify_ColorChanged();
     }
 
