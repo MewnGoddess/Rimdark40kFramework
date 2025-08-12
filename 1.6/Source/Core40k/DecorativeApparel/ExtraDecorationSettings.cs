@@ -9,7 +9,7 @@ public class ExtraDecorationSettings : IExposable
     public Color ColorTwo = Color.white;
     public Color ColorThree = Color.white;
     public bool Flipped = false;
-    public MaskDef maskDef;
+    public MaskDef maskDef = null;
 
     public ExtraDecorationSettings()
     {

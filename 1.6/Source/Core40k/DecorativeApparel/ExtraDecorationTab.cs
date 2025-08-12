@@ -51,7 +51,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                 extraDecorationDefsBody.Add(extraDecoration);
             }
             
-            var masksForItem = masksTemp.Where(mask => mask.appliesTo.Contains(extraDecoration.defName)).ToList();
+            var masksForItem = masksTemp.Where(mask => mask.appliesTo.Contains(extraDecoration.defName) || mask.appliesToKind == AppliesToKind.All).ToList();
 
             if (masksForItem.Any())
             {
@@ -256,7 +256,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                 {
                     y = bottomRect.yMax
                 };
-                if (masks.ContainsKey(extraDecorationDefs[i]))
+                if (masks.TryGetValue(extraDecorationDefs[i]).Count > 1)
                 {
                     presetSelection.width /= 2;
                 }
@@ -272,7 +272,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                 {
                     SelectPreset(apparel, extraDecorationDefs[i1]);
                 }
-                if (masks.ContainsKey(extraDecorationDefs[i]))
+                if (masks.TryGetValue(extraDecorationDefs[i]).Count > 1)
                 {
                     TooltipHandler.TipRegion(maskSelection, "BEWH.Framework.ExtraDecoration.MaskDesc".Translate());
                     if (Widgets.ButtonText(maskSelection, "BEWH.Framework.ExtraDecoration.Mask".Translate()))

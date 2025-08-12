@@ -26,7 +26,7 @@ public class ExtraDecorationDef : DecorationDef
         
     public bool appliesToAll = false;
 
-    public MaskDef defaultMask;
+    public MaskDef defaultMask = Core40kDefOf.BEWH_DefaultMask;
 
     public int colorAmount = 1;
         

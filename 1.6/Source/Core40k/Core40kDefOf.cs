@@ -8,6 +8,8 @@ public static class Core40kDefOf
 {
     public static DamageDef BEWH_WarpFlame;
 
+    public static MaskDef BEWH_DefaultMask;
+
     public static JobDef BEWH_OpenStylingStationDialogForApparelMultiColor;
     public static JobDef BEWH_OpenStylingStationDialogForWeaponMultiColor;
     public static JobDef BEWH_ChangeAmmo;

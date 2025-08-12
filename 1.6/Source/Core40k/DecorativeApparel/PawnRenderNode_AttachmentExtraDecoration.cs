@@ -15,7 +15,7 @@ public class PawnRenderNode_AttachmentExtraDecoration : PawnRenderNode
             
         var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
         
-        return MultiColorUtils.GetGraphic<Graphic_Multi>(propsMulti.texPath, shader, propsMulti.drawSize, propsMulti.color ?? Color.white, propsMulti.colorTwo ?? Color.white, propsMulti.colorThree ?? Color.white, null, propsMulti.maskDef?.maskPath);
+        return MultiColorUtils.GetGraphic<Graphic_Multi>(propsMulti.texPath, shader, propsMulti.drawSize, propsMulti.color ?? Color.white, propsMulti.colorTwo ?? Color.white, propsMulti.colorThree ?? Color.white, null, propsMulti.maskDef?.maskPath ?? Props.texPath + "_mask");
 
     }
 }

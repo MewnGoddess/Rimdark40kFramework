@@ -101,7 +101,7 @@ public class Dialog_PaintApparelMultiColor : Window
                 }
             }
             
-            var masksForItem = masksTemp.Where(mask => mask.appliesTo.Contains(item.def.defName)).ToList();
+            var masksForItem = masksTemp.Where(mask => mask.appliesTo.Contains(item.def.defName) || mask.appliesToKind == AppliesToKind.All).ToList();
 
             if (masksForItem.Any())
             {

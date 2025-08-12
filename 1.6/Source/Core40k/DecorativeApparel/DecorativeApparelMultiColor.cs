@@ -125,7 +125,7 @@ public class DecorativeApparelMultiColor : ApparelMultiColor
 
     public void UpdateDecorationMask(ExtraDecorationDef decoration, MaskDef maskDef)
     {
-        extraDecorations[decoration].maskDef = maskDef;
+        extraDecorations[decoration].maskDef = maskDef.setsNull ? null : maskDef;
         Notify_ColorChanged();
     }
 
