@@ -41,7 +41,7 @@ public class ApparelMultiColor : Apparel
         get => maskDef;
         set
         {
-            maskDef = value.setsNull ? null : value;
+            maskDef = value;
             Notify_ColorChanged();
         } 
     }

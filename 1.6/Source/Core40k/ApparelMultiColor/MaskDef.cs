@@ -5,7 +5,7 @@ namespace Core40k;
 
 public class MaskDef : Def
 {
-    public string maskPath;
+    public string maskPath = null;
     public List<string> appliesTo = new List<string>();
     public int sortOrder = 1;
     public List<string> maskExtraFlags = new List<string>();

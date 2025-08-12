@@ -46,9 +46,6 @@ public class Dialog_PaintApparelMultiColor : Window
 
     public static Core40kModSettings ModSettings => modSettings ??= LoadedModManager.GetMod<Core40kMod>().GetSettings<Core40kModSettings>();
 
-    private static readonly CachedTexture ScrollForwardIcon = new ("UI/Misc/ScrollForwardIcon");
-    private static readonly CachedTexture ScrollBackwardIcon = new ("UI/Misc/ScrollBackwardIcon");
-
     private bool recache = true;
     public Dialog_PaintApparelMultiColor()
     {
@@ -337,7 +334,7 @@ public class Dialog_PaintApparelMultiColor : Window
                 }
 
                 //Mask Stuff
-                if (masks.ContainsKey(item.def) && masks[item.def].Any())
+                if (masks.ContainsKey(item.def) && masks[item.def].Count > 1)
                 {
                     var maskRect = new Rect(itemRect)
                     {
@@ -352,7 +349,6 @@ public class Dialog_PaintApparelMultiColor : Window
                     curY += maskRect.height;
                     maskRect = maskRect.ContractedBy(3);
                     Widgets.DrawMenuSection(maskRect.ContractedBy(-1));
-
                     var posRect = new Rect(maskRect);
                     posRect.width /= 4;
                     posRect.height = posRect.width;
@@ -363,7 +359,6 @@ public class Dialog_PaintApparelMultiColor : Window
                     {
                         var curPosRect = new Rect(posRect);
                         curPosRect.x += curPosRect.width * i;
-                        
                         curPosRect = curPosRect.ContractedBy(15);
                         if (!cachedMaterials.ContainsKey((item.def, curPageMasks[i])) || recache)
                         {
@@ -373,13 +368,14 @@ public class Dialog_PaintApparelMultiColor : Window
                             }
                             var path = ((item.def.apparel.LastLayer != ApparelLayerDefOf.Overhead && item.def.apparel.LastLayer != ApparelLayerDefOf.EyeCover && !item.RenderAsPack() && item.WornGraphicPath != BaseContent.PlaceholderImagePath && item.WornGraphicPath != BaseContent.PlaceholderGearImagePath) ? (item.WornGraphicPath + "_" + pawn.story.bodyType.defName) : item.WornGraphicPath);
                             var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
-                            var graphic = MultiColorUtils.GetGraphic<Graphic_Multi>(path, shader, item.def.graphicData.drawSize, item.DrawColor, item.DrawColorTwo, item.DrawColorThree, item.Graphic.data, curPageMasks[i]?.maskPath);
+                            var maskPath = curPageMasks[i]?.maskPath;
+                            var graphic = MultiColorUtils.GetGraphic<Graphic_Multi>(path, shader, item.def.graphicData.drawSize, item.DrawColor, item.DrawColorTwo, item.DrawColorThree, item.Graphic.data, maskPath);
                             var material = graphic.MatSouth;
                             cachedMaterials.Add((item.def, curPageMasks[i]), material);
                             recache = false;
                         }
-
-                        if (item.MaskDef == curPageMasks[i] || (item.MaskDef == null && curPageMasks[i].setsNull))
+                        
+                        if (item.MaskDef == curPageMasks[i])
                         {
                             Widgets.DrawStrongHighlight(curPosRect.ExpandedBy(6f));
                         }
@@ -390,13 +386,12 @@ public class Dialog_PaintApparelMultiColor : Window
                         TooltipHandler.TipRegion(curPosRect, curPageMasks[i].label);
                         
                         Widgets.DrawHighlightIfMouseover(curPosRect);
-
                         if (Widgets.ButtonInvisible(curPosRect))
                         {
                             item.MaskDef = curPageMasks[i];
                         }
                     }
-
+                    
                     if (arrowsEnabled)
                     {
                         var arrowBack = new Rect(maskRect)
@@ -413,7 +408,7 @@ public class Dialog_PaintApparelMultiColor : Window
                                 apparelColorMaskPageNumber[item.def]--;
                             }
                             arrowBack = arrowBack.ContractedBy(5);
-                            Widgets.DrawTextureFitted(arrowBack, ScrollBackwardIcon.Texture, 1);
+                            Widgets.DrawTextureFitted(arrowBack, Core40kUtils.ScrollBackwardIcon, 1);
                         }
                         
                         if (apparelColorMaskPageNumber[item.def] < Math.Ceiling((float)masks[item.def].Count / 4)-1)
@@ -427,7 +422,7 @@ public class Dialog_PaintApparelMultiColor : Window
                                 apparelColorMaskPageNumber[item.def]++;
                             }
                             arrowForward = arrowForward.ContractedBy(5);
-                            Widgets.DrawTextureFitted(arrowForward, ScrollForwardIcon.Texture, 1);
+                            Widgets.DrawTextureFitted(arrowForward, Core40kUtils.ScrollForwardIcon, 1);
                         }
                     }
                 }

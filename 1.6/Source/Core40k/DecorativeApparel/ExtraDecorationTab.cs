@@ -20,10 +20,6 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
     private float curY;
     
     private Dictionary<ExtraDecorationDef, List<MaskDef>> masks = new ();
-    
-    private Dictionary<(ExtraDecorationDef, MaskDef), Material> cachedMaterials = new ();
-    
-    private bool recache = true;
         
     private List<ExtraDecorationDef> extraDecorationDefsBody = new List<ExtraDecorationDef>();
     private List<ExtraDecorationDef> extraDecorationDefsHelmet = new List<ExtraDecorationDef>();
@@ -160,7 +156,6 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                             Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].Color, ( newColour ) =>
                             {
                                 apparel.UpdateDecorationColourOne(extraDecorationDefs[i1], newColour);
-                                recache = true;
                             } ) );
                         }
                         break;
@@ -182,7 +177,6 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                             Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].Color, ( newColour ) =>
                             {
                                 apparel.UpdateDecorationColourOne(extraDecorationDefs[i1], newColour);
-                                recache = true;
                             } ) );
                         }
                         
@@ -196,7 +190,6 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                             Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].ColorTwo, ( newColour ) =>
                             {
                                 apparel.UpdateDecorationColourTwo(extraDecorationDefs[i1], newColour);
-                                recache = true;
                             } ) );
                         }
                         break;
@@ -222,7 +215,6 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                             Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].Color, ( newColour ) =>
                             {
                                 apparel.UpdateDecorationColourOne(extraDecorationDefs[i1], newColour);
-                                recache = true;
                             } ) );
                         }
                         
@@ -236,7 +228,6 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                             Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].ColorTwo, ( newColour ) =>
                             {
                                 apparel.UpdateDecorationColourTwo(extraDecorationDefs[i1], newColour);
-                                recache = true;
                             } ) );
                         }
                         
@@ -250,7 +241,6 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                             Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].ColorThree, ( newColour ) =>
                             {
                                 apparel.UpdateDecorationColourThree(extraDecorationDefs[i1], newColour);
-                                recache = true;
                             } ) );
                         }
                         break;
@@ -284,7 +274,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                     TooltipHandler.TipRegion(maskSelection, "BEWH.Framework.ExtraDecoration.MaskDesc".Translate());
                     if (Widgets.ButtonText(maskSelection, "BEWH.Framework.ExtraDecoration.Mask".Translate()))
                     {
-                        SelectMask(apparel, extraDecorationDefs[i1]);
+                        SelectMask(apparel, extraDecorationDefs[i1], viewRect.width/1.3f);
                     }
                 }
                 Text.Font = GameFont.Small;
@@ -315,9 +305,10 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         curY += 34f;
     }
 
-    private void SelectMask(DecorativeApparelMultiColor apparel, ExtraDecorationDef extraDecoration)
+    private void SelectMask(DecorativeApparelMultiColor apparel, ExtraDecorationDef extraDecoration, float size)
     {
-        var list = new List<FloatMenuOption>();
+        Find.WindowStack.Add(new Dialog_ExtraDecorationMaskSelection(apparel, extraDecoration, masks.TryGetValue(extraDecoration), size));
+        /*var list = new List<FloatMenuOption>();
 
         foreach (var mask in masks.TryGetValue(extraDecoration))
         {
@@ -355,7 +346,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
             list.Add(menuOptionNone);
         }
         
-        Find.WindowStack.Add(new FloatMenu(list));
+        Find.WindowStack.Add(new FloatMenu(list));*/
     }
 
     private void SelectPreset(DecorativeApparelMultiColor apparel, ExtraDecorationDef extraDecoration)
@@ -375,7 +366,6 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                 apparel.UpdateDecorationColourOne(extraDecoration, preset.colour);
                 apparel.UpdateDecorationColourTwo(extraDecoration, preset.colourTwo ?? Color.white);
                 apparel.UpdateDecorationColourThree(extraDecoration, preset.colourThree ?? Color.white);
-                recache = true;
             }, Core40kUtils.ThreeColourPreview(preset.colour, preset.colourTwo, preset.colourThree, colorAmount), Color.white);
             list.Add(menuOption);
         }
