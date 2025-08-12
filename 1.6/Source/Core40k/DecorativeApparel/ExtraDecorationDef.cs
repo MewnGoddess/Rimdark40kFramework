@@ -6,11 +6,11 @@ namespace Core40k;
 
 public class ExtraDecorationDef : DecorationDef
 {
+    public ShaderTypeDef shaderType;
+    
     public bool isHelmetDecoration = false;
         
     public List<Rot4> defaultShowRotation = new() {Rot4.North, Rot4.South, Rot4.East, Rot4.West};
-
-    public ShaderTypeDef shaderType = null;
 
     public DrawData drawData = new();
 
@@ -26,11 +26,20 @@ public class ExtraDecorationDef : DecorationDef
         
     public bool appliesToAll = false;
 
-    public MaskDef defaultMask = Core40kDefOf.BEWH_DefaultMask;
+    public MaskDef defaultMask;
+
+    public bool useMask = false;
 
     public int colorAmount = 1;
         
     public bool drawInHeadSpace = false;
     
     public Vector2 drawSize = Vector2.one;
+    
+    public override void ResolveReferences()
+    {
+        base.ResolveReferences();
+        defaultMask ??= Core40kDefOf.BEWH_DefaultMask;
+        shaderType ??= Core40kDefOf.BEWH_CutoutThreeColor;
+    }
 }

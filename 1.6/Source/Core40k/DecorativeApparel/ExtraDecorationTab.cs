@@ -137,8 +137,15 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                 Rect colourSelectionTwo;
                 Rect colourSelectionThree;
                 Rect presetSelection;
+
+                var colorAmount = extraDecorationDefs[i].colorAmount;
+
+                if (!apparel.ExtraDecorations[extraDecorationDefs[i]].maskDef.setsNull)
+                {
+                    colorAmount = apparel.ExtraDecorations[extraDecorationDefs[i]].maskDef.colorAmount;
+                }
                 
-                switch (apparel.ExtraDecorations[extraDecorationDefs[i]].maskDef?.colorAmount ?? extraDecorationDefs[i].colorAmount)
+                switch (colorAmount)
                 {
                     case 1:
                         colourSelection = new Rect(bottomRect);
@@ -355,7 +362,12 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
     {
         var presets = extraDecoration.availablePresets;
         var list = new List<FloatMenuOption>();
-        var colorAmount = apparel.ExtraDecorations[extraDecoration].maskDef?.colorAmount ?? extraDecoration.colorAmount;
+        var colorAmount = extraDecoration.colorAmount;
+
+        if (!apparel.ExtraDecorations[extraDecoration].maskDef.setsNull)
+        {
+            colorAmount = apparel.ExtraDecorations[extraDecoration].maskDef.colorAmount;
+        }
         foreach (var preset in presets)
         {
             var menuOption = new FloatMenuOption(preset.label, delegate

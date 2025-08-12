@@ -26,7 +26,7 @@ public class DynamicPawnRenderNodeSetup_DecorativeApparelBody : DynamicPawnRende
                 {
                     nodeClass = typeof(PawnRenderNode_AttachmentExtraDecoration),
                     texPath = decoration.Key.drawnTextureIconPath,
-                    shaderTypeDef = decoration.Key.shaderType,                                                                      
+                    shaderTypeDef = decoration.Key.shaderType,
                     drawData = decoration.Key.drawData,
                     drawSize = decoration.Key.drawSize,
                     flipGraphic = decoration.Value.Flipped,
@@ -35,7 +35,8 @@ public class DynamicPawnRenderNodeSetup_DecorativeApparelBody : DynamicPawnRende
                     colorThree = decoration.Value.ColorThree,
                     parentTagDef = decoration.Key.drawInHeadSpace ? PawnRenderNodeTagDefOf.Head : PawnRenderNodeTagDefOf.Body,
                     workerClass = typeof(PawnRenderNodeWorker_AttachmentExtraDecorationBody),
-                    maskDef = decoration.Value.maskDef
+                    maskDef = decoration.Value.maskDef,
+                    useMask = decoration.Key.useMask,
                 };
                 
                 var pawnRenderNode = (PawnRenderNode_AttachmentExtraDecoration)Activator.CreateInstance(typeof(PawnRenderNode_AttachmentExtraDecoration), pawn, pawnRenderNodeProperty, tree);
