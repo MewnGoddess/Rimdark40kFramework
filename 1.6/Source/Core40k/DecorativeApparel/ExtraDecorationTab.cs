@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ColourPicker;
+using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -20,6 +22,10 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
     private float curY;
     
     private Dictionary<ExtraDecorationDef, List<MaskDef>> masks = new ();
+    
+    private Dictionary<(ExtraDecorationDef, MaskDef), Material> cachedMaterials = new ();
+    
+    private bool recache = true;
         
     private List<ExtraDecorationDef> extraDecorationDefsBody = new List<ExtraDecorationDef>();
     private List<ExtraDecorationDef> extraDecorationDefsHelmet = new List<ExtraDecorationDef>();
@@ -155,6 +161,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                         {
                             Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].Color, ( newColour ) =>
                             {
+                                recache = true;
                                 apparel.UpdateDecorationColourOne(extraDecorationDefs[i1], newColour);
                             } ) );
                         }
@@ -176,6 +183,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                         {
                             Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].Color, ( newColour ) =>
                             {
+                                recache = true;
                                 apparel.UpdateDecorationColourOne(extraDecorationDefs[i1], newColour);
                             } ) );
                         }
@@ -189,6 +197,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                         {
                             Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].ColorTwo, ( newColour ) =>
                             {
+                                recache = true;
                                 apparel.UpdateDecorationColourTwo(extraDecorationDefs[i1], newColour);
                             } ) );
                         }
@@ -214,6 +223,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                         {
                             Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].Color, ( newColour ) =>
                             {
+                                recache = true;
                                 apparel.UpdateDecorationColourOne(extraDecorationDefs[i1], newColour);
                             } ) );
                         }
@@ -227,6 +237,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                         {
                             Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].ColorTwo, ( newColour ) =>
                             {
+                                recache = true;
                                 apparel.UpdateDecorationColourTwo(extraDecorationDefs[i1], newColour);
                             } ) );
                         }
@@ -240,6 +251,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                         {
                             Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDefs[i1]].ColorThree, ( newColour ) =>
                             {
+                                recache = true;
                                 apparel.UpdateDecorationColourThree(extraDecorationDefs[i1], newColour);
                             } ) );
                         }
@@ -307,16 +319,10 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
 
     private void SelectMask(DecorativeApparelMultiColor apparel, ExtraDecorationDef extraDecoration, float size)
     {
-        Find.WindowStack.Add(new Dialog_ExtraDecorationMaskSelection(apparel, extraDecoration, masks.TryGetValue(extraDecoration), size));
-        /*var list = new List<FloatMenuOption>();
-
+        var list = new List<FloatMenuOption>();
+        var mouseOffset = Input.mousePosition;
         foreach (var mask in masks.TryGetValue(extraDecoration))
         {
-            if (apparel.ExtraDecorations[extraDecoration].maskDef == mask)
-            {
-                continue;
-            }
-            
             if (!cachedMaterials.ContainsKey((extraDecoration, mask)) || recache)
             {
                 if (recache)
@@ -326,7 +332,11 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
 
                 var path = extraDecoration.drawnTextureIconPath;
                 var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
-                var graphic = MultiColorUtils.GetGraphic<Graphic_Multi>(path, shader, Vector2.one, apparel.ExtraDecorations[extraDecoration].Color, apparel.ExtraDecorations[extraDecoration].Color, apparel.ExtraDecorations[extraDecoration].Color, null, mask?.maskPath);
+                var graphic = MultiColorUtils.GetGraphic<Graphic_Multi>(path, shader, Vector2.one, apparel.ExtraDecorations[extraDecoration].Color, apparel.ExtraDecorations[extraDecoration].ColorTwo, apparel.ExtraDecorations[extraDecoration].ColorThree, null, mask?.maskPath ?? path + "_mask");
+                if (!extraDecoration.useMask)
+                {
+                    graphic = (Graphic_Multi)GraphicDatabase.Get<Graphic_Multi>(path, extraDecoration.shaderType.Shader, Vector2.one, apparel.ExtraDecorations[extraDecoration].Color);
+                }
                 var material = graphic.MatSouth;
                 cachedMaterials.Add((extraDecoration, mask), material);
                 recache = false;
@@ -335,18 +345,40 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
             var menuOption = new FloatMenuOption(mask.label, delegate
             {
                 apparel.UpdateDecorationMask(extraDecoration, mask);
-                recache = true;
-            }, (Texture2D)null, Color.white, mouseoverGuiAction: rect => Graphics.DrawTexture(rect, cachedMaterials[(extraDecoration, mask)].mainTexture, cachedMaterials[(extraDecoration, mask)]));
+            }, (Texture2D)null, Color.white, mouseoverGuiAction: delegate(Rect rect)
+            {
+                if (Mouse.IsOver(rect))
+                {
+                    var pictureSize = new Vector2(100, 100);
+                    var mouseAttachedWindowPos = Event.current.mousePosition;
+                    mouseAttachedWindowPos.x += mouseOffset.x;
+                    mouseAttachedWindowPos.y += mouseOffset.y;
+                    
+                    var pictureRect = new Rect(mouseAttachedWindowPos, pictureSize);
+                    
+                    Find.WindowStack.ImmediateWindow(1859615242, pictureRect, WindowLayer.Super, delegate
+                    {
+                        Widgets.DrawMenuSection(pictureRect.AtZero());
+                        Graphics.DrawTexture(pictureRect.AtZero(), cachedMaterials[(extraDecoration, mask)].mainTexture, cachedMaterials[(extraDecoration, mask)]);
+
+                    });
+                }
+            });
+            if (apparel.ExtraDecorations[extraDecoration].maskDef == mask)
+            {
+                menuOption.Disabled = true;
+            }
+
             list.Add(menuOption);
         }
-        
+
         if (list.NullOrEmpty())
         {
             var menuOptionNone = new FloatMenuOption("NoneBrackets".Translate(), null);
             list.Add(menuOptionNone);
         }
         
-        Find.WindowStack.Add(new FloatMenu(list));*/
+        Find.WindowStack.Add(new FloatMenu(list));
     }
 
     private void SelectPreset(DecorativeApparelMultiColor apparel, ExtraDecorationDef extraDecoration)
@@ -363,6 +395,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         {
             var menuOption = new FloatMenuOption(preset.label, delegate
             {
+                recache = true;
                 apparel.UpdateDecorationColourOne(extraDecoration, preset.colour);
                 apparel.UpdateDecorationColourTwo(extraDecoration, preset.colourTwo ?? Color.white);
                 apparel.UpdateDecorationColourThree(extraDecoration, preset.colourThree ?? Color.white);
