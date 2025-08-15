@@ -117,6 +117,7 @@
     <Compile Include="DataStructs\CachedGraphicRenderInfo.cs" />
     <Compile Include="DataStructs\PresetData.cs" />
     <Compile Include="DataStructs\TraitData.cs" />
+    <Compile Include="DataStructs\WieghtedTraitData.cs" />
     <Compile Include="Debug\DebugActions.cs" />
     <Compile Include="DecorativeApparel\BodyDecorativeApparelMultiColor.cs" />
     <Compile Include="DecorativeApparel\DecorativeApparelMultiColor.cs" />
