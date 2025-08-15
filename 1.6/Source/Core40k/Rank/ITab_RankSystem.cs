@@ -101,7 +101,11 @@ public class ITab_RankSystem : ITab
         }
         else
         {
-            currentlySelectedRankCategory = availableCategories.Count > 0 ? availableCategories[0] : null;
+            currentlySelectedRankCategory = null;
+            foreach (var availableCategory in availableCategories.Where(availableCategory => availableCategory.RankCategoryUnlockedFor(pawn)))
+            {
+                currentlySelectedRankCategory = availableCategory;
+            }
         }
         GetRanksForCategory();
         if (!compRankInfo.UnlockedRanks.NullOrEmpty())
@@ -202,11 +206,11 @@ public class ITab_RankSystem : ITab
                     GetRanksForCategory();
                     rankPos.Clear();
                 }, Widgets.PlaceholderIconTex, Color.white);
-                if (!MeetsCategoryRequirements(category))
+                if (!category.RankCategoryUnlockedFor(pawn))
                 {
-                    var newLabel = "BEWH.Framework.RankSystem.CategoryRequires".Translate(category.label.CapitalizeFirst(), DoesNotMeetRequirementTextForCategory(category));
+                    var newLabel = category.RankCategoryRequirementsNotMetFor(pawn);
                     menuOption.Disabled = true;
-                    menuOption.Label = newLabel;
+                    menuOption.tooltip = newLabel;
                 }
                 list.Add(menuOption);
             }
@@ -264,6 +268,11 @@ public class ITab_RankSystem : ITab
         
     private void FillRankTree(Rect rectRankTree)
     {
+        if (currentlySelectedRankCategory == null)
+        {
+            return;
+        }
+        
         var viewRect = new Rect(rectRankTree);
 
         viewRect.ContractedBy(20f);
@@ -501,6 +510,7 @@ public class ITab_RankSystem : ITab
             Text.Anchor = TextAnchor.MiddleCenter;
             var text = "BEWH.Framework.RankSystem.NoRankSelected".Translate();
             Widgets.Label(rectRankInfo, text);
+            Text.Anchor = TextAnchor.UpperLeft;
         }
     }
 
@@ -847,64 +857,6 @@ public class ITab_RankSystem : ITab
             text2 = string.Format(stat.formatString, text2);
         }
         return text2;
-    }
-
-    private bool MeetsCategoryRequirements(RankCategoryDef rankCategoryDef)
-    {
-        var geneRequirementMet = true;
-        if (pawn.genes != null && rankCategoryDef.unlockedByGene != null)
-        {
-            geneRequirementMet = pawn.genes.HasActiveGene(rankCategoryDef.unlockedByGene);
-        }
-            
-        var hediffRequirementMet = true;
-        if (rankCategoryDef.unlockedByHediff != null)
-        {
-            hediffRequirementMet = pawn.health.hediffSet.HasHediff(rankCategoryDef.unlockedByHediff);
-        }
-            
-        var traitRequirementMet = true;
-        if (rankCategoryDef.unlockedByTrait != null)
-        {
-            traitRequirementMet = pawn.story.traits.HasTrait(rankCategoryDef.unlockedByTrait, rankCategoryDef.traitDegree);
-        }
-
-        return geneRequirementMet && hediffRequirementMet && traitRequirementMet;
-    }
-
-    private string DoesNotMeetRequirementTextForCategory(RankCategoryDef rankCategoryDef)
-    {
-        var stringBuilder = new StringBuilder();
-        var allRequirement = new List<string>();
-        if (pawn.genes != null && rankCategoryDef.unlockedByGene != null && !pawn.genes.HasActiveGene(rankCategoryDef.unlockedByGene))
-        {
-            allRequirement.Add("BEWH.Framework.RankSystem.CategoryRequiredGene".Translate(rankCategoryDef.unlockedByGene.label.CapitalizeFirst()));
-        }
-            
-        if (rankCategoryDef.unlockedByHediff != null && !pawn.health.hediffSet.HasHediff(rankCategoryDef.unlockedByHediff))
-        {
-            allRequirement.Add("BEWH.Framework.RankSystem.CategoryRequiredHediff".Translate(rankCategoryDef.unlockedByHediff.label.CapitalizeFirst()));
-        }
-            
-        if (rankCategoryDef.unlockedByTrait != null && !pawn.story.traits.HasTrait(rankCategoryDef.unlockedByTrait, rankCategoryDef.traitDegree))
-        {
-            allRequirement.Add("BEWH.Framework.RankSystem.CategoryRequiredTrait".Translate(rankCategoryDef.unlockedByTrait.DataAtDegree(rankCategoryDef.traitDegree).label.CapitalizeFirst()));
-        }
-
-        for (var i = 0; i < allRequirement.Count; i++)
-        {
-            stringBuilder.Append(allRequirement[i]);
-            if (i + 2 == allRequirement.Count)
-            {
-                stringBuilder.Append("BEWH.Framework.RankSystem.And".Translate());
-            }
-            else if (i + 2 < allRequirement.Count)
-            {
-                stringBuilder.Append(", ");
-            }
-        }
-
-        return stringBuilder.ToString();
     }
         
     private bool AlreadyUnlocked(RankDef rankDef)
