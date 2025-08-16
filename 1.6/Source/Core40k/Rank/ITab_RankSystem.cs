@@ -72,12 +72,6 @@ public class ITab_RankSystem : ITab
 
     public ITab_RankSystem()
     {
-        var heightMult = 0.75f;
-        if (ModsConfig.IsActive("jaxe.rimhud"))
-        {
-            heightMult = 0.7f;
-        }
-        size = new Vector2(UI.screenWidth, UI.screenHeight * heightMult);
         labelKey = "BEWH.Framework.RankSystem.RankTab";
         UpdateRankCategoryList();
     }
@@ -86,6 +80,9 @@ public class ITab_RankSystem : ITab
     {
         base.OnOpen();
         pawn = SelPawn;
+
+        size = new Vector2(UI.screenWidth, PaneTopY - 100);
+        
         compRankInfo = pawn.GetComp<CompRankInfo>();
         if (compRankInfo == null)
         {
