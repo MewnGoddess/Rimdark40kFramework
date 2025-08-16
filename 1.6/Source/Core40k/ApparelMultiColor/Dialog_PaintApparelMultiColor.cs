@@ -192,7 +192,7 @@ public class Dialog_PaintApparelMultiColor : Window
                     {
                         item.DrawColor = preset.primaryColour;
                         item.SetSecondaryColor(preset.secondaryColour);
-                        item.SetTertiaryColor(preset.tertiaryColour);
+                        item.SetTertiaryColor(preset.tertiaryColour ?? preset.secondaryColour);
                         recache = true;
                             
                     }, Core40kUtils.ThreeColourPreview(preset.primaryColour, preset.secondaryColour, preset.tertiaryColour, preset.colorAmount), Color.white);
@@ -205,7 +205,7 @@ public class Dialog_PaintApparelMultiColor : Window
                     {
                         item.DrawColor = preset.primaryColour;
                         item.SetSecondaryColor(preset.secondaryColour);
-                        item.SetTertiaryColor(preset.tertiaryColour);
+                        item.SetTertiaryColor(preset.tertiaryColour ?? preset.secondaryColour);
                         recache = true;
                             
                     }, Core40kUtils.ThreeColourPreview(preset.primaryColour, preset.secondaryColour, preset.tertiaryColour, 3), Color.white);
@@ -284,54 +284,10 @@ public class Dialog_PaintApparelMultiColor : Window
                 colorOneRect = colorOneRect.ContractedBy(3);
                 colorTwoRect = colorTwoRect.ContractedBy(3);
                 colorThreeRect = colorThreeRect.ContractedBy(3);
-                
-                //Primary Color
-                Widgets.DrawMenuSection(colorOneRect.ContractedBy(-1));
-                Widgets.DrawRectFast(colorOneRect, item.DrawColor);
-                Text.Anchor = TextAnchor.MiddleCenter;
-                Widgets.Label(colorOneRect, "BEWH.Framework.ApparelMultiColor.PrimaryColor".Translate());
-                TooltipHandler.TipRegion(colorOneRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
-                Text.Anchor = TextAnchor.UpperLeft;
-                if (Widgets.ButtonInvisible(colorOneRect))
-                {
-                    Find.WindowStack.Add( new Dialog_ColourPicker( item.DrawColor, ( newColour ) =>
-                    {
-                        item.DrawColor = newColour;
-                        recache = true;
-                    } ) );
-                }
-                    
-                //Secondary Color
-                Widgets.DrawMenuSection(colorTwoRect.ContractedBy(-1));
-                Widgets.DrawRectFast(colorTwoRect, item.DrawColorTwo);
-                Text.Anchor = TextAnchor.MiddleCenter;
-                Widgets.Label(colorTwoRect, "BEWH.Framework.ApparelMultiColor.SecondaryColor".Translate());
-                TooltipHandler.TipRegion(colorTwoRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
-                Text.Anchor = TextAnchor.UpperLeft;
-                if (Widgets.ButtonInvisible(colorTwoRect))
-                {
-                    Find.WindowStack.Add( new Dialog_ColourPicker( item.DrawColorTwo, ( newColour ) =>
-                    {
-                        item.SetSecondaryColor(newColour);
-                        recache = true;
-                    } ) );
-                }
-                
-                //Tertiary Color
-                Widgets.DrawMenuSection(colorThreeRect.ContractedBy(-1));
-                Widgets.DrawRectFast(colorThreeRect, item.DrawColorThree);
-                Text.Anchor = TextAnchor.MiddleCenter;
-                Widgets.Label(colorThreeRect, "BEWH.Framework.ApparelMultiColor.TertiaryColor".Translate());
-                TooltipHandler.TipRegion(colorThreeRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
-                Text.Anchor = TextAnchor.UpperLeft;
-                if (Widgets.ButtonInvisible(colorThreeRect))
-                {
-                    Find.WindowStack.Add( new Dialog_ColourPicker( item.DrawColorThree, ( newColour ) =>
-                    {
-                        item.SetTertiaryColor(newColour);
-                        recache = true;
-                    } ) );
-                }
+
+                PrimaryColorBox(colorOneRect, item);
+                SecondaryColorBox(colorTwoRect, item);
+                TertiaryColorBox(colorThreeRect, item);
 
                 //Mask Stuff
                 if (masks.ContainsKey(item.def) && masks[item.def].Count > 1)
@@ -442,6 +398,60 @@ public class Dialog_PaintApparelMultiColor : Window
             viewRectHeight = curY - rect.y;
         }
         Widgets.EndScrollView();
+    }
+
+    private void PrimaryColorBox(Rect colorOneRect, ApparelMultiColor item)
+    {
+        Widgets.DrawMenuSection(colorOneRect.ContractedBy(-1));
+        Widgets.DrawRectFast(colorOneRect, item.DrawColor);
+        Text.Anchor = TextAnchor.MiddleCenter;
+        Widgets.Label(colorOneRect, "BEWH.Framework.ApparelMultiColor.PrimaryColor".Translate());
+        TooltipHandler.TipRegion(colorOneRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        Text.Anchor = TextAnchor.UpperLeft;
+        if (Widgets.ButtonInvisible(colorOneRect))
+        {
+            Find.WindowStack.Add( new Dialog_ColourPicker( item.DrawColor, ( newColour ) =>
+            {
+                item.DrawColor = newColour;
+                recache = true;
+            } ) );
+        }
+    }
+    
+    private void SecondaryColorBox(Rect colorTwoRect, ApparelMultiColor item)
+    {
+        Widgets.DrawMenuSection(colorTwoRect.ContractedBy(-1));
+        Widgets.DrawRectFast(colorTwoRect, item.DrawColorTwo);
+        Text.Anchor = TextAnchor.MiddleCenter;
+        Widgets.Label(colorTwoRect, "BEWH.Framework.ApparelMultiColor.SecondaryColor".Translate());
+        TooltipHandler.TipRegion(colorTwoRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        Text.Anchor = TextAnchor.UpperLeft;
+        if (Widgets.ButtonInvisible(colorTwoRect))
+        {
+            Find.WindowStack.Add( new Dialog_ColourPicker( item.DrawColorTwo, ( newColour ) =>
+            {
+                item.SetSecondaryColor(newColour);
+                recache = true;
+            } ) );
+        }
+    }
+    
+    private void TertiaryColorBox(Rect colorThreeRect, ApparelMultiColor item)
+    {
+        Widgets.DrawMenuSection(colorThreeRect.ContractedBy(-1));
+        Widgets.DrawRectFast(colorThreeRect, item.DrawColorThree);
+        Text.Anchor = TextAnchor.MiddleCenter;
+        Widgets.Label(colorThreeRect, "BEWH.Framework.ApparelMultiColor.TertiaryColor".Translate());
+        TooltipHandler.TipRegion(colorThreeRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        Text.Anchor = TextAnchor.UpperLeft;
+        if (Widgets.ButtonInvisible(colorThreeRect))
+        {
+            Find.WindowStack.Add( new Dialog_ColourPicker( item.DrawColorThree, ( newColour ) =>
+            {
+                item.SetTertiaryColor(newColour);
+                recache = true;
+            } ) );
+        }
     }
 
     private void DrawBottomButtons(Rect inRect)

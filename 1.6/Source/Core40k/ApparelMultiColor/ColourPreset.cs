@@ -9,7 +9,7 @@ public class ColourPreset : IExposable
     public PresetType appliesToKind = PresetType.None;
     public Color primaryColour = Color.white;
     public Color secondaryColour = Color.white;
-    public Color tertiaryColour = new Color(0,0,0,0);
+    public Color? tertiaryColour;
 
     public ColourPreset()
     {

@@ -8,7 +8,7 @@ public class ColourPresetDef : Def
 {
     public Color primaryColour = Color.white;
     public Color secondaryColour = Color.white;
-    public Color tertiaryColour = new Color(0,0,0,0);
+    public Color? tertiaryColour = null;
     
     public int colorAmount = 1;
 

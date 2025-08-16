@@ -146,7 +146,7 @@ public class Dialog_PaintWeaponMultiColor : Window
                 {
                     weapon.DrawColor = preset.primaryColour;
                     weapon.SetSecondaryColor(preset.secondaryColour);
-                    weapon.SetTertiaryColor(preset.tertiaryColour);
+                    weapon.SetTertiaryColor(preset.tertiaryColour ?? preset.secondaryColour);
                     recache = true;
                             
                 }, Core40kUtils.ThreeColourPreview(preset.primaryColour, preset.secondaryColour, preset.tertiaryColour, preset.colorAmount), Color.white);
@@ -159,7 +159,7 @@ public class Dialog_PaintWeaponMultiColor : Window
                 {
                     weapon.DrawColor = preset.primaryColour;
                     weapon.SetSecondaryColor(preset.secondaryColour);
-                    weapon.SetTertiaryColor(preset.tertiaryColour);
+                    weapon.SetTertiaryColor(preset.tertiaryColour ?? preset.secondaryColour);
                     recache = true;
                             
                 }, Core40kUtils.ThreeColourPreview(preset.primaryColour, preset.secondaryColour, preset.tertiaryColour, 3), Color.white);
@@ -224,20 +224,7 @@ public class Dialog_PaintWeaponMultiColor : Window
                 colorOneRect.y = colorRects.yMax - colorRects.height / 2 - colorOneRect.height / 2;
                 colorOneRect = colorOneRect.ContractedBy(10);
                 
-                Widgets.DrawMenuSection(colorOneRect.ContractedBy(-1));
-                Widgets.DrawRectFast(colorOneRect, weapon.DrawColor);
-                Text.Anchor = TextAnchor.MiddleCenter;
-                Widgets.Label(colorOneRect, "BEWH.Framework.ApparelMultiColor.PrimaryColor".Translate());
-                TooltipHandler.TipRegion(colorOneRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
-                Text.Anchor = TextAnchor.UpperLeft;
-                if (Widgets.ButtonInvisible(colorOneRect))
-                {
-                    Find.WindowStack.Add( new Dialog_ColourPicker( weapon.DrawColor, ( newColour ) =>
-                    {
-                        weapon.DrawColor = newColour;
-                        recache = true;
-                    } ) );
-                }
+                PrimaryColorBox(colorOneRect);
                 break;
             case 2:
                 colorRects = inRect.TakeBottomPart(inRect.height / 2f);
@@ -251,35 +238,8 @@ public class Dialog_PaintWeaponMultiColor : Window
                 colorOneRect = colorOneRect.ContractedBy(10);
                 colorTwoRect = colorTwoRect.ContractedBy(10);
                 
-                Widgets.DrawMenuSection(colorOneRect.ContractedBy(-1));
-                Widgets.DrawRectFast(colorOneRect, weapon.DrawColor);
-                Text.Anchor = TextAnchor.MiddleCenter;
-                Widgets.Label(colorOneRect, "BEWH.Framework.ApparelMultiColor.PrimaryColor".Translate());
-                TooltipHandler.TipRegion(colorOneRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
-                Text.Anchor = TextAnchor.UpperLeft;
-                if (Widgets.ButtonInvisible(colorOneRect))
-                {
-                    Find.WindowStack.Add( new Dialog_ColourPicker( weapon.DrawColor, ( newColour ) =>
-                    {
-                        weapon.DrawColor = newColour;
-                        recache = true;
-                    } ) );
-                }
-                
-                Widgets.DrawMenuSection(colorTwoRect.ContractedBy(-1));
-                Widgets.DrawRectFast(colorTwoRect, weapon.DrawColorTwo);
-                Text.Anchor = TextAnchor.MiddleCenter;
-                Widgets.Label(colorTwoRect, "BEWH.Framework.ApparelMultiColor.SecondaryColor".Translate());
-                TooltipHandler.TipRegion(colorTwoRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
-                Text.Anchor = TextAnchor.UpperLeft;
-                if (Widgets.ButtonInvisible(colorTwoRect))
-                {
-                    Find.WindowStack.Add( new Dialog_ColourPicker( weapon.DrawColorTwo, ( newColour ) =>
-                    {
-                        weapon.SetSecondaryColor(newColour);
-                        recache = true;
-                    } ) );
-                }
+                PrimaryColorBox(colorOneRect);
+                SecondaryColorBox(colorTwoRect);
                 break;
             case 3:
                 colorRects = inRect.TakeBottomPart(inRect.height / 2f);
@@ -301,51 +261,64 @@ public class Dialog_PaintWeaponMultiColor : Window
                 colorTwoRect = colorTwoRect.ContractedBy(10);
                 colorThreeRect = colorThreeRect.ContractedBy(10);
                 
-                Widgets.DrawMenuSection(colorOneRect.ContractedBy(-1));
-                Widgets.DrawRectFast(colorOneRect, weapon.DrawColor);
-                Text.Anchor = TextAnchor.MiddleCenter;
-                Widgets.Label(colorOneRect, "BEWH.Framework.ApparelMultiColor.PrimaryColor".Translate());
-                TooltipHandler.TipRegion(colorOneRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
-                Text.Anchor = TextAnchor.UpperLeft;
-                if (Widgets.ButtonInvisible(colorOneRect))
-                {
-                    Find.WindowStack.Add( new Dialog_ColourPicker( weapon.DrawColor, ( newColour ) =>
-                    {
-                        weapon.DrawColor = newColour;
-                        recache = true;
-                    } ) );
-                }
-                
-                Widgets.DrawMenuSection(colorTwoRect.ContractedBy(-1));
-                Widgets.DrawRectFast(colorTwoRect, weapon.DrawColorTwo);
-                Text.Anchor = TextAnchor.MiddleCenter;
-                Widgets.Label(colorTwoRect, "BEWH.Framework.ApparelMultiColor.SecondaryColor".Translate());
-                TooltipHandler.TipRegion(colorTwoRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
-                Text.Anchor = TextAnchor.UpperLeft;
-                if (Widgets.ButtonInvisible(colorTwoRect))
-                {
-                    Find.WindowStack.Add( new Dialog_ColourPicker( weapon.DrawColorTwo, ( newColour ) =>
-                    {
-                        weapon.SetSecondaryColor(newColour);
-                        recache = true;
-                    } ) );
-                }
-                
-                Widgets.DrawMenuSection(colorThreeRect.ContractedBy(-1));
-                Widgets.DrawRectFast(colorThreeRect, weapon.DrawColorThree);
-                Text.Anchor = TextAnchor.MiddleCenter;
-                Widgets.Label(colorThreeRect, "BEWH.Framework.ApparelMultiColor.TertiaryColor".Translate());
-                TooltipHandler.TipRegion(colorThreeRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
-                Text.Anchor = TextAnchor.UpperLeft;
-                if (Widgets.ButtonInvisible(colorThreeRect))
-                {
-                    Find.WindowStack.Add( new Dialog_ColourPicker( weapon.DrawColorThree, ( newColour ) =>
-                    {
-                        weapon.SetTertiaryColor(newColour);
-                        recache = true;
-                    } ) );
-                }
+                PrimaryColorBox(colorOneRect);
+                SecondaryColorBox(colorTwoRect);
+                TertiaryColorBox(colorThreeRect);
                 break;
+        }
+    }
+    
+    private void PrimaryColorBox(Rect colorOneRect)
+    {
+        Widgets.DrawMenuSection(colorOneRect.ContractedBy(-1));
+        Widgets.DrawRectFast(colorOneRect, weapon.DrawColor);
+        Text.Anchor = TextAnchor.MiddleCenter;
+        Widgets.Label(colorOneRect, "BEWH.Framework.ApparelMultiColor.PrimaryColor".Translate());
+        TooltipHandler.TipRegion(colorOneRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        Text.Anchor = TextAnchor.UpperLeft;
+        if (Widgets.ButtonInvisible(colorOneRect))
+        {
+            Find.WindowStack.Add( new Dialog_ColourPicker( weapon.DrawColor, ( newColour ) =>
+            {
+                weapon.DrawColor = newColour;
+                recache = true;
+            } ) );
+        }
+    }
+    
+    private void SecondaryColorBox(Rect colorTwoRect)
+    {
+        Widgets.DrawMenuSection(colorTwoRect.ContractedBy(-1));
+        Widgets.DrawRectFast(colorTwoRect, weapon.DrawColorTwo);
+        Text.Anchor = TextAnchor.MiddleCenter;
+        Widgets.Label(colorTwoRect, "BEWH.Framework.ApparelMultiColor.SecondaryColor".Translate());
+        TooltipHandler.TipRegion(colorTwoRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        Text.Anchor = TextAnchor.UpperLeft;
+        if (Widgets.ButtonInvisible(colorTwoRect))
+        {
+            Find.WindowStack.Add( new Dialog_ColourPicker( weapon.DrawColorTwo, ( newColour ) =>
+            {
+                weapon.SetSecondaryColor(newColour);
+                recache = true;
+            } ) );
+        }
+    }
+    
+    private void TertiaryColorBox(Rect colorThreeRect)
+    {
+        Widgets.DrawMenuSection(colorThreeRect.ContractedBy(-1));
+        Widgets.DrawRectFast(colorThreeRect, weapon.DrawColorThree);
+        Text.Anchor = TextAnchor.MiddleCenter;
+        Widgets.Label(colorThreeRect, "BEWH.Framework.ApparelMultiColor.TertiaryColor".Translate());
+        TooltipHandler.TipRegion(colorThreeRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        Text.Anchor = TextAnchor.UpperLeft;
+        if (Widgets.ButtonInvisible(colorThreeRect))
+        {
+            Find.WindowStack.Add( new Dialog_ColourPicker( weapon.DrawColorThree, ( newColour ) =>
+            {
+                weapon.SetTertiaryColor(newColour);
+                recache = true;
+            } ) );
         }
     }
     
