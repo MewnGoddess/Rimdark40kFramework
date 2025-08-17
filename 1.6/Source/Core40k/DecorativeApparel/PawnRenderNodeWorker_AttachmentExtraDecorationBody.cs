@@ -47,6 +47,11 @@ public class PawnRenderNodeWorker_AttachmentExtraDecorationBody : PawnRenderNode
             {
                 return true;
             }
+            
+            if (pawn.Swimming)
+            {
+                return false;
+            }
                 
             if (!showWhenFacing.Contains(parms.facing))
             {
