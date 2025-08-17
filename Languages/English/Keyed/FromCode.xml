@@ -108,10 +108,10 @@
   <BEWH.Framework.RankSystem.NoUnlockedRanksOfCategory>{0} does not have any ranks of category {1}</BEWH.Framework.RankSystem.NoUnlockedRanksOfCategory>
   <BEWH.Framework.RankSystem.RankTooHigh>{0} rank is too high to reset</BEWH.Framework.RankSystem.RankTooHigh>
 
-  <!--=== Rank System ===-->
-  <BEWH.Framework.AmmoChanger.GizmoInfo>Currently Equipped Ammo: {0}\n Click to change ammo type</BEWH.Framework.AmmoChanger.GizmoInfo>
-  <BEWH.Framework.AmmoChanger.CurrentlyEquipped>Currently Equipped</BEWH.Framework.AmmoChanger.CurrentlyEquipped>
-  <BEWH.Framework.AmmoChanger.MissingResearch>Missing Research: {0}</BEWH.Framework.AmmoChanger.MissingResearch>
+  <!--=== Changeable Ammo ===-->
+  <BEWH.Framework.AmmoChanger.GizmoInfo>Ammo type: {0}\nClick to change.</BEWH.Framework.AmmoChanger.GizmoInfo>
+  <BEWH.Framework.AmmoChanger.CurrentlyEquipped>Currently equipped.</BEWH.Framework.AmmoChanger.CurrentlyEquipped>
+  <BEWH.Framework.AmmoChanger.MissingResearch>Missing research: {0}</BEWH.Framework.AmmoChanger.MissingResearch>
 
   <!--=== Misc ===-->
   <!-- Unbreakable -->
