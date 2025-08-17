@@ -323,22 +323,23 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                 apparel.UpdateDecorationMask(extraDecoration, mask);
             }, (Texture2D)null, Color.white, mouseoverGuiAction: delegate(Rect rect)
             {
-                if (Mouse.IsOver(rect))
+                if (!Mouse.IsOver(rect))
                 {
-                    var pictureSize = new Vector2(100, 100);
-                    var mouseAttachedWindowPos = Event.current.mousePosition;
-                    mouseAttachedWindowPos.x += mouseOffset.x;
-                    mouseAttachedWindowPos.y += mouseOffset.y;
-                    
-                    var pictureRect = new Rect(mouseAttachedWindowPos, pictureSize);
-                    
-                    Find.WindowStack.ImmediateWindow(1859615242, pictureRect, WindowLayer.Super, delegate
-                    {
-                        Widgets.DrawMenuSection(pictureRect.AtZero());
-                        Graphics.DrawTexture(pictureRect.AtZero(), cachedMaterials[(extraDecoration, mask)].mainTexture, cachedMaterials[(extraDecoration, mask)]);
-
-                    });
+                    return;
                 }
+                var pictureSize = new Vector2(100, 100);
+                var mouseAttachedWindowPos = new Vector2(rect.width, -rect.height);
+                mouseAttachedWindowPos.x += mouseOffset.x;
+                mouseAttachedWindowPos.y += mouseOffset.y;
+                    
+                var pictureRect = new Rect(mouseAttachedWindowPos, pictureSize);
+                    
+                Find.WindowStack.ImmediateWindow(1859615242, pictureRect, WindowLayer.Super, delegate
+                {
+                    Widgets.DrawMenuSection(pictureRect.AtZero());
+                    Graphics.DrawTexture(pictureRect.AtZero(), cachedMaterials[(extraDecoration, mask)].mainTexture, cachedMaterials[(extraDecoration, mask)]);
+
+                });
             });
             if (apparel.ExtraDecorations[extraDecoration].maskDef == mask)
             {
