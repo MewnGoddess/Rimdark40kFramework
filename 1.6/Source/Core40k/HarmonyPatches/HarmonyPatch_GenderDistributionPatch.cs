@@ -19,7 +19,10 @@ public class GenderDistributionPatch
         float female = -1;
         foreach (var gene in genesListForReading)
         {
-            if (!gene.Active) continue;
+            if (!gene.Active)
+            {
+                continue;
+            }
                 
             var modExtension = gene.def.GetModExtension<GeneExtension>();
             if (modExtension != null && (modExtension.forceFemale || modExtension.forceMale))
@@ -27,13 +30,19 @@ public class GenderDistributionPatch
                 return;
             }
             var defModExtension = gene.def.GetModExtension<DefModExtension_GenderDistribution>();
-            if (defModExtension == null) continue;
+            if (defModExtension == null)
+            {
+                continue;
+            }
                 
             male = defModExtension.male;
             female = defModExtension.female;
         }
 
-        if (!(male >= 0) || !(female >= 0)) return;
+        if (!(male >= 0) || !(female >= 0))
+        {
+            return;
+        }
             
         var rand = new Random();
         var rando = rand.Next(1, 100);

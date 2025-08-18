@@ -153,6 +153,7 @@
     <Compile Include="GeneClasses\Gene_AddRandomGeneAndOrTraitByWeight.cs" />
     <Compile Include="GeneClasses\Gene_DisabledBy.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_AddedWorldCarryCapacityPatch.cs" />
+    <Compile Include="HarmonyPatches\HarmonyPatch_ArtificialPartsAffinityPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_DontPlaceProductPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_LockedByResearch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_QualityCreatedBoostFromGenePatch.cs" />

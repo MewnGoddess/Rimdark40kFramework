@@ -15,6 +15,8 @@ public static class Core40kDefOf
     public static JobDef BEWH_ChangeAmmo;
 
     public static ShaderTypeDef BEWH_CutoutThreeColor;
+    
+    public static StatDef BEWH_ArtificialPartsAffinityFactor;
 
     static Core40kDefOf()
     {
