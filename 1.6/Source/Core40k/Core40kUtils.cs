@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.Assertions.Must;
 using Verse;
 
@@ -78,5 +80,10 @@ public static class Core40kUtils
         texture2D.Apply();
 
         return texture2D;
+    }
+    
+    public static bool ContainsAllItems<T>(this IEnumerable<T> a, IEnumerable<T> b)
+    {
+        return !b.Except(a).Any();
     }
 }
