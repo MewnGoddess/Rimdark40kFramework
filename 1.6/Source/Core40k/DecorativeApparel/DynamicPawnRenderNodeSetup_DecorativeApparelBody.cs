@@ -16,10 +16,17 @@ public class DynamicPawnRenderNodeSetup_DecorativeApparelBody : DynamicPawnRende
         {
             yield break;
         }
-        
+
         var decorativeApparels = pawn.apparel.WornApparel.Where(apparel => apparel is BodyDecorativeApparelMultiColor).Cast<BodyDecorativeApparelMultiColor>();
+        
+        var pawnBodyType = pawn.story.bodyType;
+        
         foreach (var decorativeApparel in decorativeApparels)
         {
+            if (decorativeApparel.def.HasModExtension<DefModExtension_ForcesBodyType>())
+            {
+                pawnBodyType = decorativeApparel.def.GetModExtension<DefModExtension_ForcesBodyType>().forcedBodyType ?? pawnBodyType;
+            }
             foreach (var decoration in decorativeApparel.ExtraDecorations)
             {
                 var pawnRenderNodeProperty = new PawnRenderNodePropertiesMultiColor
@@ -37,6 +44,8 @@ public class DynamicPawnRenderNodeSetup_DecorativeApparelBody : DynamicPawnRende
                     workerClass = typeof(PawnRenderNodeWorker_AttachmentExtraDecorationBody),
                     maskDef = decoration.Value.maskDef,
                     useMask = decoration.Key.useMask,
+                    bodyType = pawnBodyType,
+                    useBodyType = decoration.Key.appliesToBodyTypes.Contains(pawnBodyType),
                 };
                 
                 var pawnRenderNode = (PawnRenderNode_AttachmentExtraDecoration)Activator.CreateInstance(typeof(PawnRenderNode_AttachmentExtraDecoration), pawn, pawnRenderNodeProperty, tree);

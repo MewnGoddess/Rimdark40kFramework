@@ -47,7 +47,7 @@ public class DecorationDef : Def
     
     public HediffDef mustHaveHediff = null;
         
-    public bool HasRequirements(Pawn pawn)
+    public virtual bool HasRequirements(Pawn pawn)
     {
         if (mustHaveRank != null)
         {

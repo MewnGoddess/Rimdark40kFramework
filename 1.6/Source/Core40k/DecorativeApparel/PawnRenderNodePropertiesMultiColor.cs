@@ -1,3 +1,4 @@
+using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -9,4 +10,6 @@ public class PawnRenderNodePropertiesMultiColor : PawnRenderNodeProperties
     public Color? colorThree;
     public MaskDef maskDef;
     public bool useMask;
+    public BodyTypeDef bodyType;
+    public bool useBodyType;
 }

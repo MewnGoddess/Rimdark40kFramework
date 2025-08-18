@@ -18,7 +18,27 @@ public class PawnRenderNode_AttachmentExtraDecoration : PawnRenderNode
             return GraphicDatabase.Get<Graphic_Multi>(Props.texPath, ShaderFor(pawn), Props.drawSize, Props.color ?? Color.white);
         }
 
-        return MultiColorUtils.GetGraphic<Graphic_Multi>(propsMulti.texPath, Core40kDefOf.BEWH_CutoutThreeColor.Shader, propsMulti.drawSize, propsMulti.color ?? Color.white, propsMulti.colorTwo ?? Color.white, propsMulti.colorThree ?? Color.white, null, propsMulti.maskDef?.maskPath ?? propsMulti.texPath + "_mask");
+        string maskPath;
+        
+        if (propsMulti.maskDef != null && propsMulti.maskDef.maskPath != null)
+        {
+            maskPath = propsMulti.maskDef.maskPath;
+            if (propsMulti.useBodyType)
+            {
+                maskPath += "_" + propsMulti.bodyType.defName;
+            }
+        }
+        else
+        {
+            maskPath = propsMulti.texPath;
+            if (propsMulti.useBodyType)
+            {
+                maskPath += "_" + propsMulti.bodyType.defName;
+            }
+            maskPath += "_mask";
+        }
+        
+        return MultiColorUtils.GetGraphic<Graphic_Multi>(propsMulti.texPath, Core40kDefOf.BEWH_CutoutThreeColor.Shader, propsMulti.drawSize, propsMulti.color ?? Color.white, propsMulti.colorTwo ?? Color.white, propsMulti.colorThree ?? Color.white, null, maskPath);
 
     }
 }

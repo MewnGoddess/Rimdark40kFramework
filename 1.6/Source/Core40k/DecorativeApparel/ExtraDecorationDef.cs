@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -35,6 +36,30 @@ public class ExtraDecorationDef : DecorationDef
     public bool drawInHeadSpace = false;
     
     public Vector2 drawSize = Vector2.one;
+    
+    public List<BodyTypeDef> appliesToBodyTypes = new();
+
+    public override bool HasRequirements(Pawn pawn)
+    {
+        if (appliesToBodyTypes.NullOrEmpty())
+        {
+            return base.HasRequirements(pawn);
+        }
+        var bodyApparel = (BodyDecorativeApparelMultiColor)pawn.apparel.WornApparel.FirstOrFallback(a => a is BodyDecorativeApparelMultiColor);
+        if (bodyApparel == null)
+        {
+            return base.HasRequirements(pawn);
+        }
+
+        var pawnBodyType = pawn.story.bodyType;
+        var defMod = bodyApparel.def.GetModExtension<DefModExtension_ForcesBodyType>();
+        if (defMod != null)
+        {
+            pawnBodyType = defMod.forcedBodyType ?? pawnBodyType;
+        }
+
+        return appliesToBodyTypes.Contains(pawnBodyType);
+    }
     
     public override void ResolveReferences()
     {
