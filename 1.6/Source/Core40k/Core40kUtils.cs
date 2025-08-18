@@ -74,7 +74,7 @@ public static class Core40kUtils
         texture2D.SetPixel(2, 1, thirdRowPixel);
         texture2D.SetPixel(2, 2, thirdRowPixel);
         texture2D.wrapMode = TextureWrapMode.Clamp;
-        texture2D.filterMode = FilterMode.Bilinear;
+        texture2D.filterMode = FilterMode.Point;
         texture2D.Apply();
 
         return texture2D;
