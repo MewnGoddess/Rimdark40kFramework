@@ -6,7 +6,7 @@
 		<li>1.5</li>
 		<li>1.6</li>
 	</supportedVersions>
-	<packageId>Phonicmas.RimDark.Framework</packageId>
+	<packageId>Phonicmas.RimDark.FrameworkCore</packageId>
 	<description>
     RimDark 40k - Framework.
 	</description>

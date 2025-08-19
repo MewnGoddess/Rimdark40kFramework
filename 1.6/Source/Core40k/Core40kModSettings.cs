@@ -94,6 +94,18 @@ public class Core40kModSettings : ModSettings
         Scribe_Values.Look(ref showAllRankCategories, "showAllRankCategories", false);
         Scribe_Collections.Look(ref colourPresets, "colourPresets");
         Scribe_Collections.Look(ref extraDecorationPresets, "extraDecorationPresets");
+
+        if (Scribe.mode == LoadSaveMode.PostLoadInit)
+        {
+            foreach (var preset in colourPresets)
+            {
+                if (preset.appliesToKind == PresetType.None)
+                {
+                    preset.appliesToKind = PresetType.Armor;
+                }
+            }
+        }
+        
         base.ExposeData();
     }
 }
