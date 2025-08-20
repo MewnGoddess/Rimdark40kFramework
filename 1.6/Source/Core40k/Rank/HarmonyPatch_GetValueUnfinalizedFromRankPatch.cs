@@ -56,6 +56,7 @@ public static class GetValueUnfinalizedFromRankPatch
         }
             
         var rankListForReading = pawn.GetComp<CompRankInfo>().UnlockedRanks;
+        
         foreach (var rank in rankListForReading)
         {
             num += rank.statOffsets.GetStatOffsetFromList(stat);

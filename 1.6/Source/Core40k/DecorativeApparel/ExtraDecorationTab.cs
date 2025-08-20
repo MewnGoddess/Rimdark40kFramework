@@ -139,9 +139,10 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                 Rect colourSelectionTwo;
                 Rect colourSelectionThree;
                 Rect presetSelection;
-
+                
                 var colorAmount = extraDecorationDefs[i].colorAmount;
-
+                Log.Message("colorAmount: " + colorAmount);
+                
                 if (!apparel.ExtraDecorations[extraDecorationDefs[i]].maskDef.setsNull)
                 {
                     colorAmount = apparel.ExtraDecorations[extraDecorationDefs[i]].maskDef.colorAmount;

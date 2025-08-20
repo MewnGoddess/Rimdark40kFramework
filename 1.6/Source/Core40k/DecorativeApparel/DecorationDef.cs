@@ -43,7 +43,7 @@ public class DecorationDef : Def
         
     public GeneDef mustHaveGene = null;
     
-    public TraitDef mustHaveTrait = null;
+    public TraitData mustHaveTrait = null;
     
     public HediffDef mustHaveHediff = null;
         
@@ -62,20 +62,44 @@ public class DecorationDef : Def
             }
         }
     
-        /*if (mustHaveGene != null)
+        if (mustHaveGene != null)
         {
+            if (pawn.genes == null)
+            {
+                return false;
+            }
 
+            if (!pawn.genes.HasActiveGene(mustHaveGene))
+            {
+                return false;
+            }
         }
 
         if (mustHaveTrait != null)
         {
+            if (pawn.story?.traits == null)
+            {
+                return false;
+            }
 
+            if (!pawn.story.traits.HasTrait(mustHaveTrait.traitDef, mustHaveTrait.degree))
+            {
+                return false;
+            }
         }
 
         if (mustHaveHediff != null)
         {
+            if (pawn.health?.hediffSet == null)
+            {
+                return false;
+            }
 
-        }*/
+            if (!pawn.health.hediffSet.HasHediff(mustHaveHediff))
+            {
+                return false;
+            }
+        }
             
         return true;
     }

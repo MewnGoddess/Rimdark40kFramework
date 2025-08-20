@@ -6,7 +6,7 @@ namespace Core40k;
 public class ColourPreset : IExposable
 {
     public string name = "colour preset";
-    public PresetType appliesToKind = PresetType.None;
+    public PresetType appliesToKind = PresetType.All;
     public Color primaryColour = Color.white;
     public Color secondaryColour = Color.white;
     public Color? tertiaryColour;
