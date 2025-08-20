@@ -337,7 +337,13 @@ public class Dialog_PaintApparelMultiColor : Window
                         }
                         
                         Widgets.DrawMenuSection(curPosRect.ContractedBy(-1));
-                        Graphics.DrawTexture(curPosRect, cachedMaterials[(item.def, curPageMasks[i])].mainTexture, cachedMaterials[(item.def, curPageMasks[i])]);
+                        
+                        var windowMax = rect.yMax + apparelColorScrollPosition.y;
+                        var windowMin = rect.yMin + apparelColorScrollPosition.y;
+                        if (curPosRect.yMin > windowMin && curPosRect.yMax < windowMax)
+                        {
+                            Graphics.DrawTexture(curPosRect, cachedMaterials[(item.def, curPageMasks[i])].mainTexture, cachedMaterials[(item.def, curPageMasks[i])]);
+                        }
                         
                         TooltipHandler.TipRegion(curPosRect, curPageMasks[i].label);
                         
