@@ -33,6 +33,11 @@ public static class GetExplanationUnfinalizedFromRankPatch
 
     public static StringBuilder GetExplanationForRank(StringBuilder stringBuilder, StatRequest req, StatDef stat)
     {
+        if (stat == null)
+        {
+            return stringBuilder;
+        }
+        
         if (req.Thing is not Pawn pawn)
         {
             return stringBuilder;

@@ -45,6 +45,11 @@ public static class GetValueUnfinalizedFromRankPatch
 
     public static float GetStatOffsetForRank(float num, StatRequest req, StatDef stat)
     {
+        if (stat == null)
+        {
+            return num;
+        }
+        
         if (req.Thing is not Pawn pawn)
         {
             return num;
