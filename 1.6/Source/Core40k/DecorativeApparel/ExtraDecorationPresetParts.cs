@@ -10,19 +10,21 @@ public class ExtraDecorationPresetParts : IExposable
     public Color colour = Color.white;
     public Color colourTwo = Color.white;
     public Color colourThree = Color.white;
+    public MaskDef maskDef = null;
     
     public ExtraDecorationPresetParts()
     {
         
     }
     
-    public ExtraDecorationPresetParts(ExtraDecorationDef extraDecorationDefs, bool flipped, Color colour, Color colourTwo, Color colourThree)
+    public ExtraDecorationPresetParts(ExtraDecorationDef extraDecorationDefs, bool flipped, Color colour, Color colourTwo, Color colourThree, MaskDef maskDef)
     {
         this.extraDecorationDefs = extraDecorationDefs.defName;
         this.flipped = flipped;
         this.colour = colour;
         this.colourTwo = colourTwo;
         this.colourThree = colourThree;
+        this.maskDef = maskDef;
     }
     
     public void ExposeData()
@@ -32,5 +34,6 @@ public class ExtraDecorationPresetParts : IExposable
         Scribe_Values.Look(ref colour, "colour");
         Scribe_Values.Look(ref colourTwo, "colourTwo");
         Scribe_Values.Look(ref colourThree, "colourThree");
+        Scribe_Defs.Look(ref maskDef, "maskDef");
     }
 }

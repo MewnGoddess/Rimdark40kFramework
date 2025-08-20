@@ -420,6 +420,9 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                 extraDecorationDefs = decoration.Key.defName,
                 flipped = decoration.Value.Flipped,
                 colour = decoration.Value.Color,
+                colourTwo = decoration.Value.ColorTwo,
+                colourThree = decoration.Value.ColorThree,
+                maskDef = decoration.Value.maskDef,
             };
                 
             extraDecorationPresetParts.Add(presetPart);

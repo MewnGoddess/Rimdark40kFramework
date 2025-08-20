@@ -83,7 +83,7 @@ public class DecorativeApparelMultiColor : ApparelMultiColor
                 Color = presetPart.colour,
                 ColorTwo = presetPart.colourTwo,
                 ColorThree = presetPart.colourThree,
-                maskDef = Core40kDefOf.BEWH_DefaultMask,
+                maskDef = presetPart.maskDef ?? Core40kDefOf.BEWH_DefaultMask,
             };
             
             extraDecorations.Add(decoDef, extraDecorationsSetting);
@@ -100,7 +100,7 @@ public class DecorativeApparelMultiColor : ApparelMultiColor
                 Color = presetPart.colour ?? (presetPart.extraDecorationDef.useArmorColourAsDefault ? DrawColor : Color.white),
                 ColorTwo = presetPart.colourTwo ?? Color.white,
                 ColorThree = presetPart.colourThree ?? Color.white,
-                maskDef = Core40kDefOf.BEWH_DefaultMask,
+                maskDef = presetPart.maskDef ?? Core40kDefOf.BEWH_DefaultMask,
             };
             
             extraDecorations.Add(presetPart.extraDecorationDef, extraDecorationsSetting);
