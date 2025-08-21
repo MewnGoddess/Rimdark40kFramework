@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -12,4 +13,5 @@ public class PawnRenderNodePropertiesMultiColor : PawnRenderNodeProperties
     public bool useMask;
     public BodyTypeDef bodyType;
     public bool useBodyType;
+    public List<DecorationFlag> decorationFlags = new ();
 }

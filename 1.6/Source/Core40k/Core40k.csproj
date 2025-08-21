@@ -123,6 +123,7 @@
     <Compile Include="DecorativeApparel\DecorativeApparelMultiColor.cs" />
     <Compile Include="DecorativeApparel\DecorationDef.cs" />
     <Compile Include="DecorativeApparel\DefModExtension_ApplyStandardDecorations.cs" />
+    <Compile Include="DecorativeApparel\DefModExtension_DecorationFlags.cs" />
     <Compile Include="DecorativeApparel\Dialog_ConfirmDecorationPresetOverride.cs" />
     <Compile Include="DecorativeApparel\Dialog_EditExtraDecorationPresets.cs" />
     <Compile Include="DecorativeApparel\Dialog_ExtraDecorationMaskSelection.cs" />

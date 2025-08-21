@@ -38,7 +38,7 @@ public class DecorationDef : Def
     public Color? defaultColourTwo;
     public Color? defaultColourThree;
         
-    public List<DecorationColourPresetDef> availablePresets = new List<DecorationColourPresetDef>();
+    public List<DecorationColourPresetDef> availablePresets = new();
         
     public List<RankDef> mustHaveRank = null;
         
@@ -47,7 +47,9 @@ public class DecorationDef : Def
     public List<TraitData> mustHaveTrait = null;
     
     public List<HediffDef> mustHaveHediff = null;
-        
+    
+    public List<DecorationFlag> DecorationFlags = new();
+    
     public virtual bool HasRequirements(Pawn pawn)
     {
         if (mustHaveRank != null)
@@ -104,4 +106,13 @@ public class DecorationDef : Def
             
         return true;
     }
+}
+
+public class DecorationFlag
+{
+    public string flag;
+    public string newTexPath;
+    public string maskPathAddition;
+    public ShaderTypeDef shaderType = null;
+    public int priority = 0;
 }
