@@ -48,7 +48,7 @@ public class DecorationDef : Def
     
     public List<HediffDef> mustHaveHediff = null;
     
-    public List<DecorationFlag> DecorationFlags = new();
+    public List<DecorationFlag> decorationFlags = new();
     
     public virtual bool HasRequirements(Pawn pawn)
     {

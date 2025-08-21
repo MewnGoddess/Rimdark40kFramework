@@ -37,7 +37,7 @@ public class DynamicPawnRenderNodeSetup_DecorativeApparelHead : DynamicPawnRende
                     workerClass = typeof(PawnRenderNodeWorker_AttachmentExtraDecorationHead),
                     maskDef = decoration.Value.maskDef,
                     useMask = decoration.Key.useMask,
-                    decorationFlags = decoration.Key.DecorationFlags,
+                    decorationFlags = decoration.Key.decorationFlags,
                 };
                 
                 var pawnRenderNode = (PawnRenderNode_AttachmentExtraDecoration)Activator.CreateInstance(typeof(PawnRenderNode_AttachmentExtraDecoration), pawn, pawnRenderNodeProperty, tree);

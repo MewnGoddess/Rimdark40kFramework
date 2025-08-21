@@ -46,7 +46,7 @@ public class DynamicPawnRenderNodeSetup_DecorativeApparelBody : DynamicPawnRende
                     useMask = decoration.Key.useMask,
                     bodyType = pawnBodyType,
                     useBodyType = decoration.Key.appliesToBodyTypes.Contains(pawnBodyType),
-                    decorationFlags = decoration.Key.DecorationFlags,
+                    decorationFlags = decoration.Key.decorationFlags,
                 };
                 
                 var pawnRenderNode = (PawnRenderNode_AttachmentExtraDecoration)Activator.CreateInstance(typeof(PawnRenderNode_AttachmentExtraDecoration), pawn, pawnRenderNodeProperty, tree);
