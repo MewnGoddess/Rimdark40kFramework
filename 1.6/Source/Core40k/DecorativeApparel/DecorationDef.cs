@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Core40k;
 using RimWorld;
 using UnityEngine;
@@ -39,13 +40,13 @@ public class DecorationDef : Def
         
     public List<DecorationColourPresetDef> availablePresets = new List<DecorationColourPresetDef>();
         
-    public RankDef mustHaveRank = null;
+    public List<RankDef> mustHaveRank = null;
         
-    public GeneDef mustHaveGene = null;
+    public List<GeneDef> mustHaveGene = null;
     
-    public TraitData mustHaveTrait = null;
+    public List<TraitData> mustHaveTrait = null;
     
-    public HediffDef mustHaveHediff = null;
+    public List<HediffDef> mustHaveHediff = null;
         
     public virtual bool HasRequirements(Pawn pawn)
     {
@@ -56,7 +57,7 @@ public class DecorationDef : Def
                 return false;
             }
             var comp = pawn.GetComp<CompRankInfo>();
-            if (!comp.HasRank(mustHaveRank))
+            if (mustHaveRank.All(rank => !comp.HasRank(rank)))
             {
                 return false;
             }
@@ -68,8 +69,8 @@ public class DecorationDef : Def
             {
                 return false;
             }
-
-            if (!pawn.genes.HasActiveGene(mustHaveGene))
+            
+            if (mustHaveGene.All(gene => !pawn.genes.HasActiveGene(gene)))
             {
                 return false;
             }
@@ -81,8 +82,8 @@ public class DecorationDef : Def
             {
                 return false;
             }
-
-            if (!pawn.story.traits.HasTrait(mustHaveTrait.traitDef, mustHaveTrait.degree))
+            
+            if (mustHaveTrait.All(trait => !pawn.story.traits.HasTrait(trait.traitDef, trait.degree)))
             {
                 return false;
             }
@@ -94,8 +95,8 @@ public class DecorationDef : Def
             {
                 return false;
             }
-
-            if (!pawn.health.hediffSet.HasHediff(mustHaveHediff))
+            
+            if (mustHaveHediff.All(hediff => !pawn.health.hediffSet.HasHediff(hediff)))
             {
                 return false;
             }
