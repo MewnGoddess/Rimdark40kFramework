@@ -13,6 +13,8 @@ public class RankDef : Def
     public RankCategoryDef rankCategory;
 
     public List<RankData> rankRequirements = new List<RankData>();
+    
+    public List<RankData> rankRequirementsOneAmong = new List<RankData>();
         
     public List<RankDef> incompatibleRanks = new List<RankDef>();
 

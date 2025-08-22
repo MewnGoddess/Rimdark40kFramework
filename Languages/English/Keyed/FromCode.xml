@@ -85,6 +85,7 @@
 
   <BEWH.Framework.RankSystem.RequirementsSkills>All of the following skills</BEWH.Framework.RankSystem.RequirementsSkills>
   <BEWH.Framework.RankSystem.RequirementsRanks>All of the following ranks</BEWH.Framework.RankSystem.RequirementsRanks>
+  <BEWH.Framework.RankSystem.RequirementsRanksAtLeastOne>At least one of the following ranks</BEWH.Framework.RankSystem.RequirementsRanksAtLeastOne>
 
   <BEWH.Framework.RankSystem.RequirementsTraitAll>All of the following traits</BEWH.Framework.RankSystem.RequirementsTraitAll>
   <BEWH.Framework.RankSystem.RequirementsTraitAtLeastOne>At least one of the following traits</BEWH.Framework.RankSystem.RequirementsTraitAtLeastOne>

@@ -23,7 +23,9 @@ public class ITab_RankSystem : ITab
     private Pawn pawn;
         
     private CompRankInfo compRankInfo;
-        
+
+    private bool redoRankInfo = false;
+    
     Dictionary<RankDef, Vector2> rankPos = new Dictionary<RankDef, Vector2>();
 
     private Core40kModSettings modSettings;
@@ -180,7 +182,7 @@ public class ITab_RankSystem : ITab
                 
             if (Widgets.ButtonText(debugUnlockRankRect,"dev:\nunlock rank"))
             {
-                compRankInfo.UnlockRank(currentlySelectedRank.rankDef);
+                UnlockRank(currentlySelectedRank.rankDef);
             }
             Text.Font = GameFont.Medium;
         }
@@ -225,6 +227,12 @@ public class ITab_RankSystem : ITab
         TooltipHandler.TipRegion(categoryTextRect, toolTip);
 
         curY += 12f;
+
+        if (redoRankInfo)
+        {
+            GetRanksForCategory();
+            redoRankInfo = false;
+        }
             
         //Rank info
         var rectRankInfo = new Rect(rect2);
@@ -328,12 +336,21 @@ public class ITab_RankSystem : ITab
         //Draws requirement lines
         foreach (var rank in availableRanksForCategory)
         {
-            if (rank.rankDef.rankRequirements == null)
+            if (rank.rankDef.rankRequirements == null && rank.rankDef.rankRequirementsOneAmong == null)
             {
                 continue;
             }
-            foreach (var rankReq in rank.rankDef.rankRequirements)
+
+            var rankData = new List<RankData>();
+            rankData.AddRange(rank.rankDef.rankRequirements ?? new List<RankData>());
+            rankData.AddRange(rank.rankDef.rankRequirementsOneAmong ?? new List<RankData>());
+            
+            foreach (var rankReq in rankData)
             {
+                if (rankReq.rankDef.rankCategory != currentlySelectedRankCategory)
+                {
+                    continue;
+                }
                 var startPos = new Vector2(rankPos[rank.rankDef].x + rankIconRectSize/2, rankPos[rank.rankDef].y + rankIconRectSize/2);
                 var endPos = new Vector2(rankPos[rankReq.rankDef].x + rankIconRectSize/2, rankPos[rankReq.rankDef].y + rankIconRectSize/2);
                     
@@ -600,7 +617,8 @@ public class ITab_RankSystem : ITab
         }
             
         //Ranks
-        var rankRequirementsMet = true;
+        //All
+        var rankAllRequirementsMet = true;
         if (!rankDef.rankRequirements.NullOrEmpty())
         {
             stringBuilder.Append("\n");
@@ -612,7 +630,7 @@ public class ITab_RankSystem : ITab
                     
                 if (!rankRequirementMet)
                 {
-                    rankRequirementsMet = false;
+                    rankAllRequirementsMet = false;
                 }
                     
                 var requirementColour = rankRequirementMet ? requirementMetColour : requirementNotMetColour;
@@ -626,6 +644,33 @@ public class ITab_RankSystem : ITab
                     stringBuilder.AppendLine(("    " + "BEWH.Framework.RankSystem.HaveAchievedRank".Translate(rank.rankDef.label.CapitalizeFirst())).Colorize(requirementColour));
                 }
                     
+            }
+        }
+        var rankAtLeastOneRequirementsMet = rankDef.rankRequirementsOneAmong.NullOrEmpty();
+        if (!rankAtLeastOneRequirementsMet)
+        {
+            stringBuilder.Append("\n");
+            stringBuilder.AppendLine("BEWH.Framework.RankSystem.RequirementsRanksAtLeastOne".Translate());
+            foreach (var rank in rankDef.rankRequirementsOneAmong)
+            {
+                var rankRequirementMet = compRankInfo.HasRank(rank.rankDef) &&
+                                         compRankInfo.DaysAsRank[rank.rankDef] >= rank.daysAs;
+                    
+                if (rankRequirementMet)
+                {
+                    rankAtLeastOneRequirementsMet = true;
+                }
+                    
+                var requirementColour = rankRequirementMet ? requirementMetColour : requirementNotMetColour;
+                    
+                if (rank.daysAs > 0)
+                {
+                    stringBuilder.AppendLine(("    " + "BEWH.Framework.RankSystem.HaveBeenRankForDays".Translate(rank.rankDef.label.CapitalizeFirst(), rank.daysAs)).Colorize(requirementColour));
+                }
+                else
+                {
+                    stringBuilder.AppendLine(("    " + "BEWH.Framework.RankSystem.HaveAchievedRank".Translate(rank.rankDef.label.CapitalizeFirst())).Colorize(requirementColour));
+                }
             }
         }
             
@@ -651,7 +696,7 @@ public class ITab_RankSystem : ITab
         }
         //One Among
         var traitsAtLeastOneRequirementsMet = rankDef.requiredTraitsOneAmong.NullOrEmpty();
-        if (!rankDef.requiredTraitsOneAmong.NullOrEmpty())
+        if (!traitsAtLeastOneRequirementsMet)
         {
             stringBuilder.Append("\n");
             stringBuilder.AppendLine("BEWH.Framework.RankSystem.RequirementsTraitAtLeastOne".Translate());
@@ -695,7 +740,7 @@ public class ITab_RankSystem : ITab
                 }
             }
             //One Among
-            if (!rankDef.requiredGenesOneAmong.NullOrEmpty())
+            if (!genesAtLeastOneRequirementsMet)
             {
                 stringBuilder.Append("\n");
                 stringBuilder.AppendLine("BEWH.Framework.RankSystem.RequirementsGeneAtLeastOne".Translate());
@@ -740,10 +785,15 @@ public class ITab_RankSystem : ITab
             requirementText = "    " + "BEWH.Framework.CommonKeyword.None".Translate();
         }
 
-        var requirementsMet = skillRequirementsMet && rankRequirementsMet &&
-                              rankLimitRequirementsMet && noIncompatibleRanks &&
-                              traitsAllRequirementsMet && traitsAtLeastOneRequirementsMet &&
-                              genesAllRequirementsMet && genesAtLeastOneRequirementsMet;
+        var requirementsMet = skillRequirementsMet 
+                              && rankAllRequirementsMet 
+                              && rankAtLeastOneRequirementsMet
+                              && rankLimitRequirementsMet 
+                              && noIncompatibleRanks 
+                              && traitsAllRequirementsMet 
+                              && traitsAtLeastOneRequirementsMet 
+                              && genesAllRequirementsMet 
+                              && genesAtLeastOneRequirementsMet;
             
         return (requirementsMet, requirementText);
     }
@@ -876,6 +926,7 @@ public class ITab_RankSystem : ITab
     private void UnlockRank(RankDef rank)
     {
         compRankInfo.UnlockRank(rank);
+        redoRankInfo = true;
     }
 }
 
