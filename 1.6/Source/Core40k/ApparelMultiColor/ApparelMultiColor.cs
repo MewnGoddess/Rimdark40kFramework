@@ -46,8 +46,9 @@ public class ApparelMultiColor : Apparel
         } 
     }
 
-    private bool recacheGraphics = false;
+    private bool recacheGraphics = true;
     public bool RecacheGraphics => recacheGraphics;
+    
     private Graphic_Multi cachedGraphicMulti;
     public Graphic_Multi CachedGraphicMulti
     {
@@ -60,9 +61,16 @@ public class ApparelMultiColor : Apparel
         }
     }
 
-    private ApparelGraphicRecord apparelGraphicRecord;
-    public ApparelGraphicRecord ApparelGraphicRecord => apparelGraphicRecord;
-    
+    private ApparelGraphicRecord? apparelGraphicRecord;
+    public ApparelGraphicRecord ApparelGraphicRecord
+    {
+        get
+        {
+            apparelGraphicRecord ??= new ApparelGraphicRecord(CachedGraphicMulti, this);
+            return apparelGraphicRecord.Value;
+        }
+    }
+
     public override Graphic Graphic
     {
         get
