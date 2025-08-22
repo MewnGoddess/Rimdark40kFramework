@@ -45,6 +45,23 @@ public class ApparelMultiColor : Apparel
             Notify_ColorChanged();
         } 
     }
+
+    private bool recacheGraphics = false;
+    public bool RecacheGraphics => recacheGraphics;
+    private Graphic_Multi cachedGraphicMulti;
+    public Graphic_Multi CachedGraphicMulti
+    {
+        get => cachedGraphicMulti;
+        set
+        {
+            cachedGraphicMulti = value;
+            recacheGraphics = false;
+            apparelGraphicRecord = new ApparelGraphicRecord(cachedGraphicMulti, this);
+        }
+    }
+
+    private ApparelGraphicRecord apparelGraphicRecord;
+    public ApparelGraphicRecord ApparelGraphicRecord => apparelGraphicRecord;
     
     public override Graphic Graphic
     {
@@ -52,8 +69,7 @@ public class ApparelMultiColor : Apparel
         {
             var path = def.graphicData.texPath;
             var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
-            var graphic = MultiColorUtils.GetGraphic<Graphic_Single>(path, shader, def.graphicData.drawSize*0.8f, DrawColor, DrawColorTwo, DrawColorThree, def.graphicData, maskDef?.maskPath);
-            return graphic;
+            return MultiColorUtils.GetGraphic<Graphic_Single>(path, shader, def.graphicData.drawSize*0.8f, DrawColor, DrawColorTwo, DrawColorThree, def.graphicData, maskDef?.maskPath);
         }
     }
     
@@ -64,6 +80,7 @@ public class ApparelMultiColor : Apparel
         drawColorThree = colorThree ?? Color.white;
         SetOriginals();
         initialColourSet = true;
+        recacheGraphics = true;
     }
         
     public virtual void SetOriginals()
@@ -72,6 +89,13 @@ public class ApparelMultiColor : Apparel
         originalColorTwo = drawColorTwo;
         originalColorThree = drawColorThree;
         originalMaskDef = maskDef;
+        recacheGraphics = true;
+    }
+    
+    public override void Notify_ColorChanged()
+    {
+        recacheGraphics = true;
+        base.Notify_ColorChanged();
     }
 
     public virtual void SetSecondaryColor(Color color)
