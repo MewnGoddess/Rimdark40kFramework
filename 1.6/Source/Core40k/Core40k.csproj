@@ -88,6 +88,7 @@
     <Compile Include="ApparelMultiColor\HarmonyPatch_HideBodyPatch.cs" />
     <Compile Include="ApparelMultiColor\JobDriver_OpenStylingStationDialogForApparelMultiColor.cs" />
     <Compile Include="ApparelMultiColor\MaskDef.cs" />
+    <Compile Include="ApparelMultiColor\PawnRenderNode_AttachmentApparelMultiColor.cs" />
     <Compile Include="ChangeableBullets\CompProperties_AmmoChanger.cs" />
     <Compile Include="ChangeableBullets\Comp_AmmoChanger.cs" />
     <Compile Include="ChangeableBullets\DefModExtension_AmmoChanger.cs" />
@@ -122,7 +123,8 @@
     <Compile Include="DecorativeApparel\BodyDecorativeApparelMultiColor.cs" />
     <Compile Include="DecorativeApparel\DecorativeApparelMultiColor.cs" />
     <Compile Include="DecorativeApparel\DecorationDef.cs" />
-    <Compile Include="DecorativeApparel\DefModExtension_ApplyStandardDecorations.cs" />
+    <Compile Include="DecorativeApparel\DefModExtension_HideJumpPack.cs" />
+    <Compile Include="DecorativeApparel\DefModExtension_StandardDecorations.cs" />
     <Compile Include="DecorativeApparel\DefModExtension_DecorationFlags.cs" />
     <Compile Include="DecorativeApparel\Dialog_ConfirmDecorationPresetOverride.cs" />
     <Compile Include="DecorativeApparel\Dialog_EditExtraDecorationPresets.cs" />
@@ -135,11 +137,15 @@
     <Compile Include="DecorativeApparel\ExtraDecorationPreset.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationSettings.cs" />
     <Compile Include="DecorativeApparel\ExtraDecorationTab.cs" />
+    <Compile Include="DecorativeApparel\HarmonyPatch_HideJumpPack.cs" />
     <Compile Include="DecorativeApparel\HarmonyPatch_OutfitStandExtraDecos.cs" />
     <Compile Include="DecorativeApparel\HeadDecorativeApparelMultiColor.cs" />
     <Compile Include="DecorativeApparel\PawnRenderNodePropertiesMultiColor.cs" />
+    <Compile Include="DecorativeApparel\PawnRenderNodeWorker_AttachmentBackpack.cs" />
     <Compile Include="DecorativeApparel\PawnRenderNodeWorker_AttachmentExtraDecorationBody.cs" />
     <Compile Include="DecorativeApparel\PawnRenderNodeWorker_AttachmentExtraDecorationHead.cs" />
+    <Compile Include="DecorativeApparel\PawnRenderNodeWorker_AttachmentShoulderPad.cs" />
+    <Compile Include="DecorativeApparel\PawnRenderNode_AttachmentBackpack.cs" />
     <Compile Include="DecorativeApparel\PawnRenderNode_AttachmentExtraDecoration.cs" />
     <Compile Include="DefModExtensions\DefModExtension_AddRandomTraitByWeight.cs" />
     <Compile Include="DefModExtensions\DefModExtension_AddRandomGeneByWeight.cs" />

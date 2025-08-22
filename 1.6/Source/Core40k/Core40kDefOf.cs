@@ -9,6 +9,9 @@ public static class Core40kDefOf
     public static DamageDef BEWH_WarpFlame;
 
     public static MaskDef BEWH_DefaultMask;
+    
+    [MayRequireRoyalty]
+    public static ThingDef Apparel_PackJump;
 
     public static JobDef BEWH_OpenStylingStationDialogForApparelMultiColor;
     public static JobDef BEWH_OpenStylingStationDialogForWeaponMultiColor;
