@@ -73,6 +73,16 @@ public class Dialog_PaintApparelMultiColor : Window
         foreach (var item in pawn.apparel.WornApparel.Where(a => a is ApparelMultiColor).Cast<ApparelMultiColor>())
         {
             item.SetOriginals();
+            var masksForItem = masksTemp.Where(mask => mask.appliesTo.Contains(item.def.defName) || mask.appliesToKind == AppliesToKind.All).ToList();
+
+            if (masksForItem.Any())
+            {
+                masksForItem.SortBy(def => def.sortOrder);
+                masks.Add(item.def, masksForItem);
+            }
+            
+            apparelColorMaskPageNumber.Add(item.def, 0);
+            
             if (!item.def.HasModExtension<DefModExtension_EnableTabDef>())
             {
                 continue;
@@ -97,16 +107,6 @@ public class Dialog_PaintApparelMultiColor : Window
                     tabs.Add(tabRecord);
                 }
             }
-            
-            var masksForItem = masksTemp.Where(mask => mask.appliesTo.Contains(item.def.defName) || mask.appliesToKind == AppliesToKind.All).ToList();
-
-            if (masksForItem.Any())
-            {
-                masksForItem.SortBy(def => def.sortOrder);
-                masks.Add(item.def, masksForItem);
-            }
-            
-            apparelColorMaskPageNumber.Add(item.def, 0);
         }
 
         curTab = tabs.FirstOrDefault()?.label;
@@ -325,6 +325,11 @@ public class Dialog_PaintApparelMultiColor : Window
                             var path = ((item.def.apparel.LastLayer != ApparelLayerDefOf.Overhead && item.def.apparel.LastLayer != ApparelLayerDefOf.EyeCover && !item.RenderAsPack() && item.WornGraphicPath != BaseContent.PlaceholderImagePath && item.WornGraphicPath != BaseContent.PlaceholderGearImagePath) ? (item.WornGraphicPath + "_" + pawn.story.bodyType.defName) : item.WornGraphicPath);
                             var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
                             var maskPath = curPageMasks[i]?.maskPath;
+                            if (curPageMasks[i] != null && curPageMasks[i].useBodyTypes)
+                            {
+                                var bodyType = item.def.GetModExtension<DefModExtension_ForcesBodyType>()?.forcedBodyType ?? pawn.story.bodyType;
+                                maskPath += "_" + bodyType.defName;
+                            }
                             var graphic = MultiColorUtils.GetGraphic<Graphic_Multi>(path, shader, item.def.graphicData.drawSize, item.DrawColor, item.DrawColorTwo, item.DrawColorThree, item.Graphic.data, maskPath);
                             var material = graphic.MatSouth;
                             cachedMaterials.Add((item.def, curPageMasks[i]), material);
