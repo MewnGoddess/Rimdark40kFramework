@@ -6,14 +6,24 @@ using Verse.AI;
 
 namespace Core40k;
 
-[HarmonyPatch(typeof(Building_StylingStation), "GetFloatMenuOptions")]
+[HarmonyPatch(typeof(ThingWithComps), "GetFloatMenuOptions")]
 public class WeaponMultiColorSelectableOnStylingStation
 {
-    public static IEnumerable<FloatMenuOption> Postfix(IEnumerable<FloatMenuOption> __result, Building_StylingStation __instance, Pawn selPawn)
+    public static IEnumerable<FloatMenuOption> Postfix(IEnumerable<FloatMenuOption> __result, ThingWithComps __instance, Pawn selPawn)
     {
         foreach (var floatMenu in __result)
         {
             yield return floatMenu;
+        }
+        
+        if (!__instance.def.HasModExtension<DefModExtension_AllowColoringOfThings>())
+        {
+            yield break;
+        }
+
+        if (!__instance.def.GetModExtension<DefModExtension_AllowColoringOfThings>().allowColoringOfEquipment)
+        {
+            yield break;
         }
         
         if (selPawn.equipment.Primary is not WeaponMultiColor)

@@ -12,6 +12,7 @@ public class MaskDef : Def
     public bool setsNull = false;
     public AppliesToKind appliesToKind = AppliesToKind.Thing;
     public int colorAmount = 1;
+    public bool useBodyTypes = false;
 }
 
 public enum AppliesToKind

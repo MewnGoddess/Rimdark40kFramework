@@ -43,7 +43,12 @@ public static class ApparelMultiColorPatch
         var path = ((apparel.def.apparel.LastLayer != ApparelLayerDefOf.Overhead && apparel.def.apparel.LastLayer != ApparelLayerDefOf.EyeCover && !apparel.RenderAsPack() && apparel.WornGraphicPath != BaseContent.PlaceholderImagePath && apparel.WornGraphicPath != BaseContent.PlaceholderGearImagePath) ? (apparel.WornGraphicPath + "_" + bodyType.defName) : apparel.WornGraphicPath);
         
         var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
-        var graphic = MultiColorUtils.GetGraphic<Graphic_Multi>(path, shader, apparel.def.graphicData.drawSize, apparel.DrawColor, apparel.DrawColorTwo, apparel.DrawColorThree, apparel.Graphic.data, apparel.MaskDef?.maskPath);
+        var maskPath = apparel.MaskDef?.maskPath;
+        if (apparel.MaskDef != null && apparel.MaskDef.useBodyTypes)
+        {
+            maskPath += "_" + bodyType.defName;
+        }
+        var graphic = MultiColorUtils.GetGraphic<Graphic_Multi>(path, shader, apparel.def.graphicData.drawSize, apparel.DrawColor, apparel.DrawColorTwo, apparel.DrawColorThree, apparel.Graphic.data, maskPath);
         return graphic;
     }
 }
