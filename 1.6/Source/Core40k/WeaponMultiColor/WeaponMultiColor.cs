@@ -60,6 +60,14 @@ public class WeaponMultiColor : ThingWithComps
         SetOriginals();
         initialColourSet = true;
     }
+
+    public void SetColors(ColourPresetDef preset)
+    {
+        drawColorOne = preset.primaryColour;
+        drawColorTwo = preset.secondaryColour;
+        drawColorThree = preset.tertiaryColour ?? preset.secondaryColour;
+        SetOriginals();
+    }
         
     public virtual void SetOriginals()
     {
