@@ -9,9 +9,11 @@ namespace Core40k;
 public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
 {
     private static GeneDef chosenGene = null;
+    private static List<GeneDef> chosenGenes = new List<GeneDef>();
 
     private static TraitDef chosenTrait = null;
     private static int chosenTraitDegree = 0;
+    private static Dictionary<TraitDef, int> chosenTraits = new Dictionary<TraitDef, int>();
 
     public override void PostMake()
     {
@@ -35,11 +37,26 @@ public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
         {
             pawn.genes.AddGene(chosenGene, true);
         }
+        if (!chosenGenes.NullOrEmpty())
+        {
+            foreach (var gene in chosenGenes)
+            {
+                pawn.genes.AddGene(gene, true);
+            }
+        }
 
         if (chosenTrait != null)
         {
             var trait = new Trait(chosenTrait, chosenTraitDegree);
             pawn.story.traits.GainTrait(trait);
+        }
+        if (!chosenTraits.NullOrEmpty())
+        {
+            foreach (var traitPair in chosenTraits)
+            {
+                var trait = new Trait(traitPair.Key, traitPair.Value);
+                pawn.story.traits.GainTrait(trait);
+            }
         }
     }
         
@@ -53,6 +70,17 @@ public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
                 pawn.genes.RemoveGene(gene);
             }
         }
+        if (chosenGenes != null)
+        {
+            foreach (var gene in chosenGenes)
+            {
+                var gene2 = pawn.genes.GetGene(gene);
+                if (gene2 != null)
+                {
+                    pawn.genes.RemoveGene(gene2);
+                }
+            }   
+        }
 
         if (chosenTrait != null)
         {
@@ -60,6 +88,17 @@ public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
             if (trait != null)
             {
                 pawn.story.traits.RemoveTrait(trait);
+            }
+        }
+        if (!chosenTraits.NullOrEmpty())
+        {
+            foreach (var traitPair in chosenTraits)
+            {
+                var trait = pawn.story.traits.GetTrait(traitPair.Key);
+                if (trait != null)
+                {
+                    pawn.story.traits.RemoveTrait(trait);
+                }
             }
         }
     }
@@ -86,12 +125,22 @@ public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
         {
             weightedSelection.AddEntry(new TraitData(trait.traitDef, trait.degree), trait.weight);
         }
-        
-        var result = weightedSelection.GetRandom();
-        
-        chosenTrait = result.traitDef;
 
-        chosenTraitDegree = result.degree;
+        if (defMod.amountToGive == 1)
+        {
+            var result = weightedSelection.GetRandom();
+        
+            chosenTrait = result.traitDef;
+            chosenTraitDegree = result.degree;
+        }
+        else
+        {
+            for (var i = 0; i < defMod.amountToGive; i++)
+            {
+                var result = weightedSelection.GetRandomUnique();
+                chosenTraits.Add(result.traitDef, result.degree);
+            }
+        }
     }
 
     private void SelectGeneToGive()
@@ -118,7 +167,18 @@ public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
             weightedSelection.AddEntry(gene.Key, gene.Value);
         }
             
-        chosenGene = weightedSelection.GetRandom();
+        if (defMod.amountToGive == 1)
+        {
+            chosenGene = weightedSelection.GetRandom();
+        }
+        else
+        {
+            for (var i = 0; i < defMod.amountToGive; i++)
+            {
+                var result = weightedSelection.GetRandomUnique();
+                chosenGenes.Add(result);
+            }
+        }
     }
 
     public override void ExposeData()
@@ -126,6 +186,8 @@ public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
         base.ExposeData();
         Scribe_Defs.Look(ref chosenGene, "chosenGene");
         Scribe_Defs.Look(ref chosenTrait, "chosenTrait");
+        Scribe_Collections.Look(ref chosenGenes, "chosenGenes");
+        Scribe_Collections.Look(ref chosenTraits, "chosenTraits");
         Scribe_Values.Look(ref chosenTraitDegree, "chosenTraitDegree", 0);
     }
 }
