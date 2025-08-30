@@ -1,21 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
-using UnityEngine;
 using Verse;
 
 namespace Core40k;
 
-public class PawnRenderNodeWorker_AttachmentExtraDecorationHead : PawnRenderNodeWorker
+public class PawnRenderNodeWorker_AttachmentExtraDecorationBody : PawnRenderNodeWorker
 {
     public override bool CanDrawNow(PawnRenderNode node, PawnDrawParms parms)
     {
         var pawn = parms.pawn;
+        
+        var apparelMultiColor = pawn.apparel.WornApparel.FirstOrFallback(a =>
+        {
+            var temp = a.GetComp<CompDecorative>();
+            return temp != null && temp.Props.decorativeType == DecorativeType.Body;
+        });
+
+        var decorativeComp = apparelMultiColor.GetComp<CompDecorative>();
+        
+        var decoration = decorativeComp.ExtraDecorations.Keys.FirstOrFallback(def => def.drawnTextureIconPath == node.Props.texPath);
             
-        var apparelMultiColor = (HeadDecorativeApparelMultiColor)pawn.apparel.WornApparel.FirstOrDefault(wornApparel => wornApparel is HeadDecorativeApparelMultiColor);
-
-        var decoration = apparelMultiColor.ExtraDecorations.Keys.FirstOrFallback(def => def.drawnTextureIconPath == node.Props.texPath);
-
         if (decoration == null)
         {
             return false;
@@ -36,11 +41,6 @@ public class PawnRenderNodeWorker_AttachmentExtraDecorationHead : PawnRenderNode
             {
                 return false;
             }
-
-            if ((parms.flags & PawnRenderFlags.Headgear) != PawnRenderFlags.Headgear)
-            {
-                return false;
-            }
             
             if ((parms.flags & PawnRenderFlags.Clothes) != PawnRenderFlags.Clothes)
             {
@@ -52,11 +52,6 @@ public class PawnRenderNodeWorker_AttachmentExtraDecorationHead : PawnRenderNode
             if (parms.posture is PawnPosture.LayingOnGroundNormal or PawnPosture.LayingOnGroundFaceUp)
             {
                 return true;
-            }
-
-            if (pawn.Swimming)
-            {
-                return false;
             }
                 
             if (!showWhenFacing.Contains(parms.facing))

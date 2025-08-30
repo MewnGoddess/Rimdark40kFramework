@@ -11,12 +11,12 @@ public class PawnRenderNode_AttachmentApparelMultiColor : PawnRenderNode_Apparel
 
     public override Graphic GraphicFor(Pawn pawn)
     {
-        var apparelMultiColor = (BodyDecorativeApparelMultiColor)apparel;
+        var multiColor = apparel.GetComp<CompMultiColor>();
 
         string maskPath = null; 
-        if (apparelMultiColor.MaskDef != null && apparelMultiColor.MaskDef.maskExtraFlags.Contains("HasShoulder"))
+        if (multiColor.MaskDef != null && multiColor.MaskDef.maskExtraFlags.Contains("HasShoulder"))
         {
-            maskPath = apparelMultiColor.MaskDef?.maskPath;
+            maskPath = multiColor.MaskDef?.maskPath;
 
             if (maskPath != null)
             {
@@ -41,7 +41,7 @@ public class PawnRenderNode_AttachmentApparelMultiColor : PawnRenderNode_Apparel
         
         var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
         
-        return MultiColorUtils.GetGraphic<Graphic_Multi>(texPath, shader, Props.drawSize, apparelMultiColor.DrawColor, apparelMultiColor.DrawColorTwo, apparelMultiColor.DrawColorThree, apparelMultiColor.Graphic.data, maskPath);
+        return MultiColorUtils.GetGraphic<Graphic_Multi>(texPath, shader, Props.drawSize, multiColor.DrawColor, multiColor.DrawColorTwo, multiColor.DrawColorThree, apparel.Graphic.data, maskPath);
     }
     
     protected override IEnumerable<Graphic> GraphicsFor(Pawn pawn)

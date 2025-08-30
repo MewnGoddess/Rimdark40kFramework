@@ -45,7 +45,7 @@ public class ExtraDecorationDef : DecorationDef
         {
             return base.HasRequirements(pawn);
         }
-        var bodyApparel = (BodyDecorativeApparelMultiColor)pawn.apparel.WornApparel.FirstOrFallback(a => a is BodyDecorativeApparelMultiColor);
+        var bodyApparel = pawn.apparel.WornApparel.FirstOrFallback(a => a.HasComp<CompDecorative>());
         if (bodyApparel == null)
         {
             return base.HasRequirements(pawn);

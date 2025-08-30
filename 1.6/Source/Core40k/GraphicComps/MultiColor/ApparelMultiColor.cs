@@ -9,7 +9,6 @@ public class ApparelMultiColor : Apparel
     private BodyTypeDef originalBodyType = null;
 
     private bool initialColourSet;
-    public bool InitialColourSet => initialColourSet;
         
     private Color drawColorOne = Color.white;
     private Color originalColorOne = Color.white;
@@ -45,9 +44,6 @@ public class ApparelMultiColor : Apparel
             Notify_ColorChanged();
         } 
     }
-
-    private bool recacheGraphics = true;
-    public bool RecacheGraphics => recacheGraphics;
     
     private Graphic_Multi cachedGraphicMulti;
     public Graphic_Multi CachedGraphicMulti
@@ -56,7 +52,6 @@ public class ApparelMultiColor : Apparel
         set
         {
             cachedGraphicMulti = value;
-            recacheGraphics = false;
             apparelGraphicRecord = new ApparelGraphicRecord(cachedGraphicMulti, this);
         }
     }
@@ -70,6 +65,8 @@ public class ApparelMultiColor : Apparel
             return apparelGraphicRecord.Value;
         }
     }
+    
+    private CompMultiColor CompMultiColor => GetComp<CompMultiColor>();
 
     public override Graphic Graphic
     {
@@ -77,86 +74,11 @@ public class ApparelMultiColor : Apparel
         {
             var path = def.graphicData.texPath;
             var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
-            return MultiColorUtils.GetGraphic<Graphic_Single>(path, shader, def.graphicData.drawSize*0.8f, DrawColor, DrawColorTwo, DrawColorThree, def.graphicData, maskDef?.maskPath);
+            return MultiColorUtils.GetGraphic<Graphic_Single>(path, shader, def.graphicData.drawSize*0.8f, CompMultiColor.DrawColor, CompMultiColor.DrawColorTwo, CompMultiColor.DrawColorThree, def.graphicData, CompMultiColor.MaskDef?.maskPath);
         }
     }
-    
-    public void SetInitialColours(Color colorOne, Color colorTwo, Color? colorThree)
-    {
-        drawColorOne = colorOne;
-        drawColorTwo = colorTwo;
-        drawColorThree = colorThree ?? Color.white;
-        SetOriginals();
-        initialColourSet = true;
-        recacheGraphics = true;
-    }
-        
-    public virtual void SetOriginals()
-    {
-        originalColorOne = drawColorOne;
-        originalColorTwo = drawColorTwo;
-        originalColorThree = drawColorThree;
-        originalMaskDef = maskDef;
-        recacheGraphics = true;
-    }
-    
-    public override void Notify_ColorChanged()
-    {
-        recacheGraphics = true;
-        base.Notify_ColorChanged();
-    }
 
-    public virtual void SetSecondaryColor(Color color)
-    {
-        drawColorTwo = color.a == 0 ? drawColorOne : color;
-        Notify_ColorChanged();
-    }
-    
-    public virtual void SetTertiaryColor(Color color)
-    {
-        drawColorThree = color.a == 0 ? drawColorTwo : color;
-        Notify_ColorChanged();
-    }
-
-    public virtual void Reset()
-    {
-        drawColorOne = originalColorOne;
-        drawColorTwo = originalColorTwo;
-        drawColorThree = originalColorThree;
-        maskDef = originalMaskDef;
-        Notify_ColorChanged();
-    }
-
-    public override void Notify_Equipped(Pawn pawn)
-    {
-        if (!def.HasModExtension<DefModExtension_ForcesBodyType>())
-        {
-            return;
-        }
-
-        var defMod = def.GetModExtension<DefModExtension_ForcesBodyType>();
-        
-        if (pawn.story.bodyType != defMod.forcedBodyType)
-        {
-            originalBodyType = pawn.story.bodyType;
-            pawn.story.bodyType = defMod.forcedBodyType;
-        }
-        base.Notify_Equipped(pawn);
-    }
-
-    public override void Notify_Unequipped(Pawn pawn)
-    {
-        if (!def.HasModExtension<DefModExtension_ForcesBodyType>())
-        {
-            return;
-        }
-        
-        if (originalBodyType != null)
-        {
-            pawn.story.bodyType = originalBodyType;
-        }
-        base.Notify_Unequipped(pawn);
-    }
+    private bool movedToComp = false;
     
     public override void ExposeData()
     {
@@ -172,9 +94,17 @@ public class ApparelMultiColor : Apparel
         Scribe_Defs.Look(ref maskDef, "maskDef");
         Scribe_Defs.Look(ref originalBodyType, "originalBodyType");
         
+        Scribe_Values.Look(ref movedToComp, "movedToComp");
+        
         if (Scribe.mode == LoadSaveMode.PostLoadInit)
         {
             Notify_ColorChanged();
+            if (!movedToComp && this.HasComp<CompMultiColor>())
+            {
+                var multiColor = GetComp<CompMultiColor>();
+                multiColor.TempSetInitialValues(this);
+                movedToComp = true;
+            }
         }
     }
 }

@@ -28,21 +28,10 @@ public class Dialog_PaintWeaponMultiColor : Window
 
     private Material cachedMaterial = null;
 
-    private WeaponMultiColor weapon;
+    private ThingWithComps weapon;
+    private CompMultiColor multiColor => weapon.GetComp<CompMultiColor>();
 
-    private int weaponMaskAmount = -1;
-    private int WeaponMaskAmount
-    {
-        get
-        {
-            if (weaponMaskAmount == -1)
-            {
-                weaponMaskAmount = weapon.def.HasModExtension<DefModExtension_WeaponMultiColor>() ? weapon.def.GetModExtension<DefModExtension_WeaponMultiColor>().colorMaskAmount : 1;
-            }
-
-            return weaponMaskAmount;
-        }
-    }
+    private int weaponMaskAmount => multiColor.Props.colorMaskAmount;
     
     private bool recache = true;
     
@@ -52,7 +41,7 @@ public class Dialog_PaintWeaponMultiColor : Window
     {
     }
 
-    public Dialog_PaintWeaponMultiColor(Pawn pawn, WeaponMultiColor weaponMultiColor)
+    public Dialog_PaintWeaponMultiColor(Pawn pawn, ThingWithComps weaponMultiColor)
     {
         this.pawn = pawn;
             
@@ -60,9 +49,7 @@ public class Dialog_PaintWeaponMultiColor : Window
 
         weapon = weaponMultiColor;
 
-        var defMod = weapon.def.GetModExtension<DefModExtension_WeaponMultiColor>();
-
-        originalColor = (defMod?.defaultPrimaryColor ?? (weapon.def.MadeFromStuff ? weapon.def.GetColorForStuff(weapon.Stuff) : Color.white), defMod?.defaultSecondaryColor ?? Color.white, defMod?.defaultTertiaryColor ?? Color.white);
+        originalColor = (multiColor.Props?.defaultPrimaryColor ?? (weapon.def.MadeFromStuff ? weapon.def.GetColorForStuff(weapon.Stuff) : Color.white), multiColor.Props?.defaultSecondaryColor ?? Color.white, multiColor.Props?.defaultTertiaryColor ?? Color.white);
 
         Find.TickManager.Pause();
     }
@@ -99,7 +86,7 @@ public class Dialog_PaintWeaponMultiColor : Window
         {
             var path = weapon.def.graphicData.texPath;
             var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
-            var graphic = MultiColorUtils.GetGraphic<Graphic_Single>(path, shader, weapon.def.graphicData.drawSize, weapon.DrawColor, weapon.DrawColorTwo, weapon.DrawColorThree, weapon.Graphic.data, null);
+            var graphic = MultiColorUtils.GetGraphic<Graphic_Single>(path, shader, weapon.def.graphicData.drawSize, multiColor.DrawColor, multiColor.DrawColorTwo, multiColor.DrawColorThree, weapon.Graphic.data, null);
             var material = graphic.MatSouth;
             cachedMaterial = material;
             recache = false;
@@ -133,9 +120,9 @@ public class Dialog_PaintWeaponMultiColor : Window
             //Default Color of weapon
             var defaultMenuOption = new FloatMenuOption("BEWH.Framework.CommonKeyword.Default".Translate(), delegate
             {
-                weapon.DrawColor = originalColor.col1;
-                weapon.SetSecondaryColor(originalColor.col2);
-                weapon.SetTertiaryColor(originalColor.col3);
+                multiColor.DrawColor = originalColor.col1;
+                multiColor.DrawColorTwo = originalColor.col2;
+                multiColor.DrawColorThree = originalColor.col3;
                 recache = true;
                             
             }, Core40kUtils.ThreeColourPreview(originalColor.col1, originalColor.col2, originalColor.col3, 3), Color.white);
@@ -144,9 +131,9 @@ public class Dialog_PaintWeaponMultiColor : Window
             {
                 var menuOption = new FloatMenuOption(preset.label, delegate
                 {
-                    weapon.DrawColor = preset.primaryColour;
-                    weapon.SetSecondaryColor(preset.secondaryColour);
-                    weapon.SetTertiaryColor(preset.tertiaryColour ?? preset.secondaryColour);
+                    multiColor.DrawColor = preset.primaryColour;
+                    multiColor.DrawColorTwo = preset.secondaryColour;
+                    multiColor.DrawColorThree = preset.tertiaryColour ?? preset.secondaryColour;
                     recache = true;
                             
                 }, Core40kUtils.ThreeColourPreview(preset.primaryColour, preset.secondaryColour, preset.tertiaryColour, preset.colorAmount), Color.white);
@@ -157,9 +144,9 @@ public class Dialog_PaintWeaponMultiColor : Window
             {
                 var menuOption = new FloatMenuOption(preset.name.CapitalizeFirst(), delegate
                 {
-                    weapon.DrawColor = preset.primaryColour;
-                    weapon.SetSecondaryColor(preset.secondaryColour);
-                    weapon.SetTertiaryColor(preset.tertiaryColour ?? preset.secondaryColour);
+                    multiColor.DrawColor = preset.primaryColour;
+                    multiColor.DrawColorTwo = preset.secondaryColour;
+                    multiColor.DrawColorThree = preset.tertiaryColour ?? preset.secondaryColour;
                     recache = true;
                             
                 }, Core40kUtils.ThreeColourPreview(preset.primaryColour, preset.secondaryColour, preset.tertiaryColour, 3), Color.white);
@@ -182,7 +169,7 @@ public class Dialog_PaintWeaponMultiColor : Window
             {
                 var menuOption = new FloatMenuOption(preset.name, delegate
                 {
-                    ModSettings.UpdatePreset(preset, weapon.DrawColor, weapon.DrawColorTwo, weapon.DrawColorThree);
+                    ModSettings.UpdatePreset(preset, multiColor.DrawColor, multiColor.DrawColorTwo, multiColor.DrawColorThree);
                 }, Widgets.PlaceholderIconTex, Color.white);
                 menuOption.extraPartWidth = 30f;
                 menuOption.extraPartOnGUI = rect1 => Core40kUtils.DeletePreset(rect1, preset);
@@ -195,9 +182,9 @@ public class Dialog_PaintWeaponMultiColor : Window
             {
                 var newColourPreset = new ColourPreset
                 {
-                    primaryColour = weapon.DrawColor,
-                    secondaryColour = weapon.DrawColorTwo,
-                    tertiaryColour = weapon.DrawColorThree,
+                    primaryColour = multiColor.DrawColor,
+                    secondaryColour = multiColor.DrawColorTwo,
+                    tertiaryColour = multiColor.DrawColorThree,
                     appliesToKind = PresetType.Weapon,
                 };
                 GUI.SetNextControlName("BEWH_Preset_Window");
@@ -216,7 +203,7 @@ public class Dialog_PaintWeaponMultiColor : Window
         Rect colorTwoRect;
         Rect colorThreeRect;
 
-        switch (WeaponMaskAmount)
+        switch (weaponMaskAmount)
         {
             case 1:
                 colorRects = inRect.TakeBottomPart(inRect.height / 2f);
@@ -271,16 +258,16 @@ public class Dialog_PaintWeaponMultiColor : Window
     private void PrimaryColorBox(Rect colorOneRect)
     {
         Widgets.DrawMenuSection(colorOneRect.ContractedBy(-1));
-        Widgets.DrawRectFast(colorOneRect, weapon.DrawColor);
+        Widgets.DrawRectFast(colorOneRect, multiColor.DrawColor);
         Text.Anchor = TextAnchor.MiddleCenter;
         Widgets.Label(colorOneRect, "BEWH.Framework.ApparelMultiColor.PrimaryColor".Translate());
         TooltipHandler.TipRegion(colorOneRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
         Text.Anchor = TextAnchor.UpperLeft;
         if (Widgets.ButtonInvisible(colorOneRect))
         {
-            Find.WindowStack.Add( new Dialog_ColourPicker( weapon.DrawColor, ( newColour ) =>
+            Find.WindowStack.Add( new Dialog_ColourPicker( multiColor.DrawColor, ( newColour ) =>
             {
-                weapon.DrawColor = newColour;
+                multiColor.DrawColor = newColour;
                 recache = true;
             } ) );
         }
@@ -289,16 +276,16 @@ public class Dialog_PaintWeaponMultiColor : Window
     private void SecondaryColorBox(Rect colorTwoRect)
     {
         Widgets.DrawMenuSection(colorTwoRect.ContractedBy(-1));
-        Widgets.DrawRectFast(colorTwoRect, weapon.DrawColorTwo);
+        Widgets.DrawRectFast(colorTwoRect, multiColor.DrawColorTwo);
         Text.Anchor = TextAnchor.MiddleCenter;
         Widgets.Label(colorTwoRect, "BEWH.Framework.ApparelMultiColor.SecondaryColor".Translate());
         TooltipHandler.TipRegion(colorTwoRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
         Text.Anchor = TextAnchor.UpperLeft;
         if (Widgets.ButtonInvisible(colorTwoRect))
         {
-            Find.WindowStack.Add( new Dialog_ColourPicker( weapon.DrawColorTwo, ( newColour ) =>
+            Find.WindowStack.Add( new Dialog_ColourPicker( multiColor.DrawColorTwo, ( newColour ) =>
             {
-                weapon.SetSecondaryColor(newColour);
+                multiColor.DrawColorTwo = newColour;
                 recache = true;
             } ) );
         }
@@ -307,16 +294,16 @@ public class Dialog_PaintWeaponMultiColor : Window
     private void TertiaryColorBox(Rect colorThreeRect)
     {
         Widgets.DrawMenuSection(colorThreeRect.ContractedBy(-1));
-        Widgets.DrawRectFast(colorThreeRect, weapon.DrawColorThree);
+        Widgets.DrawRectFast(colorThreeRect, multiColor.DrawColorThree);
         Text.Anchor = TextAnchor.MiddleCenter;
         Widgets.Label(colorThreeRect, "BEWH.Framework.ApparelMultiColor.TertiaryColor".Translate());
         TooltipHandler.TipRegion(colorThreeRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
         Text.Anchor = TextAnchor.UpperLeft;
         if (Widgets.ButtonInvisible(colorThreeRect))
         {
-            Find.WindowStack.Add( new Dialog_ColourPicker( weapon.DrawColorThree, ( newColour ) =>
+            Find.WindowStack.Add( new Dialog_ColourPicker( multiColor.DrawColorThree, ( newColour ) =>
             {
-                weapon.SetTertiaryColor(newColour);
+                multiColor.DrawColorThree = newColour;
                 recache = true;
             } ) );
         }
@@ -352,7 +339,7 @@ public class Dialog_PaintWeaponMultiColor : Window
 
     private void Reset()
     {
-        weapon.Reset();
+        multiColor.Reset();
         recache = true;
         
         pawn.Drawer.renderer.SetAllGraphicsDirty();
@@ -360,7 +347,7 @@ public class Dialog_PaintWeaponMultiColor : Window
 
     private void Accept()
     {
-        weapon.Notify_ColorChanged();
-        weapon.SetOriginals();
+        multiColor.Notify_GraphicChanged();
+        multiColor.SetOriginals();
     }
 }

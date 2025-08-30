@@ -11,27 +11,27 @@ public class PawnRenderNode_AttachmentBackpack : PawnRenderNode_Apparel
         
     public override Graphic GraphicFor(Pawn pawn)
     {
-        var apparelMultiColor = (BodyDecorativeApparelMultiColor)apparel;
+        var multiColor = apparel.GetComp<CompMultiColor>();
 
         var texPath = Props.texPath;
         string maskPath = null;
 
         var jumpPackVisual = ModsConfig.RoyaltyActive 
                              && pawn.apparel.WornApparel.Any(wornApparel => wornApparel.def == Core40kDefOf.Apparel_PackJump) 
-                             && apparelMultiColor.def.HasModExtension<DefModExtension_HideJumpPack>() 
-                             && apparelMultiColor.def.GetModExtension<DefModExtension_HideJumpPack>().changeBackpackVisual;
+                             && apparel.def.HasModExtension<DefModExtension_HideJumpPack>() 
+                             && apparel.def.GetModExtension<DefModExtension_HideJumpPack>().changeBackpackVisual;
 
         if (jumpPackVisual)
         {
             texPath += "_Jump";
         }
 
-        if (apparelMultiColor.MaskDef != null)
+        if (multiColor.MaskDef != null)
         {
-            maskPath = apparelMultiColor.MaskDef.maskPath;
+            maskPath = multiColor.MaskDef.maskPath;
             
-            var backpackMask = apparelMultiColor.MaskDef.maskExtraFlags.Contains("HasBackpack");
-            var jumppackMask = apparelMultiColor.MaskDef.maskExtraFlags.Contains("HasJumppack");
+            var backpackMask = multiColor.MaskDef.maskExtraFlags.Contains("HasBackpack");
+            var jumppackMask = multiColor.MaskDef.maskExtraFlags.Contains("HasJumppack");
             
             if (jumpPackVisual)
             {
@@ -59,7 +59,7 @@ public class PawnRenderNode_AttachmentBackpack : PawnRenderNode_Apparel
         
         var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
         
-        return MultiColorUtils.GetGraphic<Graphic_Multi>(texPath, shader, Props.drawSize, apparelMultiColor.DrawColor, apparelMultiColor.DrawColorTwo, apparelMultiColor.DrawColorThree, apparelMultiColor.def.graphicData, maskPath);
+        return MultiColorUtils.GetGraphic<Graphic_Multi>(texPath, shader, Props.drawSize, multiColor.DrawColor, multiColor.DrawColorTwo, multiColor.DrawColorThree, apparel.def.graphicData, maskPath);
     }
     
     protected override IEnumerable<Graphic> GraphicsFor(Pawn pawn)

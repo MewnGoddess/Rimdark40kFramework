@@ -7,7 +7,7 @@ using Verse.AI;
 namespace Core40k;
 
 [HarmonyPatch(typeof(ThingWithComps), "GetFloatMenuOptions")]
-public class ApparelMultiColorSelectableOnStylingStation
+public class MultiColorWeaponSelectableOnStylingStation
 {
     public static IEnumerable<FloatMenuOption> Postfix(IEnumerable<FloatMenuOption> __result, ThingWithComps __instance, Pawn selPawn)
     {
@@ -20,21 +20,21 @@ public class ApparelMultiColorSelectableOnStylingStation
         {
             yield break;
         }
-        
-        if (!__instance.def.GetModExtension<DefModExtension_AllowColoringOfThings>().allowColoringOfApparel)
+
+        if (!__instance.def.GetModExtension<DefModExtension_AllowColoringOfThings>().allowColoringOfEquipment)
         {
             yield break;
         }
 
-        if (!selPawn.apparel.WornApparel.Any(a => a is ApparelMultiColor))
+        if (!selPawn.equipment.Primary.HasComp<CompMultiColor>())
         {
             yield break;
         }
-
-        var secondColourChangeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.Framework.ApparelMultiColor.ArmourDecorationFeature".Translate().CapitalizeFirst(), delegate
+            
+        var changeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.Framework.WeaponMultiColor.WeaponDecorationFeature".Translate().CapitalizeFirst(), delegate
         {
-            selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(Core40kDefOf.BEWH_OpenStylingStationDialogForApparelMultiColor, __instance), JobTag.Misc);
+            selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(Core40kDefOf.BEWH_OpenStylingStationDialogForWeaponMultiColor, __instance), JobTag.Misc);
         }), selPawn, __instance);
-        yield return secondColourChangeFloatMenu;
+        yield return changeFloatMenu;
     }
 }
