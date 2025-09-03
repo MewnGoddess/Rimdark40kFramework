@@ -33,6 +33,9 @@ public class DecorationDef : Def
     public string drawnTextureIconPath;
         
     public float sortOrder = 0f;
+    
+    public DrawData drawData = new();
+    public ShaderTypeDef shaderType;
         
     public Color? defaultColour;
     public Color? defaultColourTwo;

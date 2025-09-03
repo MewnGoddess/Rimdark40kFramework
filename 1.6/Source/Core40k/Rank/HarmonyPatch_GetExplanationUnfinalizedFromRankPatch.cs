@@ -60,7 +60,7 @@ public static class GetExplanationUnfinalizedFromRankPatch
                     stringBuilder.AppendLine("BEWH.Framework.RankSystem.StatsReport_Rank".Translate());
                     appendOverallRankText = false;
                 }
-                stringBuilder.AppendLine("    " + rank.LabelCap + ": " + ValueToString(stat, statOffsetFromRank, finalized: false, ToStringNumberSense.Offset));
+                stringBuilder.AppendLine("    " + rank.LabelCap + ": " + Core40kUtils.ValueToString(stat, statOffsetFromRank, finalized: false, ToStringNumberSense.Offset));
             }
             var statFactorFromRank = rank.statFactors.GetStatFactorFromList(stat);
             if (statFactorFromRank != 1f)
@@ -70,7 +70,7 @@ public static class GetExplanationUnfinalizedFromRankPatch
                     stringBuilder.AppendLine("BEWH.Framework.RankSystem.StatsReport_Rank".Translate());
                     appendOverallRankText = false;
                 }
-                stringBuilder.AppendLine("    " + rank.LabelCap + ": " + ValueToString(stat, statFactorFromRank, finalized: false, ToStringNumberSense.Factor));
+                stringBuilder.AppendLine("    " + rank.LabelCap + ": " + Core40kUtils.ValueToString(stat, statFactorFromRank, finalized: false, ToStringNumberSense.Factor));
             }
             if (rank.conditionalStatAffecters.NullOrEmpty())
             {
@@ -91,7 +91,7 @@ public static class GetExplanationUnfinalizedFromRankPatch
                         stringBuilder.AppendLine("BEWH.Framework.RankSystem.StatsReport_Rank".Translate());
                         appendOverallRankText = false;
                     }
-                    stringBuilder.AppendLine("    " + rank.LabelCap + " (" + conditionalStat.Label + "): " + ValueToString(stat, statOffsetFromRankConditional, finalized: false, ToStringNumberSense.Offset));
+                    stringBuilder.AppendLine("    " + rank.LabelCap + " (" + conditionalStat.Label + "): " + Core40kUtils.ValueToString(stat, statOffsetFromRankConditional, finalized: false, ToStringNumberSense.Offset));
                 }
                 var statFactorFromRankConditional = conditionalStat.statFactors.GetStatFactorFromList(stat);
                 if (statFactorFromRankConditional != 1f)
@@ -101,31 +101,11 @@ public static class GetExplanationUnfinalizedFromRankPatch
                         stringBuilder.AppendLine("BEWH.Framework.RankSystem.StatsReport_Rank".Translate());
                         appendOverallRankText = false;
                     }
-                    stringBuilder.AppendLine("    " + rank.LabelCap + " (" + conditionalStat.Label + "): " + ValueToString(stat, statFactorFromRankConditional, finalized: false, ToStringNumberSense.Factor));
+                    stringBuilder.AppendLine("    " + rank.LabelCap + " (" + conditionalStat.Label + "): " + Core40kUtils.ValueToString(stat, statFactorFromRankConditional, finalized: false, ToStringNumberSense.Factor));
                 }
             }
         }            
 
         return stringBuilder;
     }
-        
-    private static string ValueToString(StatDef stat, float val, bool finalized, ToStringNumberSense numberSense = ToStringNumberSense.Absolute)
-    {
-        if (!finalized)
-        {
-            var text = val.ToStringByStyle(stat.ToStringStyleUnfinalized, numberSense);
-            if (numberSense != ToStringNumberSense.Factor && !stat.formatStringUnfinalized.NullOrEmpty())
-            {
-                text = string.Format(stat.formatStringUnfinalized, text);
-            }
-            return text;
-        }
-        var text2 = val.ToStringByStyle(stat.toStringStyle, numberSense);
-        if (numberSense != ToStringNumberSense.Factor && !stat.formatString.NullOrEmpty())
-        {
-            text2 = string.Format(stat.formatString, text2);
-        }
-        return text2;
-    }
-        
 }

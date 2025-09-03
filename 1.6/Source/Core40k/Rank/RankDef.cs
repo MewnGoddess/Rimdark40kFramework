@@ -10,12 +10,6 @@ public class RankDef : Def
     [NoTranslate]
     public string rankIconPath;
         
-    public RankCategoryDef rankCategory;
-
-    public List<RankData> rankRequirements = new List<RankData>();
-    
-    public List<RankData> rankRequirementsOneAmong = new List<RankData>();
-        
     public List<RankDef> incompatibleRanks = new List<RankDef>();
 
     public List<Aptitude> requiredSkills = new List<Aptitude>();
@@ -41,8 +35,6 @@ public class RankDef : Def
     public List<string> customEffectDescriptions = new List<string>();
         
     public Vector2 colonyLimitOfRank = new Vector2(-1, -1);
-        
-    public Vector2 displayPosition;
 
     public bool defaultFirstRank = false;
 

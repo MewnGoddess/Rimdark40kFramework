@@ -158,8 +158,7 @@
     <Compile Include="GraphicComps\MultiColor\Dialog_PaintApparelMultiColor.cs" />
     <Compile Include="GraphicComps\MultiColor\Dialog_PaintWeaponMultiColor.cs" />
     <Compile Include="GraphicComps\MultiColor\HarmonyPatch_MultiColorApparel.cs" />
-    <Compile Include="GraphicComps\MultiColor\HarmonyPatch_MultiColorApparelSelectableOnStylingStation.cs" />
-    <Compile Include="GraphicComps\MultiColor\HarmonyPatch_MultiColorWeaponSelectableOnStylingStation.cs" />
+    <Compile Include="GraphicComps\MultiColor\HarmonyPatch_MultiColorChangableOnThing.cs" />
     <Compile Include="GraphicComps\MultiColor\HarmonyPatch_ThingWithCompsGraphicOverride.cs" />
     <Compile Include="GraphicComps\MultiColor\JobDriver_OpenStylingStationDialogForApparelMultiColor.cs" />
     <Compile Include="GraphicComps\MultiColor\JobDriver_OpenStylingStationDialogForWeaponMultiColor.cs" />
@@ -180,6 +179,7 @@
     <Compile Include="Rank\CompProperties_RankInfo.cs" />
     <Compile Include="Rank\CompRankInfo.cs" />
     <Compile Include="Rank\GameComponent_RankInfo.cs" />
+    <Compile Include="Rank\RankCategorySpecificData.cs" />
     <Compile Include="Rank\HarmonyPatch_CalculateAllowedRankLimitOnArrestPatch.cs" />
     <Compile Include="Rank\HarmonyPatch_CalculateAllowedRankLimitOnRecruitPatch.cs" />
     <Compile Include="Rank\HarmonyPatch_GetExplanationUnfinalizedFromRankPatch.cs" />
@@ -214,9 +214,6 @@
     <Compile Include="Core40kMod.cs" />
     <Compile Include="Core40kDefOf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WeaponMultiColor\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

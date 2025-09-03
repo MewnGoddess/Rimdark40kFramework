@@ -7,13 +7,9 @@ namespace Core40k;
 
 public class ExtraDecorationDef : DecorationDef
 {
-    public ShaderTypeDef shaderType;
-    
     public bool isHelmetDecoration = false;
         
     public List<Rot4> defaultShowRotation = new() {Rot4.North, Rot4.South, Rot4.East, Rot4.West};
-
-    public DrawData drawData = new();
 
     public bool colourable = false;
         
