@@ -144,6 +144,7 @@
     <Compile Include="GraphicComps\Decorative\PawnRenderNodeWorker_AttachmentShoulderPad.cs" />
     <Compile Include="GraphicComps\Decorative\PawnRenderNode_AttachmentBackpack.cs" />
     <Compile Include="GraphicComps\Decorative\PawnRenderNode_AttachmentExtraDecoration.cs" />
+    <Compile Include="GraphicComps\HarmonyPatch_ForceBodyPatch.cs" />
     <Compile Include="GraphicComps\HarmonyPatch_HideBodyPatch.cs" />
     <Compile Include="GraphicComps\MultiColor\ApparelMultiColor.cs" />
     <Compile Include="GraphicComps\MultiColor\ApparelMultiColorTabDef.cs" />
