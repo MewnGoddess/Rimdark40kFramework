@@ -61,6 +61,5 @@ public class ExtraDecorationDef : DecorationDef
     {
         base.ResolveReferences();
         defaultMask ??= Core40kDefOf.BEWH_DefaultMask;
-        shaderType ??= Core40kDefOf.BEWH_CutoutThreeColor;
     }
 }

@@ -109,6 +109,12 @@ public class DecorationDef : Def
             
         return true;
     }
+    
+    public override void ResolveReferences()
+    {
+        base.ResolveReferences();
+        shaderType ??= Core40kDefOf.BEWH_CutoutThreeColor;
+    }
 }
 
 public class DecorationFlag

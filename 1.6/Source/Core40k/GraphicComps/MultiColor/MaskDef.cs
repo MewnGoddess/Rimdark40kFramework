@@ -13,6 +13,13 @@ public class MaskDef : Def
     public AppliesToKind appliesToKind = AppliesToKind.Thing;
     public int colorAmount = 1;
     public bool useBodyTypes = false;
+    public ShaderTypeDef shaderType;
+    
+    public override void ResolveReferences()
+    {
+        base.ResolveReferences();
+        shaderType ??= Core40kDefOf.BEWH_CutoutThreeColor;
+    }
 }
 
 public enum AppliesToKind

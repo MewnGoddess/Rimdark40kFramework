@@ -309,11 +309,15 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                 }
 
                 var path = extraDecoration.drawnTextureIconPath;
-                var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
-                var graphic = MultiColorUtils.GetGraphic<Graphic_Multi>(path, shader, Vector2.one, decorativeComp.ExtraDecorations[extraDecoration].Color, decorativeComp.ExtraDecorations[extraDecoration].ColorTwo, decorativeComp.ExtraDecorations[extraDecoration].ColorThree, null, mask?.maskPath ?? path + "_mask");
+                var shader = mask?.shaderType.Shader ?? extraDecoration.shaderType.Shader;
+                Graphic_Multi graphic;
                 if (!extraDecoration.useMask)
                 {
                     graphic = (Graphic_Multi)GraphicDatabase.Get<Graphic_Multi>(path, extraDecoration.shaderType.Shader, Vector2.one, decorativeComp.ExtraDecorations[extraDecoration].Color);
+                }
+                else
+                {
+                    graphic = MultiColorUtils.GetGraphic<Graphic_Multi>(path, shader, Vector2.one, decorativeComp.ExtraDecorations[extraDecoration].Color, decorativeComp.ExtraDecorations[extraDecoration].ColorTwo, decorativeComp.ExtraDecorations[extraDecoration].ColorThree, null, mask?.maskPath ?? path + "_mask");
                 }
                 var material = graphic.MatSouth;
                 cachedMaterials.Add((extraDecoration, mask), material);

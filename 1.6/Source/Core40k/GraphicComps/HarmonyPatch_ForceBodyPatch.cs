@@ -15,6 +15,11 @@ public static class ForceBodyPatch
             return true;
         }
 
+        if (apparel.def.apparel.LastLayer == ApparelLayerDefOf.Overhead )
+        {
+            return true;
+        }
+
         var pawn = apparel.Wearer;
 
         if (pawn == null)

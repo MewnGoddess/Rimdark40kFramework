@@ -91,7 +91,7 @@ public class DynamicPawnRenderNodeSetup_DecorativeAddons : DynamicPawnRenderNode
         {
             nodeClass = typeof(PawnRenderNode_AttachmentExtraDecoration),
             texPath = decoration.Key.drawnTextureIconPath,
-            shaderTypeDef = decoration.Key.shaderType,
+            shaderTypeDef = decoration.Value.maskDef?.shaderType ?? decoration.Key.shaderType,
             drawData = decoration.Key.drawData,
             drawSize = decoration.Key.drawSize,
             flipGraphic = decoration.Value.Flipped,
