@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using RimWorld;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using Verse;
@@ -85,5 +86,24 @@ public static class Core40kUtils
     public static bool ContainsAllItems<T>(this IEnumerable<T> a, IEnumerable<T> b)
     {
         return !b.Except(a).Any();
+    }
+    
+    public static string ValueToString(StatDef stat, float val, bool finalized, ToStringNumberSense numberSense = ToStringNumberSense.Absolute)
+    {
+        if (!finalized)
+        {
+            var text = val.ToStringByStyle(stat.ToStringStyleUnfinalized, numberSense);
+            if (numberSense != ToStringNumberSense.Factor && !stat.formatStringUnfinalized.NullOrEmpty())
+            {
+                text = string.Format(stat.formatStringUnfinalized, text);
+            }
+            return text;
+        }
+        var text2 = val.ToStringByStyle(stat.toStringStyle, numberSense);
+        if (numberSense != ToStringNumberSense.Factor && !stat.formatString.NullOrEmpty())
+        {
+            text2 = string.Format(stat.formatString, text2);
+        }
+        return text2;
     }
 }

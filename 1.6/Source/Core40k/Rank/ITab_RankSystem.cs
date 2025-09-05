@@ -264,11 +264,11 @@ public class ITab_RankSystem : ITab
     {
         var ranks = availableRanksForCategory.Select(rank => rank.rankDef).ToList();
             
-        var xMax = ranks.MaxBy(rank => rank.displayPosition.x);
-        var yMax = ranks.MaxBy(rank => rank.displayPosition.y);
-        var yMin = ranks.MinBy(rank => rank.displayPosition.y);
+        var xMax = ranks.MaxBy(rank => currentlySelectedRankCategory.rankDict[rank].displayPosition.x);
+        var yMax = ranks.MaxBy(rank => currentlySelectedRankCategory.rankDict[rank].displayPosition.y);
+        var yMin = ranks.MinBy(rank => currentlySelectedRankCategory.rankDict[rank].displayPosition.y);
                 
-        return (yMax.displayPosition.y, yMin.displayPosition.y, xMax.displayPosition.x);
+        return (currentlySelectedRankCategory.rankDict[yMax].displayPosition.y, currentlySelectedRankCategory.rankDict[yMin].displayPosition.y, currentlySelectedRankCategory.rankDict[xMax].displayPosition.x);
     }
         
     private void FillRankTree(Rect rectRankTree)
@@ -317,11 +317,11 @@ public class ITab_RankSystem : ITab
                 {
                     width = rankIconRectSize,
                     height = rankIconRectSize,
-                    x = xStart + rank.rankDef.displayPosition.x * rankPlacementMult,
-                    y = yStart + rank.rankDef.displayPosition.y * rankPlacementMult,
+                    x = xStart + currentlySelectedRankCategory.rankDict[rank.rankDef].displayPosition.x * rankPlacementMult,
+                    y = yStart + currentlySelectedRankCategory.rankDict[rank.rankDef].displayPosition.y * rankPlacementMult,
                 };
 
-                if (rank.rankDef.displayPosition.x < 0)
+                if (currentlySelectedRankCategory.rankDict[rank.rankDef].displayPosition.x < 0)
                 {
                     Log.Error(rank.rankDef.defName + " has display position with x < 0. Should be 0 or above");
                 }
@@ -336,21 +336,17 @@ public class ITab_RankSystem : ITab
         //Draws requirement lines
         foreach (var rank in availableRanksForCategory)
         {
-            if (rank.rankDef.rankRequirements == null && rank.rankDef.rankRequirementsOneAmong == null)
+            if (currentlySelectedRankCategory.rankDict[rank.rankDef].rankRequirements == null && currentlySelectedRankCategory.rankDict[rank.rankDef].rankRequirementsOneAmong == null)
             {
                 continue;
             }
 
             var rankData = new List<RankData>();
-            rankData.AddRange(rank.rankDef.rankRequirements ?? new List<RankData>());
-            rankData.AddRange(rank.rankDef.rankRequirementsOneAmong ?? new List<RankData>());
+            rankData.AddRange(currentlySelectedRankCategory.rankDict[rank.rankDef].rankRequirements ?? new List<RankData>());
+            rankData.AddRange(currentlySelectedRankCategory.rankDict[rank.rankDef].rankRequirementsOneAmong ?? new List<RankData>());
             
             foreach (var rankReq in rankData)
             {
-                if (rankReq.rankDef.rankCategory != currentlySelectedRankCategory)
-                {
-                    continue;
-                }
                 var startPos = new Vector2(rankPos[rank.rankDef].x + rankIconRectSize/2, rankPos[rank.rankDef].y + rankIconRectSize/2);
                 var endPos = new Vector2(rankPos[rankReq.rankDef].x + rankIconRectSize/2, rankPos[rankReq.rankDef].y + rankIconRectSize/2);
                     
@@ -375,8 +371,8 @@ public class ITab_RankSystem : ITab
             {
                 width = rankIconRectSize,
                 height = rankIconRectSize,
-                x = xStart + rank.rankDef.displayPosition.x * rankPlacementMult,
-                y = yStart + rank.rankDef.displayPosition.y * rankPlacementMult,
+                x = xStart + currentlySelectedRankCategory.rankDict[rank.rankDef].displayPosition.x * rankPlacementMult,
+                y = yStart + currentlySelectedRankCategory.rankDict[rank.rankDef].displayPosition.y * rankPlacementMult,
             };
 
             if (rank == currentlySelectedRank)
@@ -536,11 +532,11 @@ public class ITab_RankSystem : ITab
     private void GetRanksForCategory()
     {
         availableRanksForCategory.Clear();
-        var ranksForCategory = DefDatabase<RankDef>.AllDefsListForReading.Where(rank => rank.rankCategory == currentlySelectedRankCategory).ToList();
+        //var ranksForCategory = DefDatabase<RankDef>.AllDefsListForReading.Where(rank => rank.rankCategory == currentlySelectedRankCategory).ToList();
 
-        foreach (var rank in ranksForCategory)
+        foreach (var rank in currentlySelectedRankCategory.ranks)
         {
-            var rankInfo = BuildRankInfoForCategory(rank);
+            var rankInfo = BuildRankInfoForCategory(rank.rankDef);
             availableRanksForCategory.Add(rankInfo);
         }
     }
@@ -619,11 +615,11 @@ public class ITab_RankSystem : ITab
         //Ranks
         //All
         var rankAllRequirementsMet = true;
-        if (!rankDef.rankRequirements.NullOrEmpty())
+        if (!currentlySelectedRankCategory.rankDict[rankDef].rankRequirements.NullOrEmpty())
         {
             stringBuilder.Append("\n");
             stringBuilder.AppendLine("BEWH.Framework.RankSystem.RequirementsRanks".Translate());
-            foreach (var rank in rankDef.rankRequirements)
+            foreach (var rank in currentlySelectedRankCategory.rankDict[rankDef].rankRequirements)
             {
                 var rankRequirementMet = compRankInfo.HasRank(rank.rankDef) &&
                                          compRankInfo.DaysAsRank[rank.rankDef] >= rank.daysAs;
@@ -646,12 +642,12 @@ public class ITab_RankSystem : ITab
                     
             }
         }
-        var rankAtLeastOneRequirementsMet = rankDef.rankRequirementsOneAmong.NullOrEmpty();
+        var rankAtLeastOneRequirementsMet = currentlySelectedRankCategory.rankDict[rankDef].rankRequirementsOneAmong.NullOrEmpty();
         if (!rankAtLeastOneRequirementsMet)
         {
             stringBuilder.Append("\n");
             stringBuilder.AppendLine("BEWH.Framework.RankSystem.RequirementsRanksAtLeastOne".Translate());
-            foreach (var rank in rankDef.rankRequirementsOneAmong)
+            foreach (var rank in currentlySelectedRankCategory.rankDict[rankDef].rankRequirementsOneAmong)
             {
                 var rankRequirementMet = compRankInfo.HasRank(rank.rankDef) &&
                                          compRankInfo.DaysAsRank[rank.rankDef] >= rank.daysAs;

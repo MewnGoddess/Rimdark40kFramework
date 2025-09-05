@@ -16,7 +16,7 @@ public class JobDriver_OpenStylingStationDialogForWeaponMultiColor : JobDriver
         yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell).FailOnDespawnedOrNull(TargetIndex.A);
         yield return Toils_General.Do(delegate
         {
-            Find.WindowStack.Add(new Dialog_PaintWeaponMultiColor(pawn, (WeaponMultiColor)pawn.equipment.Primary));
+            Find.WindowStack.Add(new Dialog_PaintWeaponMultiColor(pawn, pawn.equipment.Primary));
         });
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -9,8 +10,8 @@ public class Dialog_ExtraDecorationMaskSelection : Window
 {
     private Vector2 size;
     public override Vector2 InitialSize => size;
-
-    private DecorativeApparelMultiColor apparelMultiColor;
+    
+    private CompDecorative decorativeComp;
     private ExtraDecorationDef decorationDef;
     private ExtraDecorationSettings decorationSettings;
     private List<MaskDef> masks = new();
@@ -18,11 +19,11 @@ public class Dialog_ExtraDecorationMaskSelection : Window
     private Dictionary<MaskDef, Material> cachedMaterials = new ();
     private bool recache = true;
         
-    public Dialog_ExtraDecorationMaskSelection(DecorativeApparelMultiColor apparelMultiColor, ExtraDecorationDef decorationDef, List<MaskDef> masks, float size)
+    public Dialog_ExtraDecorationMaskSelection(Apparel apparel, ExtraDecorationDef decorationDef, List<MaskDef> masks, float size)
     {
-        this.apparelMultiColor = apparelMultiColor;
+        decorativeComp = apparel.GetComp<CompDecorative>();
         this.decorationDef = decorationDef;
-        decorationSettings = apparelMultiColor.ExtraDecorations[decorationDef];
+        decorationSettings = decorativeComp.ExtraDecorations[decorationDef];
         this.masks = masks;
         this.size = new Vector2(size, size/2.5f);
     }
@@ -79,7 +80,7 @@ public class Dialog_ExtraDecorationMaskSelection : Window
 
             if (Widgets.ButtonInvisible(curPosRect))
             {
-                apparelMultiColor.UpdateDecorationMask(decorationDef, curPageMasks[i]);
+                decorativeComp.UpdateDecorationMask(decorationDef, curPageMasks[i]);
             }
         }
 

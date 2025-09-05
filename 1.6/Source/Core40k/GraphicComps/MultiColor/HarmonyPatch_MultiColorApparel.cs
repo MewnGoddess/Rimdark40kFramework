@@ -14,23 +14,25 @@ public static class ApparelMultiColorPatch
             return true;
         }
 
-        if (apparel is not ApparelMultiColor apparelMultiColor)
+        if (!apparel.HasComp<CompMultiColor>())
         {
             return true;
         }
+        
+        var multiColor = apparel.GetComp<CompMultiColor>();
 
-        if (apparelMultiColor.RecacheGraphics)
+        if (multiColor.RecacheGraphics)
         {
-            var graphic = TryGetGraphicApparel(apparelMultiColor, bodyType);
-            apparelMultiColor.CachedGraphicMulti = graphic;
+            var graphic = TryGetGraphicApparel(apparel, multiColor, bodyType);
+            multiColor.CachedGraphicMulti = graphic;
         }
 
-        rec = apparelMultiColor.ApparelGraphicRecord;
+        rec = multiColor.ApparelGraphicRecord;
         __result = true;
         return false;
     }
 
-    private static Graphic_Multi TryGetGraphicApparel(ApparelMultiColor apparel, BodyTypeDef bodyType)
+    private static Graphic_Multi TryGetGraphicApparel(Apparel apparel, CompMultiColor multiColor, BodyTypeDef bodyType)
     {
         if (bodyType == null)
         {
@@ -43,12 +45,12 @@ public static class ApparelMultiColorPatch
         var path = ((apparel.def.apparel.LastLayer != ApparelLayerDefOf.Overhead && apparel.def.apparel.LastLayer != ApparelLayerDefOf.EyeCover && !apparel.RenderAsPack() && apparel.WornGraphicPath != BaseContent.PlaceholderImagePath && apparel.WornGraphicPath != BaseContent.PlaceholderGearImagePath) ? (apparel.WornGraphicPath + "_" + bodyType.defName) : apparel.WornGraphicPath);
         
         var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
-        var maskPath = apparel.MaskDef?.maskPath;
-        if (apparel.MaskDef != null && apparel.MaskDef.useBodyTypes)
+        var maskPath = multiColor.MaskDef?.maskPath;
+        if (multiColor.MaskDef != null && multiColor.MaskDef.useBodyTypes)
         {
             maskPath += "_" + bodyType.defName;
         }
-        var graphic = MultiColorUtils.GetGraphic<Graphic_Multi>(path, shader, apparel.def.graphicData.drawSize, apparel.DrawColor, apparel.DrawColorTwo, apparel.DrawColorThree, apparel.Graphic.data, maskPath);
+        var graphic = MultiColorUtils.GetGraphic<Graphic_Multi>(path, shader, apparel.def.graphicData.drawSize, multiColor.DrawColor, multiColor.DrawColorTwo, multiColor.DrawColorThree, null, maskPath);
         return graphic;
     }
 }

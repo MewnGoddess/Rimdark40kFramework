@@ -71,12 +71,14 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         }
     }
 
-    private void DrawRowContent(DecorativeApparelMultiColor apparel, List<ExtraDecorationDef> extraDecorationDefs, ref Vector2 position, ref Rect viewRect)
+    private void DrawRowContent(Apparel apparel, List<ExtraDecorationDef> extraDecorationDefs, ref Vector2 position, ref Rect viewRect)
     {
         var iconSize = new Vector2(viewRect.width/RowAmount, viewRect.width/RowAmount);
         var smallIconSize = new Vector2(iconSize.x / 4, iconSize.y / 4);
-            
-        var currentDecorations = apparel.ExtraDecorations;
+
+        var decorativeComp = apparel.GetComp<CompDecorative>();
+        
+        var currentDecorations = decorativeComp.ExtraDecorations;
 
         var colourButtonExtraSize = 0f;
             
@@ -121,7 +123,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                     
             if (Widgets.ButtonInvisible(iconRect))
             {
-                apparel.AddOrRemoveDecoration(extraDecorationDefs[i]);
+                decorativeComp.AddOrRemoveDecoration(extraDecorationDefs[i]);
             }
                 
             if (extraDecorationDefs[i].colourable && currentDecorations.ContainsKey(extraDecorationDefs[i]))
@@ -141,11 +143,10 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                 Rect presetSelection;
                 
                 var colorAmount = extraDecorationDefs[i].colorAmount;
-                Log.Message("colorAmount: " + colorAmount);
                 
-                if (!apparel.ExtraDecorations[extraDecorationDefs[i]].maskDef.setsNull)
+                if (!decorativeComp.ExtraDecorations[extraDecorationDefs[i]].maskDef.setsNull)
                 {
-                    colorAmount = apparel.ExtraDecorations[extraDecorationDefs[i]].maskDef.colorAmount;
+                    colorAmount = decorativeComp.ExtraDecorations[extraDecorationDefs[i]].maskDef.colorAmount;
                 }
                 
                 switch (colorAmount)
@@ -153,7 +154,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                     case 1:
                         colourSelection = new Rect(bottomRect);
                         
-                        PrimaryColorBox(colourSelection, apparel, extraDecorationDefs[i1]);
+                        PrimaryColorBox(colourSelection, decorativeComp, extraDecorationDefs[i1]);
                         break;
                     case 2:
                         colourSelection = new Rect(bottomRect);
@@ -163,8 +164,8 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                             x = colourSelection.xMax
                         };
 
-                        PrimaryColorBox(colourSelection, apparel, extraDecorationDefs[i1]);
-                        SecondaryColorBox(colourSelectionTwo, apparel, extraDecorationDefs[i1]);
+                        PrimaryColorBox(colourSelection, decorativeComp, extraDecorationDefs[i1]);
+                        SecondaryColorBox(colourSelectionTwo, decorativeComp, extraDecorationDefs[i1]);
                         break;
                     case 3:
                         colourSelection = new Rect(bottomRect);
@@ -178,9 +179,9 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                             x = colourSelectionTwo.xMax
                         };
 
-                        PrimaryColorBox(colourSelection, apparel, extraDecorationDefs[i1]);
-                        SecondaryColorBox(colourSelectionTwo, apparel, extraDecorationDefs[i1]);
-                        TertiaryColorBox(colourSelectionThree, apparel, extraDecorationDefs[i1]);
+                        PrimaryColorBox(colourSelection, decorativeComp, extraDecorationDefs[i1]);
+                        SecondaryColorBox(colourSelectionTwo, decorativeComp, extraDecorationDefs[i1]);
+                        TertiaryColorBox(colourSelectionThree, decorativeComp, extraDecorationDefs[i1]);
                         break;
                     default:
                         Log.Warning("Wrong setup in " + extraDecorationDefs[i] + "colorAmount is more than 3 or less than 1");
@@ -212,7 +213,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                     TooltipHandler.TipRegion(maskSelection, "BEWH.Framework.ExtraDecoration.MaskDesc".Translate());
                     if (Widgets.ButtonText(maskSelection, "BEWH.Framework.ExtraDecoration.Mask".Translate()))
                     {
-                        SelectMask(apparel, extraDecorationDefs[i1], viewRect.width/1.3f);
+                        SelectMask(decorativeComp, extraDecorationDefs[i1], viewRect.width/1.3f);
                     }
                 }
                 Text.Font = GameFont.Small;
@@ -243,58 +244,58 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         curY += 34f;
     }
 
-    private void PrimaryColorBox(Rect colourSelection, DecorativeApparelMultiColor apparel, ExtraDecorationDef extraDecorationDef)
+    private void PrimaryColorBox(Rect colourSelection, CompDecorative compDecorative, ExtraDecorationDef extraDecorationDef)
     {
         colourSelection = colourSelection.ContractedBy(2f);
         Widgets.DrawMenuSection(colourSelection);
         colourSelection = colourSelection.ContractedBy(1f);
-        Widgets.DrawRectFast(colourSelection, apparel.ExtraDecorations[extraDecorationDef].Color);
+        Widgets.DrawRectFast(colourSelection, compDecorative.ExtraDecorations[extraDecorationDef].Color);
         TooltipHandler.TipRegion(colourSelection, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
         if (Widgets.ButtonInvisible(colourSelection))
         {
-            Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDef].Color, ( newColour ) =>
+            Find.WindowStack.Add( new Dialog_ColourPicker( compDecorative.ExtraDecorations[extraDecorationDef].Color, ( newColour ) =>
             {
                 recache = true;
-                apparel.UpdateDecorationColourOne(extraDecorationDef, newColour);
+                compDecorative.UpdateDecorationColourOne(extraDecorationDef, newColour);
             } ) );
         }
     }
     
-    private void SecondaryColorBox(Rect colourSelectionTwo, DecorativeApparelMultiColor apparel, ExtraDecorationDef extraDecorationDef)
+    private void SecondaryColorBox(Rect colourSelectionTwo, CompDecorative compDecorative, ExtraDecorationDef extraDecorationDef)
     {
         colourSelectionTwo = colourSelectionTwo.ContractedBy(2f);
         Widgets.DrawMenuSection(colourSelectionTwo);
         colourSelectionTwo = colourSelectionTwo.ContractedBy(1f);
-        Widgets.DrawRectFast(colourSelectionTwo, apparel.ExtraDecorations[extraDecorationDef].ColorTwo);
+        Widgets.DrawRectFast(colourSelectionTwo, compDecorative.ExtraDecorations[extraDecorationDef].ColorTwo);
         TooltipHandler.TipRegion(colourSelectionTwo, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
         if (Widgets.ButtonInvisible(colourSelectionTwo))
         {
-            Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDef].ColorTwo, ( newColour ) =>
+            Find.WindowStack.Add( new Dialog_ColourPicker( compDecorative.ExtraDecorations[extraDecorationDef].ColorTwo, ( newColour ) =>
             {
                 recache = true;
-                apparel.UpdateDecorationColourTwo(extraDecorationDef, newColour);
+                compDecorative.UpdateDecorationColourTwo(extraDecorationDef, newColour);
             } ) );
         }
     }
     
-    private void TertiaryColorBox(Rect colourSelectionThree, DecorativeApparelMultiColor apparel, ExtraDecorationDef extraDecorationDef)
+    private void TertiaryColorBox(Rect colourSelectionThree, CompDecorative compDecorative, ExtraDecorationDef extraDecorationDef)
     {
         colourSelectionThree = colourSelectionThree.ContractedBy(2f);
         Widgets.DrawMenuSection(colourSelectionThree);
         colourSelectionThree = colourSelectionThree.ContractedBy(1f);
-        Widgets.DrawRectFast(colourSelectionThree, apparel.ExtraDecorations[extraDecorationDef].ColorThree);
+        Widgets.DrawRectFast(colourSelectionThree, compDecorative.ExtraDecorations[extraDecorationDef].ColorThree);
         TooltipHandler.TipRegion(colourSelectionThree, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
         if (Widgets.ButtonInvisible(colourSelectionThree))
         {
-            Find.WindowStack.Add( new Dialog_ColourPicker( apparel.ExtraDecorations[extraDecorationDef].ColorThree, ( newColour ) =>
+            Find.WindowStack.Add( new Dialog_ColourPicker( compDecorative.ExtraDecorations[extraDecorationDef].ColorThree, ( newColour ) =>
             {
                 recache = true;
-                apparel.UpdateDecorationColourThree(extraDecorationDef, newColour);
+                compDecorative.UpdateDecorationColourThree(extraDecorationDef, newColour);
             } ) );
         }
     }
 
-    private void SelectMask(DecorativeApparelMultiColor apparel, ExtraDecorationDef extraDecoration, float size)
+    private void SelectMask(CompDecorative decorativeComp, ExtraDecorationDef extraDecoration, float size)
     {
         var list = new List<FloatMenuOption>();
         var mouseOffset = UI.MousePositionOnUI;
@@ -309,10 +310,10 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
 
                 var path = extraDecoration.drawnTextureIconPath;
                 var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
-                var graphic = MultiColorUtils.GetGraphic<Graphic_Multi>(path, shader, Vector2.one, apparel.ExtraDecorations[extraDecoration].Color, apparel.ExtraDecorations[extraDecoration].ColorTwo, apparel.ExtraDecorations[extraDecoration].ColorThree, null, mask?.maskPath ?? path + "_mask");
+                var graphic = MultiColorUtils.GetGraphic<Graphic_Multi>(path, shader, Vector2.one, decorativeComp.ExtraDecorations[extraDecoration].Color, decorativeComp.ExtraDecorations[extraDecoration].ColorTwo, decorativeComp.ExtraDecorations[extraDecoration].ColorThree, null, mask?.maskPath ?? path + "_mask");
                 if (!extraDecoration.useMask)
                 {
-                    graphic = (Graphic_Multi)GraphicDatabase.Get<Graphic_Multi>(path, extraDecoration.shaderType.Shader, Vector2.one, apparel.ExtraDecorations[extraDecoration].Color);
+                    graphic = (Graphic_Multi)GraphicDatabase.Get<Graphic_Multi>(path, extraDecoration.shaderType.Shader, Vector2.one, decorativeComp.ExtraDecorations[extraDecoration].Color);
                 }
                 var material = graphic.MatSouth;
                 cachedMaterials.Add((extraDecoration, mask), material);
@@ -321,7 +322,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
             
             var menuOption = new FloatMenuOption(mask.label, delegate
             {
-                apparel.UpdateDecorationMask(extraDecoration, mask);
+                decorativeComp.UpdateDecorationMask(extraDecoration, mask);
             }, (Texture2D)null, Color.white, mouseoverGuiAction: delegate(Rect rect)
             {
                 if (!Mouse.IsOver(rect))
@@ -342,7 +343,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
 
                 });
             });
-            if (apparel.ExtraDecorations[extraDecoration].maskDef == mask)
+            if (decorativeComp.ExtraDecorations[extraDecoration].maskDef == mask)
             {
                 menuOption.Disabled = true;
             }
@@ -359,24 +360,30 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         Find.WindowStack.Add(new FloatMenu(list));
     }
 
-    private void SelectPreset(DecorativeApparelMultiColor apparel, ExtraDecorationDef extraDecoration)
+    private void SelectPreset(Apparel apparel, ExtraDecorationDef extraDecoration)
     {
         var presets = extraDecoration.availablePresets;
         var list = new List<FloatMenuOption>();
         var colorAmount = extraDecoration.colorAmount;
 
-        if (!apparel.ExtraDecorations[extraDecoration].maskDef.setsNull)
+        var decorativeComp = apparel.GetComp<CompDecorative>();
+        var colorComp = apparel.GetComp<CompMultiColor>();
+        var armorCol1 = colorComp?.DrawColor ?? apparel.DrawColor;
+        var armorCol2 = colorComp?.DrawColorTwo ?? apparel.DrawColor;
+        var armorCol3 = colorComp?.DrawColorThree ?? apparel.DrawColor;
+        
+        if (!decorativeComp.ExtraDecorations[extraDecoration].maskDef.setsNull)
         {
-            colorAmount = apparel.ExtraDecorations[extraDecoration].maskDef.colorAmount;
+            colorAmount = decorativeComp.ExtraDecorations[extraDecoration].maskDef.colorAmount;
         }
         foreach (var preset in presets)
         {
             var menuOption = new FloatMenuOption(preset.label, delegate
             {
                 recache = true;
-                apparel.UpdateDecorationColourOne(extraDecoration, preset.colour);
-                apparel.UpdateDecorationColourTwo(extraDecoration, preset.colourTwo ?? Color.white);
-                apparel.UpdateDecorationColourThree(extraDecoration, preset.colourThree ?? Color.white);
+                decorativeComp.UpdateDecorationColourOne(extraDecoration, preset.colour);
+                decorativeComp.UpdateDecorationColourTwo(extraDecoration, preset.colourTwo ?? Color.white);
+                decorativeComp.UpdateDecorationColourThree(extraDecoration, preset.colourThree ?? Color.white);
             }, Core40kUtils.ThreeColourPreview(preset.colour, preset.colourTwo, preset.colourThree, colorAmount), Color.white);
             list.Add(menuOption);
         }
@@ -385,18 +392,18 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         {
             var menuOptionMatch = new FloatMenuOption("BEWH.Framework.ExtraDecoration.UseArmourColour".Translate(), delegate
             {
-                apparel.SetArmorColors(extraDecoration);
-            }, Core40kUtils.ThreeColourPreview(apparel.DrawColor, apparel.DrawColorTwo, apparel.DrawColorThree, colorAmount), Color.white);
+                decorativeComp.SetArmorColors(extraDecoration);
+            }, Core40kUtils.ThreeColourPreview(armorCol1,armorCol2, armorCol3, colorAmount), Color.white);
             list.Add(menuOptionMatch);
         }
 
-        var col1 = extraDecoration.defaultColour ?? (extraDecoration.useArmorColourAsDefault ? apparel.DrawColor : Color.white);
-        var col2 = extraDecoration.defaultColourTwo ?? (extraDecoration.useArmorColourAsDefault ? apparel.DrawColorTwo : Color.white);
-        var col3 = extraDecoration.defaultColourThree ?? (extraDecoration.useArmorColourAsDefault ? apparel.DrawColorThree : Color.white);
+        var col1 = extraDecoration.defaultColour ?? (extraDecoration.useArmorColourAsDefault ? armorCol1 : Color.white);
+        var col2 = extraDecoration.defaultColourTwo ?? (extraDecoration.useArmorColourAsDefault ? armorCol2 : Color.white);
+        var col3 = extraDecoration.defaultColourThree ?? (extraDecoration.useArmorColourAsDefault ? armorCol3 : Color.white);
         
         var menuOptionDefault = new FloatMenuOption("BEWH.Framework.ExtraDecoration.SetDefaultColor".Translate(), delegate
         {
-            apparel.SetDefaultColors(extraDecoration);
+            decorativeComp.SetDefaultColors(extraDecoration);
         }, Core40kUtils.ThreeColourPreview(col1, col2, col3, colorAmount), Color.white);
         list.Add(menuOptionDefault);
                 
@@ -409,11 +416,13 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         Find.WindowStack.Add(new FloatMenu(list));
     }
 
-    private ExtraDecorationPreset GetCurrentPreset(DecorativeApparelMultiColor apparel, string presetName)
+    private ExtraDecorationPreset GetCurrentPreset(Apparel apparel, string presetName)
     {
         var extraDecorationPresetParts = new List<ExtraDecorationPresetParts>();
 
-        foreach (var decoration in apparel.ExtraDecorations)
+        var decorativeComp = apparel.GetComp<CompDecorative>();
+        
+        foreach (var decoration in decorativeComp.ExtraDecorations)
         {
             var presetPart = new ExtraDecorationPresetParts()
             {
@@ -438,7 +447,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         return extraDecorationPreset;
     }
         
-    private void EditDecorationPreset(DecorativeApparelMultiColor apparel)
+    private void EditDecorationPreset(Apparel apparel)
     {
         var floatMenuOptions = new List<FloatMenuOption>();
             
@@ -472,17 +481,19 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         }
     }
 
-    private void SelectDecorationPreset(DecorativeApparelMultiColor apparel)
+    private void SelectDecorationPreset(Apparel apparel)
     {
         var presets = ModSettings.ExtraDecorationPresets.Where(deco => deco.appliesTo == apparel.def.defName);
         var list = new List<FloatMenuOption>();
+        
+        var decorativeComp = apparel.GetComp<CompDecorative>();
             
         foreach (var preset in presets)
         {
             var menuOption = new FloatMenuOption(preset.name, delegate
             {
-                apparel.RemoveAllDecorations();
-                apparel.LoadFromPreset(preset);
+                decorativeComp.RemoveAllDecorations();
+                decorativeComp.LoadFromPreset(preset);
             });
             list.Add(menuOption);
         }
@@ -491,8 +502,8 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         {
             var menuOption = new FloatMenuOption(extraDecorationPreset.label, delegate
             {
-                apparel.RemoveAllDecorations();
-                apparel.LoadFromPreset(extraDecorationPreset);
+                decorativeComp.RemoveAllDecorations();
+                decorativeComp.LoadFromPreset(extraDecorationPreset);
             });
             list.Add(menuOption);
         }
@@ -519,8 +530,16 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         var viewRect = new Rect(0f, 0f, rect.width - 16f, listScrollViewHeight);
         Widgets.BeginScrollView(outRect, ref apparelColorScrollPosition, viewRect);
             
-        var bodyApparel = (BodyDecorativeApparelMultiColor)pawn.apparel.WornApparel.FirstOrFallback(a => a is BodyDecorativeApparelMultiColor);
-        var helmetApparel = (HeadDecorativeApparelMultiColor)pawn.apparel.WornApparel.FirstOrFallback(a => a is HeadDecorativeApparelMultiColor);
+        var bodyApparel = pawn.apparel.WornApparel.FirstOrFallback(a =>
+        {
+            var temp = a.GetComp<CompDecorative>();
+            return temp != null && temp.Props.decorativeType == DecorativeType.Body;
+        });
+        var helmetApparel = pawn.apparel.WornApparel.FirstOrFallback(a =>
+        {
+            var temp = a.GetComp<CompDecorative>();
+            return temp != null && temp.Props.decorativeType == DecorativeType.Head;
+        });
             
         curY = viewRect.y;
             
@@ -542,7 +561,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
             resetAllDecorations.x -= resetAllDecorations.width + nameRect.width/20;
             if (Widgets.ButtonText(resetAllDecorations, "BEWH.Framework.ExtraDecoration.RemoveAllDecorations".Translate()))
             {
-                bodyApparel.RemoveAllDecorations();
+                bodyApparel.GetComp<CompDecorative>().RemoveAllDecorations();
             }
                 
             //Preset Tab
@@ -594,7 +613,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
             resetAllDecorations.x -= resetAllDecorations.width + nameRect.width/20;
             if (Widgets.ButtonText(resetAllDecorations, "BEWH.Framework.ExtraDecoration.RemoveAllDecorations".Translate()))
             {
-                helmetApparel.RemoveAllDecorations();
+                helmetApparel.GetComp<CompDecorative>().RemoveAllDecorations();
             }
                 
             //Preset Tab

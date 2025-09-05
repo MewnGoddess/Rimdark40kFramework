@@ -8,18 +8,30 @@ namespace Core40k;
 
 public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
 {
-    private static GeneDef chosenGene = null;
-    private static List<GeneDef> chosenGenes = new List<GeneDef>();
+    private GeneDef chosenGene = null;
+    private List<GeneDef> chosenGenes = new List<GeneDef>();
 
-    private static TraitDef chosenTrait = null;
-    private static int chosenTraitDegree = 0;
-    private static Dictionary<TraitDef, int> chosenTraits = new Dictionary<TraitDef, int>();
-
+    private TraitDef chosenTrait = null;
+    private int chosenTraitDegree = 0;
+    private Dictionary<TraitDef, int> chosenTraits = new Dictionary<TraitDef, int>();
+    
+    private DefModExtension_AddRandomGeneByWeight GeneDefMod => def.GetModExtension<DefModExtension_AddRandomGeneByWeight>();
+    private DefModExtension_AddRandomTraitByWeight TraitDefMod => def.GetModExtension<DefModExtension_AddRandomTraitByWeight>();
+    
     public override void PostMake()
     {
-        SelectGeneToGive();
-        SelectTraitToGive();
+        base.PostMake();
+        if (GeneDefMod != null)
+        {
+            SelectGeneToGive();
+        }
+
+        if (TraitDefMod != null)
+        {
+            SelectTraitToGive();
+        }
     }
+    
     public override void PostAdd()
     {
         base.PostAdd();
@@ -33,71 +45,87 @@ public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
             
     private void AddSelectedTraitAndGene()
     {
-        if (chosenGene != null)
+        if (GeneDefMod != null)
         {
-            pawn.genes.AddGene(chosenGene, true);
-        }
-        if (!chosenGenes.NullOrEmpty())
-        {
-            foreach (var gene in chosenGenes)
+            if (chosenGene != null)
             {
-                pawn.genes.AddGene(gene, true);
+                pawn.genes.AddGene(chosenGene, true);
+            }
+            
+            if (!chosenGenes.NullOrEmpty())
+            {
+                foreach (var gene in chosenGenes)
+                {
+                    pawn.genes.AddGene(gene, true);
+                }
             }
         }
 
-        if (chosenTrait != null)
+        if (TraitDefMod != null)
         {
-            var trait = new Trait(chosenTrait, chosenTraitDegree);
-            pawn.story.traits.GainTrait(trait);
-        }
-        if (!chosenTraits.NullOrEmpty())
-        {
-            foreach (var traitPair in chosenTraits)
+            if (chosenTrait != null)
             {
-                var trait = new Trait(traitPair.Key, traitPair.Value);
+                var trait = new Trait(chosenTrait, chosenTraitDegree);
                 pawn.story.traits.GainTrait(trait);
+            }
+            
+            if (!chosenTraits.NullOrEmpty())
+            {
+                foreach (var traitPair in chosenTraits)
+                {
+                    var trait = new Trait(traitPair.Key, traitPair.Value);
+                    pawn.story.traits.GainTrait(trait);
+                }
             }
         }
     }
         
     private void RemoveSelectedTraitAndGene()
     {
-        if (chosenGene != null)
+        if (GeneDefMod != null)
         {
-            var gene = pawn.genes.GetGene(chosenGene);
-            if (gene != null)
+            if (chosenGene != null)
             {
-                pawn.genes.RemoveGene(gene);
-            }
-        }
-        if (chosenGenes != null)
-        {
-            foreach (var gene in chosenGenes)
-            {
-                var gene2 = pawn.genes.GetGene(gene);
-                if (gene2 != null)
+                var gene = pawn.genes.GetGene(chosenGene);
+                if (gene != null)
                 {
-                    pawn.genes.RemoveGene(gene2);
+                    pawn.genes.RemoveGene(gene);
                 }
-            }   
-        }
-
-        if (chosenTrait != null)
-        {
-            var trait = pawn.story.traits.GetTrait(chosenTrait);
-            if (trait != null)
+            }
+            
+            if (!chosenGenes.NullOrEmpty())
             {
-                pawn.story.traits.RemoveTrait(trait);
+                foreach (var gene in chosenGenes)
+                {
+                    var gene2 = pawn.genes.GetGene(gene);
+                    if (gene2 != null)
+                    {
+                        pawn.genes.RemoveGene(gene2);
+                    }
+                }   
             }
         }
-        if (!chosenTraits.NullOrEmpty())
+        
+        if (TraitDefMod != null)
         {
-            foreach (var traitPair in chosenTraits)
+            if (chosenTrait != null)
             {
-                var trait = pawn.story.traits.GetTrait(traitPair.Key);
+                var trait = pawn.story.traits.GetTrait(chosenTrait);
                 if (trait != null)
                 {
                     pawn.story.traits.RemoveTrait(trait);
+                }
+            }
+            
+            if (!chosenTraits.NullOrEmpty())
+            {
+                foreach (var traitPair in chosenTraits)
+                {
+                    var trait = pawn.story.traits.GetTrait(traitPair.Key);
+                    if (trait != null)
+                    {
+                        pawn.story.traits.RemoveTrait(trait);
+                    }
                 }
             }
         }
@@ -105,16 +133,14 @@ public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
 
     private void SelectTraitToGive()
     {
-        var defMod = def.GetModExtension<DefModExtension_AddRandomTraitByWeight>();
-
         var random = new Random();
            
-        if (defMod == null || random.Next(0, 100) > defMod.chanceToGrantTrait)
+        if (random.Next(0, 100) > TraitDefMod.chanceToGrantTrait)
         {
             return;
         }
         
-        var possibleTraits = defMod.possibleTraitsToGive.Where(g => !pawn.story.traits.HasTrait(g.traitDef, g.degree)).ToList();
+        var possibleTraits = TraitDefMod.possibleTraitsToGive.Where(g => !pawn.story.traits.HasTrait(g.traitDef, g.degree)).ToList();
         if (possibleTraits.NullOrEmpty())
         {
             return;
@@ -126,16 +152,27 @@ public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
             weightedSelection.AddEntry(new TraitData(trait.traitDef, trait.degree), trait.weight);
         }
 
-        if (defMod.amountToGive == 1)
+        if (TraitDefMod.amountToGive == 1)
         {
             var result = weightedSelection.GetRandom();
         
             chosenTrait = result.traitDef;
             chosenTraitDegree = result.degree;
         }
+        else if (TraitDefMod.amountToGive == TraitDefMod.possibleTraitsToGive.Count)
+        {
+            foreach (var traitData in TraitDefMod.possibleTraitsToGive)
+            {
+                if (chosenTraits.ContainsKey(traitData.traitDef))
+                {
+                    continue;
+                }
+                chosenTraits.Add(traitData.traitDef, traitData.degree);
+            }
+        }
         else
         {
-            for (var i = 0; i < defMod.amountToGive; i++)
+            for (var i = 0; i < TraitDefMod.amountToGive; i++)
             {
                 var result = weightedSelection.GetRandomUnique();
                 chosenTraits.Add(result.traitDef, result.degree);
@@ -145,16 +182,14 @@ public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
 
     private void SelectGeneToGive()
     {
-        var defMod = def.GetModExtension<DefModExtension_AddRandomGeneByWeight>();
-
         var random = new Random();
 
-        if (defMod == null || random.Next(0, 100) > defMod.chanceToGrantGene)
+        if (random.Next(0, 100) > GeneDefMod.chanceToGrantGene)
         {
             return;
         }
         
-        var possibleGenes = defMod.possibleGenesToGive.Where(g => !pawn.genes.HasActiveGene(g.Key)).ToList();
+        var possibleGenes = GeneDefMod.possibleGenesToGive.Where(g => !pawn.genes.HasActiveGene(g.Key)).ToList();
         if (possibleGenes.NullOrEmpty())
         {
             return;
@@ -166,14 +201,17 @@ public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
         {
             weightedSelection.AddEntry(gene.Key, gene.Value);
         }
-            
-        if (defMod.amountToGive == 1)
+        if (GeneDefMod.amountToGive == 1)
         {
             chosenGene = weightedSelection.GetRandom();
         }
+        else if (GeneDefMod.amountToGive == GeneDefMod.possibleGenesToGive.Count)
+        {
+            chosenGenes.AddRangeUnique(GeneDefMod.possibleGenesToGive.Select(pair => pair.Key));
+        }
         else
         {
-            for (var i = 0; i < defMod.amountToGive; i++)
+            for (var i = 0; i < GeneDefMod.amountToGive; i++)
             {
                 var result = weightedSelection.GetRandomUnique();
                 chosenGenes.Add(result);

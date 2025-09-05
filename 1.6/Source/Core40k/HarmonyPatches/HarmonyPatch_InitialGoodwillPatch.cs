@@ -38,7 +38,7 @@ public class InitialGoodwillPatch
         {
             return;
         }
-        
+
         __instance.RelationWith(other).baseGoodwill = defMod.initialGoodwill;
         other.RelationWith(__instance).baseGoodwill = defMod.initialGoodwill;
     }

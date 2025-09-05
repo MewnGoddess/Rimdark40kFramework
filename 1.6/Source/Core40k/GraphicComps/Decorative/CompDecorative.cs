@@ -1,34 +1,33 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace Core40k;
 
-public class DecorativeApparelMultiColor : ApparelMultiColor
+public class CompDecorative : CompGraphicParent
 {
+    public void TempSetInitialValues(DecorativeApparelMultiColor multiColor)
+    {
+        extraDecorations = multiColor.ExtraDecorations;
+        originalExtraDecorations = multiColor.ExtraDecorations;
+    }
+    
+    public CompProperties_Decorative Props => (CompProperties_Decorative)props;
+    
     private Dictionary<ExtraDecorationDef, ExtraDecorationSettings> originalExtraDecorations = new ();
     private Dictionary<ExtraDecorationDef, ExtraDecorationSettings> extraDecorations = new ();
     
     public Dictionary<ExtraDecorationDef, ExtraDecorationSettings> ExtraDecorations => extraDecorations;
 
-    private bool extraDecoSetup = false;
-
-    public override void SpawnSetup(Map map, bool respawningAfterLoad)
+    public CompMultiColor MultiColor => parent.GetComp<CompMultiColor>();
+    
+    public override void InitialSetup()
     {
-        base.SpawnSetup(map, respawningAfterLoad);
-        
-        if (!def.HasModExtension<DefModExtension_StandardDecorations>() || extraDecoSetup)
-        {
-            return;
-        }
-        
-        extraDecoSetup = true;
-        var defMod = def.GetModExtension<DefModExtension_StandardDecorations>();
-        SetInitialColours(defMod.defaultPrimaryColor ?? DrawColor, defMod.defaultSecondaryColor ?? DrawColorTwo, defMod.defaultTertiaryColor ?? DrawColorThree);
-        foreach (var extraDecoration in defMod.extraDecorations)
+        foreach (var extraDecoration in Props.extraDecorations)
         {
             AddOrRemoveDecoration(extraDecoration);
         }
+        base.InitialSetup();
     }
     
     public void AddOrRemoveDecoration(ExtraDecorationDef decoration)
@@ -46,30 +45,30 @@ public class DecorativeApparelMultiColor : ApparelMultiColor
             extraDecorations.Add(decoration, new ExtraDecorationSettings());
             SetDefaultColors(decoration);
         }
-        Notify_ColorChanged();
+        Notify_GraphicChanged();
     }
 
     public void SetDefaultColors(ExtraDecorationDef decoration)
     {
-        extraDecorations[decoration].Color = decoration.defaultColour ?? (decoration.useArmorColourAsDefault ? DrawColor : Color.white);
-        extraDecorations[decoration].ColorTwo = decoration.defaultColourTwo ?? (decoration.useArmorColourAsDefault ? DrawColorTwo : Color.white);
-        extraDecorations[decoration].ColorThree = decoration.defaultColourThree ?? (decoration.useArmorColourAsDefault ? DrawColorThree : Color.white);
+        extraDecorations[decoration].Color = decoration.defaultColour ?? (decoration.useArmorColourAsDefault ? MultiColor.DrawColor : Color.white);
+        extraDecorations[decoration].ColorTwo = decoration.defaultColourTwo ?? (decoration.useArmorColourAsDefault ? MultiColor.DrawColorTwo : Color.white);
+        extraDecorations[decoration].ColorThree = decoration.defaultColourThree ?? (decoration.useArmorColourAsDefault ? MultiColor.DrawColorThree : Color.white);
         extraDecorations[decoration].maskDef = decoration.defaultMask;
-        Notify_ColorChanged();
+        Notify_GraphicChanged();
     }
     
     public void SetArmorColors(ExtraDecorationDef decoration)
     {
-        extraDecorations[decoration].Color = DrawColor;
-        extraDecorations[decoration].ColorTwo = DrawColorTwo;
-        extraDecorations[decoration].ColorThree = DrawColorThree;
-        Notify_ColorChanged();
+        extraDecorations[decoration].Color = MultiColor.DrawColor;
+        extraDecorations[decoration].ColorTwo = MultiColor.DrawColorTwo;
+        extraDecorations[decoration].ColorThree = MultiColor.DrawColorThree;
+        Notify_GraphicChanged();
     }
 
     public void RemoveAllDecorations()
     {
         extraDecorations = new Dictionary<ExtraDecorationDef, ExtraDecorationSettings>();
-        Notify_ColorChanged();
+        Notify_GraphicChanged();
     }
 
     public void LoadFromPreset(ExtraDecorationPreset preset)
@@ -97,7 +96,7 @@ public class DecorativeApparelMultiColor : ApparelMultiColor
             var extraDecorationsSetting = new ExtraDecorationSettings()
             {
                 Flipped = presetPart.flipped,
-                Color = presetPart.colour ?? (presetPart.extraDecorationDef.useArmorColourAsDefault ? DrawColor : Color.white),
+                Color = presetPart.colour ?? (presetPart.extraDecorationDef.useArmorColourAsDefault ? parent.DrawColor : Color.white),
                 ColorTwo = presetPart.colourTwo ?? Color.white,
                 ColorThree = presetPart.colourThree ?? Color.white,
                 maskDef = presetPart.maskDef ?? Core40kDefOf.BEWH_DefaultMask,
@@ -110,25 +109,25 @@ public class DecorativeApparelMultiColor : ApparelMultiColor
     public void UpdateDecorationColourOne(ExtraDecorationDef decoration, Color colour)
     {
         extraDecorations[decoration].Color = colour;
-        Notify_ColorChanged();
+        Notify_GraphicChanged();
     }
     
     public void UpdateDecorationColourTwo(ExtraDecorationDef decoration, Color colour)
     {
         extraDecorations[decoration].ColorTwo = colour;
-        Notify_ColorChanged();
+        Notify_GraphicChanged();
     }
     
     public void UpdateDecorationColourThree(ExtraDecorationDef decoration, Color colour)
     {
         extraDecorations[decoration].ColorThree = colour;
-        Notify_ColorChanged();
+        Notify_GraphicChanged();
     }
 
     public void UpdateDecorationMask(ExtraDecorationDef decoration, MaskDef maskDef)
     {
         extraDecorations[decoration].maskDef = maskDef;
-        Notify_ColorChanged();
+        Notify_GraphicChanged();
     }
 
     public override void SetOriginals()
@@ -145,11 +144,10 @@ public class DecorativeApparelMultiColor : ApparelMultiColor
         base.Reset();
     }
 
-    public override void ExposeData()
+    public override void PostExposeData()
     {
+        base.PostExposeData();
         Scribe_Collections.Look(ref extraDecorations, "extraDecorations");
         Scribe_Collections.Look(ref originalExtraDecorations, "originalExtraDecorations");
-        Scribe_Values.Look(ref extraDecoSetup, "extraDecoSetup");
-        base.ExposeData();
     }
 }

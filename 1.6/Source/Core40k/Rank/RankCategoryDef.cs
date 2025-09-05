@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using RimWorld;
 using Verse;
@@ -7,6 +8,10 @@ namespace Core40k;
 
 public class RankCategoryDef : Def
 {
+    public List<RankCategorySpecificData> ranks = new List<RankCategorySpecificData>();
+    
+    public Dictionary<RankDef, RankCategorySpecificData> rankDict = new Dictionary<RankDef, RankCategorySpecificData>();
+    
     public GeneDef unlockedByGene;
     public HediffDef unlockedByHediff;
     public TraitDef unlockedByTrait;
@@ -15,7 +20,19 @@ public class RankCategoryDef : Def
     public TraitDef lockedByTrait;
     public int unlockTraitDegree = 0;
     public int lockTraitDegree = 0;
-
+    
+    public override void ResolveReferences()
+    {
+        base.ResolveReferences();
+        if (ranks.Count != ranks.Distinct().Count())
+        {
+            Log.Warning(defName + " has duplicate rank categories.");
+        }
+        foreach (var rank in ranks)
+        {
+            rankDict.Add(rank.rankDef, rank);
+        }
+    }
     public bool RankCategoryUnlockedFor(Pawn pawn)
     {
         if (unlockedByGene != null)

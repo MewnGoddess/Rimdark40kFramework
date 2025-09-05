@@ -141,8 +141,8 @@ public class CompRankInfo : ThingComp
         {
             return -1;
         }
-            
-        var unlockedRanksOfDef = unlockedRanks.Where(rank => rank.rankCategory == rankCategoryDef).ToList();
+
+        var unlockedRanksOfDef = UnlockedRanksOfDef(rankCategoryDef).Where(HasRank).Select(rankDef => rankDef).ToList();
         if (unlockedRanksOfDef.NullOrEmpty())
         {
             return -1;
@@ -153,9 +153,16 @@ public class CompRankInfo : ThingComp
         
     public RankDef HighestRankDef(bool onlySpecialist, RankCategoryDef rankCategoryDef)
     {
-        var list = unlockedRanks.Where(def => (!onlySpecialist || def.specialistRank) && def.rankCategory == rankCategoryDef).ToList();
+        
+        var list = UnlockedRanksOfDef(rankCategoryDef).Where(def => !onlySpecialist || def.specialistRank).ToList();
             
         return list.NullOrEmpty() ? null : list.MaxBy(rank => rank.rankTier);
+    }
+
+    public List<RankDef> UnlockedRanksOfDef(RankCategoryDef rankCategoryDef)
+    {
+        var unlockedRanksOfDef = rankCategoryDef.ranks.Where(data => HasRank(data.rankDef)).Select(data => data.rankDef).ToList();
+        return unlockedRanksOfDef;
     }
         
     public RankDef HighestRankDef(bool onlySpecialist)
@@ -167,14 +174,14 @@ public class CompRankInfo : ThingComp
 
     public bool HasRankOfCategory(RankCategoryDef rankCategoryDef)
     {
-        return unlockedRanks.Any(rank => rank.rankCategory == rankCategoryDef);
+        return UnlockedRanksOfDef(rankCategoryDef).Any();
     }
 
     public void ResetRanks(RankCategoryDef rankCategoryDef)
     {
         if (rankCategoryDef != null)
         {
-            foreach (var rankDef in unlockedRanks.ToList().Where(rankDef => rankDef.rankCategory == rankCategoryDef))
+            foreach (var rankDef in UnlockedRanksOfDef(rankCategoryDef))
             {
                 RemoveRank(rankDef, true);
             }
