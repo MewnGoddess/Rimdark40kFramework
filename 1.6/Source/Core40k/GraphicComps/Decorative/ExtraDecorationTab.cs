@@ -309,7 +309,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                 }
 
                 var path = extraDecoration.drawnTextureIconPath;
-                var shader = mask?.shaderType.Shader ?? extraDecoration.shaderType.Shader;
+                var shader = mask?.shaderType?.Shader ?? extraDecoration.shaderType.Shader;
                 Graphic_Multi graphic;
                 if (!extraDecoration.useMask)
                 {

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using RimWorld;
 using Verse;
 
 namespace Core40k;
@@ -13,12 +14,11 @@ public class MaskDef : Def
     public AppliesToKind appliesToKind = AppliesToKind.Thing;
     public int colorAmount = 1;
     public bool useBodyTypes = false;
-    public ShaderTypeDef shaderType;
+    public ShaderTypeDef shaderType = null;
     
     public override void ResolveReferences()
     {
         base.ResolveReferences();
-        shaderType ??= Core40kDefOf.BEWH_CutoutThreeColor;
     }
 }
 

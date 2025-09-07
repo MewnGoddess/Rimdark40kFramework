@@ -113,7 +113,7 @@ public class DecorationDef : Def
     public override void ResolveReferences()
     {
         base.ResolveReferences();
-        shaderType ??= Core40kDefOf.BEWH_CutoutThreeColor;
+        shaderType ??= ShaderTypeDefOf.Cutout;
     }
 }
 

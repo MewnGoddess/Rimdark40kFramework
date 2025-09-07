@@ -16,16 +16,19 @@ public class PawnRenderNode_AttachmentExtraDecoration : PawnRenderNode
     {
         var propsMulti = (PawnRenderNodePropertiesMultiColor)Props;
 
-        if (!propsMulti.useMask)
-        {
-            return GraphicDatabase.Get<Graphic_Multi>(Props.texPath, ShaderFor(pawn), Props.drawSize, Props.color ?? Color.white);
-        }
-
+        var texPath = propsMulti.texPath;
         var shader = propsMulti.shaderTypeDef.Shader;
 
-        string maskPath;
+        Log.Message("texPath: " + texPath);
+        Log.Message("shader: " + shader);
+        Log.Message("propsMulti.color: " + propsMulti.color);
+        
+        if (!propsMulti.useMask)
+        {
+            return GraphicDatabase.Get<Graphic_Multi>(texPath, shader, Props.drawSize, propsMulti.color ?? Color.white);
+        }
 
-        var texPath = propsMulti.texPath;
+        string maskPath;
 
         var pawnFlags = GetPawnFlags(pawn);
 
