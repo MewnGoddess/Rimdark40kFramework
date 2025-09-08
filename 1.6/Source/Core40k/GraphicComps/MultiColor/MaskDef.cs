@@ -19,6 +19,10 @@ public class MaskDef : Def
     public override void ResolveReferences()
     {
         base.ResolveReferences();
+        if (shaderType == null && !setsNull)
+        {
+            Log.Error("Shader type is not defined in MaskDef: " + defName);
+        }
     }
 }
 

@@ -23,30 +23,26 @@ public class MultiColorChangableOnThing
         //Apparel
         if (__instance.def.GetModExtension<DefModExtension_AllowColoringOfThings>().allowColoringOfApparel)
         {
-            if (!selPawn.apparel.WornApparel.Any(a => a.HasComp<CompMultiColor>()))
+            if (selPawn.apparel.WornApparel.Any(a => a.HasComp<CompMultiColor>()))
             {
-                yield break;
+                var secondColourChangeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.Framework.ApparelMultiColor.ArmourDecorationFeature".Translate().CapitalizeFirst(), delegate
+                {
+                    selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(Core40kDefOf.BEWH_OpenStylingStationDialogForApparelMultiColor, __instance), JobTag.Misc);
+                }), selPawn, __instance);
+                yield return secondColourChangeFloatMenu;
             }
-
-            var secondColourChangeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.Framework.ApparelMultiColor.ArmourDecorationFeature".Translate().CapitalizeFirst(), delegate
-            {
-                selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(Core40kDefOf.BEWH_OpenStylingStationDialogForApparelMultiColor, __instance), JobTag.Misc);
-            }), selPawn, __instance);
-            yield return secondColourChangeFloatMenu;
         }
         //Equipment
         if (__instance.def.GetModExtension<DefModExtension_AllowColoringOfThings>().allowColoringOfEquipment)
         {
-            if (!selPawn.equipment.Primary.HasComp<CompMultiColor>())
+            if (selPawn.equipment.Primary.HasComp<CompMultiColor>())
             {
-                yield break;
+                var changeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.Framework.WeaponMultiColor.WeaponDecorationFeature".Translate().CapitalizeFirst(), delegate
+                {
+                    selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(Core40kDefOf.BEWH_OpenStylingStationDialogForWeaponMultiColor, __instance), JobTag.Misc);
+                }), selPawn, __instance);
+                yield return changeFloatMenu;
             }
-            
-            var changeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.Framework.WeaponMultiColor.WeaponDecorationFeature".Translate().CapitalizeFirst(), delegate
-            {
-                selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(Core40kDefOf.BEWH_OpenStylingStationDialogForWeaponMultiColor, __instance), JobTag.Misc);
-            }), selPawn, __instance);
-            yield return changeFloatMenu;
         }
     }
 }
