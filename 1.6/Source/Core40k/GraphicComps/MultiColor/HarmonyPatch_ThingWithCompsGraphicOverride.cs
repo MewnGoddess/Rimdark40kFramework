@@ -12,6 +12,13 @@ public class ThingWithCompsGraphicOverride
         {
             return;
         }
+
+        var multiColor = __instance.TryGetComp<CompMultiColor>();
+
+        if (multiColor.RecacheSingleGraphics)
+        {
+            multiColor.SetSingleGraphic();
+        }
         
         __result = __instance.TryGetComp<CompMultiColor>().Graphic;
     }

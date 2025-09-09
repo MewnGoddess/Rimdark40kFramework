@@ -62,8 +62,17 @@ public static class GetValueUnfinalizedFromRankPatch
             
         var rankListForReading = pawn.GetComp<CompRankInfo>().UnlockedRanks;
         
+        if (rankListForReading.NullOrEmpty())
+        {
+            return num;
+        }
+        
         foreach (var rank in rankListForReading)
         {
+            if (rank.statOffsets.NullOrEmpty())
+            {
+                continue;
+            }
             num += rank.statOffsets.GetStatOffsetFromList(stat);
             foreach (var conditional in rank.conditionalStatAffecters)
             {
@@ -79,6 +88,11 @@ public static class GetValueUnfinalizedFromRankPatch
 
     public static float GetStatFactorForRank(float num, StatRequest req, StatDef stat)
     {
+        if (stat == null)
+        {
+            return num;
+        }
+        
         if (req.Thing is not Pawn pawn)
         {
             return num;
@@ -90,9 +104,18 @@ public static class GetValueUnfinalizedFromRankPatch
         }
             
         var rankListForReading = pawn.GetComp<CompRankInfo>().UnlockedRanks;
-            
+
+        if (rankListForReading.NullOrEmpty())
+        {
+            return num;
+        }
+        
         foreach (var rank in rankListForReading)
         {
+            if (rank.statFactors.NullOrEmpty())
+            {
+                continue;
+            }
             num *= rank.statFactors.GetStatFactorFromList(stat);
             foreach (var conditional in rank.conditionalStatAffecters)
             {

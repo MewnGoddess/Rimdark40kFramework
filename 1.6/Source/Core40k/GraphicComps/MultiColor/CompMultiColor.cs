@@ -137,15 +137,20 @@ public class CompMultiColor : CompGraphicParent
         }
     }
     
-    public Graphic Graphic
+    
+    private bool recacheSingleGraphics = true;
+    public bool RecacheSingleGraphics => recacheSingleGraphics;
+    
+    private Graphic cachedGraphic;
+    public Graphic Graphic => cachedGraphic;
+
+    public void SetSingleGraphic()
     {
-        get
-        {
-            var path = thingDef.graphicData.texPath;
-            var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
-            var drawMult = isApparel ? 0.9f : 1f;
-            return MultiColorUtils.GetGraphic<Graphic_Single>(path, shader, thingDef.graphicData.drawSize*drawMult, DrawColor, DrawColorTwo, DrawColorThree, null, maskDef?.maskPath);
-        }
+        recacheSingleGraphics = false;
+        var path = thingDef.graphicData.texPath;
+        var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
+        var drawMult = isApparel ? 0.9f : 1f;
+        cachedGraphic = MultiColorUtils.GetGraphic<Graphic_Single>(path, shader, thingDef.graphicData.drawSize*drawMult, DrawColor, DrawColorTwo, DrawColorThree, null, maskDef?.maskPath);
     }
 
     public List<ApparelMultiColorTabDef> ApparelMultiColorTabDefs => Props.tabDefs;
@@ -201,6 +206,7 @@ public class CompMultiColor : CompGraphicParent
     public override void Notify_GraphicChanged()
     {
         recacheGraphics = true;
+        recacheSingleGraphics = true;
         base.Notify_GraphicChanged();
     }
     
