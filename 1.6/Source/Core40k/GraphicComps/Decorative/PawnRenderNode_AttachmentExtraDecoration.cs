@@ -18,10 +18,6 @@ public class PawnRenderNode_AttachmentExtraDecoration : PawnRenderNode
 
         var texPath = propsMulti.texPath;
         var shader = propsMulti.shaderTypeDef.Shader;
-
-        Log.Message("texPath: " + texPath);
-        Log.Message("shader: " + shader);
-        Log.Message("propsMulti.color: " + propsMulti.color);
         
         if (!propsMulti.useMask)
         {

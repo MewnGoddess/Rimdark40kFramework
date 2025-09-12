@@ -28,6 +28,7 @@ public class RankCategoryDef : Def
         {
             Log.Warning(defName + " has duplicate rank categories.");
         }
+        rankDict = new Dictionary<RankDef, RankCategorySpecificData>();
         foreach (var rank in ranks)
         {
             rankDict.Add(rank.rankDef, rank);

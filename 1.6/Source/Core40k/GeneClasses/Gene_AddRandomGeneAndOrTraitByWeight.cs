@@ -49,14 +49,14 @@ public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
         {
             if (chosenGene != null)
             {
-                pawn.genes.AddGene(chosenGene, true);
+                pawn.genes.AddGene(chosenGene, GeneDefMod.addAsXenogene);
             }
             
             if (!chosenGenes.NullOrEmpty())
             {
                 foreach (var gene in chosenGenes)
                 {
-                    pawn.genes.AddGene(gene, true);
+                    pawn.genes.AddGene(gene, GeneDefMod.addAsXenogene);
                 }
             }
         }
@@ -191,6 +191,11 @@ public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
         
         var possibleGenes = GeneDefMod.possibleGenesToGive.Where(g => !pawn.genes.HasActiveGene(g.Key)).ToList();
         if (possibleGenes.NullOrEmpty())
+        {
+            return;
+        }
+
+        if (GeneDefMod.skipIfAnyAlreadyExistsOnPawn && possibleGenes.Count < GeneDefMod.possibleGenesToGive.Count)
         {
             return;
         }

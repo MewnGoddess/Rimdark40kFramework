@@ -10,4 +10,8 @@ public class DefModExtension_AddRandomGeneByWeight : DefModExtension
     public int amountToGive = 1;
     
     public int chanceToGrantGene = 100;
+
+    public bool skipIfAnyAlreadyExistsOnPawn = false;
+    
+    public bool addAsXenogene = true;
 }
