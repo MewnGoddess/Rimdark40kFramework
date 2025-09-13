@@ -69,7 +69,7 @@ public static class GetValueUnfinalizedFromRankPatch
         
         foreach (var rank in rankListForReading)
         {
-            if (rank.statOffsets.NullOrEmpty())
+            if (rank == null || rank.statOffsets.NullOrEmpty())
             {
                 continue;
             }
@@ -112,7 +112,7 @@ public static class GetValueUnfinalizedFromRankPatch
         
         foreach (var rank in rankListForReading)
         {
-            if (rank.statFactors.NullOrEmpty())
+            if (rank == null || rank.statFactors.NullOrEmpty())
             {
                 continue;
             }

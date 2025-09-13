@@ -12,8 +12,19 @@ public class CompRankInfo : ThingComp
     private List<RankDef> unlockedRanks = new List<RankDef>();
 
     public List<RankDef> unlockedRanksAtDeath = new List<RankDef>();
-        
-    public List<RankDef> UnlockedRanks => unlockedRanks;
+
+    public List<RankDef> UnlockedRanks
+    {
+        get
+        {
+            if (unlockedRanks.Contains(null))
+            {
+                unlockedRanks.RemoveAll(def => def == null);
+            }
+            
+            return unlockedRanks;
+        }
+    }
 
     private RankCategoryDef lastOpenedRankCategory = null;
         
@@ -29,7 +40,7 @@ public class CompRankInfo : ThingComp
 
     public void UnlockRank(RankDef rank)
     {
-        if (unlockedRanks.Contains(rank))
+        if (UnlockedRanks.Contains(rank))
         {
             return;
         }
@@ -44,7 +55,7 @@ public class CompRankInfo : ThingComp
             pawn.story.Title = rank.label;
         }
             
-        unlockedRanks.Add(rank);
+        UnlockedRanks.Add(rank);
             
         if (!daysAsRank.ContainsKey(rank))
         {
@@ -85,7 +96,7 @@ public class CompRankInfo : ThingComp
 
     public void RemoveRank(RankDef rankDef, bool removeFromRankLimit)
     {
-        unlockedRanks.Remove(rankDef);
+        UnlockedRanks.Remove(rankDef);
         daysAsRank.Remove(rankDef);
             
         if (parent is not Pawn pawn)
@@ -127,17 +138,17 @@ public class CompRankInfo : ThingComp
 
     public int HighestRank()
     {
-        if (unlockedRanks.NullOrEmpty())
+        if (UnlockedRanks.NullOrEmpty())
         {
             return -1;
         }
             
-        return unlockedRanks.MaxBy(rank => rank.rankTier).rankTier;
+        return UnlockedRanks.MaxBy(rank => rank.rankTier).rankTier;
     }
         
     public int HighestRank(RankCategoryDef rankCategoryDef)
     {
-        if (unlockedRanks.NullOrEmpty())
+        if (UnlockedRanks.NullOrEmpty())
         {
             return -1;
         }
@@ -167,7 +178,7 @@ public class CompRankInfo : ThingComp
         
     public RankDef HighestRankDef(bool onlySpecialist)
     {
-        var list = unlockedRanks.Where(def => !onlySpecialist || def.specialistRank).ToList();
+        var list = UnlockedRanks.Where(def => !onlySpecialist || def.specialistRank).ToList();
             
         return list.NullOrEmpty() ? null : list.MaxBy(rank => rank.rankTier);
     }
@@ -188,7 +199,7 @@ public class CompRankInfo : ThingComp
         }
         else
         {
-            foreach (var rankDef in unlockedRanks)
+            foreach (var rankDef in UnlockedRanks)
             {
                 RemoveRank(rankDef, true);
             }
@@ -197,7 +208,7 @@ public class CompRankInfo : ThingComp
 
     public bool HasRank(RankDef rankDef)
     {
-        return unlockedRanks.Contains(rankDef);
+        return UnlockedRanks.Contains(rankDef);
     }
         
     public void OpenedRankCategory(RankCategoryDef rankCategory)

@@ -52,6 +52,10 @@ public static class GetExplanationUnfinalizedFromRankPatch
         var appendOverallRankText = true;
         foreach (var rank in rankListForReading)
         {
+            if (rank == null)
+            {
+                continue;
+            }
             var statOffsetFromRank = rank.statOffsets.GetStatOffsetFromList(stat);
             if (statOffsetFromRank != 0f)
             {
