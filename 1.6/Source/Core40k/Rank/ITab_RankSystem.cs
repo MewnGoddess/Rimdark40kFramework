@@ -531,9 +531,13 @@ public class ITab_RankSystem : ITab
 
     private void GetRanksForCategory()
     {
-        availableRanksForCategory.Clear();
-        //var ranksForCategory = DefDatabase<RankDef>.AllDefsListForReading.Where(rank => rank.rankCategory == currentlySelectedRankCategory).ToList();
+        availableRanksForCategory = [];
 
+        if (currentlySelectedRankCategory == null)
+        {
+            return;
+        }
+        
         foreach (var rank in currentlySelectedRankCategory.ranks)
         {
             var rankInfo = BuildRankInfoForCategory(rank.rankDef);
