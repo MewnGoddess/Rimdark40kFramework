@@ -17,6 +17,7 @@ public class CompRankInfo : ThingComp
     {
         get
         {
+            unlockedRanks ??= [];
             if (unlockedRanks.Contains(null))
             {
                 unlockedRanks.RemoveAll(def => def == null);
