@@ -6,6 +6,7 @@ namespace Core40k;
 
 public class Core40kMod : Mod
 {
+    private string version = "1.0.0";
     public static Harmony harmony;
         
     readonly Core40kModSettings settings;
@@ -33,6 +34,6 @@ public class Core40kMod : Mod
 
     public override string SettingsCategory()
     {
-        return "BEWH.Framework.ModSettings.ModName".Translate();
+        return "BEWH.Framework.ModSettings.ModName".Translate(version);
     }
 }

@@ -2,7 +2,7 @@
 <LanguageData>
 
   <!--=== Mod Setting related ===-->
-  <BEWH.Framework.ModSettings.ModName>RimDark 40k - Framework</BEWH.Framework.ModSettings.ModName>
+  <BEWH.Framework.ModSettings.ModName>RimDark 40k - Framework - {0}</BEWH.Framework.ModSettings.ModName>
   <BEWH.Framework.ModSettings.ShowRankTab>Always show Rank tab for player pawns. Will show even if no category or rank is available to the pawn.</BEWH.Framework.ModSettings.ShowRankTab>
   <BEWH.Framework.ModSettings.ConfirmRankUnlock>Confirm rank unlock with popup. (Looking at you butterfingers)</BEWH.Framework.ModSettings.ConfirmRankUnlock>
 
