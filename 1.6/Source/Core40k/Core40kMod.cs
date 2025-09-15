@@ -6,13 +6,15 @@ namespace Core40k;
 
 public class Core40kMod : Mod
 {
-    private string version = "1.0.0";
+    public static string CurrentVersion;
+    
     public static Harmony harmony;
         
     readonly Core40kModSettings settings;
     public Core40kMod(ModContentPack content) : base(content)
     {
         settings = GetSettings<Core40kModSettings>();
+        CurrentVersion = content.ModMetaData.ModVersion;
         harmony = new Harmony("Core40k.Mod");
         harmony.PatchAll();
     }
@@ -34,6 +36,6 @@ public class Core40kMod : Mod
 
     public override string SettingsCategory()
     {
-        return "BEWH.Framework.ModSettings.ModName".Translate(version);
+        return "BEWH.Framework.ModSettings.ModName".Translate(CurrentVersion);
     }
 }

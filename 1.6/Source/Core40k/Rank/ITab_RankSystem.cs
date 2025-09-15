@@ -42,8 +42,6 @@ public class ITab_RankSystem : ITab
 
     private static readonly Color requirementMetColour = Color.white;
     private static readonly Color requirementNotMetColour = new Color(1f, 0.0f, 0.0f, 0.8f);
-        
-    private Vector2 scrollPosition;
 
     public override bool IsVisible
     {
@@ -271,6 +269,7 @@ public class ITab_RankSystem : ITab
         return (currentlySelectedRankCategory.rankDict[yMax].displayPosition.y, currentlySelectedRankCategory.rankDict[yMin].displayPosition.y, currentlySelectedRankCategory.rankDict[xMax].displayPosition.x);
     }
         
+    private Vector2 scrollPosition;
     private void FillRankTree(Rect rectRankTree)
     {
         if (currentlySelectedRankCategory == null)
@@ -287,9 +286,10 @@ public class ITab_RankSystem : ITab
             
         var (yMax, yMin, xMax) = GetYAndX();
             
-        var newYMin = Math.Abs(yMin * rankIconRectSize) + (Math.Abs(yMin * rankIconGapSize) - rankIconGapSize/2) + rankIconMargin;
-        var newYMax = Math.Abs(yMax * rankIconRectSize) + (Math.Abs(yMax * rankIconGapSize) - rankIconGapSize/2) + rankIconMargin;
-        var newXMax = Math.Abs(xMax * rankPlacementMult) + rankIconMargin * 2;
+        //Needs correction on larger uiscale
+        var newYMin = (Math.Abs(yMin * rankIconRectSize) + Math.Abs(yMin * rankIconGapSize) + rankIconMargin) * Prefs.UIScale;
+        var newYMax = (Math.Abs(yMax * rankIconRectSize) + Math.Abs(yMax * rankIconGapSize) + rankIconMargin) * Prefs.UIScale;
+        var newXMax = (Math.Abs(xMax * rankPlacementMult) + rankIconMargin * 2) * Prefs.UIScale;
 
         if (newYMin - yStart > 0)
         {
@@ -505,6 +505,8 @@ public class ITab_RankSystem : ITab
             listingRankInfo.Label(rankBonusText);
             scrollViewHeightRankInfo += listingHeightIncreaseSmall * (rankBonusText.Split('\n').Length - 1);
 
+            scrollViewHeightRankInfo *= Prefs.UIScale;
+            
             if (scrollViewHeightRankInfo < rectRankInfo.height - 4)
             {
                 scrollViewHeightRankInfo = rectRankInfo.height - 4;
