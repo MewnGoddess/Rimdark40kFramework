@@ -88,6 +88,7 @@
     <Compile Include="Core40kUtils.cs" />
     <Compile Include="DamageWorkers\DamageWorker_Holy.cs" />
     <Compile Include="DataStructs\CachedGraphicRenderInfo.cs" />
+    <Compile Include="DataStructs\HediffData.cs" />
     <Compile Include="DataStructs\PresetData.cs" />
     <Compile Include="DataStructs\TraitData.cs" />
     <Compile Include="DataStructs\WieghtedTraitData.cs" />

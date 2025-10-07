@@ -822,7 +822,7 @@ public class ITab_RankSystem : ITab
             
             
         var abilityStringBuilder = new StringBuilder();
-            
+        
         foreach (var ability in rankDef.givesAbilities)
         {
             abilityStringBuilder.AppendLine("    " + ability.label.CapitalizeFirst());
@@ -831,16 +831,25 @@ public class ITab_RankSystem : ITab
         {
             abilityStringBuilder.AppendLine("    " + abilityVfe.label.CapitalizeFirst());
         }
-        foreach (var hediff in rankDef.givesHediffs)
-        {
-            abilityStringBuilder.AppendLine("    " + hediff.label.CapitalizeFirst());
-        }
-            
+        
         var abilityBonuses = abilityStringBuilder.ToString();
             
         if (!abilityBonuses.NullOrEmpty())
         {
             abilityBonuses = "BEWH.Framework.RankSystem.Abilities".Translate() + "\n" + abilityBonuses;
+        }
+        
+        var hediffStringBuilder = new StringBuilder();
+        
+        foreach (var hediff in rankDef.givesHediffs)
+        {
+            hediffStringBuilder.AppendLine("    " + hediff.hediffDef.label.CapitalizeFirst());
+        }
+        var hediffBonuses = hediffStringBuilder.ToString();
+            
+        if (!hediffBonuses.NullOrEmpty())
+        {
+            hediffBonuses = "BEWH.Framework.RankSystem.Hediffs".Translate() + "\n" + hediffBonuses;
         }
         
         var customEffectStringBuilder = new StringBuilder();
@@ -871,6 +880,18 @@ public class ITab_RankSystem : ITab
             else
             {
                 result += "\n" + abilityBonuses;
+            }
+        }
+        
+        if (!hediffBonuses.NullOrEmpty())
+        {
+            if (result.NullOrEmpty())
+            {
+                result = hediffBonuses;
+            }
+            else
+            {
+                result += "\n" + hediffBonuses;
             }
         }
         

@@ -86,8 +86,10 @@ public class CompRankInfo : ThingComp
 
         if (rank.givesHediffs != null)
         {
-            foreach (var hediff in rank.givesHediffs)
+            foreach (var hediffData in rank.givesHediffs)
             {
+                var hediff = HediffMaker.MakeHediff(hediffData.hediffDef, pawn, pawn.health.hediffSet.GetBodyPartRecord(hediffData.bodyPartDef));
+                hediff.Severity = hediffData.initialSeverity;
                 pawn.health.AddHediff(hediff);
             }
         }
@@ -138,7 +140,7 @@ public class CompRankInfo : ThingComp
         {
             foreach (var hediff in rankDef.givesHediffs)
             {
-                var hediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(hediff);
+                var hediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(hediff.hediffDef);
                 pawn.health.RemoveHediff(hediffOfDef);
             }
         }
