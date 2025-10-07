@@ -16,9 +16,12 @@ public static class SpecificInheritableArchiteGenes
 
     public static void Postfix(ref Thing __result, Pawn geneticMother, Pawn father)
     {
-        var pawn = (Pawn)__result;
+        if (__result is not Pawn pawn)
+        {
+            return;
+        }
 
-        if (geneticMother == null || geneticMother.genes == null || father == null || father.genes == null)
+        if (geneticMother?.genes == null || father?.genes == null)
         {
             return;
         }
@@ -52,7 +55,10 @@ public static class SpecificInheritableArchiteGenes
                 continue;
             }
 
-            if (geneDef.biostatArc <= 0 || !geneDef.HasModExtension<DefModExtension_InheritableArchite>()) continue;
+            if (geneDef.biostatArc <= 0 || !geneDef.HasModExtension<DefModExtension_InheritableArchite>())
+            {
+                continue;
+            }
                 
             if (!geneDef.GetModExtension<DefModExtension_InheritableArchite>().presentOnBothParentsRequired || geneSetFather.Contains(geneDef))
             {
@@ -67,7 +73,10 @@ public static class SpecificInheritableArchiteGenes
                 continue;
             }
 
-            if (geneDef.biostatArc <= 0 || !geneDef.HasModExtension<DefModExtension_InheritableArchite>()) continue;
+            if (geneDef.biostatArc <= 0 || !geneDef.HasModExtension<DefModExtension_InheritableArchite>())
+            {
+                continue;
+            }
                 
             if (!geneDef.GetModExtension<DefModExtension_InheritableArchite>().presentOnBothParentsRequired)
             {

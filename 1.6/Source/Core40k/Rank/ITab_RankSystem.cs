@@ -439,12 +439,13 @@ public class ITab_RankSystem : ITab
             scrollViewHeightRankInfo += listingHeightIncreaseMedium;
                 
             //Show day as rank
-            if (compRankInfo.DaysAsRank.TryGetValue(currentlySelectedRank.rankDef, out var daysSpentAs))
+            var rankDayAmount = compRankInfo.GetDaysAsRank(currentlySelectedRank.rankDef);
+            if (rankDayAmount > 0f)
             {
                 listingRankInfo.Gap(5);
                 scrollViewHeightRankInfo += 5f;
                 Text.Font = GameFont.Small;
-                listingRankInfo.Label("BEWH.Framework.RankSystem.DaysSinceRankGiven".Translate(daysSpentAs));
+                listingRankInfo.Label("BEWH.Framework.RankSystem.DaysSinceRankGiven".Translate(rankDayAmount));
                 scrollViewHeightRankInfo += listingHeightIncreaseSmall;
                 Text.Font = GameFont.Medium;
             }
@@ -628,7 +629,7 @@ public class ITab_RankSystem : ITab
             foreach (var rank in currentlySelectedRankCategory.rankDict[rankDef].rankRequirements)
             {
                 var rankRequirementMet = compRankInfo.HasRank(rank.rankDef) &&
-                                         compRankInfo.DaysAsRank[rank.rankDef] >= rank.daysAs;
+                                         compRankInfo.GetDaysAsRank(rank.rankDef) >= rank.daysAs / pawn.GetStatValue(Core40kDefOf.BEWH_RankLearningFactor);
                     
                 if (!rankRequirementMet)
                 {
@@ -656,7 +657,7 @@ public class ITab_RankSystem : ITab
             foreach (var rank in currentlySelectedRankCategory.rankDict[rankDef].rankRequirementsOneAmong)
             {
                 var rankRequirementMet = compRankInfo.HasRank(rank.rankDef) &&
-                                         compRankInfo.DaysAsRank[rank.rankDef] >= rank.daysAs;
+                                         compRankInfo.GetDaysAsRank(rank.rankDef) >= rank.daysAs / pawn.GetStatValue(Core40kDefOf.BEWH_RankLearningFactor);
                     
                 if (rankRequirementMet)
                 {
@@ -829,6 +830,10 @@ public class ITab_RankSystem : ITab
         foreach (var abilityVfe in rankDef.givesVFEAbilities)
         {
             abilityStringBuilder.AppendLine("    " + abilityVfe.label.CapitalizeFirst());
+        }
+        foreach (var hediff in rankDef.givesHediffs)
+        {
+            abilityStringBuilder.AppendLine("    " + hediff.label.CapitalizeFirst());
         }
             
         var abilityBonuses = abilityStringBuilder.ToString();

@@ -20,6 +20,7 @@ public static class Core40kDefOf
     public static ShaderTypeDef BEWH_CutoutThreeColor;
     
     public static StatDef BEWH_ArtificialPartsAffinityFactor;
+    public static StatDef BEWH_RankLearningFactor;
 
     static Core40kDefOf()
     {

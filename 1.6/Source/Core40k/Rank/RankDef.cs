@@ -31,6 +31,8 @@ public class RankDef : Def
     public List<AbilityDef> givesAbilities = new List<AbilityDef>();
         
     public List<VEF.Abilities.AbilityDef> givesVFEAbilities = new List<VEF.Abilities.AbilityDef>();
+    
+    public List<HediffDef> givesHediffs = new List<HediffDef>();
         
     public List<string> customEffectDescriptions = new List<string>();
         

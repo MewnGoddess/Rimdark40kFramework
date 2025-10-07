@@ -7,7 +7,7 @@ public class RankData
 {
     public RankDef rankDef;
 
-    public int daysAs = 0;
+    public float daysAs = 0f;
 
     public RankData()
     {

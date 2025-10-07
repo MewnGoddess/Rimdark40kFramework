@@ -15,6 +15,22 @@ public static class DebugActions
 
         p.GetComp<CompRankInfo>().IncreaseDaysForAllRank();
     }
+    
+    [DebugAction("RimDark", "Print days as ranks", false, false, false, false, false,0, false, actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap, displayPriority = -1000)]
+    private static void PrintDaysAsRanks(Pawn p)
+    {
+        if (!p.HasComp<CompRankInfo>())
+        {
+            return;
+        }
+
+        var comp = p.GetComp<CompRankInfo>();
+        foreach (var rankDef in comp.UnlockedRanks)
+        {
+            Log.Message(rankDef.label + " : " + comp.GetDaysAsRank(rankDef));
+        }
+    }
+
         
     [DebugAction("RimDark", "Reset all ranks", false, false, false, false, false, 0, false, actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap, displayPriority = -1000)]
     private static void ResetRank(Pawn p)

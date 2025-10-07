@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using VEF.Abilities;
 using Verse;
@@ -7,6 +8,7 @@ namespace Core40k;
 
 public class CompRankInfo : ThingComp
 {
+    private const int TicksPerDay = 60000;
     public CompProperties_RankInfo Props => (CompProperties_RankInfo)props;
         
     private List<RankDef> unlockedRanks = new List<RankDef>();
@@ -30,10 +32,9 @@ public class CompRankInfo : ThingComp
     private RankCategoryDef lastOpenedRankCategory = null;
         
     public RankCategoryDef LastOpenedRankCategory => lastOpenedRankCategory;
-        
+
+    private bool convertToStartTick = true;
     private Dictionary<RankDef, int> daysAsRank = new Dictionary<RankDef, int>();
-        
-    public Dictionary<RankDef, int> DaysAsRank => daysAsRank;
 
     private GameComponent_RankInfo gameComponentRankInfo = null;
 
@@ -60,7 +61,7 @@ public class CompRankInfo : ThingComp
             
         if (!daysAsRank.ContainsKey(rank))
         {
-            daysAsRank.Add(rank, 0);
+            daysAsRank.Add(rank, Find.TickManager.TicksGame);
         }
             
         if (rank.givesAbilities != null)
@@ -80,6 +81,14 @@ public class CompRankInfo : ThingComp
                 {
                     comp.GiveAbility(ability);
                 }
+            }
+        }
+
+        if (rank.givesHediffs != null)
+        {
+            foreach (var hediff in rank.givesHediffs)
+            {
+                pawn.health.AddHediff(hediff);
             }
         }
             
@@ -124,6 +133,15 @@ public class CompRankInfo : ThingComp
                 }
             }
         }
+        
+        if (rankDef.givesHediffs != null)
+        {
+            foreach (var hediff in rankDef.givesHediffs)
+            {
+                var hediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(hediff);
+                pawn.health.RemoveHediff(hediffOfDef);
+            }
+        }
 
         if (removeFromRankLimit)
         {
@@ -146,7 +164,17 @@ public class CompRankInfo : ThingComp
             
         return UnlockedRanks.MaxBy(rank => rank.rankTier).rankTier;
     }
+
+    public float GetDaysAsRank(RankDef rankDef)
+    {
+        if (daysAsRank.TryGetValue(rankDef, out var days))
+        {
+            return Math.Abs((float)(days - Find.TickManager.TicksGame)) / TicksPerDay;
+        }
         
+        return 0f;
+    }
+    
     public int HighestRank(RankCategoryDef rankCategoryDef)
     {
         if (UnlockedRanks.NullOrEmpty())
@@ -228,35 +256,19 @@ public class CompRankInfo : ThingComp
         base.PostDestroy(mode, previousMap);
         GameComponentRankInfo.PawnResetRanks(UnlockedRanks);
     }
-        
-    public override void CompTick()
-    {
-        base.CompTick();
-        if (parent is not Pawn pawn)
-        {
-            return;
-        }
-
-        if (!pawn.IsHashIntervalTick(60000))
-        {
-            return;
-        }
-
-        IncreaseDaysForAllRank();
-    }
 
     public void IncreaseDaysForAllRank()
     {
         var daysAsRankTemp = daysAsRank.ToList();
         foreach (var rank in daysAsRankTemp)
         {
-            daysAsRank[rank.Key]++;
+            daysAsRank[rank.Key] -= TicksPerDay;
         }
     }
         
     public void IncreaseDaysAsRank(RankDef rankDef)
     {
-        daysAsRank[rankDef]++;
+        daysAsRank[rankDef] -= TicksPerDay;
     }
         
     public override void PostExposeData()
@@ -265,6 +277,7 @@ public class CompRankInfo : ThingComp
         Scribe_Collections.Look(ref unlockedRanks, "unlockedRanks", LookMode.Def);
         Scribe_Collections.Look(ref unlockedRanksAtDeath, "unlockedRanksAtDeath", LookMode.Def);
         Scribe_Collections.Look(ref daysAsRank, "daysAsRank");
+        Scribe_Values.Look(ref convertToStartTick, "convertToStartTick");
         Scribe_Defs.Look(ref lastOpenedRankCategory, "lastOpenedRankCategory");
 
         if (Scribe.mode != LoadSaveMode.PostLoadInit)
@@ -273,6 +286,18 @@ public class CompRankInfo : ThingComp
         }
             
         daysAsRank ??= new Dictionary<RankDef, int>();
+
+        if (!convertToStartTick)
+        {
+            return;
+        }
+        
+        foreach (var keyPair in daysAsRank)
+        {
+            daysAsRank[keyPair.Key] = Find.TickManager.TicksGame - keyPair.Value;
+        }
+
+        convertToStartTick = false;
     }
         
 }
