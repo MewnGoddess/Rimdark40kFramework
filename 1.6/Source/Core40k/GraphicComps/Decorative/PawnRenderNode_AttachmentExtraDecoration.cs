@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
 using UnityEngine;
@@ -18,23 +19,27 @@ public class PawnRenderNode_AttachmentExtraDecoration : PawnRenderNode
 
         var texPath = propsMulti.texPath;
         var shader = propsMulti.shaderTypeDef.Shader;
+        var maskPath = string.Empty;
         
-        if (!propsMulti.useMask)
+        if (propsMulti.useBodyType)
         {
-            return GraphicDatabase.Get<Graphic_Multi>(texPath, shader, Props.drawSize, propsMulti.color ?? Color.white);
+            texPath += "_" + propsMulti.bodyType.defName;
         }
-
-        string maskPath;
-
+        
         var pawnFlags = GetPawnFlags(pawn);
 
-        var additionalMaskPath = "";
+        var additionalMaskPath = string.Empty;
         var decorationFlag = propsMulti.decorationFlags.Where(flag => pawnFlags.Contains(flag.flag)).OrderBy(d => d.priority).FirstOrDefault();
         if (decorationFlag != null)
         {
             texPath = decorationFlag.newTexPath;
             shader = decorationFlag.shaderType?.Shader ?? shader;
             additionalMaskPath += decorationFlag.maskPathAddition;
+        }
+        
+        if (!propsMulti.useMask)
+        {
+            return GraphicDatabase.Get<Graphic_Multi>(texPath, shader, Props.drawSize, propsMulti.color ?? Color.white);
         }
         
         if (propsMulti.maskDef != null && propsMulti.maskDef.maskPath != null)

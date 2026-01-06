@@ -11,17 +11,21 @@ public class PawnRenderNodeWorker_AttachmentExtraDecorationHead : PawnRenderNode
     public override bool CanDrawNow(PawnRenderNode node, PawnDrawParms parms)
     {
         var pawn = parms.pawn;
-            
-        var apparelMultiColor = pawn.apparel.WornApparel.FirstOrFallback(a =>
+
+        var decoration = pawn.apparel.WornApparel.Where(apparel =>
         {
-            var temp = a.GetComp<CompDecorative>();
-            return temp != null && temp.Props.decorativeType == DecorativeType.Head;
-        });
-
-        var decorativeComp = apparelMultiColor.GetComp<CompDecorative>();
+            var decos = apparel.GetComp<CompDecorative>();
+            if (decos == null || decos.Props.decorativeType != DecorativeType.Head)
+            {
+                return false;
+            }
+            return decos.ExtraDecorations.Keys.FirstOrFallback(def => def.drawnTextureIconPath == node.Props.texPath) != null;
+        }).Select(apparel =>
+        {
+            var decos = apparel.GetComp<CompDecorative>();
+            return decos.ExtraDecorations.Keys.FirstOrFallback(def => def.drawnTextureIconPath == node.Props.texPath);
+        }).FirstOrFallback();
         
-        var decoration = decorativeComp.ExtraDecorations.Keys.FirstOrFallback(def => def.drawnTextureIconPath == node.Props.texPath);
-
         if (decoration == null)
         {
             return false;

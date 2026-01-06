@@ -49,7 +49,6 @@ public class CompMultiColor : CompGraphicParent
             return pawn_ApparelTracker.pawn;
         }
     }
-
     
     private bool isApparel => parent is Apparel;
     
@@ -150,7 +149,8 @@ public class CompMultiColor : CompGraphicParent
         var path = thingDef.graphicData.texPath;
         var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
         var drawMult = isApparel ? 0.9f : 1f;
-        cachedGraphic = MultiColorUtils.GetGraphic<Graphic_Single>(path, shader, thingDef.graphicData.drawSize*drawMult, DrawColor, DrawColorTwo, DrawColorThree, null, maskDef?.maskPath);
+        var graphic = MultiColorUtils.GetGraphic<Graphic_Single>(path, shader, thingDef.graphicData.drawSize*drawMult, DrawColor, DrawColorTwo, DrawColorThree, null, maskDef?.maskPath);
+        cachedGraphic = new Graphic_RandomRotated(graphic, 35f);
     }
 
     public List<ApparelMultiColorTabDef> ApparelMultiColorTabDefs => Props.tabDefs;

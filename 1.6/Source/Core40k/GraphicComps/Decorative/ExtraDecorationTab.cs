@@ -534,121 +534,127 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         var viewRect = new Rect(0f, 0f, rect.width - 16f, listScrollViewHeight);
         Widgets.BeginScrollView(outRect, ref apparelColorScrollPosition, viewRect);
             
-        var bodyApparel = pawn.apparel.WornApparel.FirstOrFallback(a =>
+        var bodyApparels = pawn.apparel.WornApparel.Where(a =>
         {
             var temp = a.GetComp<CompDecorative>();
             return temp != null && temp.Props.decorativeType == DecorativeType.Body;
-        });
-        var helmetApparel = pawn.apparel.WornApparel.FirstOrFallback(a =>
+        }).ToList();
+        var helmetApparels = pawn.apparel.WornApparel.Where(a =>
         {
             var temp = a.GetComp<CompDecorative>();
             return temp != null && temp.Props.decorativeType == DecorativeType.Head;
-        });
+        }).ToList();
             
         curY = viewRect.y;
             
         //Body Decorations
-        if (bodyApparel != null)
+        if (!bodyApparels.NullOrEmpty())
         {
-            //Extra decoration title
-            var nameRect = new Rect(viewRect.x, curY, viewRect.width, 30f);
-            nameRect.width /= 2;
-            nameRect.x += nameRect.width / 2;
-            Widgets.DrawMenuSection(nameRect);
-            Text.Anchor = TextAnchor.MiddleCenter;
-            Widgets.Label(nameRect, "BEWH.Framework.ExtraDecoration.BodyDecoration".Translate());
-            Text.Anchor = TextAnchor.UpperLeft;
-                
-            //Remove All
-            var resetAllDecorations = new Rect(nameRect.xMin, curY, viewRect.width, 30f);
-            resetAllDecorations.width /= 5;
-            resetAllDecorations.x -= resetAllDecorations.width + nameRect.width/20;
-            if (Widgets.ButtonText(resetAllDecorations, "BEWH.Framework.ExtraDecoration.RemoveAllDecorations".Translate()))
+            foreach (var bodyApparel in bodyApparels)
             {
-                bodyApparel.GetComp<CompDecorative>().RemoveAllDecorations();
-            }
-                
-            //Preset Tab
-            var presetSelectRect = new Rect(nameRect.xMax, curY, viewRect.width, 30f);
-            presetSelectRect.x += nameRect.width/20;
-            presetSelectRect.width /= 10;
-            presetSelectRect.width -= 2;
+                //Extra decoration title
+                var nameRect = new Rect(viewRect.x, curY, viewRect.width, 30f);
+                nameRect.width /= 2;
+                nameRect.x += nameRect.width / 2;
+                Widgets.DrawMenuSection(nameRect);
+                Text.Anchor = TextAnchor.MiddleCenter;
+                Widgets.Label(nameRect, "BEWH.Framework.ExtraDecoration.BodyDecoration".Translate());
+                Text.Anchor = TextAnchor.UpperLeft;
+                    
+                //Remove All
+                var resetAllDecorations = new Rect(nameRect.xMin, curY, viewRect.width, 30f);
+                resetAllDecorations.width /= 5;
+                resetAllDecorations.x -= resetAllDecorations.width + nameRect.width/20;
+                if (Widgets.ButtonText(resetAllDecorations, "BEWH.Framework.ExtraDecoration.RemoveAllDecorations".Translate()))
+                {
+                    bodyApparel.GetComp<CompDecorative>().RemoveAllDecorations();
+                }
+                    
+                //Preset Tab
+                var presetSelectRect = new Rect(nameRect.xMax, curY, viewRect.width, 30f);
+                presetSelectRect.x += nameRect.width/20;
+                presetSelectRect.width /= 10;
+                presetSelectRect.width -= 2;
 
-            var presetEditRect = new Rect(presetSelectRect);
-            presetEditRect.x += presetSelectRect.width + 4;
+                var presetEditRect = new Rect(presetSelectRect);
+                presetEditRect.x += presetSelectRect.width + 4;
+                    
+                //Select Preset
+                TooltipHandler.TipRegion(presetSelectRect, "BEWH.Framework.ExtraDecoration.SelectDesc".Translate());
+                if (Widgets.ButtonText(presetSelectRect, "BEWH.Framework.ExtraDecoration.Select".Translate()))
+                {
+                    SelectDecorationPreset(bodyApparel);
+                }
+                    
+                //Edit Presets
+                TooltipHandler.TipRegion(presetEditRect, "BEWH.Framework.ExtraDecoration.EditDesc".Translate());
+                if (Widgets.ButtonText(presetEditRect, "BEWH.Framework.ExtraDecoration.Edit".Translate()))
+                {
+                    EditDecorationPreset(bodyApparel);
+                }
+                    
+                var position = new Vector2(viewRect.x, resetAllDecorations.yMax);
+                curY = position.y;    
                 
-            //Select Preset
-            TooltipHandler.TipRegion(presetSelectRect, "BEWH.Framework.ExtraDecoration.SelectDesc".Translate());
-            if (Widgets.ButtonText(presetSelectRect, "BEWH.Framework.ExtraDecoration.Select".Translate()))
-            {
-                SelectDecorationPreset(bodyApparel);
+                DrawRowContent(bodyApparel, extraDecorationDefsBody, ref position, ref viewRect);
+                
+                listScrollViewHeight = curY + 10f;
             }
-                
-            //Edit Presets
-            TooltipHandler.TipRegion(presetEditRect, "BEWH.Framework.ExtraDecoration.EditDesc".Translate());
-            if (Widgets.ButtonText(presetEditRect, "BEWH.Framework.ExtraDecoration.Edit".Translate()))
-            {
-                EditDecorationPreset(bodyApparel);
-            }
-                
-            var position = new Vector2(viewRect.x, resetAllDecorations.yMax);
-            curY = position.y;    
-            
-            DrawRowContent(bodyApparel, extraDecorationDefsBody, ref position, ref viewRect);
-            
-            listScrollViewHeight = curY + 10f;
         }
             
         //Head Decorations
-        if (helmetApparel != null)
+        if (!helmetApparels.NullOrEmpty())
         {
-            //Extra decoration title
-            var nameRect = new Rect(viewRect.x, curY, viewRect.width, 30f);
-            nameRect.width /= 2;
-            nameRect.x += nameRect.width / 2;
-            Widgets.DrawMenuSection(nameRect);
-            Text.Anchor = TextAnchor.MiddleCenter;
-            Widgets.Label(nameRect, "BEWH.Framework.ExtraDecoration.HelmetDecoration".Translate());
-            Text.Anchor = TextAnchor.UpperLeft;
-                
-            //Remove All
-            var resetAllDecorations = new Rect(nameRect.xMin, curY, viewRect.width, 30f);
-            resetAllDecorations.width /= 5;
-            resetAllDecorations.x -= resetAllDecorations.width + nameRect.width/20;
-            if (Widgets.ButtonText(resetAllDecorations, "BEWH.Framework.ExtraDecoration.RemoveAllDecorations".Translate()))
+            foreach (var helmetApparel in helmetApparels)
             {
-                helmetApparel.GetComp<CompDecorative>().RemoveAllDecorations();
-            }
-                
-            //Preset Tab
-            var presetSelectRect = new Rect(nameRect.xMax, curY, viewRect.width, 30f);
-            presetSelectRect.x += nameRect.width/20;
-            presetSelectRect.width /= 10;
-            presetSelectRect.width -= 2;
+                //Extra decoration title
+                var nameRect = new Rect(viewRect.x, curY, viewRect.width, 30f);
+                nameRect.width /= 2;
+                nameRect.x += nameRect.width / 2;
+                Widgets.DrawMenuSection(nameRect);
+                Text.Anchor = TextAnchor.MiddleCenter;
+                Widgets.Label(nameRect, "BEWH.Framework.ExtraDecoration.HelmetDecoration".Translate());
+                Text.Anchor = TextAnchor.UpperLeft;
+                    
+                //Remove All
+                var resetAllDecorations = new Rect(nameRect.xMin, curY, viewRect.width, 30f);
+                resetAllDecorations.width /= 5;
+                resetAllDecorations.x -= resetAllDecorations.width + nameRect.width/20;
+                if (Widgets.ButtonText(resetAllDecorations, "BEWH.Framework.ExtraDecoration.RemoveAllDecorations".Translate()))
+                {
+                    helmetApparel.GetComp<CompDecorative>().RemoveAllDecorations();
+                }
+                    
+                //Preset Tab
+                var presetSelectRect = new Rect(nameRect.xMax, curY, viewRect.width, 30f);
+                presetSelectRect.x += nameRect.width/20;
+                presetSelectRect.width /= 10;
+                presetSelectRect.width -= 2;
 
-            var presetEditRect = new Rect(presetSelectRect);
-            presetEditRect.x += presetSelectRect.width + 4;
+                var presetEditRect = new Rect(presetSelectRect);
+                presetEditRect.x += presetSelectRect.width + 4;
+                    
+                //Select Preset
+                TooltipHandler.TipRegion(presetSelectRect, "BEWH.Framework.ExtraDecoration.SelectDesc".Translate());
+                if (Widgets.ButtonText(presetSelectRect, "BEWH.Framework.ExtraDecoration.Select".Translate()))
+                {
+                    SelectDecorationPreset(helmetApparel);
+                }
+                    
+                //Edit Presets
+                TooltipHandler.TipRegion(presetEditRect, "BEWH.Framework.ExtraDecoration.EditDesc".Translate());
+                if (Widgets.ButtonText(presetEditRect, "BEWH.Framework.ExtraDecoration.Edit".Translate()))
+                {
+                    EditDecorationPreset(helmetApparel);
+                }
+                    
+                var position = new Vector2(viewRect.x, curY + resetAllDecorations.height);
+                curY = position.y;   
                 
-            //Select Preset
-            TooltipHandler.TipRegion(presetSelectRect, "BEWH.Framework.ExtraDecoration.SelectDesc".Translate());
-            if (Widgets.ButtonText(presetSelectRect, "BEWH.Framework.ExtraDecoration.Select".Translate()))
-            {
-                SelectDecorationPreset(helmetApparel);
+                DrawRowContent(helmetApparel, extraDecorationDefsHelmet, ref position, ref viewRect);
+                
+                listScrollViewHeight = curY + 10f;
             }
-                
-            //Edit Presets
-            TooltipHandler.TipRegion(presetEditRect, "BEWH.Framework.ExtraDecoration.EditDesc".Translate());
-            if (Widgets.ButtonText(presetEditRect, "BEWH.Framework.ExtraDecoration.Edit".Translate()))
-            {
-                EditDecorationPreset(helmetApparel);
-            }
-                
-            var position = new Vector2(viewRect.x, curY + resetAllDecorations.height);
-            curY = position.y;   
-            
-            DrawRowContent(helmetApparel, extraDecorationDefsHelmet, ref position, ref viewRect);
-            
-            listScrollViewHeight = curY + 10f;
         }
             
         Widgets.EndScrollView();
