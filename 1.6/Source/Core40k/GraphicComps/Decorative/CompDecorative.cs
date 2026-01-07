@@ -11,7 +11,7 @@ public class CompDecorative : CompGraphicParent
         extraDecorations = multiColor.ExtraDecorations;
         originalExtraDecorations = multiColor.ExtraDecorations;
     }
-    
+
     public CompProperties_Decorative Props => (CompProperties_Decorative)props;
     
     private Dictionary<ExtraDecorationDef, ExtraDecorationSettings> originalExtraDecorations = new ();
@@ -142,6 +142,12 @@ public class CompDecorative : CompGraphicParent
         extraDecorations = new Dictionary<ExtraDecorationDef, ExtraDecorationSettings>();
         extraDecorations.AddRange(originalExtraDecorations);
         base.Reset();
+    }
+    
+    public override void Notify_Equipped(Pawn pawn)
+    {
+        Notify_ColorChanged();
+        base.Notify_Equipped(pawn);
     }
 
     public override void PostExposeData()

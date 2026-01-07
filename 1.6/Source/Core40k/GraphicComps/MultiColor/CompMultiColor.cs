@@ -210,6 +210,12 @@ public class CompMultiColor : CompGraphicParent
         base.Notify_GraphicChanged();
     }
     
+    public override void Notify_Equipped(Pawn pawn)
+    {
+        Notify_GraphicChanged();
+        base.Notify_Equipped(pawn);
+    }
+    
     public override void PostExposeData()
     {
         Scribe_Values.Look(ref originalColorOne, "originalColorOne", Color.white);

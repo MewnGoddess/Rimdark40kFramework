@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 using Verse;
 
 namespace Core40k;
 
+[Obsolete]
 public class WeaponMultiColor : ThingWithComps
 {
     private bool initialColourSet;

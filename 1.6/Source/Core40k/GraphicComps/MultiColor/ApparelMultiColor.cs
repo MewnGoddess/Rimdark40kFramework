@@ -1,9 +1,11 @@
-﻿using RimWorld;
+﻿using System;
+using RimWorld;
 using UnityEngine;
 using Verse;
 
 namespace Core40k;
 
+[Obsolete]
 public class ApparelMultiColor : Apparel
 {
     private BodyTypeDef originalBodyType = null;
