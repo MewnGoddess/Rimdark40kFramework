@@ -104,8 +104,8 @@ public class CompMultiColor : CompGraphicParent
         } 
     }
 
-    private bool recacheGraphics = true;
-    public bool RecacheGraphics => recacheGraphics;
+    private bool recacheMultiGraphics = true;
+    public bool RecacheMultiGraphics => recacheMultiGraphics;
     
     private Graphic_Multi cachedGraphicMulti;
     public Graphic_Multi CachedGraphicMulti
@@ -114,7 +114,7 @@ public class CompMultiColor : CompGraphicParent
         set
         {
             cachedGraphicMulti = value;
-            recacheGraphics = false;
+            recacheMultiGraphics = false;
             if (isApparel)
             {
                 apparelGraphicRecord = new ApparelGraphicRecord(cachedGraphicMulti, parent as Apparel);
@@ -136,21 +136,51 @@ public class CompMultiColor : CompGraphicParent
         }
     }
     
-    
     private bool recacheSingleGraphics = true;
     public bool RecacheSingleGraphics => recacheSingleGraphics;
-    
-    private Graphic cachedGraphic;
-    public Graphic Graphic => cachedGraphic;
 
-    public void SetSingleGraphic()
+    private Graphic cachedGraphic;
+    private Graphic cachedDefaultGraphic;
+
+    public AlternateBaseFormDef originalCurrentAlternateBaseForm = null;
+    public AlternateBaseFormDef currentAlternateBaseForm = null;
+    
+    public Graphic GetSingleGraphic(bool onlyDefaultGraphic = false)
+    {
+        if (onlyDefaultGraphic)
+        {
+            if (cachedDefaultGraphic != null)
+            {
+                return cachedDefaultGraphic;
+            }
+        }
+        else
+        {
+            if (cachedGraphic != null)
+            {
+                return cachedGraphic;
+            }
+        }
+        
+        SetSingleGraphic(onlyDefaultGraphic);
+        return GetSingleGraphic(onlyDefaultGraphic);
+    }
+    
+    public void SetSingleGraphic(bool onlyDefaultGraphic = false)
     {
         recacheSingleGraphics = false;
-        var path = thingDef.graphicData.texPath;
+        var path = onlyDefaultGraphic ? thingDef.graphicData.texPath : currentAlternateBaseForm?.drawnTextureIconPath ?? thingDef.graphicData.texPath;
         var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
         var drawMult = isApparel ? 0.9f : 1f;
         var graphic = MultiColorUtils.GetGraphic<Graphic_Single>(path, shader, thingDef.graphicData.drawSize*drawMult, DrawColor, DrawColorTwo, DrawColorThree, null, maskDef?.maskPath);
-        cachedGraphic = new Graphic_RandomRotated(graphic, 35f);
+        if (onlyDefaultGraphic)
+        {
+            cachedDefaultGraphic = new Graphic_RandomRotated(graphic, 35f);
+        }
+        else
+        {
+            cachedGraphic = new Graphic_RandomRotated(graphic, 35f);
+        }
     }
 
     public List<ApparelMultiColorTabDef> ApparelMultiColorTabDefs => Props.tabDefs;
@@ -159,7 +189,7 @@ public class CompMultiColor : CompGraphicParent
     {
         InitialColors();
         base.InitialSetup();
-        recacheGraphics = true;
+        recacheMultiGraphics = true;
     }
 
     public virtual void InitialColors()
@@ -191,6 +221,7 @@ public class CompMultiColor : CompGraphicParent
         originalColorTwo = drawColorTwo;
         originalColorThree = drawColorThree;
         originalMaskDef = maskDef;
+        originalCurrentAlternateBaseForm = currentAlternateBaseForm;
         Notify_GraphicChanged();
     }
 
@@ -200,12 +231,13 @@ public class CompMultiColor : CompGraphicParent
         drawColorTwo = originalColorTwo;
         drawColorThree = originalColorThree;
         maskDef = originalMaskDef;
+        currentAlternateBaseForm = originalCurrentAlternateBaseForm;
         Notify_GraphicChanged();
     }
     
     public override void Notify_GraphicChanged()
     {
-        recacheGraphics = true;
+        recacheMultiGraphics = true;
         recacheSingleGraphics = true;
         base.Notify_GraphicChanged();
     }
@@ -225,7 +257,9 @@ public class CompMultiColor : CompGraphicParent
         Scribe_Values.Look(ref drawColorTwo, "drawColorTwo", Color.white);
         Scribe_Values.Look(ref drawColorThree, "drawColorThree", Color.white);
         Scribe_Defs.Look(ref originalMaskDef, "originalMaskDef");
+        Scribe_Defs.Look(ref originalCurrentAlternateBaseForm, "originalCurrentAlternateBaseForm");
         Scribe_Defs.Look(ref maskDef, "maskDef");
+        Scribe_Defs.Look(ref currentAlternateBaseForm, "currentAlternateBaseForm");
         Scribe_Defs.Look(ref originalBodyType, "originalBodyType");
         
         base.PostExposeData();

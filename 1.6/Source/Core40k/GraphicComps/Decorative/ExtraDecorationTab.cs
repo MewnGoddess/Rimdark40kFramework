@@ -334,7 +334,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                     return;
                 }
                 var pictureSize = new Vector2(100, 100);
-                var mouseAttachedWindowPos = new Vector2(rect.width, -rect.height);
+                var mouseAttachedWindowPos = new Vector2(rect.width, rect.height);
                 mouseAttachedWindowPos.x += mouseOffset.x;
                 mouseAttachedWindowPos.y += mouseOffset.y;
                     

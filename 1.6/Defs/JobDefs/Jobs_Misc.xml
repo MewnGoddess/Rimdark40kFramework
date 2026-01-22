@@ -4,13 +4,13 @@
   <JobDef>
     <defName>BEWH_OpenStylingStationDialogForApparelMultiColor</defName>
     <driverClass>Core40k.JobDriver_OpenStylingStationDialogForApparelMultiColor</driverClass>
-    <reportString>Changing apparel colors at TargetA.</reportString>
+    <reportString>Customizing apparel at TargetA.</reportString>
   </JobDef>
 
   <JobDef>
     <defName>BEWH_OpenStylingStationDialogForWeaponMultiColor</defName>
     <driverClass>Core40k.JobDriver_OpenStylingStationDialogForWeaponMultiColor</driverClass>
-    <reportString>Changing weapon colors at TargetA.</reportString>
+    <reportString>Customizing weapon at TargetA.</reportString>
   </JobDef>
 
   <JobDef>

@@ -29,7 +29,7 @@
   <BEWH.Framework.ApparelMultiColor.ConfirmOverride>Are you sure you want to overwrite this preset?</BEWH.Framework.ApparelMultiColor.ConfirmOverride>
   <BEWH.Framework.ApparelMultiColor.PresetExists>Already exists!</BEWH.Framework.ApparelMultiColor.PresetExists>
 
-  <BEWH.Framework.ApparelMultiColor.ArmourDecorationFeature>Decorate armor</BEWH.Framework.ApparelMultiColor.ArmourDecorationFeature>
+  <BEWH.Framework.ApparelMultiColor.ArmourDecorationFeature>Customize armor</BEWH.Framework.ApparelMultiColor.ArmourDecorationFeature>
 
   <BEWH.Framework.ApparelMultiColor.ChooseCustomColour>Click to select custom color</BEWH.Framework.ApparelMultiColor.ChooseCustomColour>
 
@@ -55,7 +55,11 @@
   <BEWH.Framework.ExtraDecoration.EditDesc>Create, overwrite or remove a preset</BEWH.Framework.ExtraDecoration.EditDesc>
 
   <!--=== Weapon Multi Color ===-->
-  <BEWH.Framework.WeaponMultiColor.WeaponDecorationFeature>Decorate weapon</BEWH.Framework.WeaponMultiColor.WeaponDecorationFeature>
+  <BEWH.Framework.WeaponMultiColor.WeaponDecorationFeature>Customize weapon</BEWH.Framework.WeaponMultiColor.WeaponDecorationFeature>
+
+  <!--=== Weapon Decoration ===-->
+  <BEWH.Framework.WeaponDecoration.IncompatibleWithCurrentAltBase>Incompatible with currently selected texture</BEWH.Framework.WeaponDecoration.IncompatibleWithCurrentAltBase>
+  <BEWH.Framework.WeaponDecoration.AlternativeBaseTexture>Alt. Textures</BEWH.Framework.WeaponDecoration.AlternativeBaseTexture>
 
   <!--=== Rank System ===-->
   <BEWH.Framework.RankSystem.RankTab>Ranks</BEWH.Framework.RankSystem.RankTab>

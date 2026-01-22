@@ -34,12 +34,24 @@ public class DecorationDef : Def
         
     public float sortOrder = 0f;
     
+    public List<string> appliesTo = new List<string>();
+        
+    public bool appliesToAll = false;
+    
     public DrawData drawData = new();
     public ShaderTypeDef shaderType;
+    
+    public bool colourable = false;
+    public int colorAmount = 1;
         
     public Color? defaultColour;
     public Color? defaultColourTwo;
     public Color? defaultColourThree;
+    
+    public bool useMask = false;
+    public MaskDef defaultMask;
+    
+    public Vector2 drawSize = Vector2.one;
         
     public List<DecorationColourPresetDef> availablePresets = new();
         

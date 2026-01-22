@@ -4,7 +4,8 @@ using Verse;
 namespace Core40k;
 
 [HarmonyPatch(typeof(Thing), "Graphic", MethodType.Getter)]
-public class ThingWithCompsGraphicOverride
+[HarmonyPriority(Priority.Normal)]
+public class ThingWithCompsMultiColorGraphicOverride
 {
     public static void Postfix(ref Graphic __result, Thing __instance)
     {
@@ -20,6 +21,6 @@ public class ThingWithCompsGraphicOverride
             multiColor.SetSingleGraphic();
         }
         
-        __result = __instance.TryGetComp<CompMultiColor>().Graphic;
+        __result = multiColor.GetSingleGraphic();
     }
 }

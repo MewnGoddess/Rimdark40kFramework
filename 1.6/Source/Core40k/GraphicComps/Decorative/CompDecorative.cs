@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -149,6 +150,50 @@ public class CompDecorative : CompGraphicParent
         Notify_ColorChanged();
         base.Notify_Equipped(pawn);
     }
+    
+    private List<Graphic> cachedGraphics = [];
+    
+    //MESS WITH THIS WHEN YOURE GOING TO FIX OUTFIT STANDS NOT SHOWING DECOS, SHOULD BE ABLE TO DRAW FROM HERE.
+    /*public override void Notify_GraphicChanged()
+    {
+        base.Notify_GraphicChanged();
+        foreach (var extraDecorationDef in extraDecorations.Keys)
+        {
+            Graphic graphic;
+            if (extraDecorationDef.colorAmount > 2)
+            {
+                graphic = MultiColorUtils.GetGraphic<Graphic_Single>(
+                    extraDecorationDef.drawnTextureIconPath, 
+                    extraDecorationDef.shaderType.Shader ?? Core40kDefOf.BEWH_CutoutThreeColor.Shader, 
+                    extraDecorationDef.drawSize, 
+                    MultiColor?.DrawColor ?? parent.DrawColor, 
+                    MultiColor?.DrawColorTwo ?? parent.DrawColorTwo, 
+                    MultiColor?.DrawColorThree ?? parent.DrawColorTwo, 
+                    parent.def.graphicData,
+                    extraDecorationDef.useMask ? extraDecorationDef.defaultMask.maskPath : null);
+            }
+            else
+            {
+                graphic = GraphicDatabase.Get<Graphic_Single>(
+                    extraDecorationDef.drawnTextureIconPath, 
+                    extraDecorationDef.shaderType.Shader ?? ShaderTypeDefOf.Cutout.Shader, 
+                    extraDecorationDef.drawSize, 
+                    parent.DrawColor, 
+                    parent.DrawColorTwo, 
+                    parent.def.graphicData);
+            }
+            
+            cachedGraphics.Add(graphic);
+        }
+    }
+    
+    public override void DrawAt(Vector3 drawLoc, bool flip = false)
+    {
+        foreach (var graphic in cachedGraphics)
+        {
+            graphic.Draw(drawLoc, flip ? parent.Rotation.Opposite : parent.Rotation, parent);
+        }
+    }*/
 
     public override void PostExposeData()
     {

@@ -10,8 +10,6 @@ public class ExtraDecorationDef : DecorationDef
     public bool isHelmetDecoration = false;
         
     public List<Rot4> defaultShowRotation = new() {Rot4.North, Rot4.South, Rot4.East, Rot4.West};
-
-    public bool colourable = false;
         
     public bool flipable = false;
 
@@ -19,19 +17,7 @@ public class ExtraDecorationDef : DecorationDef
         
     public bool useArmorColourAsDefault = false;
         
-    public List<string> appliesTo = new List<string>();
-        
-    public bool appliesToAll = false;
-
-    public MaskDef defaultMask;
-
-    public bool useMask = false;
-
-    public int colorAmount = 1;
-        
     public bool drawInHeadSpace = false;
-    
-    public Vector2 drawSize = Vector2.one;
     
     public List<BodyTypeDef> appliesToBodyTypes = new();
 

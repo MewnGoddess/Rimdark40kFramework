@@ -35,7 +35,7 @@ public class MultiColorChangableOnThing
         //Equipment
         if (__instance.def.GetModExtension<DefModExtension_AllowColoringOfThings>().allowColoringOfEquipment)
         {
-            if (selPawn.equipment.Primary.HasComp<CompMultiColor>())
+            if (selPawn.equipment.Primary.HasComp<CompMultiColor>() || selPawn.equipment.Primary.HasComp<CompWeaponDecoration>())
             {
                 var changeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.Framework.WeaponMultiColor.WeaponDecorationFeature".Translate().CapitalizeFirst(), delegate
                 {

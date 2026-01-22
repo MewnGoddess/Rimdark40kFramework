@@ -1,6 +1,8 @@
 ﻿using HarmonyLib;
 using RimWorld;
+using VEF.Apparels;
 using Verse;
+using ApparelLayerDefOf = RimWorld.ApparelLayerDefOf;
 
 namespace Core40k;
 
@@ -21,7 +23,7 @@ public static class ApparelMultiColorPatch
         
         var multiColor = apparel.GetComp<CompMultiColor>();
 
-        if (multiColor.RecacheGraphics)
+        if (multiColor.RecacheMultiGraphics)
         {
             var graphic = TryGetGraphicApparel(apparel, multiColor, bodyType);
             multiColor.CachedGraphicMulti = graphic;
@@ -41,8 +43,14 @@ public static class ApparelMultiColorPatch
         }
 
         bodyType = apparel.def.GetModExtension<DefModExtension_ForcesBodyType>()?.forcedBodyType ?? bodyType;
-        
-        var path = ((apparel.def.apparel.LastLayer != ApparelLayerDefOf.Overhead && apparel.def.apparel.LastLayer != ApparelLayerDefOf.EyeCover && !apparel.RenderAsPack() && apparel.WornGraphicPath != BaseContent.PlaceholderImagePath && apparel.WornGraphicPath != BaseContent.PlaceholderGearImagePath) ? (apparel.WornGraphicPath + "_" + bodyType.defName) : apparel.WornGraphicPath);
+        var extension = apparel.def.GetModExtension<ApparelExtension>();
+        var path = apparel.def.apparel.LastLayer != ApparelLayerDefOf.Overhead 
+                   && apparel.def.apparel.LastLayer != ApparelLayerDefOf.EyeCover 
+                   && !apparel.RenderAsPack() 
+                   && apparel.WornGraphicPath != BaseContent.PlaceholderImagePath 
+                   && apparel.WornGraphicPath != BaseContent.PlaceholderGearImagePath 
+                   && extension is not { isUnifiedApparel: true }
+            ? (apparel.WornGraphicPath + "_" + bodyType.defName) : apparel.WornGraphicPath;
         
         var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
         var maskPath = multiColor.MaskDef?.maskPath;

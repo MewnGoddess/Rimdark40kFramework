@@ -21,17 +21,23 @@ public class Dialog_PaintWeaponMultiColor : Window
     private bool DevMode => Prefs.DevMode;
         
     private List<ColourPresetDef> presets;
-        
-    private static Core40kModSettings modSettings = null;
 
-    public static Core40kModSettings ModSettings => modSettings ??= LoadedModManager.GetMod<Core40kMod>().GetSettings<Core40kModSettings>();
+    private Dictionary<WeaponDecorationTypeDef, List<WeaponDecorationDef>> weaponDecorations = new();
+        
+    private static Core40kModSettings cachedModSettings = null;
+
+    public static Core40kModSettings ModSettings => cachedModSettings ??= LoadedModManager.GetMod<Core40kMod>().GetSettings<Core40kModSettings>();
 
     private Material cachedMaterial = null;
+    
+    private List<AlternateBaseFormDef> alternateBaseForms = [];
+    private AlternateBaseFormDef selectedAlternateBaseForm = null;
 
     private ThingWithComps weapon;
-    private CompMultiColor multiColor => weapon.GetComp<CompMultiColor>();
+    private CompMultiColor MultiColorComp => weapon.GetComp<CompMultiColor>();
+    private CompWeaponDecoration WeaponDecorationComp => weapon.GetComp<CompWeaponDecoration>();
 
-    private int weaponMaskAmount => multiColor.Props.colorMaskAmount;
+    private int weaponMaskAmount => selectedAlternateBaseForm?.colorAmount ?? MultiColorComp.Props.colorMaskAmount;
     
     private bool recache = true;
     
@@ -43,17 +49,40 @@ public class Dialog_PaintWeaponMultiColor : Window
 
     public Dialog_PaintWeaponMultiColor(Pawn pawn, ThingWithComps weaponMultiColor)
     {
+        Setup(pawn, weaponMultiColor);
+    }
+    
+    private void Setup(Pawn pawn, ThingWithComps weaponMultiColor)
+    {
         this.pawn = pawn;
             
         presets = DefDatabase<ColourPresetDef>.AllDefs.Where(preset => preset.appliesToKind is PresetType.Weapon or PresetType.All).ToList();
 
         weapon = weaponMultiColor;
 
-        originalColor = (multiColor.Props?.defaultPrimaryColor ?? (weapon.def.MadeFromStuff ? weapon.def.GetColorForStuff(weapon.Stuff) : Color.white), multiColor.Props?.defaultSecondaryColor ?? Color.white, multiColor.Props?.defaultTertiaryColor ?? Color.white);
+        originalColor = (MultiColorComp?.Props?.defaultPrimaryColor ?? (weapon.def.MadeFromStuff ? weapon.def.GetColorForStuff(weapon.Stuff) : Color.white), MultiColorComp?.Props?.defaultSecondaryColor ?? Color.white, MultiColorComp?.Props?.defaultTertiaryColor ?? Color.white);
 
+        if (weapon.HasComp<CompWeaponDecoration>())
+        {
+            var weaponDecoGrouping = DefDatabase<WeaponDecorationDef>.AllDefs.Where(def => def.appliesTo.Contains(weapon.def.defName) || def.appliesToAll).GroupBy(def => def.decorationType);
+            foreach (var grouping in weaponDecoGrouping)
+            {
+                weaponDecorations.Add(grouping.Key, grouping.ToList());
+            }
+        }
+        
+        var allExtraDecorations = DefDatabase<ExtraDecorationDef>.AllDefs.ToList();
+        
+        alternateBaseForms = DefDatabase<AlternateBaseFormDef>.AllDefs.Where(def => def.appliesTo.Contains(weaponMultiColor.def.defName)).ToList();
+
+        if (MultiColorComp != null)
+        {
+            selectedAlternateBaseForm = MultiColorComp.currentAlternateBaseForm;
+        }
+        
         Find.TickManager.Pause();
     }
-
+    
     public override void DoWindowContents(Rect inRect)
     {
         Text.Font = GameFont.Medium;
@@ -65,54 +94,265 @@ public class Dialog_PaintWeaponMultiColor : Window
         Widgets.Label(rect, weapon.Label.CapitalizeFirst());
         Text.Anchor = TextAnchor.UpperLeft;
         Text.Font = GameFont.Small;
+        
         inRect.yMin = rect.yMax + 4f;
+        
         var rect2 = inRect;
         rect2.yMax -= ButSize.y + 4f;
+
+        Rect iconRect;
+
+        if (!weaponDecorations.NullOrEmpty())
+        {
+            rect2.width /= 2;
+
+            var rect3 = new Rect(rect2)
+            {
+                x = rect2.xMax
+            };
+
+            iconRect = DrawGraphicIcon(rect2);
+            if (MultiColorComp != null)
+            {
+                DrawWeaponColoring(rect2, iconRect);
+            }
+            DrawDecorations(rect3);
+        }
+        else
+        {
+            iconRect = DrawGraphicIcon(rect2);
+            if (MultiColorComp != null)
+            {
+                DrawWeaponColoring(rect2, iconRect);
+            }
+        }
         
-        DrawWeaponColoring(rect2);
-            
         DrawBottomButtons(inRect);
     }
 
-    private void DrawWeaponColoring(Rect inRect)
+    private Rect DrawGraphicIcon(Rect inRect)
     {
         var iconRect = inRect.TakeTopPart(inRect.height / 2f);
         iconRect.width = iconRect.height;
         iconRect.x += inRect.width / 2 - iconRect.width / 2;
 
         iconRect = iconRect.ContractedBy(1);
-
+        
         if (cachedMaterial == null || recache)
         {
-            var path = weapon.def.graphicData.texPath;
+            recache = false;
+            
+            var path = selectedAlternateBaseForm?.drawnTextureIconPath ?? weapon.def.graphicData.texPath;
             var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
-            var graphic = MultiColorUtils.GetGraphic<Graphic_Single>(path, shader, weapon.def.graphicData.drawSize, multiColor.DrawColor, multiColor.DrawColorTwo, multiColor.DrawColorThree, weapon.Graphic.data, null);
+
+            Graphic graphic;
+            if (MultiColorComp != null)
+            {
+                graphic = MultiColorUtils.GetGraphic<Graphic_Single>(path, shader, weapon.def.graphicData.drawSize, MultiColorComp.DrawColor, MultiColorComp.DrawColorTwo, MultiColorComp.DrawColorThree, weapon.Graphic.data);
+            }
+            else
+            {
+                graphic = GraphicDatabase.Get<Graphic_Single>(path, shader, weapon.def.graphicData.drawSize, weapon.DrawColor, weapon.DrawColorTwo, weapon.def.graphicData);
+            }
+            
             var material = graphic.MatSouth;
             cachedMaterial = material;
-            recache = false;
         }
         
         Widgets.DrawMenuSection(iconRect.ContractedBy(-1));
-        Graphics.DrawTexture(iconRect, cachedMaterial.mainTexture, cachedMaterial);
+        Widgets.DrawTextureFitted(iconRect, cachedMaterial.mainTexture, 1f, cachedMaterial);
+        if (WeaponDecorationComp != null)
+        {
+            foreach (var graphic in WeaponDecorationComp.Graphics)
+            {
+                Widgets.DrawTextureFitted(iconRect, graphic.MatSouth.mainTexture, 1f, graphic.MatSingle);
+            }
+        }
+
+        return iconRect;
+    }
+    
+    private Vector2 weaponDecorationScrollPosition;
+    private float curY;
+    private void DrawDecorations(Rect inRect)
+    {
+        inRect = inRect.ContractedBy(10);
+        inRect.yMin -= 9f;
         
+        var viewRect = new Rect(inRect);
+        viewRect.height -= 16f;
+        viewRect.width -= 16f;
+        
+        var headerHeight = viewRect.height / 12;
+        var decoHeight = viewRect.width / 4;
+        var iconSize = new Vector2(decoHeight, decoHeight);
+        
+        viewRect.height = curY;
+        
+        var curX = viewRect.x;
+        curY = inRect.y;
+        Widgets.DrawMenuSection(inRect.ContractedBy(-1));
+        Widgets.BeginScrollView(inRect, ref weaponDecorationScrollPosition, viewRect);
+        
+        var rowExpanded = false;
+        
+        foreach (var weaponDecoration in weaponDecorations)
+        {
+            var headerRect = new Rect(viewRect)
+            {
+                height = headerHeight,
+                y = curY
+            };
+            curY += headerRect.height;
+            headerRect = headerRect.ContractedBy(5f);
+            
+            Widgets.DrawMenuSection(headerRect.ContractedBy(-1));
+            Text.Anchor = TextAnchor.MiddleCenter;
+            Widgets.Label(headerRect, weaponDecoration.Key.label);
+            Text.Anchor = TextAnchor.UpperLeft;
+            
+            for (var i = 0; i < weaponDecoration.Value.Count; i++)
+            {
+                var curDecoIsIncompatible = selectedAlternateBaseForm != null && selectedAlternateBaseForm.incompatibleWeaponDecorations.Contains(weaponDecoration.Value[i]);
+                var hasDeco = WeaponDecorationComp.WeaponDecorations.ContainsKey(weaponDecoration.Value[i]);
+                
+                var position = new Vector2(curX, curY);
+                var iconRect = new Rect(position, iconSize);
+                curX += iconRect.width;
+                    
+                iconRect = iconRect.ContractedBy(5f);
+                
+                if (hasDeco)
+                {
+                    Widgets.DrawStrongHighlight(iconRect.ExpandedBy(3f));
+                }
+                
+                var color = Color.white;
+                if (Mouse.IsOver(iconRect))
+                {
+                    color = GenUI.MouseoverColor;
+                    if (curDecoIsIncompatible || (selectedAlternateBaseForm == null && weaponDecoration.Value[i].isIncompatibleWithBaseTexture))
+                    {
+                        TooltipHandler.TipRegion(iconRect, "BEWH.Framework.WeaponDecoration.IncompatibleWithCurrentAltBase".Translate());
+                    }
+                }
+                if (curDecoIsIncompatible || (selectedAlternateBaseForm == null && weaponDecoration.Value[i].isIncompatibleWithBaseTexture))
+                {
+                    color = Color.gray;
+                }
+                GUI.color = color;
+                GUI.DrawTexture(iconRect, Command.BGTexShrunk);
+                GUI.color = Color.white;
+                GUI.DrawTexture(iconRect, weaponDecoration.Value[i].Icon);
+                if (curDecoIsIncompatible)
+                {
+                    continue;
+                }
+                
+                if (Widgets.ButtonInvisible(iconRect))
+                {
+                    WeaponDecorationComp.AddOrRemoveDecoration(weaponDecoration.Value[i]);
+                    recache = true;
+                }
+                
+                if (weaponDecoration.Value[i].colourable && WeaponDecorationComp.WeaponDecorations.ContainsKey(weaponDecoration.Value[i]))
+                {
+                    rowExpanded = true;
+                    
+                    var bottomRect = new Rect(new Vector2(iconRect.x, iconRect.yMax + 3f), iconRect.size);
+                    bottomRect.height /= 3;
+                    bottomRect = bottomRect.ContractedBy(2f);
+                    
+                    Rect colourSelection;
+                    Rect colourSelectionTwo;
+                    Rect colourSelectionThree;
+                
+                    var colorAmount = weaponDecoration.Value[i].colorAmount;
+                    
+                    switch (colorAmount)
+                    {
+                        case 1:
+                            colourSelection = new Rect(bottomRect);
+                        
+                            PrimaryColorBox(colourSelection, weaponDecoration.Value[i]);
+                            break;
+                        case 2:
+                            colourSelection = new Rect(bottomRect);
+                            colourSelection.width /= 2;
+                            colourSelectionTwo = new Rect(colourSelection)
+                            {
+                                x = colourSelection.xMax
+                            };
+
+                            PrimaryColorBox(colourSelection, weaponDecoration.Value[i]);
+                            SecondaryColorBox(colourSelectionTwo, weaponDecoration.Value[i]);
+                            break;
+                        case 3:
+                            colourSelection = new Rect(bottomRect);
+                            colourSelection.width /= 3;
+                            colourSelectionTwo = new Rect(colourSelection)
+                            {
+                                x = colourSelection.xMax
+                            };
+                            colourSelectionThree = new Rect(colourSelectionTwo)
+                            {
+                                x = colourSelectionTwo.xMax
+                            };
+
+                            PrimaryColorBox(colourSelection, weaponDecoration.Value[i]);
+                            SecondaryColorBox(colourSelectionTwo, weaponDecoration.Value[i]);
+                            TertiaryColorBox(colourSelectionThree, weaponDecoration.Value[i]);
+                            break;
+                        default:
+                            Log.Warning("Wrong setup in " + weaponDecoration.Value[i] + "colorAmount is more than 3 or less than 1");
+                            break;
+                    }
+                }
+                
+                if (i != 0 && (i+1) % 4 == 0 || i == weaponDecoration.Value.Count - 1)
+                {
+                    curY += iconSize.x;
+                    curX = viewRect.x;
+                    if (rowExpanded)
+                    {
+                        curY += iconRect.height/3;
+                        rowExpanded = false;
+                    }
+                }
+            }
+        }
+        Widgets.EndScrollView();
+    }
+
+    private Dictionary<AlternateBaseFormDef, Material> cachedAlternateBaseForms = new Dictionary<AlternateBaseFormDef, Material>();
+    private void DrawWeaponColoring(Rect inRect, Rect iconRect)
+    {
         var presetRect = new Rect(iconRect)
         {
             y = iconRect.yMax
         };
-        presetRect.height /= 3;
-        presetRect.width *= 2;
-        presetRect.x -= presetRect.width / 4;
-        presetRect.y += presetRect.height / 3;
-        
+        presetRect.height /= 8;
+        presetRect.y += presetRect.height*1.5f;
+
         var editPresetRect = new Rect(presetRect);
-        editPresetRect.width /= 2;
-        editPresetRect = editPresetRect.ContractedBy(30);
+        editPresetRect.width /= 3;
         
-        var selectPresetRect = new Rect(presetRect);
-        selectPresetRect.width /= 2;
-        selectPresetRect.x += selectPresetRect.width;
-        selectPresetRect = selectPresetRect.ContractedBy(30);
+        var selectBaseFormRect = new Rect(editPresetRect)
+        {
+            x = editPresetRect.xMax
+        };
+
+        var selectPresetRect = new Rect(selectBaseFormRect)
+        {
+            x = selectBaseFormRect.xMax
+        };
         
+        editPresetRect.ContractedBy(10f);
+        editPresetRect.x -= 5;
+        selectBaseFormRect.ContractedBy(10f);
+        selectPresetRect.ContractedBy(10f);
+        selectPresetRect.x += 5;
+
         //Select button
         if (Widgets.ButtonText(selectPresetRect, "BEWH.Framework.ApparelMultiColor.SelectPreset".Translate()))
         {
@@ -120,9 +360,9 @@ public class Dialog_PaintWeaponMultiColor : Window
             //Default Color of weapon
             var defaultMenuOption = new FloatMenuOption("BEWH.Framework.CommonKeyword.Default".Translate(), delegate
             {
-                multiColor.DrawColor = originalColor.col1;
-                multiColor.DrawColorTwo = originalColor.col2;
-                multiColor.DrawColorThree = originalColor.col3;
+                MultiColorComp.DrawColor = originalColor.col1;
+                MultiColorComp.DrawColorTwo = originalColor.col2;
+                MultiColorComp.DrawColorThree = originalColor.col3;
                 recache = true;
                             
             }, Core40kUtils.ThreeColourPreview(originalColor.col1, originalColor.col2, originalColor.col3, 3), Color.white);
@@ -131,9 +371,9 @@ public class Dialog_PaintWeaponMultiColor : Window
             {
                 var menuOption = new FloatMenuOption(preset.label, delegate
                 {
-                    multiColor.DrawColor = preset.primaryColour;
-                    multiColor.DrawColorTwo = preset.secondaryColour;
-                    multiColor.DrawColorThree = preset.tertiaryColour ?? preset.secondaryColour;
+                    MultiColorComp.DrawColor = preset.primaryColour;
+                    MultiColorComp.DrawColorTwo = preset.secondaryColour;
+                    MultiColorComp.DrawColorThree = preset.tertiaryColour ?? preset.secondaryColour;
                     recache = true;
                             
                 }, Core40kUtils.ThreeColourPreview(preset.primaryColour, preset.secondaryColour, preset.tertiaryColour, preset.colorAmount), Color.white);
@@ -144,9 +384,9 @@ public class Dialog_PaintWeaponMultiColor : Window
             {
                 var menuOption = new FloatMenuOption(preset.name.CapitalizeFirst(), delegate
                 {
-                    multiColor.DrawColor = preset.primaryColour;
-                    multiColor.DrawColorTwo = preset.secondaryColour;
-                    multiColor.DrawColorThree = preset.tertiaryColour ?? preset.secondaryColour;
+                    MultiColorComp.DrawColor = preset.primaryColour;
+                    MultiColorComp.DrawColorTwo = preset.secondaryColour;
+                    MultiColorComp.DrawColorThree = preset.tertiaryColour ?? preset.secondaryColour;
                     recache = true;
                             
                 }, Core40kUtils.ThreeColourPreview(preset.primaryColour, preset.secondaryColour, preset.tertiaryColour, 3), Color.white);
@@ -169,7 +409,7 @@ public class Dialog_PaintWeaponMultiColor : Window
             {
                 var menuOption = new FloatMenuOption(preset.name, delegate
                 {
-                    ModSettings.UpdatePreset(preset, multiColor.DrawColor, multiColor.DrawColorTwo, multiColor.DrawColorThree);
+                    ModSettings.UpdatePreset(preset, MultiColorComp.DrawColor, MultiColorComp.DrawColorTwo, MultiColorComp.DrawColorThree);
                 }, Widgets.PlaceholderIconTex, Color.white);
                 menuOption.extraPartWidth = 30f;
                 menuOption.extraPartOnGUI = rect1 => Core40kUtils.DeletePreset(rect1, preset);
@@ -182,9 +422,9 @@ public class Dialog_PaintWeaponMultiColor : Window
             {
                 var newColourPreset = new ColourPreset
                 {
-                    primaryColour = multiColor.DrawColor,
-                    secondaryColour = multiColor.DrawColorTwo,
-                    tertiaryColour = multiColor.DrawColorThree,
+                    primaryColour = MultiColorComp.DrawColor,
+                    secondaryColour = MultiColorComp.DrawColorTwo,
+                    tertiaryColour = MultiColorComp.DrawColorThree,
                     appliesToKind = PresetType.Weapon,
                 };
                 GUI.SetNextControlName("BEWH_Preset_Window");
@@ -197,8 +437,118 @@ public class Dialog_PaintWeaponMultiColor : Window
                 Find.WindowStack.Add(new FloatMenu(list));
             }
         }
+        
+        //Switch base texture
+        if (MultiColorComp != null && Widgets.ButtonText(selectBaseFormRect, "BEWH.Framework.WeaponDecoration.AlternativeBaseTexture".Translate()))
+        {
+            var list = new List<FloatMenuOption>();
+            var mouseOffset = UI.MousePositionOnUI;
 
-        Rect colorRects;
+            foreach (var alternateBaseForm in alternateBaseForms)
+            {
+                if (alternateBaseForm == selectedAlternateBaseForm)
+                {
+                    continue;
+                }
+
+                if (!cachedAlternateBaseForms.ContainsKey(alternateBaseForm) || recache)
+                {
+                    if (recache)
+                    {
+                        cachedAlternateBaseForms = new Dictionary<AlternateBaseFormDef, Material>();
+                    }
+
+                    var path = alternateBaseForm.drawnTextureIconPath;
+                    var shader = alternateBaseForm.shaderType?.Shader ?? Core40kDefOf.BEWH_CutoutThreeColor.Shader;
+                    var graphic = MultiColorUtils.GetGraphic<Graphic_Single>(path, shader,
+                        weapon.def.graphicData.drawSize, MultiColorComp.DrawColor, MultiColorComp.DrawColorTwo,
+                        MultiColorComp.DrawColorThree, weapon.Graphic.data);
+                    
+                    var material = graphic.MatSouth;
+                    cachedAlternateBaseForms.Add(alternateBaseForm, material);
+                    recache = false;
+                }
+
+                var menuOption = new FloatMenuOption(alternateBaseForm.label, delegate 
+                {
+                        MultiColorComp.currentAlternateBaseForm = alternateBaseForm;
+                        selectedAlternateBaseForm = alternateBaseForm;
+                        foreach (var weaponDecorationDef in alternateBaseForm.incompatibleWeaponDecorations)
+                        {
+                            if (WeaponDecorationComp.WeaponDecorations.ContainsKey(weaponDecorationDef))
+                            {
+                                WeaponDecorationComp.AddOrRemoveDecoration(weaponDecorationDef);
+                            }
+                        }
+                        recache = true;
+                    }, Widgets.PlaceholderIconTex, Color.white, mouseoverGuiAction: delegate(Rect rect)
+                    {
+                        if (!Mouse.IsOver(rect))
+                        {
+                            return;
+                        }
+                        var pictureSize = new Vector2(200, 200);
+                        var mouseAttachedWindowPos = new Vector2(rect.width, rect.height);
+                        mouseAttachedWindowPos.x += mouseOffset.x;
+                        mouseAttachedWindowPos.y += mouseOffset.y;
+                        
+                        var pictureRect = new Rect(mouseAttachedWindowPos, pictureSize);
+
+                        Find.WindowStack.ImmediateWindow(1859615242, pictureRect, WindowLayer.Super, delegate
+                        {
+                            Widgets.DrawMenuSection(pictureRect.AtZero());
+                            Widgets.DrawTextureFitted(pictureRect.AtZero(), cachedAlternateBaseForms[alternateBaseForm].mainTexture, 1f, cachedAlternateBaseForms[alternateBaseForm]);
+                        });
+                    });
+                
+                    list.Add(menuOption);
+            }
+            
+            if (selectedAlternateBaseForm != null)
+            {
+                var menuOptionDefault = new FloatMenuOption("BEWH.Framework.CommonKeyword.Default".Translate(), delegate
+                {
+                    MultiColorComp.currentAlternateBaseForm = null;
+                    selectedAlternateBaseForm = null;
+                    var decosIncompatibleWithBase = WeaponDecorationComp.WeaponDecorations.Keys
+                        .Where(def => def.isIncompatibleWithBaseTexture).ToList();
+                    foreach (var weaponDecorationDef in decosIncompatibleWithBase)
+                    {
+                        WeaponDecorationComp.AddOrRemoveDecoration(weaponDecorationDef);
+                    }
+                    recache = true;
+                }, Widgets.PlaceholderIconTex, Color.white, mouseoverGuiAction: delegate(Rect rect)
+                {
+                    if (!Mouse.IsOver(rect))
+                    {
+                        return;
+                    }
+                    var pictureSize = new Vector2(200, 200);
+                    var mouseAttachedWindowPos = new Vector2(rect.width, rect.height);
+                    mouseAttachedWindowPos.x += mouseOffset.x;
+                    mouseAttachedWindowPos.y += mouseOffset.y;
+                        
+                    var pictureRect = new Rect(mouseAttachedWindowPos, pictureSize);
+                    var graphic = MultiColorComp.GetSingleGraphic(true);
+                    
+                    Find.WindowStack.ImmediateWindow(1859615242, pictureRect, WindowLayer.Super, delegate
+                    {
+                        Widgets.DrawMenuSection(pictureRect.AtZero());
+                        Widgets.DrawTextureFitted(pictureRect.AtZero(), graphic.MatSingle.mainTexture, 1f, graphic.MatSingle);
+                    });
+                });
+                list.Add(menuOptionDefault);
+            }
+            if (list.NullOrEmpty())
+            {
+                var menuOptionNone = new FloatMenuOption("NoneBrackets".Translate(), null);
+                list.Add(menuOptionNone);
+            }
+            
+            Find.WindowStack.Add(new FloatMenu(list));
+        }
+        
+        var colorRects = inRect.TakeBottomPart(inRect.height / 4f);;
         Rect colorOneRect;
         Rect colorTwoRect;
         Rect colorThreeRect;
@@ -206,7 +556,6 @@ public class Dialog_PaintWeaponMultiColor : Window
         switch (weaponMaskAmount)
         {
             case 1:
-                colorRects = inRect.TakeBottomPart(inRect.height / 2f);
                 colorOneRect = new Rect(colorRects);
                 colorOneRect.y = colorRects.yMax - colorRects.height / 2 - colorOneRect.height / 2;
                 colorOneRect = colorOneRect.ContractedBy(10);
@@ -214,7 +563,6 @@ public class Dialog_PaintWeaponMultiColor : Window
                 PrimaryColorBox(colorOneRect);
                 break;
             case 2:
-                colorRects = inRect.TakeBottomPart(inRect.height / 2f);
                 colorOneRect = new Rect(colorRects);
                 colorOneRect.width /= 2;
                 colorOneRect.y = colorRects.yMax - colorRects.height / 2 - colorOneRect.height / 2;
@@ -229,7 +577,6 @@ public class Dialog_PaintWeaponMultiColor : Window
                 SecondaryColorBox(colorTwoRect);
                 break;
             case 3:
-                colorRects = inRect.TakeBottomPart(inRect.height / 2f);
                 colorOneRect = new Rect(colorRects);
                 colorOneRect.width /= 3;
                 colorOneRect.y = colorRects.yMax - colorRects.height / 2 - colorOneRect.height / 2;
@@ -255,19 +602,20 @@ public class Dialog_PaintWeaponMultiColor : Window
         }
     }
     
+    //Multicolor color boxes
     private void PrimaryColorBox(Rect colorOneRect)
     {
         Widgets.DrawMenuSection(colorOneRect.ContractedBy(-1));
-        Widgets.DrawRectFast(colorOneRect, multiColor.DrawColor);
+        Widgets.DrawRectFast(colorOneRect, MultiColorComp.DrawColor);
         Text.Anchor = TextAnchor.MiddleCenter;
         Widgets.Label(colorOneRect, "BEWH.Framework.ApparelMultiColor.PrimaryColor".Translate());
         TooltipHandler.TipRegion(colorOneRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
         Text.Anchor = TextAnchor.UpperLeft;
         if (Widgets.ButtonInvisible(colorOneRect))
         {
-            Find.WindowStack.Add( new Dialog_ColourPicker( multiColor.DrawColor, ( newColour ) =>
+            Find.WindowStack.Add( new Dialog_ColourPicker( MultiColorComp.DrawColor, ( newColour ) =>
             {
-                multiColor.DrawColor = newColour;
+                MultiColorComp.DrawColor = newColour;
                 recache = true;
             } ) );
         }
@@ -276,16 +624,16 @@ public class Dialog_PaintWeaponMultiColor : Window
     private void SecondaryColorBox(Rect colorTwoRect)
     {
         Widgets.DrawMenuSection(colorTwoRect.ContractedBy(-1));
-        Widgets.DrawRectFast(colorTwoRect, multiColor.DrawColorTwo);
+        Widgets.DrawRectFast(colorTwoRect, MultiColorComp.DrawColorTwo);
         Text.Anchor = TextAnchor.MiddleCenter;
         Widgets.Label(colorTwoRect, "BEWH.Framework.ApparelMultiColor.SecondaryColor".Translate());
         TooltipHandler.TipRegion(colorTwoRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
         Text.Anchor = TextAnchor.UpperLeft;
         if (Widgets.ButtonInvisible(colorTwoRect))
         {
-            Find.WindowStack.Add( new Dialog_ColourPicker( multiColor.DrawColorTwo, ( newColour ) =>
+            Find.WindowStack.Add( new Dialog_ColourPicker( MultiColorComp.DrawColorTwo, ( newColour ) =>
             {
-                multiColor.DrawColorTwo = newColour;
+                MultiColorComp.DrawColorTwo = newColour;
                 recache = true;
             } ) );
         }
@@ -294,17 +642,69 @@ public class Dialog_PaintWeaponMultiColor : Window
     private void TertiaryColorBox(Rect colorThreeRect)
     {
         Widgets.DrawMenuSection(colorThreeRect.ContractedBy(-1));
-        Widgets.DrawRectFast(colorThreeRect, multiColor.DrawColorThree);
+        Widgets.DrawRectFast(colorThreeRect, MultiColorComp.DrawColorThree);
         Text.Anchor = TextAnchor.MiddleCenter;
         Widgets.Label(colorThreeRect, "BEWH.Framework.ApparelMultiColor.TertiaryColor".Translate());
         TooltipHandler.TipRegion(colorThreeRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
         Text.Anchor = TextAnchor.UpperLeft;
         if (Widgets.ButtonInvisible(colorThreeRect))
         {
-            Find.WindowStack.Add( new Dialog_ColourPicker( multiColor.DrawColorThree, ( newColour ) =>
+            Find.WindowStack.Add( new Dialog_ColourPicker( MultiColorComp.DrawColorThree, ( newColour ) =>
             {
-                multiColor.DrawColorThree = newColour;
+                MultiColorComp.DrawColorThree = newColour;
                 recache = true;
+            } ) );
+        }
+    }
+    
+    //Attachments color boxes
+    private void PrimaryColorBox(Rect colourSelection, WeaponDecorationDef weaponDecorationDef)
+    {
+        colourSelection = colourSelection.ContractedBy(2f);
+        Widgets.DrawMenuSection(colourSelection);
+        colourSelection = colourSelection.ContractedBy(1f);
+        Widgets.DrawRectFast(colourSelection, WeaponDecorationComp.WeaponDecorations[weaponDecorationDef].Color);
+        TooltipHandler.TipRegion(colourSelection, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        if (Widgets.ButtonInvisible(colourSelection))
+        {
+            Find.WindowStack.Add( new Dialog_ColourPicker( WeaponDecorationComp.WeaponDecorations[weaponDecorationDef].Color, ( newColour ) =>
+            {
+                recache = true;
+                WeaponDecorationComp.UpdateDecorationColourOne(weaponDecorationDef, newColour);
+            } ) );
+        }
+    }
+    
+    private void SecondaryColorBox(Rect colourSelectionTwo, WeaponDecorationDef weaponDecorationDef)
+    {
+        colourSelectionTwo = colourSelectionTwo.ContractedBy(2f);
+        Widgets.DrawMenuSection(colourSelectionTwo);
+        colourSelectionTwo = colourSelectionTwo.ContractedBy(1f);
+        Widgets.DrawRectFast(colourSelectionTwo, WeaponDecorationComp.WeaponDecorations[weaponDecorationDef].ColorTwo);
+        TooltipHandler.TipRegion(colourSelectionTwo, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        if (Widgets.ButtonInvisible(colourSelectionTwo))
+        {
+            Find.WindowStack.Add( new Dialog_ColourPicker( WeaponDecorationComp.WeaponDecorations[weaponDecorationDef].ColorTwo, ( newColour ) =>
+            {
+                recache = true;
+                WeaponDecorationComp.UpdateDecorationColourTwo(weaponDecorationDef, newColour);
+            } ) );
+        }
+    }
+    
+    private void TertiaryColorBox(Rect colourSelectionThree, WeaponDecorationDef weaponDecorationDef)
+    {
+        colourSelectionThree = colourSelectionThree.ContractedBy(2f);
+        Widgets.DrawMenuSection(colourSelectionThree);
+        colourSelectionThree = colourSelectionThree.ContractedBy(1f);
+        Widgets.DrawRectFast(colourSelectionThree, WeaponDecorationComp.WeaponDecorations[weaponDecorationDef].ColorThree);
+        TooltipHandler.TipRegion(colourSelectionThree, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        if (Widgets.ButtonInvisible(colourSelectionThree))
+        {
+            Find.WindowStack.Add( new Dialog_ColourPicker( WeaponDecorationComp.WeaponDecorations[weaponDecorationDef].ColorThree, ( newColour ) =>
+            {
+                recache = true;
+                WeaponDecorationComp.UpdateDecorationColourThree(weaponDecorationDef, newColour);
             } ) );
         }
     }
@@ -339,7 +739,8 @@ public class Dialog_PaintWeaponMultiColor : Window
 
     private void Reset()
     {
-        multiColor.Reset();
+        MultiColorComp?.Reset();
+        WeaponDecorationComp?.Reset();
         recache = true;
         
         pawn.Drawer.renderer.SetAllGraphicsDirty();
@@ -347,7 +748,9 @@ public class Dialog_PaintWeaponMultiColor : Window
 
     private void Accept()
     {
-        multiColor.Notify_GraphicChanged();
-        multiColor.SetOriginals();
+        MultiColorComp?.Notify_GraphicChanged();
+        WeaponDecorationComp?.Notify_GraphicChanged();
+        MultiColorComp?.SetOriginals();
+        WeaponDecorationComp?.SetOriginals();
     }
 }
