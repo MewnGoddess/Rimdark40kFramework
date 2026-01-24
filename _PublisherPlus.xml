@@ -3,7 +3,9 @@
   <Excluded>
     <exclude>.git</exclude>
     <exclude>1.5\Source</exclude>
+    <exclude>1.6\Defs\ThingDef_Astartes.xml</exclude>
     <exclude>1.6\Source</exclude>
+    <exclude>Textures\Test</exclude>
     <exclude>TODOLIST.md</exclude>
   </Excluded>
 </Configuration>

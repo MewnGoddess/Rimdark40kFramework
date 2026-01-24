@@ -6,16 +6,18 @@
         <nomatch Class="PatchOperationAdd">
             <xpath>Defs/AlienRace.ThingDef_AlienRace</xpath>
             <value>
-                <comps />
+                <comps>
+                    <li Class="Core40k.CompProperties_RankInfo"/>
+                </comps>
             </value>
         </nomatch>
-    </Operation>
-
-    <Operation Class="PatchOperationAdd">
-        <xpath>Defs/AlienRace.ThingDef_AlienRace/comps</xpath>
-        <value>
-            <li Class="Core40k.CompProperties_RankInfo"/>
-        </value>
+        <match Class="PatchOperationAdd">
+            <xpath>Defs/AlienRace.ThingDef_AlienRace/comps</xpath>
+            <value>
+                <li Class="Core40k.CompProperties_RankInfo"/>
+            </value>
+        </match>
+        <success>Always</success>
     </Operation>
 
 </Patch>

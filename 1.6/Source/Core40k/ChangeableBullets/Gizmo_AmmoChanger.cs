@@ -1,7 +1,10 @@
 using System.Collections.Generic;
+using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.AI;
+using Verse.Sound;
+using Verse.Steam;
 
 namespace Core40k;
 
@@ -22,6 +25,21 @@ public class Gizmo_AmmoChanger : Command
         var rect = new Rect(topLeft.x, topLeft.y, GetWidth(maxWidth), 75f);
         TooltipHandler.TipRegion(rect, "BEWH.Framework.AmmoChanger.GizmoInfo".Translate(compAmmoChanger.CurrentlySelectedProjectile.LabelCap));
         Widgets.DrawWindowBackground(rect);
+        
+        Color color = Color.white;
+        bool flag = false;
+        if (Mouse.IsOver(rect))
+        {
+            flag = true;
+            if (!disabled)
+            {
+                color = GenUI.MouseoverColor;
+            }
+        }
+        var material = parms.lowLight ? TexUI.GrayscaleGUI : null;
+        GUI.color = parms.lowLight ? LowLightBgColor : color;
+        GenUI.DrawTextureWithMaterial(rect, parms.shrunk ? BGTextureShrunk : BGTexture, material);
+        GUI.color = color;
         
         if (Widgets.ButtonImage(rect, compAmmoChanger.CurrentlySelectedProjectile.uiIcon))
         {
@@ -59,18 +77,23 @@ public class Gizmo_AmmoChanger : Command
             Find.WindowStack.Add(new FloatMenu(list));
         }
         
+        //Text on bottom
         Text.Font = GameFont.Tiny;
         var num = Text.CalcHeight(LabelCap, rect.width + 0.1f);
         var rect3 = new Rect(rect.x, rect.yMax - num + 12f, rect.width, num);
-        GUI.DrawTexture(rect3, TexUI.GrayTextBG);
+        GUI.DrawTexture(rect3, BGTexShrunk);
         Text.Anchor = TextAnchor.UpperCenter;
         Widgets.Label(rect3, LabelCap);
         Text.Anchor = TextAnchor.UpperLeft;
         Text.Font = GameFont.Small;
         
-        return new GizmoResult(GizmoState.Clear);;
+        if (flag)
+        {
+            return new GizmoResult(GizmoState.Mouseover, null);
+        }
+        return new GizmoResult(GizmoState.Clear, null);
     }
-
+    
     public override float GetWidth(float maxWidth)
     {
         return Width;

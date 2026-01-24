@@ -4,6 +4,9 @@
     <ResearchTabDef>
         <defName>BEWH_WH40kTab</defName>
         <label>RimDark 40k</label>
+        <generalTitle>RimDark research projects</generalTitle>
+        <generalDescription>Unlock RimDark technologies.</generalDescription>
+
     </ResearchTabDef>
 
 </Defs>
