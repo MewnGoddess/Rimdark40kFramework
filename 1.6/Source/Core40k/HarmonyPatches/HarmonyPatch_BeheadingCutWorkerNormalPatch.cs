@@ -14,7 +14,7 @@ public class BeheadingCutWorkerNormalPatch
             return;
         }
 
-        var beheadingCut = dinfo.Weapon.GetModExtension<DefModExtension_BeheadingCut>();
+        var beheadingCut = dinfo.Weapon?.GetModExtension<DefModExtension_BeheadingCut>();
         if (beheadingCut == null)
         {
             return;
