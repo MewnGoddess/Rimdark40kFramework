@@ -26,11 +26,10 @@ public class Gizmo_AmmoChanger : Command
         TooltipHandler.TipRegion(rect, "BEWH.Framework.AmmoChanger.GizmoInfo".Translate(compAmmoChanger.CurrentlySelectedProjectile.LabelCap));
         Widgets.DrawWindowBackground(rect);
         
-        Color color = Color.white;
-        bool flag = false;
+        var color = Color.white;
+        var flag = false;
         if (Mouse.IsOver(rect))
         {
-            flag = true;
             if (!disabled)
             {
                 color = GenUI.MouseoverColor;
@@ -39,9 +38,9 @@ public class Gizmo_AmmoChanger : Command
         var material = parms.lowLight ? TexUI.GrayscaleGUI : null;
         GUI.color = parms.lowLight ? LowLightBgColor : color;
         GenUI.DrawTextureWithMaterial(rect, parms.shrunk ? BGTextureShrunk : BGTexture, material);
-        GUI.color = color;
+        GUI.color = Color.white;
         
-        if (Widgets.ButtonImage(rect, compAmmoChanger.CurrentlySelectedProjectile.uiIcon))
+        if (Widgets.ButtonInvisible(rect))
         {
             var list = new List<FloatMenuOption>();
             foreach (var availableProjectile in compAmmoChanger.AvailableProjectiles)
@@ -77,20 +76,18 @@ public class Gizmo_AmmoChanger : Command
             Find.WindowStack.Add(new FloatMenu(list));
         }
         
+        Widgets.DrawTextureFitted(rect, compAmmoChanger.CurrentlySelectedProjectile.uiIcon, 1f);
+        
         //Text on bottom
         Text.Font = GameFont.Tiny;
         var num = Text.CalcHeight(LabelCap, rect.width + 0.1f);
         var rect3 = new Rect(rect.x, rect.yMax - num + 12f, rect.width, num);
-        GUI.DrawTexture(rect3, BGTexShrunk);
+        GUI.DrawTexture(rect3, TexUI.GrayTextBG);
         Text.Anchor = TextAnchor.UpperCenter;
         Widgets.Label(rect3, LabelCap);
         Text.Anchor = TextAnchor.UpperLeft;
         Text.Font = GameFont.Small;
         
-        if (flag)
-        {
-            return new GizmoResult(GizmoState.Mouseover, null);
-        }
         return new GizmoResult(GizmoState.Clear, null);
     }
     
