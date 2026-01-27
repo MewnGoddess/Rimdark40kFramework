@@ -27,7 +27,6 @@ public class Gizmo_AmmoChanger : Command
         Widgets.DrawWindowBackground(rect);
         
         var color = Color.white;
-        var flag = false;
         if (Mouse.IsOver(rect))
         {
             if (!disabled)
