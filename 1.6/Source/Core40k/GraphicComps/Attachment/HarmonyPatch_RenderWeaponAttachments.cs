@@ -61,8 +61,23 @@ public static class RenderWeaponAttachments
         
         foreach (var decoCompGraphic in decoComp.Graphics)
         {
-            var material = decoCompGraphic.MatSingle;
-            var matrix = Matrix4x4.TRS(s: new Vector3(decoCompGraphic.drawSize.x, 0f, decoCompGraphic.drawSize.y), pos: drawLoc, q: Quaternion.AngleAxis(num, Vector3.up));
+            var graphic = decoCompGraphic.Value;
+
+            var offset = Vector3.zero;
+            var drawSize = decoCompGraphic.Key.drawSize;
+            if (decoCompGraphic.Key.weaponSpecificDrawData != null && decoCompGraphic.Key.weaponSpecificDrawData.TryGetValue(eq.def.defName, out var value))
+            {
+                offset = value.OffsetForRot(Rot4.Invalid);
+                drawSize *= value.scale;
+            }
+            else if(decoCompGraphic.Key.drawData != null)
+            {
+                offset = decoCompGraphic.Key.drawData.OffsetForRot(Rot4.Invalid);
+                drawSize *= decoCompGraphic.Key.drawData.scale;
+            }
+            
+            var material = graphic.MatSingle;
+            var matrix = Matrix4x4.TRS(s: new Vector3(drawSize.x, 0f, drawSize.y), pos: drawLoc+offset, q: Quaternion.AngleAxis(num, Vector3.up));
             Graphics.DrawMesh(mesh, matrix, material, 0);
         }
     }

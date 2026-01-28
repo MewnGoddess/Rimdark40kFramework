@@ -36,8 +36,8 @@ public class CompWeaponDecoration : CompGraphicParent
     
     public bool recacheGraphics = true;
     
-    private List<Graphic> cachedGraphics = [];
-    public List<Graphic> Graphics => cachedGraphics;
+    private Dictionary<WeaponDecorationDef, Graphic> cachedGraphics = [];
+    public Dictionary<WeaponDecorationDef, Graphic> Graphics => cachedGraphics;
 
     public void RecacheGraphics()
     {
@@ -72,7 +72,7 @@ public class CompWeaponDecoration : CompGraphicParent
                     weaponDecoration.useMask ? weaponDecoration.defaultMask.maskPath : null);
             }
             
-            cachedGraphics.Add(graphic);
+            cachedGraphics.Add(weaponDecoration, graphic);
         }
     }
     

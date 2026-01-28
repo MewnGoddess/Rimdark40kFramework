@@ -181,6 +181,7 @@
     <Compile Include="Rank\CompRankInfo.cs" />
     <Compile Include="Rank\GameComponent_RankInfo.cs" />
     <Content Include="Rank\RankCategoryDefNEWTEMP.txt" />
+    <Compile Include="Rank\HarmonyPatch_RecreationFromSkill.cs" />
     <Compile Include="Rank\RankCategorySpecificData.cs" />
     <Compile Include="Rank\HarmonyPatch_CalculateAllowedRankLimitOnArrestPatch.cs" />
     <Compile Include="Rank\HarmonyPatch_CalculateAllowedRankLimitOnRecruitPatch.cs" />

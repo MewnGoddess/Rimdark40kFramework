@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RimWorld;
 using VEF.Abilities;
 using Verse;
 
@@ -39,6 +40,20 @@ public class CompRankInfo : ThingComp
     private GameComponent_RankInfo gameComponentRankInfo = null;
 
     public GameComponent_RankInfo GameComponentRankInfo => gameComponentRankInfo ??= Current.Game.GetComponent<GameComponent_RankInfo>();
+    
+    public List<SkillDef> recreationSkillFromRanks
+    {
+        get
+        {
+            List<SkillDef> recreationSkillFromRanks = [];
+            foreach (var rank in UnlockedRanks)
+            {
+                recreationSkillFromRanks.AddRange(rank.recreationFromSkills);
+            }
+
+            return recreationSkillFromRanks;
+        }
+    }
 
     public void UnlockRank(RankDef rank)
     {
@@ -82,6 +97,11 @@ public class CompRankInfo : ThingComp
                     comp.GiveAbility(ability);
                 }
             }
+        }
+        
+        if (rank.recreationFromSkills != null)
+        {
+            
         }
 
         if (rank.givesHediffs != null)

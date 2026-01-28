@@ -21,6 +21,8 @@ public static class Core40kDefOf
     
     public static StatDef BEWH_ArtificialPartsAffinityFactor;
     public static StatDef BEWH_RankLearningFactor;
+    
+    public static JoyKindDef BEWH_RecreationFromSkill;
 
     static Core40kDefOf()
     {

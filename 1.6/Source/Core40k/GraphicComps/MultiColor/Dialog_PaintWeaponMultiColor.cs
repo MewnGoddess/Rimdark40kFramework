@@ -165,7 +165,7 @@ public class Dialog_PaintWeaponMultiColor : Window
         {
             foreach (var graphic in WeaponDecorationComp.Graphics)
             {
-                Widgets.DrawTextureFitted(iconRect, graphic.MatSouth.mainTexture, 1f, graphic.MatSingle);
+                Widgets.DrawTextureFitted(iconRect, graphic.Value.MatSouth.mainTexture, 1f, graphic.Value.MatSingle);
             }
         }
 
