@@ -160,12 +160,33 @@ public class Dialog_PaintWeaponMultiColor : Window
         }
         
         Widgets.DrawMenuSection(iconRect.ContractedBy(-1));
+
         Widgets.DrawTextureFitted(iconRect, cachedMaterial.mainTexture, 1f, cachedMaterial);
+        
         if (WeaponDecorationComp != null)
         {
             foreach (var graphic in WeaponDecorationComp.Graphics)
             {
-                Widgets.DrawTextureFitted(iconRect, graphic.Value.MatSouth.mainTexture, 1f, graphic.Value.MatSingle);
+                var offset = Vector3.zero;
+                var drawSize = graphic.Key.drawSize;
+                if (graphic.Key.weaponSpecificDrawData != null && graphic.Key.weaponSpecificDrawData.TryGetValue(weapon.def.defName, out var value))
+                {
+                    offset = value.OffsetForRot(Rot4.Invalid);
+                    drawSize *= value.scale;
+                }
+                else if(graphic.Key.drawData != null)
+                {
+                    offset = graphic.Key.drawData.OffsetForRot(Rot4.Invalid);
+                    drawSize *= graphic.Key.drawData.scale;
+                }
+
+                var offsetRect = new Rect(iconRect);
+                offsetRect.width *= drawSize.x;
+                offsetRect.height *= drawSize.y;
+                offsetRect.x += offset.x * 200;
+                offsetRect.y -= offset.y * 200;
+                
+                Widgets.DrawTextureFitted(offsetRect, graphic.Value.MatSouth.mainTexture, 1f, graphic.Value.MatSingle);
             }
         }
 
