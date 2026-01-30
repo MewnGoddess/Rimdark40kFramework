@@ -129,6 +129,7 @@
     <Compile Include="GraphicComps\Decorative\Dialog_ConfirmDecorationPresetOverride.cs" />
     <Compile Include="GraphicComps\Decorative\Dialog_EditExtraDecorationPresets.cs" />
     <Compile Include="GraphicComps\Decorative\Dialog_ExtraDecorationMaskSelection.cs" />
+    <Compile Include="GraphicComps\Decorative\Dialog_PaintWeaponMultiColor.cs" />
     <Compile Include="GraphicComps\Decorative\DynamicPawnRenderNodeSetup_DecorativeAddons.cs" />
     <Compile Include="GraphicComps\Decorative\ExtraDecorationDef.cs" />
     <Compile Include="GraphicComps\Decorative\ExtraDecorationPreset.cs" />
@@ -158,7 +159,6 @@
     <Compile Include="GraphicComps\MultiColor\Dialog_ConfirmColorPresetOverride.cs" />
     <Compile Include="GraphicComps\MultiColor\Dialog_EditColourPresets.cs" />
     <Compile Include="GraphicComps\MultiColor\Dialog_PaintApparelMultiColor.cs" />
-    <Compile Include="GraphicComps\MultiColor\Dialog_PaintWeaponMultiColor.cs" />
     <Compile Include="GraphicComps\MultiColor\HarmonyPatch_MultiColorApparel.cs" />
     <Compile Include="GraphicComps\MultiColor\HarmonyPatch_MultiColorChangableOnThing.cs" />
     <Compile Include="GraphicComps\MultiColor\HarmonyPatch_ThingWithCompsMultiColorGraphicOverride.cs" />

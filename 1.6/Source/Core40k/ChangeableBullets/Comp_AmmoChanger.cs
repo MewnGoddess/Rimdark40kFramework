@@ -16,12 +16,11 @@ public class Comp_AmmoChanger : ThingComp
     
     private ThingDef nextProjectile;
     private ThingDef currentlySelectedProjectile;
-    public ThingDef CurrentlySelectedProjectile => currentlySelectedProjectile ??= AvailableProjectiles.FirstOrFallback(def => HasResearchForAmmo(def, out _)) ?? Equippable.PrimaryVerb.verbProps.defaultProjectile;
+    public ThingDef CurrentlySelectedProjectile => currentlySelectedProjectile ??= AvailableProjectiles?.FirstOrFallback(def => HasResearchForAmmo(def, out _)) ?? Equippable.PrimaryVerb.verbProps.defaultProjectile;
     
-    public DefModExtension_AmmoChanger DefModExtensionAmmoChanger => CurrentlySelectedProjectile.GetModExtension<DefModExtension_AmmoChanger>();
+    public DefModExtension_AmmoChanger DefModExtensionAmmoChanger => CurrentlySelectedProjectile?.GetModExtension<DefModExtension_AmmoChanger>();
     public int ShotsPerBurst => DefModExtensionAmmoChanger?.shotsPerBurst ?? 0;
     public float EffectiveRange => DefModExtensionAmmoChanger?.effectiveRange ?? 0;
-    public float WarmupTime => DefModExtensionAmmoChanger?.warmupTime ?? 0;
     
     public void LoadNextProjectile()
     {
