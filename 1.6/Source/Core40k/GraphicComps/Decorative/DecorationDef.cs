@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Core40k;
 using RimWorld;
 using UnityEngine;
@@ -65,18 +66,33 @@ public class DecorationDef : Def
     
     public List<DecorationFlag> decorationFlags = new();
     
-    public virtual bool HasRequirements(Pawn pawn)
+    public List<StatModifier> statOffsets = new List<StatModifier>();
+
+    public List<StatModifier> statFactors = new List<StatModifier>();
+    
+    public List<ConditionalStatAffecter> conditionalStatAffecters = new List<ConditionalStatAffecter>();
+    
+    public virtual bool HasRequirements(Pawn pawn, out string lockedReason)
     {
+        var reason = new StringBuilder();
+        var requirementFulfilled = true;
         if (mustHaveRank != null)
         {
             if (!pawn.HasComp<CompRankInfo>())
             {
-                return false;
+                reason.AppendLine("COMP ISSUE: SHOW PHONICMAS");
+                requirementFulfilled = false;
             }
             var comp = pawn.GetComp<CompRankInfo>();
-            if (mustHaveRank.All(rank => !comp.HasRank(rank)))
+            var missingRanks = (from rank in mustHaveRank where !comp.HasRank(rank) select rank.label.CapitalizeFirst()).ToList();
+            if (missingRanks.Count > 0)
             {
-                return false;
+                requirementFulfilled = false;
+                reason.AppendLine("BEWH.Framework.DecoRequirement.MissingRanks".Translate());
+                foreach (var rank in missingRanks)
+                {
+                    reason.AppendLine("BEWH.Framework.DecoRequirement.AppendedLabel".Translate(rank));
+                }
             }
         }
     
@@ -84,12 +100,18 @@ public class DecorationDef : Def
         {
             if (pawn.genes == null)
             {
-                return false;
+                requirementFulfilled = false;
             }
             
-            if (mustHaveGene.All(gene => !pawn.genes.HasActiveGene(gene)))
+            var missingGenes = (from gene in mustHaveGene where !pawn.genes.HasActiveGene(gene) select gene.label.CapitalizeFirst()).ToList();
+            if (missingGenes.Count > 0)
             {
-                return false;
+                requirementFulfilled = false;
+                reason.AppendLine("BEWH.Framework.DecoRequirement.MissingGenes".Translate());
+                foreach (var gene in missingGenes)
+                {
+                    reason.AppendLine("BEWH.Framework.DecoRequirement.AppendedLabel".Translate(gene));
+                }
             }
         }
 
@@ -97,12 +119,18 @@ public class DecorationDef : Def
         {
             if (pawn.story?.traits == null)
             {
-                return false;
+                requirementFulfilled = false;
             }
             
-            if (mustHaveTrait.All(trait => !pawn.story.traits.HasTrait(trait.traitDef, trait.degree)))
+            var missingTraits = (from trait in mustHaveTrait where !pawn.story.traits.HasTrait(trait.traitDef, trait.degree) select trait.traitDef.label.CapitalizeFirst()).ToList();
+            if (missingTraits.Count > 0)
             {
-                return false;
+                requirementFulfilled = false;
+                reason.AppendLine("BEWH.Framework.DecoRequirement.MissingTraits".Translate());
+                foreach (var trait in missingTraits)
+                {
+                    reason.AppendLine("BEWH.Framework.DecoRequirement.AppendedLabel".Translate(trait));
+                }
             }
         }
 
@@ -110,16 +138,24 @@ public class DecorationDef : Def
         {
             if (pawn.health?.hediffSet == null)
             {
-                return false;
+                requirementFulfilled = false;
             }
             
-            if (mustHaveHediff.All(hediff => !pawn.health.hediffSet.HasHediff(hediff)))
+            
+            var missingHediffs = (from hediff in mustHaveHediff where !pawn.health.hediffSet.HasHediff(hediff) select hediff.label.CapitalizeFirst()).ToList();
+            if (missingHediffs.Count > 0)
             {
-                return false;
+                requirementFulfilled = false;
+                reason.AppendLine("BEWH.Framework.DecoRequirement.MissingHediffs".Translate());
+                foreach (var hediff in missingHediffs)
+                {
+                    reason.AppendLine("BEWH.Framework.DecoRequirement.AppendedLabel".Translate(hediff));
+                }
             }
         }
             
-        return true;
+        lockedReason = reason.ToString();
+        return requirementFulfilled;
     }
     
     public override void ResolveReferences()

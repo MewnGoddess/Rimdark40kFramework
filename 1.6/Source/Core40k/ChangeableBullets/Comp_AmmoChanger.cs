@@ -4,18 +4,24 @@ using Verse;
 
 namespace Core40k;
 
-public class Comp_AmmoChanger : CompEquippable
+public class Comp_AmmoChanger : ThingComp
 {
     public CompProperties_AmmoChanger Props => (CompProperties_AmmoChanger)props;
 
+    public CompEquippable Equippable => parent.GetComp<CompEquippable>();
     public List<ThingDef> AvailableProjectiles => Props.availableProjectiles;
 
+    public Pawn pawn => (parent?.ParentHolder as Pawn_EquipmentTracker)?.pawn;
+    public ThingWithComps Weapon => parent;
+    
     private ThingDef nextProjectile;
     private ThingDef currentlySelectedProjectile;
-    public ThingDef CurrentlySelectedProjectile => currentlySelectedProjectile ??= AvailableProjectiles.FirstOrFallback(def => HasResearchForAmmo(def, out _)) ?? PrimaryVerb.verbProps.defaultProjectile;
-
-    public Pawn pawn => Holder;
-    public ThingWithComps Weapon => parent;
+    public ThingDef CurrentlySelectedProjectile => currentlySelectedProjectile ??= AvailableProjectiles.FirstOrFallback(def => HasResearchForAmmo(def, out _)) ?? Equippable.PrimaryVerb.verbProps.defaultProjectile;
+    
+    public DefModExtension_AmmoChanger DefModExtensionAmmoChanger => CurrentlySelectedProjectile.GetModExtension<DefModExtension_AmmoChanger>();
+    public int ShotsPerBurst => DefModExtensionAmmoChanger?.shotsPerBurst ?? 0;
+    public float EffectiveRange => DefModExtensionAmmoChanger?.effectiveRange ?? 0;
+    public float WarmupTime => DefModExtensionAmmoChanger?.warmupTime ?? 0;
     
     public void LoadNextProjectile()
     {
@@ -39,18 +45,5 @@ public class Comp_AmmoChanger : CompEquippable
         var research = ammoDef.GetModExtension<DefModExtension_AmmoChanger>().unlockedBy;
         researchDef = research;
         return research?.IsFinished ?? true;
-    }
-    
-    public override IEnumerable<Gizmo> CompGetEquippedGizmosExtra()
-    {
-        foreach (var gizmo in base.CompGetEquippedGizmosExtra())
-        {
-            yield return gizmo;
-        }
-        
-        var gizmo_AmmoChanger = new Gizmo_AmmoChanger(this);
-        gizmo_AmmoChanger.defaultLabel = CurrentlySelectedProjectile.label;
-        
-        yield return gizmo_AmmoChanger;
     }
 }

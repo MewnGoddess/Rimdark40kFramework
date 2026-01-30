@@ -71,14 +71,14 @@ public class Dialog_PaintWeaponMultiColor : Window
             }
         }
         
-        var allExtraDecorations = DefDatabase<ExtraDecorationDef>.AllDefs.ToList();
-        
         alternateBaseForms = DefDatabase<AlternateBaseFormDef>.AllDefs.Where(def => def.appliesTo.Contains(weaponMultiColor.def.defName)).ToList();
 
         if (MultiColorComp != null)
         {
             selectedAlternateBaseForm = MultiColorComp.currentAlternateBaseForm;
         }
+        
+        WeaponDecorationComp.RemoveInvalidDecorations(pawn);
         
         Find.TickManager.Pause();
     }
@@ -247,86 +247,95 @@ public class Dialog_PaintWeaponMultiColor : Window
                 {
                     Widgets.DrawStrongHighlight(iconRect.ExpandedBy(3f));
                 }
+
+                var hasReq = weaponDecoration.Value[i].HasRequirements(pawn, out var reason);
+                var incompatibleDeco = curDecoIsIncompatible 
+                                       || (selectedAlternateBaseForm == null 
+                                           && weaponDecoration.Value[i].isIncompatibleWithBaseTexture);
                 
                 var color = Color.white;
+                var tipTooltip = weaponDecoration.Value[i].label;
                 if (Mouse.IsOver(iconRect))
                 {
                     color = GenUI.MouseoverColor;
-                    if (curDecoIsIncompatible || (selectedAlternateBaseForm == null && weaponDecoration.Value[i].isIncompatibleWithBaseTexture))
-                    {
-                        TooltipHandler.TipRegion(iconRect, "BEWH.Framework.WeaponDecoration.IncompatibleWithCurrentAltBase".Translate());
-                    }
                 }
-                if (curDecoIsIncompatible || (selectedAlternateBaseForm == null && weaponDecoration.Value[i].isIncompatibleWithBaseTexture))
+                if (!hasReq)
                 {
+                    tipTooltip += "\n" + "BEWH.Framework.DecoRequirement.RequirementNotMet".Translate() + reason;
                     color = Color.gray;
                 }
+                if (incompatibleDeco)
+                {
+                    tipTooltip += "\n" +"BEWH.Framework.WeaponDecoration.IncompatibleWithCurrentAltBase".Translate();
+                    color = Color.gray;
+                }
+                
                 GUI.color = color;
                 GUI.DrawTexture(iconRect, Command.BGTexShrunk);
                 GUI.color = Color.white;
                 GUI.DrawTexture(iconRect, weaponDecoration.Value[i].Icon);
-                if (curDecoIsIncompatible)
-                {
-                    continue;
-                }
+                TooltipHandler.TipRegion(iconRect, tipTooltip);
                 
-                if (Widgets.ButtonInvisible(iconRect))
+                if(hasReq && !incompatibleDeco)
                 {
-                    WeaponDecorationComp.AddOrRemoveDecoration(weaponDecoration.Value[i]);
-                    recache = true;
-                }
-                
-                if (weaponDecoration.Value[i].colourable && WeaponDecorationComp.WeaponDecorations.ContainsKey(weaponDecoration.Value[i]))
-                {
-                    rowExpanded = true;
-                    
-                    var bottomRect = new Rect(new Vector2(iconRect.x, iconRect.yMax + 3f), iconRect.size);
-                    bottomRect.height /= 3;
-                    bottomRect = bottomRect.ContractedBy(2f);
-                    
-                    Rect colourSelection;
-                    Rect colourSelectionTwo;
-                    Rect colourSelectionThree;
-                
-                    var colorAmount = weaponDecoration.Value[i].colorAmount;
-                    
-                    switch (colorAmount)
+                    if (Widgets.ButtonInvisible(iconRect))
                     {
-                        case 1:
-                            colourSelection = new Rect(bottomRect);
+                        WeaponDecorationComp.AddOrRemoveDecoration(weaponDecoration.Value[i]);
+                        recache = true;
+                    }
+                
+                    if (weaponDecoration.Value[i].colourable && WeaponDecorationComp.WeaponDecorations.ContainsKey(weaponDecoration.Value[i]))
+                    {
+                        rowExpanded = true;
+                    
+                        var bottomRect = new Rect(new Vector2(iconRect.x, iconRect.yMax + 3f), iconRect.size);
+                        bottomRect.height /= 3;
+                        bottomRect = bottomRect.ContractedBy(2f);
+                    
+                        Rect colourSelection;
+                        Rect colourSelectionTwo;
+                        Rect colourSelectionThree;
+                
+                        var colorAmount = weaponDecoration.Value[i].colorAmount;
+                    
+                        switch (colorAmount)
+                        {
+                            case 1:
+                                colourSelection = new Rect(bottomRect);
                         
-                            PrimaryColorBox(colourSelection, weaponDecoration.Value[i]);
-                            break;
-                        case 2:
-                            colourSelection = new Rect(bottomRect);
-                            colourSelection.width /= 2;
-                            colourSelectionTwo = new Rect(colourSelection)
-                            {
-                                x = colourSelection.xMax
-                            };
+                                PrimaryColorBox(colourSelection, weaponDecoration.Value[i]);
+                                break;
+                            case 2:
+                                colourSelection = new Rect(bottomRect);
+                                colourSelection.width /= 2;
+                                colourSelectionTwo = new Rect(colourSelection)
+                                {
+                                    x = colourSelection.xMax
+                                };
 
-                            PrimaryColorBox(colourSelection, weaponDecoration.Value[i]);
-                            SecondaryColorBox(colourSelectionTwo, weaponDecoration.Value[i]);
-                            break;
-                        case 3:
-                            colourSelection = new Rect(bottomRect);
-                            colourSelection.width /= 3;
-                            colourSelectionTwo = new Rect(colourSelection)
-                            {
-                                x = colourSelection.xMax
-                            };
-                            colourSelectionThree = new Rect(colourSelectionTwo)
-                            {
-                                x = colourSelectionTwo.xMax
-                            };
+                                PrimaryColorBox(colourSelection, weaponDecoration.Value[i]);
+                                SecondaryColorBox(colourSelectionTwo, weaponDecoration.Value[i]);
+                                break;
+                            case 3:
+                                colourSelection = new Rect(bottomRect);
+                                colourSelection.width /= 3;
+                                colourSelectionTwo = new Rect(colourSelection)
+                                {
+                                    x = colourSelection.xMax
+                                };
+                                colourSelectionThree = new Rect(colourSelectionTwo)
+                                {
+                                    x = colourSelectionTwo.xMax
+                                };
 
-                            PrimaryColorBox(colourSelection, weaponDecoration.Value[i]);
-                            SecondaryColorBox(colourSelectionTwo, weaponDecoration.Value[i]);
-                            TertiaryColorBox(colourSelectionThree, weaponDecoration.Value[i]);
-                            break;
-                        default:
-                            Log.Warning("Wrong setup in " + weaponDecoration.Value[i] + "colorAmount is more than 3 or less than 1");
-                            break;
+                                PrimaryColorBox(colourSelection, weaponDecoration.Value[i]);
+                                SecondaryColorBox(colourSelectionTwo, weaponDecoration.Value[i]);
+                                TertiaryColorBox(colourSelectionThree, weaponDecoration.Value[i]);
+                                break;
+                            default:
+                                Log.Warning("Wrong setup in " + weaponDecoration.Value[i] + "colorAmount is more than 3 or less than 1");
+                                break;
+                        }
                     }
                 }
                 

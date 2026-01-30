@@ -22,7 +22,7 @@ public static class GetValueUnfinalizedFromRankPatch
                 yield return new CodeInstruction(OpCodes.Ldarg_1);
                 yield return new CodeInstruction(OpCodes.Ldarg_0);
                 yield return new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(StatWorker), "stat"));
-                yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GetValueUnfinalizedFromRankPatch), "GetStatFactorForRank"));
+                yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GetValueUnfinalizedFromRankPatch), "GetStatOffsetForX"));
                 yield return new CodeInstruction(OpCodes.Stloc_0);
                 yield return new CodeInstruction(OpCodes.Ldloc_0);
                 addedFactor = true;
@@ -36,96 +36,192 @@ public static class GetValueUnfinalizedFromRankPatch
                 yield return new CodeInstruction(OpCodes.Ldarg_1);
                 yield return new CodeInstruction(OpCodes.Ldarg_0);
                 yield return new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(StatWorker), "stat"));
-                yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GetValueUnfinalizedFromRankPatch), "GetStatOffsetForRank"));
+                yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GetValueUnfinalizedFromRankPatch), "GetStatFactorForX"));
                 yield return new CodeInstruction(OpCodes.Stloc_0);
                 addedOffset = true;
             }
         }
     }
 
-    public static float GetStatOffsetForRank(float num, StatRequest req, StatDef stat)
+    public static float GetStatOffsetForX(float num, StatRequest req, StatDef stat)
     {
         if (stat == null)
         {
             return num;
         }
-        
         if (req.Thing is not Pawn pawn)
         {
             return num;
         }
 
-        if (!pawn.HasComp<CompRankInfo>())
+        //Rank offset
+        if (pawn.HasComp<CompRankInfo>())
         {
-            return num;
-        }
-            
-        var rankListForReading = pawn.GetComp<CompRankInfo>().UnlockedRanks;
+            var rankListForReading = pawn.GetComp<CompRankInfo>().UnlockedRanks;
         
-        if (rankListForReading.NullOrEmpty())
-        {
-            return num;
-        }
-        
-        foreach (var rank in rankListForReading)
-        {
-            if (rank == null || rank.statOffsets.NullOrEmpty())
+            if (!rankListForReading.NullOrEmpty())
             {
-                continue;
-            }
-            num += rank.statOffsets.GetStatOffsetFromList(stat);
-            foreach (var conditional in rank.conditionalStatAffecters)
-            {
-                if (!conditional.statOffsets.NullOrEmpty() && conditional.Applies(req))
+                foreach (var rank in rankListForReading)
                 {
-                    num += conditional.statOffsets.GetStatOffsetFromList(stat);
+                    if (rank == null || rank.statOffsets.NullOrEmpty())
+                    {
+                        continue;
+                    }
+                    num += rank.statOffsets.GetStatOffsetFromList(stat);
+                    foreach (var conditional in rank.conditionalStatAffecters)
+                    {
+                        if (!conditional.statOffsets.NullOrEmpty() && conditional.Applies(req))
+                        {
+                            num += conditional.statOffsets.GetStatOffsetFromList(stat);
+                        }
+                    }
+                }
+            }
+        }
+        
+        //Apparel offset
+        var apparels = pawn.apparel?.WornApparel?.Where(apparel => apparel.HasComp<CompDecorative>()).ToList();
+        if (apparels != null)
+        {
+            foreach (var apparel in apparels)
+            {
+                var compApparel = apparel.TryGetComp<CompDecorative>();
+                if (compApparel == null)
+                {
+                    continue;
+                }
+
+                foreach (var extraDecoration in compApparel.ExtraDecorations)
+                {
+                    if (!extraDecoration.Key.statOffsets.NullOrEmpty())
+                    {
+                        num += extraDecoration.Key.statOffsets.GetStatOffsetFromList(stat);
+                    }
+                
+                    foreach (var conditional in extraDecoration.Key.conditionalStatAffecters)
+                    {
+                        if (!conditional.statOffsets.NullOrEmpty() && conditional.Applies(req))
+                        {
+                            num += conditional.statOffsets.GetStatOffsetFromList(stat);
+                        }
+                    }
+                }
+            }
+        }
+        
+        //Weapon offset
+        var weapon = pawn.equipment?.Primary;
+        var compWeapon = weapon?.TryGetComp<CompWeaponDecoration>();
+        if (compWeapon != null)
+        {
+            foreach (var weaponDecoration in compWeapon.WeaponDecorations)
+            {
+                if (!weaponDecoration.Key.statOffsets.NullOrEmpty())
+                {
+                    num += weaponDecoration.Key.statOffsets.GetStatOffsetFromList(stat);
+                }
+                
+                foreach (var conditional in weaponDecoration.Key.conditionalStatAffecters)
+                {
+                    if (!conditional.statOffsets.NullOrEmpty() && conditional.Applies(req))
+                    {
+                        num += conditional.statOffsets.GetStatOffsetFromList(stat);
+                    }
                 }
             }
         }
 
         return num;
     }
-
-    public static float GetStatFactorForRank(float num, StatRequest req, StatDef stat)
+    
+    public static float GetStatFactorForX(float num, StatRequest req, StatDef stat)
     {
         if (stat == null)
         {
             return num;
         }
-        
         if (req.Thing is not Pawn pawn)
         {
             return num;
         }
-
-        if (!pawn.HasComp<CompRankInfo>())
-        {
-            return num;
-        }
-            
-        var rankListForReading = pawn.GetComp<CompRankInfo>().UnlockedRanks;
-
-        if (rankListForReading.NullOrEmpty())
-        {
-            return num;
-        }
         
-        foreach (var rank in rankListForReading)
+        //Rank offset
+        if (pawn.HasComp<CompRankInfo>())
         {
-            if (rank == null || rank.statFactors.NullOrEmpty())
+            var rankListForReading = pawn.GetComp<CompRankInfo>().UnlockedRanks;
+        
+            if (!rankListForReading.NullOrEmpty())
             {
-                continue;
-            }
-            num *= rank.statFactors.GetStatFactorFromList(stat);
-            foreach (var conditional in rank.conditionalStatAffecters)
-            {
-                if (!conditional.statFactors.NullOrEmpty() && conditional.Applies(req))
+                foreach (var rank in rankListForReading)
                 {
-                    num *= conditional.statFactors.GetStatFactorFromList(stat);
+                    if (rank == null || rank.statFactors.NullOrEmpty())
+                    {
+                        continue;
+                    }
+                    num += rank.statFactors.GetStatOffsetFromList(stat);
+                    foreach (var conditional in rank.conditionalStatAffecters)
+                    {
+                        if (!conditional.statFactors.NullOrEmpty() && conditional.Applies(req))
+                        {
+                            num += conditional.statFactors.GetStatOffsetFromList(stat);
+                        }
+                    }
                 }
             }
         }
-            
+        
+        //Apparel offset
+        var apparels = pawn.apparel?.WornApparel?.Where(apparel => apparel.HasComp<CompDecorative>()).ToList();
+        if (apparels != null)
+        {
+            foreach (var apparel in apparels)
+            {
+                var compApparel = apparel.TryGetComp<CompDecorative>();
+                if (compApparel == null)
+                {
+                    continue;
+                }
+
+                foreach (var extraDecoration in compApparel.ExtraDecorations)
+                {
+                    if (!extraDecoration.Key.statFactors.NullOrEmpty())
+                    {
+                        num += extraDecoration.Key.statFactors.GetStatOffsetFromList(stat);
+                    }
+                
+                    foreach (var conditional in extraDecoration.Key.conditionalStatAffecters)
+                    {
+                        if (!conditional.statFactors.NullOrEmpty() && conditional.Applies(req))
+                        {
+                            num += conditional.statFactors.GetStatOffsetFromList(stat);
+                        }
+                    }
+                }
+            }
+        }
+        
+        //Weapon offset
+        var weapon = pawn.equipment?.Primary;
+        var compWeapon = weapon?.TryGetComp<CompWeaponDecoration>();
+        if (compWeapon != null)
+        {
+            foreach (var weaponDecoration in compWeapon.WeaponDecorations)
+            {
+                if (!weaponDecoration.Key.statFactors.NullOrEmpty())
+                {
+                    num += weaponDecoration.Key.statFactors.GetStatOffsetFromList(stat);
+                }
+                
+                foreach (var conditional in weaponDecoration.Key.conditionalStatAffecters)
+                {
+                    if (!conditional.statFactors.NullOrEmpty() && conditional.Applies(req))
+                    {
+                        num += conditional.statFactors.GetStatOffsetFromList(stat);
+                    }
+                }
+            }
+        }
+
         return num;
     }
 }

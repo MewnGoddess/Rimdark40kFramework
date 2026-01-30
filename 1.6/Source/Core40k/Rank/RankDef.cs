@@ -35,6 +35,8 @@ public class RankDef : Def
     public List<HediffData> givesHediffs = new List<HediffData>();
     
     public List<SkillDef> recreationFromSkills = new List<SkillDef>();
+    
+    public List<PassionMod> givesPassions = new List<PassionMod>();
         
     public List<string> customEffectDescriptions = new List<string>();
         

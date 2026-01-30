@@ -54,6 +54,15 @@
   <BEWH.Framework.ExtraDecoration.Edit>Edit</BEWH.Framework.ExtraDecoration.Edit>
   <BEWH.Framework.ExtraDecoration.EditDesc>Create, overwrite or remove a preset</BEWH.Framework.ExtraDecoration.EditDesc>
 
+  <BEWH.Framework.DecoRequirement.RequirementNotMet>Requirements not met:\n</BEWH.Framework.DecoRequirement.RequirementNotMet>
+  <BEWH.Framework.DecoRequirement.MissingRanks>Missing Ranks:</BEWH.Framework.DecoRequirement.MissingRanks>
+  <BEWH.Framework.DecoRequirement.MissingGenes>Missing Genes:</BEWH.Framework.DecoRequirement.MissingGenes>
+  <BEWH.Framework.DecoRequirement.MissingTraits>Missing Traits:</BEWH.Framework.DecoRequirement.MissingTraits>
+  <BEWH.Framework.DecoRequirement.MissingHediffs>Missing Hediffs:</BEWH.Framework.DecoRequirement.MissingHediffs>
+  <BEWH.Framework.DecoRequirement.InvalidBodytype>Invalid bodytype</BEWH.Framework.DecoRequirement.InvalidBodytype>
+
+  <BEWH.Framework.DecoRequirement.AppendedLabel>- {0}</BEWH.Framework.DecoRequirement.AppendedLabel>
+
   <!--=== Weapon Multi Color ===-->
   <BEWH.Framework.WeaponMultiColor.WeaponDecorationFeature>Customize weapon</BEWH.Framework.WeaponMultiColor.WeaponDecorationFeature>
 
@@ -87,6 +96,8 @@
   <BEWH.Framework.RankSystem.UnlockRank>Unlock rank</BEWH.Framework.RankSystem.UnlockRank>
 
   <BEWH.Framework.RankSystem.StatsReport_Rank>Relevant ranks</BEWH.Framework.RankSystem.StatsReport_Rank>
+  <BEWH.Framework.RankSystem.StatsReport_ArmorDeco>Armor decorations</BEWH.Framework.RankSystem.StatsReport_ArmorDeco>
+  <BEWH.Framework.RankSystem.StatsReport_WeaponDeco>Weapon decorations</BEWH.Framework.RankSystem.StatsReport_WeaponDeco>
 
   <BEWH.Framework.RankSystem.RequirementsSkills>All of the following skills</BEWH.Framework.RankSystem.RequirementsSkills>
   <BEWH.Framework.RankSystem.RequirementsRanks>All of the following ranks</BEWH.Framework.RankSystem.RequirementsRanks>

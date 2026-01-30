@@ -31,19 +31,18 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
     private List<ExtraDecorationDef> extraDecorationDefsHelmet = new List<ExtraDecorationDef>();
     
     private List<ExtraDecorationPresetDef> extraDecorationPresets = new List<ExtraDecorationPresetDef>();
-        
+
+    private Pawn selPawn = null;
+    
     private void Setup(Pawn pawn)
     {
+        selPawn = pawn;
         var allExtraDecorations = DefDatabase<ExtraDecorationDef>.AllDefs.ToList();
         
         var masksTemp = DefDatabase<MaskDef>.AllDefs.Where(def => def.appliesToKind is AppliesToKind.ExtraDecoration or AppliesToKind.All).ToList();
 
         foreach (var extraDecoration in allExtraDecorations)
         {
-            if (!extraDecoration.HasRequirements(pawn))
-            {
-                continue;
-            }
             if (extraDecoration.isHelmetDecoration)
             {
                 extraDecorationDefsHelmet.Add(extraDecoration);
@@ -69,6 +68,18 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         {
             extraDecorationPresets.Add(extraDecorationPresetDef);
         }
+        
+        var apparels = pawn.apparel.WornApparel.Where(a =>
+        {
+            var temp = a.GetComp<CompDecorative>();
+            return temp != null;
+        }).ToList();
+        foreach (var apparel in apparels)
+        {
+            apparel.GetComp<CompDecorative>().RemoveInvalidDecorations(pawn);
+        }
+        Find.TickManager.Pause();
+        
     }
 
     private void DrawRowContent(Apparel apparel, List<ExtraDecorationDef> extraDecorationDefs, ref Vector2 position, ref Rect viewRect)
@@ -103,14 +114,27 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
             {
                 Widgets.DrawStrongHighlight(iconRect.ExpandedBy(3f));
             }
-                    
-            var color = Mouse.IsOver(iconRect) ? GenUI.MouseoverColor : Color.white;
+            
+            var hasReq = extraDecorationDefs[i].HasRequirements(selPawn, out var reason);
+                
+            var color = Color.white;
+            var tipTooltip = extraDecorationDefs[i].label;
+            if (Mouse.IsOver(iconRect))
+            {
+                color = GenUI.MouseoverColor;
+            }
+            if (!hasReq)
+            {
+                tipTooltip += "\n" + "BEWH.Framework.DecoRequirement.RequirementNotMet".Translate() + reason;
+                color = Color.gray;
+            }
+            
             GUI.color = color;
             GUI.DrawTexture(iconRect, Command.BGTexShrunk);
             GUI.color = Color.white;
             GUI.DrawTexture(iconRect, extraDecorationDefs[i].Icon);
                     
-            if (hasDeco)
+            if (hasDeco)    
             {
                 if (currentDecorations[extraDecorationDefs[i]].Flipped)
                 {
@@ -118,106 +142,111 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                     GUI.DrawTexture(flippedIconRect, Core40kUtils.FlippedIconTex);
                 }
             }
-                    
-            TooltipHandler.TipRegion(iconRect, extraDecorationDefs[i].label);
-                    
-            if (Widgets.ButtonInvisible(iconRect))
+
+            TooltipHandler.TipRegion(iconRect, tipTooltip);
+            if (hasReq)
             {
-                decorativeComp.AddOrRemoveDecoration(extraDecorationDefs[i]);
-            }
+                TooltipHandler.TipRegion(iconRect, extraDecorationDefs[i].label);
+            
+                if (Widgets.ButtonInvisible(iconRect))
+                {
+                    decorativeComp.AddOrRemoveDecoration(extraDecorationDefs[i]);
+                }
                 
-            if (extraDecorationDefs[i].colourable && currentDecorations.ContainsKey(extraDecorationDefs[i]))
-            {
-                rowExpanded = true;
-                var i1 = i;
+                if (extraDecorationDefs[i].colourable && currentDecorations.ContainsKey(extraDecorationDefs[i]))
+                {
+                    rowExpanded = true;
+                    var i1 = i;
                 
-                var bottomRect = new Rect(new Vector2(iconRect.x, iconRect.yMax + 3f), iconRect.size);
-                bottomRect.height /= 3;
-                bottomRect = bottomRect.ContractedBy(2f);
+                    var bottomRect = new Rect(new Vector2(iconRect.x, iconRect.yMax + 3f), iconRect.size);
+                    bottomRect.height /= 3;
+                    bottomRect = bottomRect.ContractedBy(2f);
                 
-                colourButtonExtraSize = bottomRect.height*2;
+                    colourButtonExtraSize = bottomRect.height*2;
 
-                Rect colourSelection;
-                Rect colourSelectionTwo;
-                Rect colourSelectionThree;
-                Rect presetSelection;
+                    Rect colourSelection;
+                    Rect colourSelectionTwo;
+                    Rect colourSelectionThree;
+                    Rect presetSelection;
                 
-                var colorAmount = extraDecorationDefs[i].colorAmount;
+                    var colorAmount = extraDecorationDefs[i].colorAmount;
                 
-                if (!decorativeComp.ExtraDecorations[extraDecorationDefs[i]].maskDef.setsNull)
-                {
-                    colorAmount = decorativeComp.ExtraDecorations[extraDecorationDefs[i]].maskDef.colorAmount;
-                }
-                
-                switch (colorAmount)
-                {
-                    case 1:
-                        colourSelection = new Rect(bottomRect);
-                        
-                        PrimaryColorBox(colourSelection, decorativeComp, extraDecorationDefs[i1]);
-                        break;
-                    case 2:
-                        colourSelection = new Rect(bottomRect);
-                        colourSelection.width /= 2;
-                        colourSelectionTwo = new Rect(colourSelection)
-                        {
-                            x = colourSelection.xMax
-                        };
-
-                        PrimaryColorBox(colourSelection, decorativeComp, extraDecorationDefs[i1]);
-                        SecondaryColorBox(colourSelectionTwo, decorativeComp, extraDecorationDefs[i1]);
-                        break;
-                    case 3:
-                        colourSelection = new Rect(bottomRect);
-                        colourSelection.width /= 3;
-                        colourSelectionTwo = new Rect(colourSelection)
-                        {
-                            x = colourSelection.xMax
-                        };
-                        colourSelectionThree = new Rect(colourSelectionTwo)
-                        {
-                            x = colourSelectionTwo.xMax
-                        };
-
-                        PrimaryColorBox(colourSelection, decorativeComp, extraDecorationDefs[i1]);
-                        SecondaryColorBox(colourSelectionTwo, decorativeComp, extraDecorationDefs[i1]);
-                        TertiaryColorBox(colourSelectionThree, decorativeComp, extraDecorationDefs[i1]);
-                        break;
-                    default:
-                        Log.Warning("Wrong setup in " + extraDecorationDefs[i] + "colorAmount is more than 3 or less than 1");
-                        break;
-                }
-                
-                presetSelection = new Rect(bottomRect)
-                {
-                    y = bottomRect.yMax
-                };
-                if (masks.TryGetValue(extraDecorationDefs[i]).Count > 1)
-                {
-                    presetSelection.width /= 2;
-                }
-                var maskSelection = new Rect(presetSelection)
-                {
-                    x = presetSelection.xMax
-                };
-                presetSelection = presetSelection.ContractedBy(1f);
-                maskSelection = maskSelection.ContractedBy(1f);
-                Text.Font = GameFont.Tiny;
-                TooltipHandler.TipRegion(presetSelection, "BEWH.Framework.ExtraDecoration.PresetDesc".Translate());
-                if (Widgets.ButtonText(presetSelection, "BEWH.Framework.ExtraDecoration.Preset".Translate()))
-                {
-                    SelectPreset(apparel, extraDecorationDefs[i1]);
-                }
-                if (masks.TryGetValue(extraDecorationDefs[i]).Count > 1)
-                {
-                    TooltipHandler.TipRegion(maskSelection, "BEWH.Framework.ExtraDecoration.MaskDesc".Translate());
-                    if (Widgets.ButtonText(maskSelection, "BEWH.Framework.ExtraDecoration.Mask".Translate()))
+                    if (!decorativeComp.ExtraDecorations[extraDecorationDefs[i]].maskDef.setsNull)
                     {
-                        SelectMask(decorativeComp, extraDecorationDefs[i1], viewRect.width/1.3f);
+                        colorAmount = decorativeComp.ExtraDecorations[extraDecorationDefs[i]].maskDef.colorAmount;
                     }
+                
+                    switch (colorAmount)
+                    {
+                        case 1:
+                            colourSelection = new Rect(bottomRect);
+                        
+                            PrimaryColorBox(colourSelection, decorativeComp, extraDecorationDefs[i1]);
+                            break;
+                        case 2:
+                            colourSelection = new Rect(bottomRect);
+                            colourSelection.width /= 2;
+                            colourSelectionTwo = new Rect(colourSelection)
+                            {
+                                x = colourSelection.xMax
+                            };
+
+                            PrimaryColorBox(colourSelection, decorativeComp, extraDecorationDefs[i1]);
+                            SecondaryColorBox(colourSelectionTwo, decorativeComp, extraDecorationDefs[i1]);
+                            break;
+                        case 3:
+                            colourSelection = new Rect(bottomRect);
+                            colourSelection.width /= 3;
+                            colourSelectionTwo = new Rect(colourSelection)
+                            {
+                                x = colourSelection.xMax
+                            };
+                            colourSelectionThree = new Rect(colourSelectionTwo)
+                            {
+                                x = colourSelectionTwo.xMax
+                            };
+
+                            PrimaryColorBox(colourSelection, decorativeComp, extraDecorationDefs[i1]);
+                            SecondaryColorBox(colourSelectionTwo, decorativeComp, extraDecorationDefs[i1]);
+                            TertiaryColorBox(colourSelectionThree, decorativeComp, extraDecorationDefs[i1]);
+                            break;
+                        default:
+                            Log.Warning("Wrong setup in " + extraDecorationDefs[i] + "colorAmount is more than 3 or less than 1");
+                            break;
+                    }
+                
+                    presetSelection = new Rect(bottomRect)
+                    {
+                        y = bottomRect.yMax
+                    };
+                    if (masks.TryGetValue(extraDecorationDefs[i]).Count > 1)
+                    {
+                        presetSelection.width /= 2;
+                    }
+                    var maskSelection = new Rect(presetSelection)
+                    {
+                        x = presetSelection.xMax
+                    };
+                    presetSelection = presetSelection.ContractedBy(1f);
+                    maskSelection = maskSelection.ContractedBy(1f);
+                    Text.Font = GameFont.Tiny;
+                    TooltipHandler.TipRegion(presetSelection, "BEWH.Framework.ExtraDecoration.PresetDesc".Translate());
+                    if (Widgets.ButtonText(presetSelection, "BEWH.Framework.ExtraDecoration.Preset".Translate()))
+                    {
+                        SelectPreset(apparel, extraDecorationDefs[i1]);
+                    }
+                    if (masks.TryGetValue(extraDecorationDefs[i]).Count > 1)
+                    {
+                        TooltipHandler.TipRegion(maskSelection, "BEWH.Framework.ExtraDecoration.MaskDesc".Translate());
+                        if (Widgets.ButtonText(maskSelection, "BEWH.Framework.ExtraDecoration.Mask".Translate()))
+                        {
+                            SelectMask(decorativeComp, extraDecorationDefs[i1], viewRect.width/1.3f);
+                        }
+                    }
+                    Text.Font = GameFont.Small;
                 }
-                Text.Font = GameFont.Small;
             }
+            GUI.color = Color.white;
             
             if (i != 0 && (i+1) % RowAmount == 0)
             {

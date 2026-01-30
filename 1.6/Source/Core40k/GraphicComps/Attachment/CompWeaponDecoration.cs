@@ -112,6 +112,29 @@ public class CompWeaponDecoration : CompGraphicParent
         base.Notify_GraphicChanged();
     }
     
+    public void RemoveInvalidDecorations(Pawn pawn)
+    {
+        var toRemove = new List<WeaponDecorationDef>();
+        foreach (var weaponDecoration in weaponDecorations)
+        {
+            if (!weaponDecoration.Key.HasRequirements(pawn, out _))
+            {
+                toRemove.Add(weaponDecoration.Key);
+            }
+        }
+        foreach (var weaponDecorationDef in toRemove)
+        {
+            weaponDecorations.Remove(weaponDecorationDef);
+        }
+    }
+    
+    public override void Notify_Equipped(Pawn pawn)
+    {
+        RemoveInvalidDecorations(pawn);
+        Notify_GraphicChanged();
+        base.Notify_Equipped(pawn);
+    }
+    
     public override void PostExposeData()
     {
         base.PostExposeData();

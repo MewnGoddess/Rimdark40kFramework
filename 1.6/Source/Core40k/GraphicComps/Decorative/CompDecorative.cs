@@ -144,9 +144,26 @@ public class CompDecorative : CompGraphicParent
         extraDecorations.AddRange(originalExtraDecorations);
         base.Reset();
     }
+
+    public void RemoveInvalidDecorations(Pawn pawn)
+    {
+        var toRemove = new List<ExtraDecorationDef>();
+        foreach (var extraDecoration in extraDecorations)
+        {
+            if (!extraDecoration.Key.HasRequirements(pawn, out _))
+            {
+                toRemove.Add(extraDecoration.Key);
+            }
+        }
+        foreach (var extraDecorationDef in toRemove)
+        {
+            extraDecorations.Remove(extraDecorationDef);
+        }
+    }
     
     public override void Notify_Equipped(Pawn pawn)
     {
+        RemoveInvalidDecorations(pawn);
         Notify_ColorChanged();
         base.Notify_Equipped(pawn);
     }

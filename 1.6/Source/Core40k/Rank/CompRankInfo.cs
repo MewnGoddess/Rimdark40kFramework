@@ -36,6 +36,8 @@ public class CompRankInfo : ThingComp
 
     private bool convertToStartTick = true;
     private Dictionary<RankDef, int> daysAsRank = new Dictionary<RankDef, int>();
+    
+    private Dictionary<SkillDef, Passion> originalPassions = new Dictionary<SkillDef, Passion>();
 
     private GameComponent_RankInfo gameComponentRankInfo = null;
 
@@ -99,9 +101,21 @@ public class CompRankInfo : ThingComp
             }
         }
         
-        if (rank.recreationFromSkills != null)
+        if (rank.givesPassions != null)
         {
-            
+            if (originalPassions.NullOrEmpty())
+            {
+                foreach (var passion in rank.givesPassions)
+                {
+                    var skill = pawn.skills.GetSkill(passion.skill);
+                    if (!originalPassions.ContainsKey(skill.def))
+                    {
+                        originalPassions.Add(skill.def, skill.passion);
+                        skill.passion = passion.NewPassionFor(skill);
+                    }
+                }
+            }
+            RecalculatePassions(pawn);
         }
 
         if (rank.givesHediffs != null)
@@ -123,6 +137,58 @@ public class CompRankInfo : ThingComp
         else
         {
             gameCompRankInfo.rankLimits.Add(rank, 1);
+        }
+    }
+
+    private void RecalculatePassions(Pawn pawn)
+    {
+        foreach (var originalPassion in originalPassions)
+        {
+            var skill = pawn.skills.GetSkill(originalPassion.Key);
+            skill.passion = originalPassion.Value;
+        }
+        var passionMods = unlockedRanks.SelectMany(def => def.givesPassions);
+        var skillDefPassionCol = new Dictionary<SkillDef, List<PassionMod.PassionModType>>();
+        foreach (var passionMod in passionMods)
+        {
+            if (!skillDefPassionCol.ContainsKey(passionMod.skill))
+            {
+                skillDefPassionCol.Add(passionMod.skill, [passionMod.modType]);
+            }
+            else
+            {
+                skillDefPassionCol[passionMod.skill].Add(passionMod.modType);
+            }
+        }
+
+        foreach (var col in skillDefPassionCol)
+        {
+            var skill = pawn.skills.GetSkill(col.Key);
+            if (col.Value.NullOrEmpty())
+            {
+                skill.passion = originalPassions[col.Key];
+                originalPassions.Remove(col.Key);
+                continue;
+            }
+            
+            if (col.Value.Any(type => type == PassionMod.PassionModType.DropAll))
+            {
+                skill.passion = Passion.None;
+                continue;
+            }
+
+            foreach (var passion in col.Value)
+            {
+                if (passion == PassionMod.PassionModType.AddOneLevel)
+                {
+                    skill.passion = skill.passion switch
+                    {
+                        Passion.None => Passion.Minor,
+                        Passion.Minor => Passion.Major,
+                        _ => skill.passion
+                    };
+                }
+            }
         }
     }
 
@@ -153,6 +219,14 @@ public class CompRankInfo : ThingComp
                 {
                     comp.LearnedAbilities.RemoveWhere(learnedAbility => learnedAbility.def == ability);
                 }
+            }
+        }
+        
+        if (rankDef.givesPassions != null)
+        {
+            if (!originalPassions.NullOrEmpty())
+            {
+                RecalculatePassions(pawn);
             }
         }
         

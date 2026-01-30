@@ -14,4 +14,6 @@ public class WeaponDecorationDef : DecorationDef
     public Dictionary<string, DrawData> weaponSpecificDrawData = [];
 
     public bool isIncompatibleWithBaseTexture = false;
+    
+    public VerbModifier verbModifier = null;
 }

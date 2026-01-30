@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -21,26 +22,31 @@ public class ExtraDecorationDef : DecorationDef
     
     public List<BodyTypeDef> appliesToBodyTypes = new();
 
-    public override bool HasRequirements(Pawn pawn)
+    public override bool HasRequirements(Pawn pawn, out string lockedReason)
     {
+        var requirementFulfilled = base.HasRequirements(pawn, out lockedReason);
         if (appliesToBodyTypes.NullOrEmpty())
         {
-            return base.HasRequirements(pawn);
+            return requirementFulfilled;
         }
         var bodyApparel = pawn.apparel.WornApparel.FirstOrFallback(a => a.HasComp<CompDecorative>());
         if (bodyApparel == null)
         {
-            return base.HasRequirements(pawn);
+            return requirementFulfilled;
         }
-
-        var pawnBodyType = pawn.story.bodyType;
-        var defMod = bodyApparel.def.GetModExtension<DefModExtension_ForcesBodyType>();
-        if (defMod != null)
+        
+        var reason = new StringBuilder();
+        reason.AppendLine(lockedReason);
+        
+        var pawnBodyType = bodyApparel.def?.GetModExtension<DefModExtension_ForcesBodyType>()?.forcedBodyType ?? pawn.story.bodyType;
+        if (!appliesToBodyTypes.Contains(pawnBodyType))
         {
-            pawnBodyType = defMod.forcedBodyType ?? pawnBodyType;
+            reason.AppendLine("BEWH.Framework.DecoRequirement.InvalidBodytype".Translate());
+            lockedReason = reason.ToString();
+            requirementFulfilled = false;
         }
-
-        return appliesToBodyTypes.Contains(pawnBodyType);
+        
+        return requirementFulfilled;
     }
     
     public override void ResolveReferences()
