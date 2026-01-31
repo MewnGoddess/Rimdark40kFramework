@@ -113,6 +113,7 @@
     <Compile Include="GraphicComps\Attachment\AlternateBaseFormDef.cs" />
     <Compile Include="GraphicComps\Attachment\CompWeaponDecoration.cs" />
     <Compile Include="GraphicComps\Attachment\CompProperties_WeaponDecoration.cs" />
+    <Compile Include="GraphicComps\Attachment\Dialog_PaintWeaponMultiColor.cs" />
     <Compile Include="GraphicComps\Attachment\HarmonyPatch_RenderWeaponAttachments.cs" />
     <Compile Include="GraphicComps\Attachment\VerbModifier.cs" />
     <Compile Include="GraphicComps\Attachment\WeaponDecorationDef.cs" />
@@ -129,7 +130,6 @@
     <Compile Include="GraphicComps\Decorative\Dialog_ConfirmDecorationPresetOverride.cs" />
     <Compile Include="GraphicComps\Decorative\Dialog_EditExtraDecorationPresets.cs" />
     <Compile Include="GraphicComps\Decorative\Dialog_ExtraDecorationMaskSelection.cs" />
-    <Compile Include="GraphicComps\Decorative\Dialog_PaintWeaponMultiColor.cs" />
     <Compile Include="GraphicComps\Decorative\DynamicPawnRenderNodeSetup_DecorativeAddons.cs" />
     <Compile Include="GraphicComps\Decorative\ExtraDecorationDef.cs" />
     <Compile Include="GraphicComps\Decorative\ExtraDecorationPreset.cs" />

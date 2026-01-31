@@ -8,7 +8,7 @@ public static class IncreaseRangeFromVarious
 {
     public static void Postfix(Verb_Shoot __instance, ref float __result)
     {
-        var weaponDecoComp = __instance.EquipmentSource.GetComp<CompWeaponDecoration>();
+        var weaponDecoComp = __instance?.EquipmentSource?.GetComp<CompWeaponDecoration>();
         if (weaponDecoComp != null)
         {
             foreach (var weaponDecoration in weaponDecoComp.WeaponDecorations)
@@ -19,7 +19,7 @@ public static class IncreaseRangeFromVarious
                 }
             }
         }
-        var ammoChangerComp = __instance.EquipmentSource.GetComp<Comp_AmmoChanger>();
+        var ammoChangerComp = __instance?.EquipmentSource?.GetComp<Comp_AmmoChanger>();
         if (ammoChangerComp != null)
         {
             __result += ammoChangerComp.EffectiveRange;
