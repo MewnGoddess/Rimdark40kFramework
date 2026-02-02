@@ -21,7 +21,7 @@ public class MaskDef : Def
         base.ResolveReferences();
         if (shaderType == null && !setsNull)
         {
-            Log.Error("Shader type is not defined in MaskDef: " + defName);
+            Log.Error("Shader type is not defined in MaskDef: " + defName + ", using thing parent shader.");
         }
     }
 }

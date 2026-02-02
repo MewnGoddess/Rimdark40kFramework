@@ -21,6 +21,9 @@ public static class Core40kUtils
     private static Core40kModSettings modSettings = null;
     public static Core40kModSettings ModSettings => modSettings ??= LoadedModManager.GetMod<Core40kMod>().GetSettings<Core40kModSettings>();
 
+    public static readonly Color RequirementMetColour = Color.white;
+    public static readonly Color RequirementNotMetColour = new Color(1f, 0.0f, 0.0f, 0.8f);
+    
     public static ExtraDecorationDef GetDefFromString(string defName)
     {
         return DefDatabase<ExtraDecorationDef>.GetNamed(defName);

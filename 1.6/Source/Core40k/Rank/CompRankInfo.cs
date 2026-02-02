@@ -35,9 +35,10 @@ public class CompRankInfo : ThingComp
     public RankCategoryDef LastOpenedRankCategory => lastOpenedRankCategory;
 
     private bool convertToStartTick = true;
+    
     private Dictionary<RankDef, int> daysAsRank = new Dictionary<RankDef, int>();
     
-    private Dictionary<SkillDef, Passion> originalPassions = new Dictionary<SkillDef, Passion>();
+    public Dictionary<SkillDef, Passion> originalPassions = new Dictionary<SkillDef, Passion>();
 
     private GameComponent_RankInfo gameComponentRankInfo = null;
 
@@ -57,6 +58,8 @@ public class CompRankInfo : ThingComp
         }
     }
 
+    public Pawn ParentPawn => parent as Pawn;
+    
     public void UnlockRank(RankDef rank)
     {
         if (UnlockedRanks.Contains(rank))
@@ -64,14 +67,14 @@ public class CompRankInfo : ThingComp
             return;
         }
 
-        if (parent is not Pawn pawn)
+        if (ParentPawn == null)
         {
             return;
         }
             
         if (rank.rankTier > HighestRank())
         {
-            pawn.story.Title = rank.label;
+            ParentPawn.story.Title = rank.label;
         }
             
         UnlockedRanks.Add(rank);
@@ -80,53 +83,8 @@ public class CompRankInfo : ThingComp
         {
             daysAsRank.Add(rank, Find.TickManager.TicksGame);
         }
-            
-        if (rank.givesAbilities != null)
-        {
-            foreach (var ability in rank.givesAbilities)
-            {
-                pawn.abilities.GainAbility(ability);
-            }
-        }
-            
-        if (rank.givesVFEAbilities != null)
-        {
-            var comp = pawn.GetComp<CompAbilities>();
-            if (comp != null)
-            {
-                foreach (var ability in rank.givesVFEAbilities)
-                {
-                    comp.GiveAbility(ability);
-                }
-            }
-        }
         
-        if (rank.givesPassions != null)
-        {
-            if (originalPassions.NullOrEmpty())
-            {
-                foreach (var passion in rank.givesPassions)
-                {
-                    var skill = pawn.skills.GetSkill(passion.skill);
-                    if (!originalPassions.ContainsKey(skill.def))
-                    {
-                        originalPassions.Add(skill.def, skill.passion);
-                        skill.passion = passion.NewPassionFor(skill);
-                    }
-                }
-            }
-            RecalculatePassions(pawn);
-        }
-
-        if (rank.givesHediffs != null)
-        {
-            foreach (var hediffData in rank.givesHediffs)
-            {
-                var hediff = HediffMaker.MakeHediff(hediffData.hediffDef, pawn, pawn.health.hediffSet.GetBodyPartRecord(hediffData.bodyPartDef));
-                hediff.Severity = hediffData.initialSeverity;
-                pawn.health.AddHediff(hediff);
-            }
-        }
+        rank.UnlockRank(this);
             
         var gameCompRankInfo = Current.Game.GetComponent<GameComponent_RankInfo>();
 
@@ -140,11 +98,35 @@ public class CompRankInfo : ThingComp
         }
     }
 
-    private void RecalculatePassions(Pawn pawn)
+    public void RemoveRank(RankDef rank, bool removeFromRankLimit)
+    {
+        UnlockedRanks.Remove(rank);
+        daysAsRank.Remove(rank);
+            
+        if (parent is not Pawn pawn)
+        {
+            return;
+        }
+            
+        rank.RemoveRank(this);
+
+        if (removeFromRankLimit)
+        {
+            GameComponentRankInfo.PawnLostRank(rank);
+        }
+
+        var newHighestRank = HighestRankDef(false);
+        if (newHighestRank != null)
+        {
+            pawn.story.Title = newHighestRank.label;
+        }
+    }
+    
+    public void RecalculatePassions()
     {
         foreach (var originalPassion in originalPassions)
         {
-            var skill = pawn.skills.GetSkill(originalPassion.Key);
+            var skill = ParentPawn.skills.GetSkill(originalPassion.Key);
             skill.passion = originalPassion.Value;
         }
         var passionMods = unlockedRanks.SelectMany(def => def.givesPassions);
@@ -163,7 +145,7 @@ public class CompRankInfo : ThingComp
 
         foreach (var col in skillDefPassionCol)
         {
-            var skill = pawn.skills.GetSkill(col.Key);
+            var skill = ParentPawn.skills.GetSkill(col.Key);
             if (col.Value.NullOrEmpty())
             {
                 skill.passion = originalPassions[col.Key];
@@ -189,65 +171,6 @@ public class CompRankInfo : ThingComp
                     };
                 }
             }
-        }
-    }
-
-    public void RemoveRank(RankDef rankDef, bool removeFromRankLimit)
-    {
-        UnlockedRanks.Remove(rankDef);
-        daysAsRank.Remove(rankDef);
-            
-        if (parent is not Pawn pawn)
-        {
-            return;
-        }
-            
-        if (rankDef.givesAbilities != null)
-        {
-            foreach (var ability in rankDef.givesAbilities)
-            {
-                pawn.abilities.RemoveAbility(ability);
-            }
-        }
-            
-        if (rankDef.givesVFEAbilities != null)
-        {
-            var comp = pawn.GetComp<CompAbilities>();
-            if (comp != null)
-            {
-                foreach (var ability in rankDef.givesVFEAbilities)
-                {
-                    comp.LearnedAbilities.RemoveWhere(learnedAbility => learnedAbility.def == ability);
-                }
-            }
-        }
-        
-        if (rankDef.givesPassions != null)
-        {
-            if (!originalPassions.NullOrEmpty())
-            {
-                RecalculatePassions(pawn);
-            }
-        }
-        
-        if (rankDef.givesHediffs != null)
-        {
-            foreach (var hediff in rankDef.givesHediffs)
-            {
-                var hediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(hediff.hediffDef);
-                pawn.health.RemoveHediff(hediffOfDef);
-            }
-        }
-
-        if (removeFromRankLimit)
-        {
-            GameComponentRankInfo.PawnLostRank(rankDef);
-        }
-
-        var newHighestRank = HighestRankDef(false);
-        if (newHighestRank != null)
-        {
-            pawn.story.Title = newHighestRank.label;
         }
     }
 
@@ -294,18 +217,18 @@ public class CompRankInfo : ThingComp
             
         return list.NullOrEmpty() ? null : list.MaxBy(rank => rank.rankTier);
     }
-
-    public List<RankDef> UnlockedRanksOfDef(RankCategoryDef rankCategoryDef)
-    {
-        var unlockedRanksOfDef = rankCategoryDef.ranks.Where(data => HasRank(data.rankDef)).Select(data => data.rankDef).ToList();
-        return unlockedRanksOfDef;
-    }
-        
+    
     public RankDef HighestRankDef(bool onlySpecialist)
     {
         var list = UnlockedRanks.Where(def => !onlySpecialist || def.specialistRank).ToList();
             
         return list.NullOrEmpty() ? null : list.MaxBy(rank => rank.rankTier);
+    }
+
+    public List<RankDef> UnlockedRanksOfDef(RankCategoryDef rankCategoryDef)
+    {
+        var unlockedRanksOfDef = rankCategoryDef.ranks.Where(data => HasRank(data.rankDef)).Select(data => data.rankDef).ToList();
+        return unlockedRanksOfDef;
     }
 
     public bool HasRankOfCategory(RankCategoryDef rankCategoryDef)
@@ -344,6 +267,10 @@ public class CompRankInfo : ThingComp
     public override void Notify_Killed(Map prevMap, DamageInfo? dinfo = null)
     {
         base.Notify_Killed(prevMap, dinfo);
+        foreach (var rank in UnlockedRanks)
+        {
+            rank.Notify_Killed(this, prevMap, dinfo);
+        }
         GameComponentRankInfo.PawnResetRanks(UnlockedRanks);
     }
 
@@ -358,7 +285,7 @@ public class CompRankInfo : ThingComp
         var daysAsRankTemp = daysAsRank.ToList();
         foreach (var rank in daysAsRankTemp)
         {
-            daysAsRank[rank.Key] -= TicksPerDay;
+            IncreaseDaysAsRank(rank.Key);
         }
     }
         

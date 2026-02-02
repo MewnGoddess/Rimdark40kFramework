@@ -179,12 +179,12 @@ public class Dialog_PaintWeaponMultiColor : Window
                     offset = graphic.Key.drawData.OffsetForRot(Rot4.Invalid);
                     drawSize *= graphic.Key.drawData.scale;
                 }
-
+                
                 var offsetRect = new Rect(iconRect);
                 offsetRect.width *= drawSize.x;
                 offsetRect.height *= drawSize.y;
-                offsetRect.x += offset.x * 200 * (iconRect.width/offsetRect.width);
-                offsetRect.y -= offset.y * 200 * (iconRect.height/offsetRect.height);
+                offsetRect.x += offset.x * 200;
+                offsetRect.y -= offset.y * 200;
                 
                 Widgets.DrawTextureFitted(offsetRect, graphic.Value.MatSouth.mainTexture, 1f, graphic.Value.MatSingle);
             }
