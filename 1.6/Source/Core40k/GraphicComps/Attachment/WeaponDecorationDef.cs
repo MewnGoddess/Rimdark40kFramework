@@ -7,7 +7,7 @@ public class WeaponDecorationDef : DecorationDef
 {
     public int layerPlacement = 1;
 
-    public bool useWeaponColorAsDefault = true;
+    public bool useWeaponColorAsDefault = false;
 
     public WeaponDecorationTypeDef decorationType;
 
