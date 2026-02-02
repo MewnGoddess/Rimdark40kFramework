@@ -77,7 +77,7 @@ public static class RenderWeaponAttachments
             var size = new Vector3(drawSize.x, 0f, drawSize.y);
             
             var matrix = Matrix4x4.TRS(s: size, pos: afterOffsetPos, q: quaterion);
-            Graphics.DrawMesh(mesh, matrix, material, 0);
+            Graphics.DrawMesh(mesh, matrix, material, decoCompGraphic.Key.layerPlacement);
         }
     }
 }
