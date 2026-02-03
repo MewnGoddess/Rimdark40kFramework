@@ -83,7 +83,7 @@ public class Gizmo_AmmoChanger : Command
         var rect3 = new Rect(rect.x, rect.yMax - num + 12f, rect.width, num);
         GUI.DrawTexture(rect3, TexUI.GrayTextBG);
         Text.Anchor = TextAnchor.UpperCenter;
-        Widgets.Label(rect3, LabelCap);
+        Widgets.Label(rect3, compAmmoChanger.CurrentlySelectedProjectile.LabelCap);
         Text.Anchor = TextAnchor.UpperLeft;
         Text.Font = GameFont.Small;
         

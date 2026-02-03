@@ -66,6 +66,7 @@
     <Compile Include="ChangeableBullets\DefModExtension_AmmoChanger.cs" />
     <Compile Include="ChangeableBullets\Gizmo_AmmoChanger.cs" />
     <Compile Include="ChangeableBullets\HarmonyPatch_AmmoChangerGizmo.cs" />
+    <Compile Include="ChangeableBullets\HarmonyPatch_ChangeCurrentProjectile.cs" />
     <Compile Include="ChangeableBullets\HarmonyPatch_IncreaseShotBurstCountFromVarious.cs" />
     <Compile Include="ChangeableBullets\HarmonyPatch_IncreaseRangeFromVarious.cs" />
     <Compile Include="ChangeableBullets\JobDriver_ChangeAmmo.cs" />

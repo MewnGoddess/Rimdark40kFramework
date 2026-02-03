@@ -6,7 +6,7 @@ namespace Core40k;
 [HarmonyPatch(typeof(Verb), "EffectiveRange", MethodType.Getter)]
 public static class IncreaseRangeFromVarious
 {
-    public static void Postfix(Verb_Shoot __instance, ref float __result)
+    public static void Postfix(Verb __instance, ref float __result)
     {
         var weaponDecoComp = __instance?.EquipmentSource?.GetComp<CompWeaponDecoration>();
         if (weaponDecoComp != null)

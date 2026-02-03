@@ -6,7 +6,7 @@ namespace Core40k;
 [HarmonyPatch(typeof(Verb), "BurstShotCount", MethodType.Getter)]
 public static class IncreaseShotBurstCountFromVarious
 {
-    public static void Postfix(Verb_Shoot __instance, ref int __result)
+    public static void Postfix(Verb __instance, ref int __result)
     {
         var weaponDecoComp = __instance?.EquipmentSource?.GetComp<CompWeaponDecoration>();
         if (weaponDecoComp != null)
