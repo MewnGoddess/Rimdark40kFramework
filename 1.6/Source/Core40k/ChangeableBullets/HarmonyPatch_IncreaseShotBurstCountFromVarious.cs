@@ -8,6 +8,11 @@ public static class IncreaseShotBurstCountFromVarious
 {
     public static void Postfix(Verb __instance, ref int __result)
     {
+        var ammoChangerComp = __instance?.EquipmentSource?.GetComp<Comp_AmmoChanger>();
+        if (ammoChangerComp != null)
+        {
+            __result = ammoChangerComp.ShotsPerBurst;
+        }
         var weaponDecoComp = __instance?.EquipmentSource?.GetComp<CompWeaponDecoration>();
         if (weaponDecoComp != null)
         {
@@ -18,11 +23,6 @@ public static class IncreaseShotBurstCountFromVarious
                     __result += weaponDecoration.Key.verbModifier.additionalBurstShotCount;
                 }
             }
-        }
-        var ammoChangerComp = __instance?.EquipmentSource?.GetComp<Comp_AmmoChanger>();
-        if (ammoChangerComp != null)
-        {
-            __result += ammoChangerComp.ShotsPerBurst;
         }
     }
 }
