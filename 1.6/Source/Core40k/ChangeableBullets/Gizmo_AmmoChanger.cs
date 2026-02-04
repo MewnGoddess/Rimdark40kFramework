@@ -79,7 +79,7 @@ public class Gizmo_AmmoChanger : Command
         
         //Text on bottom
         Text.Font = GameFont.Tiny;
-        var num = Text.CalcHeight(LabelCap, rect.width + 0.1f);
+        var num = Text.CalcHeight(compAmmoChanger.CurrentlySelectedProjectile.LabelCap, rect.width + 0.1f);
         var rect3 = new Rect(rect.x, rect.yMax - num + 12f, rect.width, num);
         GUI.DrawTexture(rect3, TexUI.GrayTextBG);
         Text.Anchor = TextAnchor.UpperCenter;
