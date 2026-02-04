@@ -184,13 +184,15 @@ public class Dialog_PaintWeaponMultiColor : Window
                 var offsetRect = new Rect(iconRect);
                 offsetRect.width *= drawSize.x;
                 offsetRect.height *= drawSize.y;
+                offsetRect.width /= weapon.def.graphicData.drawSize.x;
+                offsetRect.height /= weapon.def.graphicData.drawSize.y;
                 offsetRect.x = iconRect.center.x - offsetRect.width / 2;
                 offsetRect.y = iconRect.center.y - offsetRect.height / 2;
 
                 var sizeDiff = iconRect.size - offsetRect.size;
                 
-                offsetRect.x += offset.x * sizeDiff.x + offsetRect.size.x * offset.x;
-                offsetRect.y -= offset.z * sizeDiff.y + offsetRect.size.y * offset.z;
+                offsetRect.x += (offset.x * sizeDiff.x + offsetRect.width * offset.x) / weapon.def.graphicData.drawSize.x;
+                offsetRect.y -= (offset.z * sizeDiff.y + offsetRect.height * offset.z) / weapon.def.graphicData.drawSize.y;
 
                 //offsetRect.x += extraOffst.x;
                 //offsetRect.y += extraOffst.y;
