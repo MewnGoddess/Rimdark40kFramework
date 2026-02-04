@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using RimWorld;
 using UnityEngine;
@@ -227,8 +228,9 @@ public class RankDef : Def
             stringBuilder.AppendLine("BEWH.Framework.RankSystem.RequirementsRanks".Translate());
             foreach (var rank in currentlySelectedRankCategory.rankDict[this].rankRequirements)
             {
+                var requiredDaysAsRank = Math.Round(rank.daysAs / pawn.GetStatValue(Core40kDefOf.BEWH_RankLearningFactor));
                 var rankRequirementMet = rankComp.HasRank(rank.rankDef) &&
-                                         rankComp.GetDaysAsRank(rank.rankDef) >= rank.daysAs / pawn.GetStatValue(Core40kDefOf.BEWH_RankLearningFactor);
+                                         rankComp.GetDaysAsRank(rank.rankDef) >= requiredDaysAsRank;
                     
                 if (!rankRequirementMet)
                 {
@@ -239,7 +241,7 @@ public class RankDef : Def
                     
                 if (rank.daysAs > 0)
                 {
-                    stringBuilder.AppendLine(("    " + "BEWH.Framework.RankSystem.HaveBeenRankForDays".Translate(rank.rankDef.label.CapitalizeFirst(), rank.daysAs)).Colorize(requirementColour));
+                    stringBuilder.AppendLine(("    " + "BEWH.Framework.RankSystem.HaveBeenRankForDays".Translate(rank.rankDef.label.CapitalizeFirst(), requiredDaysAsRank)).Colorize(requirementColour));
                 }
                 else
                 {
