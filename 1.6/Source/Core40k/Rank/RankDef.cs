@@ -404,6 +404,7 @@ public class RankDef : Def
 
     public virtual string BuildRankBonusString(StringBuilder stringBuilder)
     {
+        //Stats
         foreach (var statOffset in statOffsets)
         {
             stringBuilder.AppendLine("    " + statOffset.stat.label.CapitalizeFirst() + ": " + Core40kUtils.ValueToString(statOffset.stat, statOffset.value, finalized: false, ToStringNumberSense.Offset));
@@ -419,9 +420,8 @@ public class RankDef : Def
             statBonuses = "BEWH.Framework.RankSystem.Stats".Translate() + "\n" + statBonuses;
         }
             
-            
+        //Abilities
         var abilityStringBuilder = new StringBuilder();
-        
         foreach (var ability in givesAbilities)
         {
             abilityStringBuilder.AppendLine("    " + ability.label.CapitalizeFirst());
@@ -432,27 +432,64 @@ public class RankDef : Def
         }
         
         var abilityBonuses = abilityStringBuilder.ToString();
-            
         if (!abilityBonuses.NullOrEmpty())
         {
             abilityBonuses = "BEWH.Framework.RankSystem.Abilities".Translate() + "\n" + abilityBonuses;
         }
         
+        //Hediffs
         var hediffStringBuilder = new StringBuilder();
-        
         foreach (var hediff in givesHediffs)
         {
             hediffStringBuilder.AppendLine("    " + hediff.hediffDef.label.CapitalizeFirst());
         }
+        
         var hediffBonuses = hediffStringBuilder.ToString();
-            
         if (!hediffBonuses.NullOrEmpty())
         {
             hediffBonuses = "BEWH.Framework.RankSystem.Hediffs".Translate() + "\n" + hediffBonuses;
         }
         
+        //Recreation From Skills
+        var recreationFromSkillStringBuilder = new StringBuilder();
+        Log.Message("recreationFromSkills: " + recreationFromSkills);
+        Log.Message("recreationFromSkills c: " + recreationFromSkills.Count);
+        foreach (var recreationFromSkill in recreationFromSkills)
+        {
+            recreationFromSkillStringBuilder.AppendLine("    " + recreationFromSkill.label.CapitalizeFirst());
+        }
+        
+        var recreationFromSkillBonuses = recreationFromSkillStringBuilder.ToString();
+        if (!recreationFromSkillBonuses.NullOrEmpty())
+        {
+            recreationFromSkillBonuses = "BEWH.Framework.RankSystem.RecreationFromSkill".Translate() + "\n" + recreationFromSkillBonuses;
+        }
+        
+        //Passions
+        var givesPassionsStringBuilder = new StringBuilder();
+        foreach (var passionMod in givesPassions)
+        {
+            var passionText = passionMod.skill.label.CapitalizeFirst();
+            switch (passionMod.modType)
+            {
+                case PassionMod.PassionModType.AddOneLevel:
+                    passionText += "BEWH.Framework.RankSystem.PassionModAddOne".Translate();
+                    break;
+                case PassionMod.PassionModType.DropAll:
+                    passionText += "BEWH.Framework.RankSystem.PassionModDropAll".Translate();
+                    break;
+            }
+            givesPassionsStringBuilder.AppendLine("    " + passionText);
+        }
+        
+        var givesPassionsBonuses = givesPassionsStringBuilder.ToString();
+        if (!givesPassionsBonuses.NullOrEmpty())
+        {
+            givesPassionsBonuses = "BEWH.Framework.RankSystem.PassionMod".Translate() + "\n" + givesPassionsBonuses;
+        }
+        
+        //Custom Effects
         var customEffectStringBuilder = new StringBuilder();
-
         foreach (var customEffect in customEffectDescriptions)
         {
             customEffectStringBuilder.Append("    " + customEffect.CapitalizeFirst());
@@ -464,6 +501,7 @@ public class RankDef : Def
             customEffects = "BEWH.Framework.RankSystem.OtherEffects".Translate() + "\n" + customEffects;
         }
 
+        //Final Result
         var result = "";
         if (!statBonuses.NullOrEmpty())
         {
@@ -493,6 +531,30 @@ public class RankDef : Def
                 result += "\n" + hediffBonuses;
             }
         }
+
+        if (!recreationFromSkillBonuses.NullOrEmpty())
+        {
+            if (result.NullOrEmpty())
+            {
+                result = recreationFromSkillBonuses;
+            }
+            else
+            {
+                result += "\n" + recreationFromSkillBonuses;
+            }
+        }
+        
+        if (!givesPassionsBonuses.NullOrEmpty())
+        {
+            if (result.NullOrEmpty())
+            {
+                result = givesPassionsBonuses;
+            }
+            else
+            {
+                result += "\n" + givesPassionsBonuses;
+            }
+        }
         
         if (!customEffects.NullOrEmpty())
         {
@@ -505,15 +567,21 @@ public class RankDef : Def
                 result += "\n" + customEffects;
             }
         }
-            
-        if (statBonuses.NullOrEmpty() && abilityBonuses.NullOrEmpty())
-        {
-            result = "    " + "BEWH.Framework.CommonKeyword.None".Translate();
-        }
 
         return result;
     }
 
+    public string GetRankBonusString()
+    {
+        var bonuses = BuildRankBonusString(new StringBuilder());
+        if (bonuses.NullOrEmpty())
+        {
+            return"    " + "BEWH.Framework.CommonKeyword.None".Translate();
+        }
+
+        return bonuses;
+    }
+    
     public virtual void Notify_Killed(CompRankInfo rankComp, Map prevMap, DamageInfo? dinfo = null)
     {
         

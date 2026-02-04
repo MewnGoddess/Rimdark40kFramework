@@ -8,7 +8,7 @@ using Verse;
 namespace Core40k;
 
 [HarmonyPatch(typeof(StatWorker), "GetValueUnfinalized")]
-public static class GetValueUnfinalizedFromRankPatch
+public static class GetValueUnfinalizedFromVariousPatch
 {
     static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
     {
@@ -22,7 +22,7 @@ public static class GetValueUnfinalizedFromRankPatch
                 yield return new CodeInstruction(OpCodes.Ldarg_1);
                 yield return new CodeInstruction(OpCodes.Ldarg_0);
                 yield return new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(StatWorker), "stat"));
-                yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GetValueUnfinalizedFromRankPatch), "GetStatOffsetForX"));
+                yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GetValueUnfinalizedFromVariousPatch), "GetStatOffsetForX"));
                 yield return new CodeInstruction(OpCodes.Stloc_0);
                 yield return new CodeInstruction(OpCodes.Ldloc_0);
                 addedFactor = true;
@@ -36,7 +36,7 @@ public static class GetValueUnfinalizedFromRankPatch
                 yield return new CodeInstruction(OpCodes.Ldarg_1);
                 yield return new CodeInstruction(OpCodes.Ldarg_0);
                 yield return new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(StatWorker), "stat"));
-                yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GetValueUnfinalizedFromRankPatch), "GetStatFactorForX"));
+                yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GetValueUnfinalizedFromVariousPatch), "GetStatFactorForX"));
                 yield return new CodeInstruction(OpCodes.Stloc_0);
                 addedOffset = true;
             }
@@ -145,7 +145,7 @@ public static class GetValueUnfinalizedFromRankPatch
             return num;
         }
         
-        //Rank offset
+        //Rank factor
         if (pawn.HasComp<CompRankInfo>())
         {
             var rankListForReading = pawn.GetComp<CompRankInfo>().UnlockedRanks;
@@ -158,19 +158,19 @@ public static class GetValueUnfinalizedFromRankPatch
                     {
                         continue;
                     }
-                    num += rank.statFactors.GetStatOffsetFromList(stat);
+                    num *= rank.statFactors.GetStatFactorFromList(stat);
                     foreach (var conditional in rank.conditionalStatAffecters)
                     {
                         if (!conditional.statFactors.NullOrEmpty() && conditional.Applies(req))
                         {
-                            num += conditional.statFactors.GetStatOffsetFromList(stat);
+                            num *= conditional.statFactors.GetStatFactorFromList(stat);
                         }
                     }
                 }
             }
         }
         
-        //Apparel offset
+        //Apparel factor
         var apparels = pawn.apparel?.WornApparel?.Where(apparel => apparel.HasComp<CompDecorative>()).ToList();
         if (apparels != null)
         {
@@ -186,21 +186,21 @@ public static class GetValueUnfinalizedFromRankPatch
                 {
                     if (!extraDecoration.Key.statFactors.NullOrEmpty())
                     {
-                        num += extraDecoration.Key.statFactors.GetStatOffsetFromList(stat);
+                        num *= extraDecoration.Key.statFactors.GetStatFactorFromList(stat);
                     }
                 
                     foreach (var conditional in extraDecoration.Key.conditionalStatAffecters)
                     {
                         if (!conditional.statFactors.NullOrEmpty() && conditional.Applies(req))
                         {
-                            num += conditional.statFactors.GetStatOffsetFromList(stat);
+                            num *= conditional.statFactors.GetStatFactorFromList(stat);
                         }
                     }
                 }
             }
         }
         
-        //Weapon offset
+        //Weapon factor
         var weapon = pawn.equipment?.Primary;
         var compWeapon = weapon?.TryGetComp<CompWeaponDecoration>();
         if (compWeapon != null)
@@ -209,14 +209,14 @@ public static class GetValueUnfinalizedFromRankPatch
             {
                 if (!weaponDecoration.Key.statFactors.NullOrEmpty())
                 {
-                    num += weaponDecoration.Key.statFactors.GetStatOffsetFromList(stat);
+                    num *= weaponDecoration.Key.statFactors.GetStatFactorFromList(stat);
                 }
                 
                 foreach (var conditional in weaponDecoration.Key.conditionalStatAffecters)
                 {
                     if (!conditional.statFactors.NullOrEmpty() && conditional.Applies(req))
                     {
-                        num += conditional.statFactors.GetStatOffsetFromList(stat);
+                        num *= conditional.statFactors.GetStatFactorFromList(stat);
                     }
                 }
             }

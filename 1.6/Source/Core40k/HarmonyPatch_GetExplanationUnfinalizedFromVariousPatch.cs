@@ -9,7 +9,7 @@ using Verse;
 namespace Core40k;
 
 [HarmonyPatch(typeof(StatWorker), "GetExplanationUnfinalized")]
-public static class GetExplanationUnfinalizedFromRankPatch
+public static class GetExplanationUnfinalizedFromVariousPatch
 {
     static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
     {
@@ -22,7 +22,7 @@ public static class GetExplanationUnfinalizedFromRankPatch
                 yield return new CodeInstruction(OpCodes.Ldarg_1);
                 yield return new CodeInstruction(OpCodes.Ldarg_0);
                 yield return new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(StatWorker), "stat"));
-                yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GetExplanationUnfinalizedFromRankPatch), "GetExplanationForX"));
+                yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GetExplanationUnfinalizedFromVariousPatch), "GetExplanationForX"));
                 yield return new CodeInstruction(OpCodes.Stloc_0);
                 yield return new CodeInstruction(OpCodes.Ldloc_0);
                 patched = true;

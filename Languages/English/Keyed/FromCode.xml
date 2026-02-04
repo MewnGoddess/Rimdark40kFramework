@@ -88,12 +88,15 @@
   <BEWH.Framework.RankSystem.RankBonuses>Bonuses from rank</BEWH.Framework.RankSystem.RankBonuses>
   <BEWH.Framework.RankSystem.DaysSinceRankGiven>{0} days since rank was given</BEWH.Framework.RankSystem.DaysSinceRankGiven>
 
-
+  <BEWH.Framework.RankSystem.UnlockRank>Unlock rank</BEWH.Framework.RankSystem.UnlockRank>
   <BEWH.Framework.RankSystem.Stats>Stats</BEWH.Framework.RankSystem.Stats>
   <BEWH.Framework.RankSystem.Abilities>Abilities</BEWH.Framework.RankSystem.Abilities>
   <BEWH.Framework.RankSystem.Hediffs>Hediffs</BEWH.Framework.RankSystem.Hediffs>
   <BEWH.Framework.RankSystem.OtherEffects>Other Effects</BEWH.Framework.RankSystem.OtherEffects>
-  <BEWH.Framework.RankSystem.UnlockRank>Unlock rank</BEWH.Framework.RankSystem.UnlockRank>
+  <BEWH.Framework.RankSystem.RecreationFromSkill>Recreation from skills</BEWH.Framework.RankSystem.RecreationFromSkill>
+  <BEWH.Framework.RankSystem.PassionMod>Passions</BEWH.Framework.RankSystem.PassionMod>
+  <BEWH.Framework.RankSystem.PassionModAddOne> - increase by one</BEWH.Framework.RankSystem.PassionModAddOne>
+  <BEWH.Framework.RankSystem.PassionModDropAll> - drop all</BEWH.Framework.RankSystem.PassionModDropAll>
 
   <BEWH.Framework.RankSystem.StatsReport_Rank>Relevant ranks</BEWH.Framework.RankSystem.StatsReport_Rank>
   <BEWH.Framework.RankSystem.StatsReport_ArmorDeco>Armor decorations</BEWH.Framework.RankSystem.StatsReport_ArmorDeco>

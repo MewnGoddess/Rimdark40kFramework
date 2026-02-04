@@ -69,6 +69,9 @@ public class Dialog_PaintWeaponMultiColor : Window
             {
                 weaponDecorations.Add(grouping.Key, grouping.ToList());
             }
+            
+            WeaponDecorationComp.SetOriginals();
+            WeaponDecorationComp.RemoveInvalidDecorations(pawn);
         }
         
         alternateBaseForms = DefDatabase<AlternateBaseFormDef>.AllDefs.Where(def => def.appliesTo.Contains(weaponMultiColor.def.defName)).ToList();
@@ -77,8 +80,6 @@ public class Dialog_PaintWeaponMultiColor : Window
         {
             selectedAlternateBaseForm = MultiColorComp.currentAlternateBaseForm;
         }
-        
-        WeaponDecorationComp.RemoveInvalidDecorations(pawn);
         
         Find.TickManager.Pause();
     }
@@ -183,15 +184,64 @@ public class Dialog_PaintWeaponMultiColor : Window
                 var offsetRect = new Rect(iconRect);
                 offsetRect.width *= drawSize.x;
                 offsetRect.height *= drawSize.y;
-                offsetRect.x += offset.x * 200;
-                offsetRect.y -= offset.y * 200;
+                offsetRect.x = iconRect.center.x - offsetRect.width / 2;
+                offsetRect.y = iconRect.center.y - offsetRect.height / 2;
+
+                var sizeDiff = iconRect.size - offsetRect.size;
+                
+                offsetRect.x += offset.x * sizeDiff.x + offsetRect.size.x * offset.x;
+                offsetRect.y -= offset.z * sizeDiff.y + offsetRect.size.y * offset.z;
+
+                //offsetRect.x += extraOffst.x;
+                //offsetRect.y += extraOffst.y;
                 
                 Widgets.DrawTextureFitted(offsetRect, graphic.Value.MatSouth.mainTexture, 1f, graphic.Value.MatSingle);
+
+                /*var printOffsetRect = new Rect(iconRect);
+                printOffsetRect.y = iconRect.yMax;
+                printOffsetRect.height /= 5;
+                printOffsetRect.width /= 5;
+                printOffsetRect.x += printOffsetRect.width * 2;
+                if (Widgets.ButtonText(printOffsetRect, "log"))
+                {
+                    Log.Message("iconRect size: " + iconRect.size);
+                    Log.Message("offsetRect size: " + offsetRect.size);
+                    Log.Message("sizeDiff: " + sizeDiff);
+                    Log.Message("offset: " + offset);
+                    Log.Message("centerVec: " + centerVec);
+                    Log.Message("offsetRect pos: " + offsetRect.position);
+                }
+                var increaseOffsetXRect = new Rect(printOffsetRect);
+                increaseOffsetXRect.x = printOffsetRect.xMax;
+                if (Widgets.ButtonText(increaseOffsetXRect, "+ x"))
+                {
+                    extraOffst.x += 1f;
+                }
+                var decreaseOffsetXRect = new Rect(increaseOffsetXRect);
+                decreaseOffsetXRect.x = increaseOffsetXRect.xMax;
+                if (Widgets.ButtonText(decreaseOffsetXRect, "- x"))
+                {
+                    extraOffst.x -= 1f;
+                }
+                var increaseOffsetYRect = new Rect(printOffsetRect);
+                increaseOffsetYRect.x = printOffsetRect.xMin-printOffsetRect.width;
+                if (Widgets.ButtonText(increaseOffsetYRect, "+ y"))
+                {
+                    extraOffst.y += 1f;
+                }
+                var decreaseOffsetYRect = new Rect(increaseOffsetYRect);
+                decreaseOffsetYRect.x = decreaseOffsetYRect.xMin-decreaseOffsetYRect.width;
+                if (Widgets.ButtonText(decreaseOffsetYRect, "- y"))
+                {
+                    extraOffst.y -= 1f;
+                }*/
             }
         }
 
         return iconRect;
     }
+    
+    //private Vector2 extraOffst = Vector2.zero;
     
     private Vector2 weaponDecorationScrollPosition;
     private float curY;

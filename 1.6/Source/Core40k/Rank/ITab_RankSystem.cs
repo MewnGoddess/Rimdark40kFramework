@@ -499,7 +499,7 @@ public class ITab_RankSystem : ITab
             listingRankInfo.Label("BEWH.Framework.RankSystem.RankBonuses".Translate());
             scrollViewHeightRankInfo += listingHeightIncreaseMedium;
             Text.Font = GameFont.Small;
-            var rankBonusText = currentlySelectedRank.rankDef.BuildRankBonusString(new StringBuilder());
+            var rankBonusText = currentlySelectedRank.rankDef.GetRankBonusString();
             listingRankInfo.Label(rankBonusText);
             scrollViewHeightRankInfo += listingHeightIncreaseSmall * (rankBonusText.Split('\n').Length - 1);
 

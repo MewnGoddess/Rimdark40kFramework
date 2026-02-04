@@ -181,6 +181,8 @@
     <Compile Include="HarmonyPatches\HarmonyPatch_QualityCreatedBoostFromGenePatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_SpecificInheritableArchiteGenes.cs" />
     <Compile Include="GraphicComps\DefModExtension_ForcesBodyType.cs" />
+    <Compile Include="HarmonyPatch_GetExplanationUnfinalizedFromVariousPatch.cs" />
+    <Compile Include="HarmonyPatch_GetValueUnfinalizedFromVariousPatch.cs" />
     <Compile Include="MultiColorUtils.cs" />
     <Compile Include="PlaceWorkers\PlaceWorker_OnlyOnePerMap.cs" />
     <Compile Include="Rank\CompProperties_RankInfo.cs" />
@@ -191,8 +193,6 @@
     <Compile Include="Rank\RankCategorySpecificData.cs" />
     <Compile Include="Rank\HarmonyPatch_CalculateAllowedRankLimitOnArrestPatch.cs" />
     <Compile Include="Rank\HarmonyPatch_CalculateAllowedRankLimitOnRecruitPatch.cs" />
-    <Compile Include="Rank\HarmonyPatch_GetExplanationUnfinalizedFromRankPatch.cs" />
-    <Compile Include="Rank\HarmonyPatch_GetValueUnfinalizedFromRankPatch.cs" />
     <Compile Include="Rank\HarmonyPatch_PopulateMutableStatsWithRankStatsPatch.cs" />
     <Compile Include="Rank\HarmonyPatch_RankLimitResurrectionReAdd.cs" />
     <Compile Include="Rank\ITab_RankSystem.cs" />
