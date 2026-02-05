@@ -76,7 +76,7 @@ public class CompDecorative : CompGraphicParent
     {
         foreach (var presetPart in preset.extraDecorationPresetParts)
         {
-            var decoDef = Core40kUtils.GetDefFromString(presetPart.extraDecorationDefs);
+            var decoDef = Core40kUtils.GetArmorDecoDefFromString(presetPart.extraDecorationDefs);
             var extraDecorationsSetting = new ExtraDecorationSettings()
             {
                 Flipped = presetPart.flipped,

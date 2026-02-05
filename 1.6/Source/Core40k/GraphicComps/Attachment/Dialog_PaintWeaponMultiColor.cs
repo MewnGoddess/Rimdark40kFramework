@@ -43,6 +43,8 @@ public class Dialog_PaintWeaponMultiColor : Window
     
     private (Color col1, Color col2, Color col3) originalColor = (Color.white, Color.white, Color.white);
     
+    private List<WeaponDecorationPresetDef> weaponDecorationPresets = new List<WeaponDecorationPresetDef>();
+    
     public Dialog_PaintWeaponMultiColor()
     {
     }
@@ -72,6 +74,11 @@ public class Dialog_PaintWeaponMultiColor : Window
             
             WeaponDecorationComp.SetOriginals();
             WeaponDecorationComp.RemoveInvalidDecorations(pawn);
+        }
+        
+        foreach (var weaponDecorationPresetDef in DefDatabase<WeaponDecorationPresetDef>.AllDefs)
+        {
+            weaponDecorationPresets.Add(weaponDecorationPresetDef);
         }
         
         alternateBaseForms = DefDatabase<AlternateBaseFormDef>.AllDefs.Where(def => def.appliesTo.Contains(weaponMultiColor.def.defName)).ToList();
@@ -251,6 +258,102 @@ public class Dialog_PaintWeaponMultiColor : Window
     {
         inRect = inRect.ContractedBy(10);
         inRect.yMin -= 9f;
+
+        var presetRect = new Rect(inRect)
+        {
+            height = inRect.height / 16
+        };
+        presetRect.width /= 3;
+        var removeAllRect = new Rect(presetRect);
+        var editPresetRect = new Rect(presetRect);
+        
+        presetRect.x += presetRect.width*2;
+        editPresetRect.x += editPresetRect.width*1;
+
+        inRect.yMin += presetRect.height;
+        
+        removeAllRect = removeAllRect.ContractedBy(3f);
+        editPresetRect = editPresetRect.ContractedBy(3f);
+        presetRect = presetRect.ContractedBy(3f);
+
+        removeAllRect.x -= 2.5f;
+        presetRect.x += 2.5f;
+        
+        if (Widgets.ButtonText(presetRect, "BEWH.Framework.ExtraDecoration.Select".Translate()))
+        {
+            var floatMenuOptions = new List<FloatMenuOption>();
+        
+            var modsettingPresets = ModSettings.ExtraDecorationPresets.Where(deco => deco.appliesTo == weapon.def.defName);
+            
+            foreach (var preset in modsettingPresets)
+            {
+                var menuOption = new FloatMenuOption(preset.name, delegate
+                {
+                    WeaponDecorationComp.RemoveAllDecorations();
+                    WeaponDecorationComp.LoadFromPreset(preset);
+                    recache = true;
+                });
+                floatMenuOptions.Add(menuOption);
+            }
+            
+            foreach (var weaponDecorationPresetDef in weaponDecorationPresets.Where(deco => deco.appliesTo.Contains(weapon.def)))
+            {
+                var menuOption = new FloatMenuOption(weaponDecorationPresetDef.label, delegate
+                {
+                    WeaponDecorationComp.RemoveAllDecorations();
+                    WeaponDecorationComp.LoadFromPreset(weaponDecorationPresetDef);
+                    recache = true;
+                });
+                floatMenuOptions.Add(menuOption);
+            }
+            
+            if (floatMenuOptions.NullOrEmpty())
+            {
+                var menuOptionNone = new FloatMenuOption("NoneBrackets".Translate(), null);
+                floatMenuOptions.Add(menuOptionNone);
+            }
+        
+            Find.WindowStack.Add(new FloatMenu(floatMenuOptions));
+        }
+
+        if (Widgets.ButtonText(editPresetRect, "BEWH.Framework.ApparelMultiColor.EditPreset".Translate()))
+        {
+            var floatMenuOptions = new List<FloatMenuOption>();
+            
+            var currentPreset = GetCurrentPreset("");
+            
+            var modsettingPresets = ModSettings.ExtraDecorationPresets.Where(deco => deco.appliesTo == weapon.def.defName);
+            
+            //Delete or override existing
+            foreach (var preset in modsettingPresets)
+            {
+                var menuOption = new FloatMenuOption(preset.name, delegate
+                {
+                    Find.WindowStack.Add(new Dialog_ConfirmDecorationPresetOverride(preset, currentPreset));
+                }, Widgets.PlaceholderIconTex, Color.white);
+                menuOption.extraPartWidth = 30f;
+                menuOption.extraPartOnGUI = rect1 => Core40kUtils.DeletePreset(rect1, preset);
+                menuOption.tooltip = "BEWH.Framework.ApparelMultiColor.OverridePreset".Translate(preset.name);
+                floatMenuOptions.Add(menuOption);
+            }
+            
+            //Create new
+            var newPreset = new FloatMenuOption("BEWH.Framework.ApparelMultiColor.NewPreset".Translate(), delegate
+            {
+                Find.WindowStack.Add( new Dialog_EditExtraDecorationPresets(currentPreset));
+            }, Widgets.PlaceholderIconTex, Color.white);
+            floatMenuOptions.Add(newPreset);
+                
+            if (!floatMenuOptions.NullOrEmpty())
+            {
+                Find.WindowStack.Add(new FloatMenu(floatMenuOptions));
+            }
+        }
+
+        if (Widgets.ButtonText(removeAllRect, "BEWH.Framework.ExtraDecoration.RemoveAllDecorations".Translate()))
+        {
+            WeaponDecorationComp.RemoveAllDecorations();
+        }
         
         var viewRect = new Rect(inRect);
         viewRect.height -= 16f;
@@ -404,6 +507,33 @@ public class Dialog_PaintWeaponMultiColor : Window
             }
         }
         Widgets.EndScrollView();
+    }
+    
+    private ExtraDecorationPreset GetCurrentPreset(string presetName)
+    {
+        var extraDecorationPresetParts = new List<ExtraDecorationPresetParts>();
+        
+        foreach (var decoration in WeaponDecorationComp.WeaponDecorations)
+        {
+            var presetPart = new ExtraDecorationPresetParts()
+            {
+                extraDecorationDefs = decoration.Key.defName,
+                colour = decoration.Value.Color,
+                colourTwo = decoration.Value.ColorTwo,
+                colourThree = decoration.Value.ColorThree,
+            };
+                
+            extraDecorationPresetParts.Add(presetPart);
+        }
+
+        var extraDecorationPreset = new ExtraDecorationPreset()
+        {
+            extraDecorationPresetParts = extraDecorationPresetParts,
+            appliesTo = weapon.def.defName,
+            name = presetName
+        };
+
+        return extraDecorationPreset;
     }
 
     private Dictionary<AlternateBaseFormDef, Material> cachedAlternateBaseForms = new Dictionary<AlternateBaseFormDef, Material>();

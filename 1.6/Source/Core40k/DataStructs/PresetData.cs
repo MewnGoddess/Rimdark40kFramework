@@ -8,6 +8,7 @@ namespace Core40k;
 public class PresetData
 {
     public ExtraDecorationDef extraDecorationDef;
+    public WeaponDecorationDef weaponDecorationDef;
 
     public bool flipped = false;
     public Color? colour = null;

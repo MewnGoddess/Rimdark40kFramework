@@ -94,6 +94,44 @@ public class CompWeaponDecoration : CompGraphicParent
         Notify_GraphicChanged();
     }
     
+    public void RemoveAllDecorations()
+    {
+        weaponDecorations = new Dictionary<WeaponDecorationDef, ExtraDecorationSettings>();
+        Notify_GraphicChanged();
+    }
+
+    public void LoadFromPreset(ExtraDecorationPreset preset)
+    {
+        foreach (var presetPart in preset.extraDecorationPresetParts)
+        {
+            var decoDef = Core40kUtils.GetWeaponDecoDefFromString(presetPart.extraDecorationDefs);
+            var extraDecorationsSetting = new ExtraDecorationSettings()
+            {
+                Color = presetPart.colour,
+                ColorTwo = presetPart.colourTwo,
+                ColorThree = presetPart.colourThree,
+            };
+            weaponDecorations.Add(decoDef, extraDecorationsSetting);
+        }
+        Notify_GraphicChanged();
+    }
+    
+    public void LoadFromPreset(WeaponDecorationPresetDef preset)
+    {
+        foreach (var presetPart in preset.presetData)
+        {
+            var extraDecorationsSetting = new ExtraDecorationSettings()
+            {
+                Color = presetPart.colour ?? (presetPart.extraDecorationDef.useArmorColourAsDefault ? parent.DrawColor : Color.white),
+                ColorTwo = presetPart.colourTwo ?? Color.white,
+                ColorThree = presetPart.colourThree ?? Color.white,
+            };
+            
+            weaponDecorations.Add(presetPart.weaponDecorationDef, extraDecorationsSetting);
+        }
+        Notify_GraphicChanged();
+    }
+    
     public override void SetOriginals()
     {
         originalWeaponDecorations = weaponDecorations;

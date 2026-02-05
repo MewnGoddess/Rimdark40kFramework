@@ -24,9 +24,14 @@ public static class Core40kUtils
     public static readonly Color RequirementMetColour = Color.white;
     public static readonly Color RequirementNotMetColour = new Color(1f, 0.0f, 0.0f, 0.8f);
     
-    public static ExtraDecorationDef GetDefFromString(string defName)
+    public static ExtraDecorationDef GetArmorDecoDefFromString(string defName)
     {
         return DefDatabase<ExtraDecorationDef>.GetNamed(defName);
+    }
+    
+    public static WeaponDecorationDef GetWeaponDecoDefFromString(string defName)
+    {
+        return DefDatabase<WeaponDecorationDef>.GetNamed(defName);
     }
         
     public static bool DeletePreset(Rect rect, ColourPreset preset)

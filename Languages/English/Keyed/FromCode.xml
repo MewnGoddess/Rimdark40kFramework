@@ -21,7 +21,7 @@
   <BEWH.Framework.ApparelMultiColor.SecondaryColor>Secondary</BEWH.Framework.ApparelMultiColor.SecondaryColor>
   <BEWH.Framework.ApparelMultiColor.TertiaryColor>Tertiary</BEWH.Framework.ApparelMultiColor.TertiaryColor>
 
-  <BEWH.Framework.ApparelMultiColor.SelectPreset>Select Preset</BEWH.Framework.ApparelMultiColor.SelectPreset>
+  <BEWH.Framework.ApparelMultiColor.SelectPreset>Color Preset</BEWH.Framework.ApparelMultiColor.SelectPreset>
   <BEWH.Framework.ApparelMultiColor.EditPreset>Edit Presets</BEWH.Framework.ApparelMultiColor.EditPreset>
   <BEWH.Framework.ApparelMultiColor.NewPreset>[New Preset]</BEWH.Framework.ApparelMultiColor.NewPreset>
   <BEWH.Framework.ApparelMultiColor.EnterPresetName>Enter name of new preset</BEWH.Framework.ApparelMultiColor.EnterPresetName>
@@ -42,13 +42,13 @@
   <BEWH.Framework.ExtraDecoration.SetDefaultColor>Set Default Colors</BEWH.Framework.ExtraDecoration.SetDefaultColor>
 
 
-  <BEWH.Framework.ExtraDecoration.Preset>Preset</BEWH.Framework.ExtraDecoration.Preset>
+  <BEWH.Framework.ExtraDecoration.Preset>Col. Preset</BEWH.Framework.ExtraDecoration.Preset>
   <BEWH.Framework.ExtraDecoration.PresetDesc>Select a color preset</BEWH.Framework.ExtraDecoration.PresetDesc>
 
   <BEWH.Framework.ExtraDecoration.Mask>Masks</BEWH.Framework.ExtraDecoration.Mask>
   <BEWH.Framework.ExtraDecoration.MaskDesc>Select a mask</BEWH.Framework.ExtraDecoration.MaskDesc>
 
-  <BEWH.Framework.ExtraDecoration.Select>Select</BEWH.Framework.ExtraDecoration.Select>
+  <BEWH.Framework.ExtraDecoration.Select>Preset</BEWH.Framework.ExtraDecoration.Select>
   <BEWH.Framework.ExtraDecoration.SelectDesc>Select a decoration preset</BEWH.Framework.ExtraDecoration.SelectDesc>
 
   <BEWH.Framework.ExtraDecoration.Edit>Edit</BEWH.Framework.ExtraDecoration.Edit>
