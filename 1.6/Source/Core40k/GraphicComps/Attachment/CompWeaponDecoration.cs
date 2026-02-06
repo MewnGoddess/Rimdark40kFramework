@@ -134,14 +134,19 @@ public class CompWeaponDecoration : CompGraphicParent
     
     public override void SetOriginals()
     {
-        originalWeaponDecorations = weaponDecorations;
+        originalWeaponDecorations = new Dictionary<WeaponDecorationDef, ExtraDecorationSettings>();
+        originalWeaponDecorations.AddRange(weaponDecorations);
         Notify_GraphicChanged();
+        base.SetOriginals();
     }
 
     public override void Reset()
     {
-        weaponDecorations = originalWeaponDecorations;
+        weaponDecorations = new Dictionary<WeaponDecorationDef, ExtraDecorationSettings>();
+        weaponDecorations.AddRange(originalWeaponDecorations);
+        cachedGraphics = [];
         Notify_GraphicChanged();
+        base.Reset();
     }
     
     public override void Notify_GraphicChanged()
@@ -156,6 +161,26 @@ public class CompWeaponDecoration : CompGraphicParent
         foreach (var weaponDecoration in weaponDecorations)
         {
             if (!weaponDecoration.Key.HasRequirements(pawn, out _))
+            {
+                toRemove.Add(weaponDecoration.Key);
+            }
+        }
+        foreach (var weaponDecorationDef in toRemove)
+        {
+            weaponDecorations.Remove(weaponDecorationDef);
+        }
+    }
+    
+    public void RemoveDecorationsIncompatibleWithAlternate(AlternateBaseFormDef alternateBaseFormDef)
+    {
+        var toRemove = new List<WeaponDecorationDef>();
+        foreach (var weaponDecoration in weaponDecorations)
+        {
+            if (alternateBaseFormDef == null && weaponDecoration.Key.isIncompatibleWithBaseTexture)
+            {
+                toRemove.Add(weaponDecoration.Key);
+            }
+            else if (alternateBaseFormDef != null && alternateBaseFormDef.incompatibleWeaponDecorations.Contains(weaponDecoration.Key))
             {
                 toRemove.Add(weaponDecoration.Key);
             }

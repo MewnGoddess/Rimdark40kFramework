@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -11,8 +12,6 @@ public class CompProperties_MultiColor : CompProperties
     public Color? defaultPrimaryColor = null;
     public Color? defaultSecondaryColor;
     public Color? defaultTertiaryColor;
-    
-    public List<ApparelMultiColorTabDef> tabDefs;
     
     public CompProperties_MultiColor()
     {

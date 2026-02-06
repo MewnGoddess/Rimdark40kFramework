@@ -29,7 +29,7 @@ public class Dialog_ConfirmDecorationPresetOverride : Window
             height = viewRect.height * 0.5f
         };
         Text.Anchor = TextAnchor.MiddleCenter;
-        Widgets.Label(labelRect, "BEWH.Framework.ApparelMultiColor.ConfirmOverride".Translate());
+        Widgets.Label(labelRect, "BEWH.Framework.Customization.ConfirmOverride".Translate());
         Text.Anchor = TextAnchor.UpperLeft;
             
         var closeRect = new Rect(labelRect)

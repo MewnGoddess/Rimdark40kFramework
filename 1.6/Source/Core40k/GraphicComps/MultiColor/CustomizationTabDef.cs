@@ -3,7 +3,7 @@ using Verse;
 
 namespace Core40k;
 
-public class ApparelMultiColorTabDef : Def
+public class CustomizationTabDef : Def
 {
     public Type tabDrawerClass;
 }

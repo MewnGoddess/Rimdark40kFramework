@@ -37,7 +37,7 @@ public class CompMultiColor : CompGraphicParent
     public CompProperties_MultiColor Props => (CompProperties_MultiColor)props; 
 
     private ThingDef thingDef => parent.def;
-    
+    private Thing thing => parent;
     public Pawn Wearer
     {
         get
@@ -92,6 +92,7 @@ public class CompMultiColor : CompGraphicParent
         }
     }
 
+    
     private MaskDef originalMaskDef;
     private MaskDef maskDef;
     public MaskDef MaskDef
@@ -104,9 +105,9 @@ public class CompMultiColor : CompGraphicParent
         } 
     }
 
+    
     private bool recacheMultiGraphics = true;
     public bool RecacheMultiGraphics => recacheMultiGraphics;
-    
     private Graphic_Multi cachedGraphicMulti;
     public Graphic_Multi CachedGraphicMulti
     {
@@ -121,7 +122,6 @@ public class CompMultiColor : CompGraphicParent
             }
         }
     }
-
     private ApparelGraphicRecord? apparelGraphicRecord;
     public ApparelGraphicRecord ApparelGraphicRecord
     {
@@ -136,15 +136,11 @@ public class CompMultiColor : CompGraphicParent
         }
     }
     
+    
     private bool recacheSingleGraphics = true;
     public bool RecacheSingleGraphics => recacheSingleGraphics;
-
     private Graphic cachedGraphic;
     private Graphic cachedDefaultGraphic;
-
-    public AlternateBaseFormDef originalCurrentAlternateBaseForm = null;
-    public AlternateBaseFormDef currentAlternateBaseForm = null;
-    
     public Graphic GetSingleGraphic(bool onlyDefaultGraphic = false)
     {
         if (onlyDefaultGraphic)
@@ -165,7 +161,6 @@ public class CompMultiColor : CompGraphicParent
         SetSingleGraphic(onlyDefaultGraphic);
         return GetSingleGraphic(onlyDefaultGraphic);
     }
-    
     public void SetSingleGraphic(bool onlyDefaultGraphic = false)
     {
         recacheSingleGraphics = false;
@@ -182,8 +177,32 @@ public class CompMultiColor : CompGraphicParent
             cachedGraphic = new Graphic_RandomRotated(graphic, 35f);
         }
     }
+    
+    
+    public AlternateBaseFormDef originalCurrentAlternateBaseForm = null;
+    public AlternateBaseFormDef currentAlternateBaseForm = null;
 
-    public List<ApparelMultiColorTabDef> ApparelMultiColorTabDefs => Props.tabDefs;
+    public void SetAlternateBaseForm(AlternateBaseFormDef alternateBaseFormDef, bool isForApparel)
+    {
+        if (isForApparel)
+        {
+            var compArmorDeco = thing.TryGetComp<CompDecorative>();
+            compArmorDeco?.RemoveDecorationsIncompatibleWithAlternate(alternateBaseFormDef);
+        }
+        else
+        {
+            var compWeaponDeco = thing.TryGetComp<CompWeaponDecoration>();
+            compWeaponDeco?.RemoveDecorationsIncompatibleWithAlternate(alternateBaseFormDef);
+        }
+        
+        if (alternateBaseFormDef != null && alternateBaseFormDef.incompatibleMaskDefs.Contains(maskDef))
+        {
+            maskDef = Core40kDefOf.BEWH_DefaultMask;
+        }
+        
+        currentAlternateBaseForm = alternateBaseFormDef;
+        Notify_GraphicChanged();
+    }
     
     public override void InitialSetup()
     {
@@ -204,7 +223,6 @@ public class CompMultiColor : CompGraphicParent
         drawColorOne = colorOne;
         drawColorTwo = colorTwo;
         drawColorThree = colorThree ?? Color.white;
-        SetOriginals();
     }
     
     public void SetColors(ColourPresetDef preset)
@@ -212,7 +230,6 @@ public class CompMultiColor : CompGraphicParent
         drawColorOne = preset.primaryColour;
         drawColorTwo = preset.secondaryColour;
         drawColorThree = preset.tertiaryColour ?? preset.secondaryColour;
-        SetOriginals();
     }
     
     public override void SetOriginals()

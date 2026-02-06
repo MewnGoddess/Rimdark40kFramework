@@ -10,7 +10,7 @@ using Verse.Sound;
 namespace Core40k;
 
 [StaticConstructorOnStartup]
-public class Dialog_PaintWeaponMultiColor : Window
+public class Dialog_CustomizeWeaponOld : Window
 {
     private Pawn pawn;
 
@@ -45,11 +45,11 @@ public class Dialog_PaintWeaponMultiColor : Window
     
     private List<WeaponDecorationPresetDef> weaponDecorationPresets = new List<WeaponDecorationPresetDef>();
     
-    public Dialog_PaintWeaponMultiColor()
+    public Dialog_CustomizeWeaponOld()
     {
     }
 
-    public Dialog_PaintWeaponMultiColor(Pawn pawn, ThingWithComps weaponMultiColor)
+    public Dialog_CustomizeWeaponOld(Pawn pawn, ThingWithComps weaponMultiColor)
     {
         Setup(pawn, weaponMultiColor);
     }
@@ -200,57 +200,13 @@ public class Dialog_PaintWeaponMultiColor : Window
                 
                 offsetRect.x += (offset.x * sizeDiff.x + offsetRect.width * offset.x) / weapon.def.graphicData.drawSize.x;
                 offsetRect.y -= (offset.z * sizeDiff.y + offsetRect.height * offset.z) / weapon.def.graphicData.drawSize.y;
-
-                //offsetRect.x += extraOffst.x;
-                //offsetRect.y += extraOffst.y;
                 
                 Widgets.DrawTextureFitted(offsetRect, graphic.Value.MatSouth.mainTexture, 1f, graphic.Value.MatSingle);
-
-                /*var printOffsetRect = new Rect(iconRect);
-                printOffsetRect.y = iconRect.yMax;
-                printOffsetRect.height /= 5;
-                printOffsetRect.width /= 5;
-                printOffsetRect.x += printOffsetRect.width * 2;
-                if (Widgets.ButtonText(printOffsetRect, "log"))
-                {
-                    Log.Message("iconRect size: " + iconRect.size);
-                    Log.Message("offsetRect size: " + offsetRect.size);
-                    Log.Message("sizeDiff: " + sizeDiff);
-                    Log.Message("offset: " + offset);
-                    Log.Message("centerVec: " + centerVec);
-                    Log.Message("offsetRect pos: " + offsetRect.position);
-                }
-                var increaseOffsetXRect = new Rect(printOffsetRect);
-                increaseOffsetXRect.x = printOffsetRect.xMax;
-                if (Widgets.ButtonText(increaseOffsetXRect, "+ x"))
-                {
-                    extraOffst.x += 1f;
-                }
-                var decreaseOffsetXRect = new Rect(increaseOffsetXRect);
-                decreaseOffsetXRect.x = increaseOffsetXRect.xMax;
-                if (Widgets.ButtonText(decreaseOffsetXRect, "- x"))
-                {
-                    extraOffst.x -= 1f;
-                }
-                var increaseOffsetYRect = new Rect(printOffsetRect);
-                increaseOffsetYRect.x = printOffsetRect.xMin-printOffsetRect.width;
-                if (Widgets.ButtonText(increaseOffsetYRect, "+ y"))
-                {
-                    extraOffst.y += 1f;
-                }
-                var decreaseOffsetYRect = new Rect(increaseOffsetYRect);
-                decreaseOffsetYRect.x = decreaseOffsetYRect.xMin-decreaseOffsetYRect.width;
-                if (Widgets.ButtonText(decreaseOffsetYRect, "- y"))
-                {
-                    extraOffst.y -= 1f;
-                }*/
             }
         }
 
         return iconRect;
     }
-    
-    //private Vector2 extraOffst = Vector2.zero;
     
     private Vector2 weaponDecorationScrollPosition;
     private float curY;
@@ -279,7 +235,7 @@ public class Dialog_PaintWeaponMultiColor : Window
         removeAllRect.x -= 2.5f;
         presetRect.x += 2.5f;
         
-        if (Widgets.ButtonText(presetRect, "BEWH.Framework.ExtraDecoration.Select".Translate()))
+        if (Widgets.ButtonText(presetRect, "BEWH.Framework.Customization.DecorationPreset".Translate()))
         {
             var floatMenuOptions = new List<FloatMenuOption>();
         
@@ -316,7 +272,7 @@ public class Dialog_PaintWeaponMultiColor : Window
             Find.WindowStack.Add(new FloatMenu(floatMenuOptions));
         }
 
-        if (Widgets.ButtonText(editPresetRect, "BEWH.Framework.ApparelMultiColor.EditPreset".Translate()))
+        if (Widgets.ButtonText(editPresetRect, "BEWH.Framework.Customization.EditPreset".Translate()))
         {
             var floatMenuOptions = new List<FloatMenuOption>();
             
@@ -333,12 +289,12 @@ public class Dialog_PaintWeaponMultiColor : Window
                 }, Widgets.PlaceholderIconTex, Color.white);
                 menuOption.extraPartWidth = 30f;
                 menuOption.extraPartOnGUI = rect1 => Core40kUtils.DeletePreset(rect1, preset);
-                menuOption.tooltip = "BEWH.Framework.ApparelMultiColor.OverridePreset".Translate(preset.name);
+                menuOption.tooltip = "BEWH.Framework.Customization.OverridePreset".Translate(preset.name);
                 floatMenuOptions.Add(menuOption);
             }
             
             //Create new
-            var newPreset = new FloatMenuOption("BEWH.Framework.ApparelMultiColor.NewPreset".Translate(), delegate
+            var newPreset = new FloatMenuOption("BEWH.Framework.Customization.NewPreset".Translate(), delegate
             {
                 Find.WindowStack.Add( new Dialog_EditExtraDecorationPresets(currentPreset));
             }, Widgets.PlaceholderIconTex, Color.white);
@@ -350,7 +306,7 @@ public class Dialog_PaintWeaponMultiColor : Window
             }
         }
 
-        if (Widgets.ButtonText(removeAllRect, "BEWH.Framework.ExtraDecoration.RemoveAllDecorations".Translate()))
+        if (Widgets.ButtonText(removeAllRect, "BEWH.Framework.Customization.RemoveAllDecorations".Translate()))
         {
             WeaponDecorationComp.RemoveAllDecorations();
         }
@@ -404,9 +360,10 @@ public class Dialog_PaintWeaponMultiColor : Window
                 }
 
                 var hasReq = weaponDecoration.Value[i].HasRequirements(pawn, out var reason);
-                var incompatibleDeco = curDecoIsIncompatible 
-                                       || (selectedAlternateBaseForm == null 
-                                           && weaponDecoration.Value[i].isIncompatibleWithBaseTexture);
+                var incompatibleDeco = (selectedAlternateBaseForm != null 
+                                            && selectedAlternateBaseForm.incompatibleWeaponDecorations.Contains(weaponDecoration.Value[i])) 
+                                            || (selectedAlternateBaseForm == null
+                                            && weaponDecoration.Value[i].isIncompatibleWithBaseTexture);
                 
                 var color = Color.white;
                 var tipTooltip = weaponDecoration.Value[i].label;
@@ -416,12 +373,12 @@ public class Dialog_PaintWeaponMultiColor : Window
                 }
                 if (!hasReq)
                 {
-                    tipTooltip += "\n" + "BEWH.Framework.DecoRequirement.RequirementNotMet".Translate() + reason;
+                    tipTooltip += "\n" + "BEWH.Framework.Customization.RequirementNotMet".Translate() + reason;
                     color = Color.gray;
                 }
                 if (incompatibleDeco)
                 {
-                    tipTooltip += "\n" +"BEWH.Framework.WeaponDecoration.IncompatibleWithCurrentAltBase".Translate();
+                    tipTooltip += "\n" +"BEWH.Framework.Customization.IncompatibleWithCurrentAltBase".Translate();
                     color = Color.gray;
                 }
                 
@@ -566,7 +523,7 @@ public class Dialog_PaintWeaponMultiColor : Window
         selectPresetRect.x += 5;
 
         //Select button
-        if (Widgets.ButtonText(selectPresetRect, "BEWH.Framework.ApparelMultiColor.SelectPreset".Translate()))
+        if (Widgets.ButtonText(selectPresetRect, "BEWH.Framework.Customization.ColorPreset".Translate()))
         {
             var list = new List<FloatMenuOption>();
             //Default Color of weapon
@@ -612,7 +569,7 @@ public class Dialog_PaintWeaponMultiColor : Window
         }
                 
         //Save button
-        if (Widgets.ButtonText(editPresetRect, "BEWH.Framework.ApparelMultiColor.EditPreset".Translate()))
+        if (Widgets.ButtonText(editPresetRect, "BEWH.Framework.Customization.EditPreset".Translate()))
         {
             var list = new List<FloatMenuOption>();
                     
@@ -625,12 +582,12 @@ public class Dialog_PaintWeaponMultiColor : Window
                 }, Widgets.PlaceholderIconTex, Color.white);
                 menuOption.extraPartWidth = 30f;
                 menuOption.extraPartOnGUI = rect1 => Core40kUtils.DeletePreset(rect1, preset);
-                menuOption.tooltip = "BEWH.Framework.ApparelMultiColor.OverridePreset".Translate(preset.name);
+                menuOption.tooltip = "BEWH.Framework.Customization.OverridePreset".Translate(preset.name);
                 list.Add(menuOption);
             }
                     
             //Create new
-            var newPreset = new FloatMenuOption("BEWH.Framework.ApparelMultiColor.NewPreset".Translate(), delegate
+            var newPreset = new FloatMenuOption("BEWH.Framework.Customization.NewPreset".Translate(), delegate
             {
                 var newColourPreset = new ColourPreset
                 {
@@ -651,7 +608,7 @@ public class Dialog_PaintWeaponMultiColor : Window
         }
         
         //Switch base texture
-        if (MultiColorComp != null && Widgets.ButtonText(selectBaseFormRect, "BEWH.Framework.WeaponDecoration.AlternativeBaseTexture".Translate()))
+        if (MultiColorComp != null && Widgets.ButtonText(selectBaseFormRect, "BEWH.Framework.Customization.AlternativeBaseTexture".Translate()))
         {
             var list = new List<FloatMenuOption>();
             var mouseOffset = UI.MousePositionOnUI;
@@ -683,15 +640,8 @@ public class Dialog_PaintWeaponMultiColor : Window
 
                 var menuOption = new FloatMenuOption(alternateBaseForm.label, delegate 
                 {
-                        MultiColorComp.currentAlternateBaseForm = alternateBaseForm;
+                        MultiColorComp.SetAlternateBaseForm(alternateBaseForm, false);
                         selectedAlternateBaseForm = alternateBaseForm;
-                        foreach (var weaponDecorationDef in alternateBaseForm.incompatibleWeaponDecorations)
-                        {
-                            if (WeaponDecorationComp.WeaponDecorations.ContainsKey(weaponDecorationDef))
-                            {
-                                WeaponDecorationComp.AddOrRemoveDecoration(weaponDecorationDef);
-                            }
-                        }
                         recache = true;
                     }, Widgets.PlaceholderIconTex, Color.white, mouseoverGuiAction: delegate(Rect rect)
                     {
@@ -820,8 +770,8 @@ public class Dialog_PaintWeaponMultiColor : Window
         Widgets.DrawMenuSection(colorOneRect.ContractedBy(-1));
         Widgets.DrawRectFast(colorOneRect, MultiColorComp.DrawColor);
         Text.Anchor = TextAnchor.MiddleCenter;
-        Widgets.Label(colorOneRect, "BEWH.Framework.ApparelMultiColor.PrimaryColor".Translate());
-        TooltipHandler.TipRegion(colorOneRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        Widgets.Label(colorOneRect, "BEWH.Framework.Customization.PrimaryColor".Translate());
+        TooltipHandler.TipRegion(colorOneRect, "BEWH.Framework.Customization.ChooseCustomColour".Translate());
         Text.Anchor = TextAnchor.UpperLeft;
         if (Widgets.ButtonInvisible(colorOneRect))
         {
@@ -838,8 +788,8 @@ public class Dialog_PaintWeaponMultiColor : Window
         Widgets.DrawMenuSection(colorTwoRect.ContractedBy(-1));
         Widgets.DrawRectFast(colorTwoRect, MultiColorComp.DrawColorTwo);
         Text.Anchor = TextAnchor.MiddleCenter;
-        Widgets.Label(colorTwoRect, "BEWH.Framework.ApparelMultiColor.SecondaryColor".Translate());
-        TooltipHandler.TipRegion(colorTwoRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        Widgets.Label(colorTwoRect, "BEWH.Framework.Customization.SecondaryColor".Translate());
+        TooltipHandler.TipRegion(colorTwoRect, "BEWH.Framework.Customization.ChooseCustomColour".Translate());
         Text.Anchor = TextAnchor.UpperLeft;
         if (Widgets.ButtonInvisible(colorTwoRect))
         {
@@ -856,8 +806,8 @@ public class Dialog_PaintWeaponMultiColor : Window
         Widgets.DrawMenuSection(colorThreeRect.ContractedBy(-1));
         Widgets.DrawRectFast(colorThreeRect, MultiColorComp.DrawColorThree);
         Text.Anchor = TextAnchor.MiddleCenter;
-        Widgets.Label(colorThreeRect, "BEWH.Framework.ApparelMultiColor.TertiaryColor".Translate());
-        TooltipHandler.TipRegion(colorThreeRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        Widgets.Label(colorThreeRect, "BEWH.Framework.Customization.TertiaryColor".Translate());
+        TooltipHandler.TipRegion(colorThreeRect, "BEWH.Framework.Customization.ChooseCustomColour".Translate());
         Text.Anchor = TextAnchor.UpperLeft;
         if (Widgets.ButtonInvisible(colorThreeRect))
         {
@@ -876,7 +826,7 @@ public class Dialog_PaintWeaponMultiColor : Window
         Widgets.DrawMenuSection(colourSelection);
         colourSelection = colourSelection.ContractedBy(1f);
         Widgets.DrawRectFast(colourSelection, WeaponDecorationComp.WeaponDecorations[weaponDecorationDef].Color);
-        TooltipHandler.TipRegion(colourSelection, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        TooltipHandler.TipRegion(colourSelection, "BEWH.Framework.Customization.ChooseCustomColour".Translate());
         if (Widgets.ButtonInvisible(colourSelection))
         {
             Find.WindowStack.Add( new Dialog_ColourPicker( WeaponDecorationComp.WeaponDecorations[weaponDecorationDef].Color, ( newColour ) =>
@@ -893,7 +843,7 @@ public class Dialog_PaintWeaponMultiColor : Window
         Widgets.DrawMenuSection(colourSelectionTwo);
         colourSelectionTwo = colourSelectionTwo.ContractedBy(1f);
         Widgets.DrawRectFast(colourSelectionTwo, WeaponDecorationComp.WeaponDecorations[weaponDecorationDef].ColorTwo);
-        TooltipHandler.TipRegion(colourSelectionTwo, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        TooltipHandler.TipRegion(colourSelectionTwo, "BEWH.Framework.Customization.ChooseCustomColour".Translate());
         if (Widgets.ButtonInvisible(colourSelectionTwo))
         {
             Find.WindowStack.Add( new Dialog_ColourPicker( WeaponDecorationComp.WeaponDecorations[weaponDecorationDef].ColorTwo, ( newColour ) =>
@@ -910,7 +860,7 @@ public class Dialog_PaintWeaponMultiColor : Window
         Widgets.DrawMenuSection(colourSelectionThree);
         colourSelectionThree = colourSelectionThree.ContractedBy(1f);
         Widgets.DrawRectFast(colourSelectionThree, WeaponDecorationComp.WeaponDecorations[weaponDecorationDef].ColorThree);
-        TooltipHandler.TipRegion(colourSelectionThree, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        TooltipHandler.TipRegion(colourSelectionThree, "BEWH.Framework.Customization.ChooseCustomColour".Translate());
         if (Widgets.ButtonInvisible(colourSelectionThree))
         {
             Find.WindowStack.Add( new Dialog_ColourPicker( WeaponDecorationComp.WeaponDecorations[weaponDecorationDef].ColorThree, ( newColour ) =>

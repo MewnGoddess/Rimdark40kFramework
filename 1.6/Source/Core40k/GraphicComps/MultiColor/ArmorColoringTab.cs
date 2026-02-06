@@ -1,75 +1,37 @@
 ﻿using System;
-using RimWorld;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using ColourPicker;
+using RimWorld;
 using UnityEngine;
 using Verse;
-using Verse.Sound;
 
 namespace Core40k;
 
-[StaticConstructorOnStartup]
-public class Dialog_PaintApparelMultiColor : Window
+public class ArmorColoringTab : CustomizerTabDrawer
 {
-    private Pawn pawn;
-
-    Vector3 PortraitOffset = new Vector3(0f, 0f, 0.15f);
-
-    private Vector2 apparelColorScrollPosition;
-    private Dictionary<ThingDef, int> apparelColorMaskPageNumber = new Dictionary<ThingDef, int>();
-
-    private float viewRectHeight;
-
-    private static readonly Vector2 ButSize = new Vector2(200f, 40f);
-
-    public override Vector2 InitialSize => new Vector2(950f, 750f);
-
+    private static Core40kModSettings modSettings = null;
+    public static Core40kModSettings ModSettings => modSettings ??= LoadedModManager.GetMod<Core40kMod>().GetSettings<Core40kModSettings>();
+    
     private bool DevMode => Prefs.DevMode;
-        
-    private List<ColourPresetDef> presets;
-
+    
+    private bool recache = true;
+    private Dictionary<ThingDef, int> apparelColorMaskPageNumber = new Dictionary<ThingDef, int>();
+    
     private Dictionary<ThingDef, List<MaskDef>> masks = new ();
+
+    private List<ColourPresetDef> presets;
     
     private Dictionary<(ThingDef, MaskDef), Material> cachedMaterials = new ();
-
-    private readonly List<ApparelMultiColorTabDef> allTabs;
-        
-    private readonly List<TabRecord> tabs;
-
-    private static readonly string MainTab = "BEWH.Framework.ApparelMultiColor.MainTab".Translate();
-
-    private string curTab;
-        
-    private static Core40kModSettings modSettings = null;
-
-    public static Core40kModSettings ModSettings => modSettings ??= LoadedModManager.GetMod<Core40kMod>().GetSettings<Core40kModSettings>();
-
-    private bool recache = true;
-    public Dialog_PaintApparelMultiColor()
+    
+    private float viewRectHeight;
+    
+    public override void Setup(Pawn pawn)
     {
-    }
-
-    public Dialog_PaintApparelMultiColor(Pawn pawn)
-    {
-        this.pawn = pawn;
-            
         presets = DefDatabase<ColourPresetDef>.AllDefs.Where(preset => preset.appliesToKind is PresetType.Armor or PresetType.All).ToList();
-            
-        allTabs = DefDatabase<ApparelMultiColorTabDef>.AllDefsListForReading;
-            
-        tabs = new List<TabRecord>();
-            
-        var mainTabRecord = new TabRecord(MainTab, delegate
-        {
-            curTab = MainTab;
-        }, curTab == MainTab);
-            
-        tabs.Add(mainTabRecord);
         
         var masksTemp = DefDatabase<MaskDef>.AllDefs.Where(def => def.appliesToKind is AppliesToKind.Thing or AppliesToKind.All).ToList();
-            
+        
         foreach (var item in pawn.apparel.WornApparel.Where(a => a.HasComp<CompMultiColor>()))
         {
             var multiColor = item.GetComp<CompMultiColor>();
@@ -83,87 +45,10 @@ public class Dialog_PaintApparelMultiColor : Window
             }
             
             apparelColorMaskPageNumber.Add(item.def, 0);
-            
-            if (multiColor.ApparelMultiColorTabDefs.NullOrEmpty())
-            {
-                continue;
-            }
-                
-            var tabDefs = multiColor.ApparelMultiColorTabDefs;
-
-            foreach (var tabDef in tabDefs)
-            {
-                if (!allTabs.Contains(tabDef))
-                {
-                    continue;
-                }
-                
-                var tabRecord = new TabRecord(tabDef.label, delegate
-                {
-                    curTab = tabDef.label;
-                }, curTab == tabDef.label);
-
-                if (!Enumerable.Any(tabs, tab => tab.label == tabRecord.label))
-                {
-                    tabs.Add(tabRecord);
-                }
-            }
         }
-
-        curTab = tabs.FirstOrDefault()?.label;
-            
-        Find.TickManager.Pause();
     }
 
-    public override void DoWindowContents(Rect inRect)
-    {
-        Text.Font = GameFont.Medium;
-        var rect = new Rect(inRect)
-        {
-            height = Text.LineHeight * 2f
-        };
-        Widgets.Label(rect, "StylePawn".Translate().CapitalizeFirst() + ": " + Find.ActiveLanguageWorker.WithDefiniteArticle(pawn.Name.ToStringShort, pawn.gender, plural: false, name: true).ApplyTag(TagType.Name));
-        Text.Font = GameFont.Small;
-        inRect.yMin = rect.yMax + 4f;
-        var rect2 = inRect;
-        rect2.width *= 0.3f;
-        rect2.yMax -= ButSize.y + 4f;
-        DrawPawn(rect2);
-        var rect3 = inRect;
-        rect3.xMin = rect2.xMax + 10f;
-        rect3.yMax -= ButSize.y + 4f;
-            
-        Widgets.DrawMenuSection(rect3);
-        TabDrawer.DrawTabs(rect3, tabs);
-        rect3 = rect3.ContractedBy(18f);
-            
-        if (curTab == MainTab)
-        {
-            DrawApparelColor(rect3);
-        }
-        else
-        {
-            var tab = allTabs.FirstOrDefault(def => def.label == curTab).tabDrawerClass;
-            var tabDrawer = (ApparelMultiColorTabDrawer)Activator.CreateInstance(tab);
-            tabDrawer.DrawTab(rect3, pawn, ref apparelColorScrollPosition);
-        }
-            
-        DrawBottomButtons(inRect);
-    }
-
-    private void DrawPawn(Rect rect)
-    {
-        Widgets.BeginGroup(rect);
-        for (var i = 0; i < 4; i++)
-        {
-            var position = new Rect(0f, rect.height / 4f * i, rect.width, rect.height / 4f).ContractedBy(4f);
-            var image = PortraitsCache.Get(pawn, new Vector2(position.width, position.height), new Rot4(3 - i), PortraitOffset, 1.1f, supersample: true, compensateForUIScale: true, true, true, null, null, stylingStation: true);
-            GUI.DrawTexture(position, image);
-        }
-        Widgets.EndGroup();
-    }
-
-    private void DrawApparelColor(Rect rect)
+    public override void DrawTab(Rect rect, Pawn pawn, ref Vector2 apparelColorScrollPosition)
     {
         var viewRect = new Rect(rect.x, rect.y, rect.width - 16f, viewRectHeight);
         Widgets.BeginScrollView(rect, ref apparelColorScrollPosition, viewRect);
@@ -178,14 +63,14 @@ public class Dialog_PaintApparelMultiColor : Window
             nameRect.x += nameRect.width / 2;
             Widgets.DrawMenuSection(nameRect);
             Text.Anchor = TextAnchor.MiddleCenter;
-            Widgets.Label(nameRect, item.Label);
+            Widgets.Label(nameRect, item.LabelCap);
             Text.Anchor = TextAnchor.UpperLeft;
                 
             //Select button
             var selectPresetRect = new Rect(rect.x, curY, viewRect.width - 16f, 30f);
             selectPresetRect.width /= 5;
             selectPresetRect.x = nameRect.xMax + nameRect.width/20;
-            if (Widgets.ButtonText(selectPresetRect, "BEWH.Framework.ApparelMultiColor.SelectPreset".Translate()))
+            if (Widgets.ButtonText(selectPresetRect, "BEWH.Framework.Customization.ColorPreset".Translate()))
             {
                 var list = new List<FloatMenuOption>();
                 foreach (var preset in presets.Where(p => p.appliesTo.Contains(item.def.defName) || p.appliesTo.Empty()))
@@ -224,7 +109,7 @@ public class Dialog_PaintApparelMultiColor : Window
             var savePresetRect = new Rect(rect.x, curY, viewRect.width - 16f, 30f);
             savePresetRect.width /= 5;
             savePresetRect.x = nameRect.xMin - savePresetRect.width - nameRect.width/20;
-            if (Widgets.ButtonText(savePresetRect, "BEWH.Framework.ApparelMultiColor.EditPreset".Translate()))
+            if (Widgets.ButtonText(savePresetRect, "BEWH.Framework.Customization.EditPreset".Translate()))
             {
                 var list = new List<FloatMenuOption>();
                     
@@ -237,12 +122,12 @@ public class Dialog_PaintApparelMultiColor : Window
                     }, Widgets.PlaceholderIconTex, Color.white);
                     menuOption.extraPartWidth = 30f;
                     menuOption.extraPartOnGUI = rect1 => Core40kUtils.DeletePreset(rect1, preset);
-                    menuOption.tooltip = "BEWH.Framework.ApparelMultiColor.OverridePreset".Translate(preset.name);
+                    menuOption.tooltip = "BEWH.Framework.Customization.OverridePreset".Translate(preset.name);
                     list.Add(menuOption);
                 }
                     
                 //Create new
-                var newPreset = new FloatMenuOption("BEWH.Framework.ApparelMultiColor.NewPreset".Translate(), delegate
+                var newPreset = new FloatMenuOption("BEWH.Framework.Customization.NewPreset".Translate(), delegate
                 {
                     var newColourPreset = new ColourPreset
                     {
@@ -290,7 +175,7 @@ public class Dialog_PaintApparelMultiColor : Window
                 PrimaryColorBox(colorOneRect, multiColor);
                 SecondaryColorBox(colorTwoRect, multiColor);
                 TertiaryColorBox(colorThreeRect, multiColor);
-
+                
                 //Mask Stuff
                 if (masks.ContainsKey(item.def) && masks[item.def].Count > 1)
                 {
@@ -310,9 +195,24 @@ public class Dialog_PaintApparelMultiColor : Window
                     var posRect = new Rect(maskRect);
                     posRect.width /= 4;
                     posRect.height = posRect.width;
-                    var num = masks[item.def].Count - apparelColorMaskPageNumber[item.def]*4;
+                    
+                    var maskDefs = new List<MaskDef>();
+
+                    if (multiColor.currentAlternateBaseForm != null)
+                    {
+                        maskDefs.AddRange(masks[item.def].Where(maskDef => !multiColor.currentAlternateBaseForm.incompatibleMaskDefs.Contains(maskDef)));
+                    }
+                    else
+                    {
+                        maskDefs = masks[item.def];
+                    }
+                    
+                    var num = maskDefs.Count - apparelColorMaskPageNumber[item.def]*4;
                     num = num > 4 ? 4 : num;
-                    var curPageMasks = masks[item.def].GetRange(apparelColorMaskPageNumber[item.def]*4, num);
+                    
+                    //Might null error at maskDefs.Count 0?
+                    var curPageMasks = maskDefs.GetRange(apparelColorMaskPageNumber[item.def]*4, num);
+                    
                     for (var i = 0; i < curPageMasks.Count; i++)
                     {
                         var curPosRect = new Rect(posRect);
@@ -326,7 +226,16 @@ public class Dialog_PaintApparelMultiColor : Window
                             }
                             var bodyType = item.def.GetModExtension<DefModExtension_ForcesBodyType>()?.forcedBodyType ?? pawn.story.bodyType;
                             
-                            var path = ((item.def.apparel.LastLayer != ApparelLayerDefOf.Overhead && item.def.apparel.LastLayer != ApparelLayerDefOf.EyeCover && !item.RenderAsPack() && item.WornGraphicPath != BaseContent.PlaceholderImagePath && item.WornGraphicPath != BaseContent.PlaceholderGearImagePath) ? (item.WornGraphicPath + "_" + bodyType.defName) : item.WornGraphicPath);
+                            var alternatePath = multiColor.currentAlternateBaseForm?.drawnTextureIconPath;
+                            var usedPath = alternatePath.NullOrEmpty() ? item.WornGraphicPath : alternatePath;
+                            
+                            var path = item.def.apparel.LastLayer != ApparelLayerDefOf.Overhead 
+                                       && item.def.apparel.LastLayer != ApparelLayerDefOf.EyeCover 
+                                       && !item.RenderAsPack() 
+                                       && usedPath != BaseContent.PlaceholderImagePath 
+                                       && usedPath != BaseContent.PlaceholderGearImagePath 
+                                        ? usedPath + "_" + bodyType.defName : usedPath;
+                            
                             var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
                             var maskPath = curPageMasks[i]?.maskPath;
                             if (curPageMasks[i] != null && curPageMasks[i].useBodyTypes)
@@ -338,7 +247,6 @@ public class Dialog_PaintApparelMultiColor : Window
                             cachedMaterials.Add((item.def, curPageMasks[i]), material);
                             recache = false;
                         }
-                        
                         if (multiColor.MaskDef == curPageMasks[i])
                         {
                             Widgets.DrawStrongHighlight(curPosRect.ExpandedBy(6f));
@@ -361,7 +269,6 @@ public class Dialog_PaintApparelMultiColor : Window
                             multiColor.MaskDef = curPageMasks[i];
                         }
                     }
-                    
                     if (arrowsEnabled)
                     {
                         var arrowBack = new Rect(maskRect)
@@ -413,14 +320,14 @@ public class Dialog_PaintApparelMultiColor : Window
         }
         Widgets.EndScrollView();
     }
-
+    
     private void PrimaryColorBox(Rect colorOneRect, CompMultiColor item)
     {
         Widgets.DrawMenuSection(colorOneRect.ContractedBy(-1));
         Widgets.DrawRectFast(colorOneRect, item.DrawColor);
         Text.Anchor = TextAnchor.MiddleCenter;
-        Widgets.Label(colorOneRect, "BEWH.Framework.ApparelMultiColor.PrimaryColor".Translate());
-        TooltipHandler.TipRegion(colorOneRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        Widgets.Label(colorOneRect, "BEWH.Framework.Customization.PrimaryColor".Translate());
+        TooltipHandler.TipRegion(colorOneRect, "BEWH.Framework.Customization.ChooseCustomColour".Translate());
         Text.Anchor = TextAnchor.UpperLeft;
         if (Widgets.ButtonInvisible(colorOneRect))
         {
@@ -437,8 +344,8 @@ public class Dialog_PaintApparelMultiColor : Window
         Widgets.DrawMenuSection(colorTwoRect.ContractedBy(-1));
         Widgets.DrawRectFast(colorTwoRect, item.DrawColorTwo);
         Text.Anchor = TextAnchor.MiddleCenter;
-        Widgets.Label(colorTwoRect, "BEWH.Framework.ApparelMultiColor.SecondaryColor".Translate());
-        TooltipHandler.TipRegion(colorTwoRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        Widgets.Label(colorTwoRect, "BEWH.Framework.Customization.SecondaryColor".Translate());
+        TooltipHandler.TipRegion(colorTwoRect, "BEWH.Framework.Customization.ChooseCustomColour".Translate());
         Text.Anchor = TextAnchor.UpperLeft;
         if (Widgets.ButtonInvisible(colorTwoRect))
         {
@@ -455,8 +362,8 @@ public class Dialog_PaintApparelMultiColor : Window
         Widgets.DrawMenuSection(colorThreeRect.ContractedBy(-1));
         Widgets.DrawRectFast(colorThreeRect, item.DrawColorThree);
         Text.Anchor = TextAnchor.MiddleCenter;
-        Widgets.Label(colorThreeRect, "BEWH.Framework.ApparelMultiColor.TertiaryColor".Translate());
-        TooltipHandler.TipRegion(colorThreeRect, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        Widgets.Label(colorThreeRect, "BEWH.Framework.Customization.TertiaryColor".Translate());
+        TooltipHandler.TipRegion(colorThreeRect, "BEWH.Framework.Customization.ChooseCustomColour".Translate());
         Text.Anchor = TextAnchor.UpperLeft;
         if (Widgets.ButtonInvisible(colorThreeRect))
         {
@@ -468,83 +375,27 @@ public class Dialog_PaintApparelMultiColor : Window
         }
     }
 
-    private void DrawBottomButtons(Rect inRect)
+
+    public override void OnClose(Pawn pawn, bool closeOnCancel, bool closeOnClickedOutside)
     {
-        if (Widgets.ButtonText(new Rect(inRect.x, inRect.yMax - ButSize.y, ButSize.x, ButSize.y), "Cancel".Translate()))
-        {
-            Close();
-        }
-        if (Widgets.ButtonText(new Rect(inRect.xMin + inRect.width / 2f - ButSize.x / 2f, inRect.yMax - ButSize.y, ButSize.x, ButSize.y), "Reset".Translate()))
-        {
-            Reset();
-            SoundDefOf.Tick_Low.PlayOneShotOnCamera();
-        }
-        if (Widgets.ButtonText(new Rect(inRect.xMax - ButSize.x, inRect.yMax - ButSize.y, ButSize.x, ButSize.y), "Accept".Translate()))
-        {
-            Accept();
-            Close();
-        }
+        OnReset(pawn);
     }
 
-    public override void Close(bool doCloseSound = true)
-    {
-        if (closeOnCancel || closeOnClickedOutside)
-        {
-            Reset();
-        }
-
-        foreach (var tab in allTabs)
-        {
-            if (tab.label == MainTab)
-            {
-                continue;
-            }
-            var tabDrawer = (ApparelMultiColorTabDrawer)Activator.CreateInstance(tab.tabDrawerClass);
-            tabDrawer.OnClose(pawn, closeOnCancel, closeOnClickedOutside);
-        }
-        
-        base.Close(doCloseSound);
-    }
-
-    private void Reset()
-    {
-        foreach (var item in pawn.apparel.WornApparel.Where(a => a.HasComp<CompMultiColor>()))
-        {
-            item.GetComp<CompMultiColor>().Reset();
-        }
-        
-        foreach (var tab in allTabs)
-        {
-            if (tab.label == MainTab)
-            {
-                continue;
-            }
-            var tabDrawer = (ApparelMultiColorTabDrawer)Activator.CreateInstance(tab.tabDrawerClass);
-            tabDrawer.OnReset(pawn);
-        }
-        
-        recache = true;
-        
-        pawn.Drawer.renderer.SetAllGraphicsDirty();
-    }
-
-    private void Accept()
+    public override void OnAccept(Pawn pawn)
     {
         foreach (var item in pawn.apparel.WornApparel.Where(a => a.HasComp<CompMultiColor>()))
         {
             var multiColor = item.GetComp<CompMultiColor>();
-            multiColor.Notify_GraphicChanged();
             multiColor.SetOriginals();
+            multiColor.Notify_GraphicChanged();
         }
-
-        foreach (var tab in allTabs)
+    }
+    
+    public override void OnReset(Pawn pawn)
+    {
+        foreach (var item in pawn.apparel.WornApparel.Where(a => a.HasComp<CompMultiColor>()))
         {
-            if (tab.label == MainTab)
-            {
-                continue;
-            }
-            var tabDrawer = (ApparelMultiColorTabDrawer)Activator.CreateInstance(tab.tabDrawerClass);
-            tabDrawer.OnAccept(pawn);
-        }
+            item.GetComp<CompMultiColor>().Reset();
+        } 
     }
 }

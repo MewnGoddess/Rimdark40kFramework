@@ -8,67 +8,61 @@
 
   <BEWH.ModSettings.CheckVEFPatches>Remember to check Vanilla Expanded Framework toggleable patches for more settings for this mod!</BEWH.ModSettings.CheckVEFPatches>
 
-
   <!--=== Common Keywords ===-->
   <BEWH.Framework.CommonKeyword.None>None</BEWH.Framework.CommonKeyword.None>
   <BEWH.Framework.CommonKeyword.Default>Default</BEWH.Framework.CommonKeyword.Default>
   <BEWH.Framework.CommonKeywords.ModSettings>mod settings</BEWH.Framework.CommonKeywords.ModSettings>
 
-  <!--=== Apparel Multi Color ===-->
-  <BEWH.Framework.ApparelMultiColor.MainTab>Coloring</BEWH.Framework.ApparelMultiColor.MainTab>
+  <!--=== Customization ===-->
+  <BEWH.Framework.Customization.PrimaryColor>Primary</BEWH.Framework.Customization.PrimaryColor>
+  <BEWH.Framework.Customization.SecondaryColor>Secondary</BEWH.Framework.Customization.SecondaryColor>
+  <BEWH.Framework.Customization.TertiaryColor>Tertiary</BEWH.Framework.Customization.TertiaryColor>
+  <BEWH.Framework.Customization.ChooseCustomColour>Click to select custom color</BEWH.Framework.Customization.ChooseCustomColour>
 
-  <BEWH.Framework.ApparelMultiColor.PrimaryColor>Primary</BEWH.Framework.ApparelMultiColor.PrimaryColor>
-  <BEWH.Framework.ApparelMultiColor.SecondaryColor>Secondary</BEWH.Framework.ApparelMultiColor.SecondaryColor>
-  <BEWH.Framework.ApparelMultiColor.TertiaryColor>Tertiary</BEWH.Framework.ApparelMultiColor.TertiaryColor>
+  <BEWH.Framework.Customization.UseArmourColour>Use Armor Color</BEWH.Framework.Customization.UseArmourColour>
+  <BEWH.Framework.Customization.SetDefaultColor>Set Default Colors</BEWH.Framework.Customization.SetDefaultColor>
 
-  <BEWH.Framework.ApparelMultiColor.SelectPreset>Color Preset</BEWH.Framework.ApparelMultiColor.SelectPreset>
-  <BEWH.Framework.ApparelMultiColor.EditPreset>Edit Presets</BEWH.Framework.ApparelMultiColor.EditPreset>
-  <BEWH.Framework.ApparelMultiColor.NewPreset>[New Preset]</BEWH.Framework.ApparelMultiColor.NewPreset>
-  <BEWH.Framework.ApparelMultiColor.EnterPresetName>Enter name of new preset</BEWH.Framework.ApparelMultiColor.EnterPresetName>
-  <BEWH.Framework.ApparelMultiColor.OverridePreset>Overwrite {0} with currently selected colors</BEWH.Framework.ApparelMultiColor.OverridePreset>
-  <BEWH.Framework.ApparelMultiColor.ConfirmOverride>Are you sure you want to overwrite this preset?</BEWH.Framework.ApparelMultiColor.ConfirmOverride>
-  <BEWH.Framework.ApparelMultiColor.PresetExists>Already exists!</BEWH.Framework.ApparelMultiColor.PresetExists>
+  <BEWH.Framework.Customization.ColorPreset>Color Preset</BEWH.Framework.Customization.ColorPreset>
+  <BEWH.Framework.Customization.EditPreset>Edit Presets</BEWH.Framework.Customization.EditPreset>
+  <BEWH.Framework.Customization.NewPreset>[New Preset]</BEWH.Framework.Customization.NewPreset>
 
-  <BEWH.Framework.ApparelMultiColor.ArmourDecorationFeature>Customize armor</BEWH.Framework.ApparelMultiColor.ArmourDecorationFeature>
+  <BEWH.Framework.Customization.EnterPresetName>Enter name of new preset</BEWH.Framework.Customization.EnterPresetName>
+  <BEWH.Framework.Customization.OverridePreset>Overwrite {0} with currently selected colors</BEWH.Framework.Customization.OverridePreset>
+  <BEWH.Framework.Customization.ConfirmOverride>Are you sure you want to overwrite this preset?</BEWH.Framework.Customization.ConfirmOverride>
+  <BEWH.Framework.Customization.PresetExists>Already exists!</BEWH.Framework.Customization.PresetExists>
 
-  <BEWH.Framework.ApparelMultiColor.ChooseCustomColour>Click to select custom color</BEWH.Framework.ApparelMultiColor.ChooseCustomColour>
+  <BEWH.Framework.Customization.ColorPresetShort>Col. Preset</BEWH.Framework.Customization.ColorPresetShort>
+  <BEWH.Framework.Customization.ColorPresetShortDesc>Select a color preset</BEWH.Framework.Customization.ColorPresetShortDesc>
 
-  <BEWH.Framework.ExtraDecoration.BodyDecoration>Body Decorations</BEWH.Framework.ExtraDecoration.BodyDecoration>
-  <BEWH.Framework.ExtraDecoration.HelmetDecoration>Helmet Decorations</BEWH.Framework.ExtraDecoration.HelmetDecoration>
+  <BEWH.Framework.Customization.Mask>Masks</BEWH.Framework.Customization.Mask>
+  <BEWH.Framework.Customization.MaskDesc>Select a mask</BEWH.Framework.Customization.MaskDesc>
 
-  <BEWH.Framework.ExtraDecoration.RemoveAllDecorations>Remove All</BEWH.Framework.ExtraDecoration.RemoveAllDecorations>
+  <BEWH.Framework.Customization.DecorationPreset>Preset</BEWH.Framework.Customization.DecorationPreset>
+  <BEWH.Framework.Customization.DecorationPresetDesc>Select a decoration preset</BEWH.Framework.Customization.DecorationPresetDesc>
 
-  <BEWH.Framework.ExtraDecoration.UseArmourColour>Use Armor Color</BEWH.Framework.ExtraDecoration.UseArmourColour>
-  <BEWH.Framework.ExtraDecoration.SetDefaultColor>Set Default Colors</BEWH.Framework.ExtraDecoration.SetDefaultColor>
+  <BEWH.Framework.Customization.Edit>Edit</BEWH.Framework.Customization.Edit>
+  <BEWH.Framework.Customization.EditDesc>Create, overwrite or remove a preset</BEWH.Framework.Customization.EditDesc>
 
+  <BEWH.Framework.Customization.RemoveAllDecorations>Remove All</BEWH.Framework.Customization.RemoveAllDecorations>
 
-  <BEWH.Framework.ExtraDecoration.Preset>Col. Preset</BEWH.Framework.ExtraDecoration.Preset>
-  <BEWH.Framework.ExtraDecoration.PresetDesc>Select a color preset</BEWH.Framework.ExtraDecoration.PresetDesc>
+  <BEWH.Framework.Customization.ArmourDecorationFeature>Customize armor</BEWH.Framework.Customization.ArmourDecorationFeature>
+  <BEWH.Framework.Customization.WeaponDecorationFeature>Customize weapon</BEWH.Framework.Customization.WeaponDecorationFeature>
 
-  <BEWH.Framework.ExtraDecoration.Mask>Masks</BEWH.Framework.ExtraDecoration.Mask>
-  <BEWH.Framework.ExtraDecoration.MaskDesc>Select a mask</BEWH.Framework.ExtraDecoration.MaskDesc>
+  <BEWH.Framework.Customization.BodyDecoration>Body Decorations</BEWH.Framework.Customization.BodyDecoration>
+  <BEWH.Framework.Customization.HelmetDecoration>Helmet Decorations</BEWH.Framework.Customization.HelmetDecoration>
 
-  <BEWH.Framework.ExtraDecoration.Select>Preset</BEWH.Framework.ExtraDecoration.Select>
-  <BEWH.Framework.ExtraDecoration.SelectDesc>Select a decoration preset</BEWH.Framework.ExtraDecoration.SelectDesc>
+  <BEWH.Framework.Customization.RequirementNotMet>Requirements not met:\n</BEWH.Framework.Customization.RequirementNotMet>
+  <BEWH.Framework.Customization.MissingRanks>Missing Ranks:</BEWH.Framework.Customization.MissingRanks>
+  <BEWH.Framework.Customization.MissingGenes>Missing Genes:</BEWH.Framework.Customization.MissingGenes>
+  <BEWH.Framework.Customization.MissingTraits>Missing Traits:</BEWH.Framework.Customization.MissingTraits>
+  <BEWH.Framework.Customization.MissingHediffs>Missing Hediffs:</BEWH.Framework.Customization.MissingHediffs>
+  <BEWH.Framework.Customization.InvalidBodytype>Invalid bodytype</BEWH.Framework.Customization.InvalidBodytype>
 
-  <BEWH.Framework.ExtraDecoration.Edit>Edit</BEWH.Framework.ExtraDecoration.Edit>
-  <BEWH.Framework.ExtraDecoration.EditDesc>Create, overwrite or remove a preset</BEWH.Framework.ExtraDecoration.EditDesc>
+  <BEWH.Framework.Customization.AppendedLabel>- {0}</BEWH.Framework.Customization.AppendedLabel>
 
-  <BEWH.Framework.DecoRequirement.RequirementNotMet>Requirements not met:\n</BEWH.Framework.DecoRequirement.RequirementNotMet>
-  <BEWH.Framework.DecoRequirement.MissingRanks>Missing Ranks:</BEWH.Framework.DecoRequirement.MissingRanks>
-  <BEWH.Framework.DecoRequirement.MissingGenes>Missing Genes:</BEWH.Framework.DecoRequirement.MissingGenes>
-  <BEWH.Framework.DecoRequirement.MissingTraits>Missing Traits:</BEWH.Framework.DecoRequirement.MissingTraits>
-  <BEWH.Framework.DecoRequirement.MissingHediffs>Missing Hediffs:</BEWH.Framework.DecoRequirement.MissingHediffs>
-  <BEWH.Framework.DecoRequirement.InvalidBodytype>Invalid bodytype</BEWH.Framework.DecoRequirement.InvalidBodytype>
-
-  <BEWH.Framework.DecoRequirement.AppendedLabel>- {0}</BEWH.Framework.DecoRequirement.AppendedLabel>
-
-  <!--=== Weapon Multi Color ===-->
-  <BEWH.Framework.WeaponMultiColor.WeaponDecorationFeature>Customize weapon</BEWH.Framework.WeaponMultiColor.WeaponDecorationFeature>
-
-  <!--=== Weapon Decoration ===-->
-  <BEWH.Framework.WeaponDecoration.IncompatibleWithCurrentAltBase>Incompatible with currently selected texture</BEWH.Framework.WeaponDecoration.IncompatibleWithCurrentAltBase>
-  <BEWH.Framework.WeaponDecoration.AlternativeBaseTexture>Alt. Textures</BEWH.Framework.WeaponDecoration.AlternativeBaseTexture>
+  <BEWH.Framework.Customization.IncompatibleWithCurrentAltBase>Incompatible with currently selected texture</BEWH.Framework.Customization.IncompatibleWithCurrentAltBase>
+  <BEWH.Framework.Customization.AlternativeBaseTexture>Alt. Textures</BEWH.Framework.Customization.AlternativeBaseTexture>
+  <BEWH.Framework.Customization.BaseTexture>Base Texture: </BEWH.Framework.Customization.BaseTexture>
 
   <!--=== Rank System ===-->
   <BEWH.Framework.RankSystem.RankTab>Ranks</BEWH.Framework.RankSystem.RankTab>

@@ -7,7 +7,7 @@ using Verse.AI;
 namespace Core40k;
 
 [HarmonyPatch(typeof(ThingWithComps), "GetFloatMenuOptions")]
-public class MultiColorChangableOnThing
+public class CustomizerOnThing
 {
     public static IEnumerable<FloatMenuOption> Postfix(IEnumerable<FloatMenuOption> __result, ThingWithComps __instance, Pawn selPawn)
     {
@@ -23,9 +23,9 @@ public class MultiColorChangableOnThing
         //Apparel
         if (__instance.def.GetModExtension<DefModExtension_AllowColoringOfThings>().allowColoringOfApparel)
         {
-            if (selPawn.apparel.WornApparel.Any(a => a.HasComp<CompMultiColor>()))
+            if (selPawn.apparel.WornApparel.Any(a => a.def.HasModExtension<DefModExtension_AvailableDrawerTabDefs>()))
             {
-                var secondColourChangeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.Framework.ApparelMultiColor.ArmourDecorationFeature".Translate().CapitalizeFirst(), delegate
+                var secondColourChangeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.Framework.Customization.ArmourDecorationFeature".Translate().CapitalizeFirst(), delegate
                 {
                     selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(Core40kDefOf.BEWH_OpenStylingStationDialogForApparelMultiColor, __instance), JobTag.Misc);
                 }), selPawn, __instance);
@@ -34,10 +34,10 @@ public class MultiColorChangableOnThing
         }
         //Equipment
         if (__instance.def.GetModExtension<DefModExtension_AllowColoringOfThings>().allowColoringOfEquipment)
-        {
-            if (selPawn.equipment.Primary.HasComp<CompMultiColor>() || selPawn.equipment.Primary.HasComp<CompWeaponDecoration>())
+        {   
+            if (selPawn.equipment.Primary.def.HasModExtension<DefModExtension_AvailableDrawerTabDefs>())
             {
-                var changeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.Framework.WeaponMultiColor.WeaponDecorationFeature".Translate().CapitalizeFirst(), delegate
+                var changeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.Framework.Customization.WeaponDecorationFeature".Translate().CapitalizeFirst(), delegate
                 {
                     selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(Core40kDefOf.BEWH_OpenStylingStationDialogForWeaponMultiColor, __instance), JobTag.Misc);
                 }), selPawn, __instance);

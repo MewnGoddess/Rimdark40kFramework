@@ -3,8 +3,13 @@ using Verse;
 
 namespace Core40k;
 
-public class ApparelMultiColorTabDrawer
+public class CustomizerTabDrawer
 {
+    public virtual void Setup(Pawn pawn)
+    {
+        
+    }
+    
     public virtual void DrawTab(Rect rect, Pawn pawn, ref Vector2 apparelColorScrollPosition)
     {
             

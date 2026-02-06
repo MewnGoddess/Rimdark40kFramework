@@ -8,14 +8,12 @@ using Verse;
 
 namespace Core40k;
 
-public class ExtraDecorationTab : ApparelMultiColorTabDrawer
+public class ExtraDecorationTab : CustomizerTabDrawer
 {
     private static Core40kModSettings modSettings = null;
     public static Core40kModSettings ModSettings => modSettings ??= LoadedModManager.GetMod<Core40kMod>().GetSettings<Core40kModSettings>();
         
     private const int RowAmount = 6;
-
-    private bool setupDone = false;
 
     private static float listScrollViewHeight = 0f;
 
@@ -27,14 +25,14 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
     
     private bool recache = true;
         
-    private List<ExtraDecorationDef> extraDecorationDefsBody = new List<ExtraDecorationDef>();
-    private List<ExtraDecorationDef> extraDecorationDefsHelmet = new List<ExtraDecorationDef>();
+    private List<ExtraDecorationDef> extraDecorationDefsBody = [];
+    private List<ExtraDecorationDef> extraDecorationDefsHelmet = [];
     
-    private List<ExtraDecorationPresetDef> extraDecorationPresets = new List<ExtraDecorationPresetDef>();
+    private List<ExtraDecorationPresetDef> extraDecorationPresets = [];
 
     private Pawn selPawn = null;
     
-    private void Setup(Pawn pawn)
+    public override void Setup(Pawn pawn)
     {
         selPawn = pawn;
         var allExtraDecorations = DefDatabase<ExtraDecorationDef>.AllDefs.ToList();
@@ -77,11 +75,144 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         foreach (var apparel in apparels)
         {
             apparel.GetComp<CompDecorative>().RemoveInvalidDecorations(pawn);
+            apparel.GetComp<CompDecorative>().SetOriginals();
         }
-        Find.TickManager.Pause();
-        
     }
+    
+    public override void DrawTab(Rect rect, Pawn pawn, ref Vector2 apparelColorScrollPosition)
+    {
+        GUI.BeginGroup(rect);
+        var outRect = new Rect(0f, 0f, rect.width, rect.height);
+        var viewRect = new Rect(0f, 0f, rect.width - 16f, listScrollViewHeight);
+        Widgets.BeginScrollView(outRect, ref apparelColorScrollPosition, viewRect);
+            
+        var bodyApparels = pawn.apparel.WornApparel.Where(a =>
+        {
+            var temp = a.GetComp<CompDecorative>();
+            return temp != null && temp.Props.decorativeType == DecorativeType.Body;
+        }).ToList();
+        var helmetApparels = pawn.apparel.WornApparel.Where(a =>
+        {
+            var temp = a.GetComp<CompDecorative>();
+            return temp != null && temp.Props.decorativeType == DecorativeType.Head;
+        }).ToList();
+            
+        curY = viewRect.y;
+            
+        //Body Decorations
+        if (!bodyApparels.NullOrEmpty())
+        {
+            foreach (var bodyApparel in bodyApparels)
+            {
+                //Extra decoration title
+                var nameRect = new Rect(viewRect.x, curY, viewRect.width, 30f);
+                nameRect.width /= 2;
+                nameRect.x += nameRect.width / 2;
+                Widgets.DrawMenuSection(nameRect);
+                Text.Anchor = TextAnchor.MiddleCenter;
+                Widgets.Label(nameRect, "BEWH.Framework.Customization.BodyDecoration".Translate());
+                Text.Anchor = TextAnchor.UpperLeft;
+                    
+                //Remove All
+                var resetAllDecorations = new Rect(nameRect.xMin, curY, viewRect.width, 30f);
+                resetAllDecorations.width /= 5;
+                resetAllDecorations.x -= resetAllDecorations.width + nameRect.width/20;
+                if (Widgets.ButtonText(resetAllDecorations, "BEWH.Framework.Customization.RemoveAllDecorations".Translate()))
+                {
+                    bodyApparel.GetComp<CompDecorative>().RemoveAllDecorations();
+                }
+                    
+                //Preset Tab
+                var presetSelectRect = new Rect(nameRect.xMax, curY, viewRect.width, 30f);
+                presetSelectRect.x += nameRect.width/20;
+                presetSelectRect.width /= 10;
+                presetSelectRect.width -= 2;
 
+                var presetEditRect = new Rect(presetSelectRect);
+                presetEditRect.x += presetSelectRect.width + 4;
+                    
+                //Select Preset
+                TooltipHandler.TipRegion(presetSelectRect, "BEWH.Framework.Customization.DecorationPresetDesc".Translate());
+                if (Widgets.ButtonText(presetSelectRect, "BEWH.Framework.Customization.DecorationPreset".Translate()))
+                {
+                    SelectDecorationPreset(bodyApparel);
+                }
+                    
+                //Edit Presets
+                TooltipHandler.TipRegion(presetEditRect, "BEWH.Framework.Customization.EditDesc".Translate());
+                if (Widgets.ButtonText(presetEditRect, "BEWH.Framework.Customization.Edit".Translate()))
+                {
+                    EditDecorationPreset(bodyApparel);
+                }
+                    
+                var position = new Vector2(viewRect.x, resetAllDecorations.yMax);
+                curY = position.y;    
+                
+                DrawRowContent(bodyApparel, extraDecorationDefsBody, ref position, ref viewRect);
+                
+                listScrollViewHeight = curY + 10f;
+            }
+        }
+            
+        //Head Decorations
+        if (!helmetApparels.NullOrEmpty())
+        {
+            foreach (var helmetApparel in helmetApparels)
+            {
+                //Extra decoration title
+                var nameRect = new Rect(viewRect.x, curY, viewRect.width, 30f);
+                nameRect.width /= 2;
+                nameRect.x += nameRect.width / 2;
+                Widgets.DrawMenuSection(nameRect);
+                Text.Anchor = TextAnchor.MiddleCenter;
+                Widgets.Label(nameRect, "BEWH.Framework.Customization.HelmetDecoration".Translate());
+                Text.Anchor = TextAnchor.UpperLeft;
+                    
+                //Remove All
+                var resetAllDecorations = new Rect(nameRect.xMin, curY, viewRect.width, 30f);
+                resetAllDecorations.width /= 5;
+                resetAllDecorations.x -= resetAllDecorations.width + nameRect.width/20;
+                if (Widgets.ButtonText(resetAllDecorations, "BEWH.Framework.Customization.RemoveAllDecorations".Translate()))
+                {
+                    helmetApparel.GetComp<CompDecorative>().RemoveAllDecorations();
+                }
+                    
+                //Preset Tab
+                var presetSelectRect = new Rect(nameRect.xMax, curY, viewRect.width, 30f);
+                presetSelectRect.x += nameRect.width/20;
+                presetSelectRect.width /= 10;
+                presetSelectRect.width -= 2;
+
+                var presetEditRect = new Rect(presetSelectRect);
+                presetEditRect.x += presetSelectRect.width + 4;
+                    
+                //Select Preset
+                TooltipHandler.TipRegion(presetSelectRect, "BEWH.Framework.Customization.DecorationPresetDesc".Translate());
+                if (Widgets.ButtonText(presetSelectRect, "BEWH.Framework.Customization.DecorationPreset".Translate()))
+                {
+                    SelectDecorationPreset(helmetApparel);
+                }
+                    
+                //Edit Presets
+                TooltipHandler.TipRegion(presetEditRect, "BEWH.Framework.Customization.EditDesc".Translate());
+                if (Widgets.ButtonText(presetEditRect, "BEWH.Framework.Customization.Edit".Translate()))
+                {
+                    EditDecorationPreset(helmetApparel);
+                }
+                    
+                var position = new Vector2(viewRect.x, curY + resetAllDecorations.height);
+                curY = position.y;   
+                
+                DrawRowContent(helmetApparel, extraDecorationDefsHelmet, ref position, ref viewRect);
+                
+                listScrollViewHeight = curY + 10f;
+            }
+        }
+            
+        Widgets.EndScrollView();
+        GUI.EndGroup();
+    }
+    
     private void DrawRowContent(Apparel apparel, List<ExtraDecorationDef> extraDecorationDefs, ref Vector2 position, ref Rect viewRect)
     {
         var iconSize = new Vector2(viewRect.width/RowAmount, viewRect.width/RowAmount);
@@ -97,7 +228,26 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
 
         var rowExpanded = false;
 
-        extraDecorationDefs = extraDecorationDefs.Where(deco => deco.appliesToAll || deco.appliesTo.Contains(apparel.def.defName)).ToList();
+        extraDecorationDefs = extraDecorationDefs
+            .Where(deco => deco.appliesToAll || deco.appliesTo.Contains(apparel.def.defName))
+            .ToList();
+
+        var tempExtraDecorationDefs = new List<ExtraDecorationDef>();
+        extraDecorationDefs.CopyToList(tempExtraDecorationDefs);
+        
+        var multiColorComp = apparel.TryGetComp<CompMultiColor>();
+        if (multiColorComp?.currentAlternateBaseForm != null)
+        {
+            foreach (var incompatibleArmorDecoration in multiColorComp.currentAlternateBaseForm.incompatibleArmorDecorations)
+            {
+                if (extraDecorationDefs.Contains(incompatibleArmorDecoration))
+                {
+                    tempExtraDecorationDefs.Remove(incompatibleArmorDecoration);
+                }
+            }
+        }
+
+        extraDecorationDefs = tempExtraDecorationDefs;
             
         for (var i = 0; i < extraDecorationDefs.Count; i++)
         {
@@ -116,6 +266,10 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
             }
             
             var hasReq = extraDecorationDefs[i].HasRequirements(selPawn, out var reason);
+            var incompatibleDeco = (multiColorComp?.currentAlternateBaseForm != null 
+                                        && multiColorComp.currentAlternateBaseForm.incompatibleArmorDecorations.Contains(extraDecorationDefs[i]))
+                                        || (multiColorComp?.currentAlternateBaseForm == null 
+                                        && extraDecorationDefs[i].isIncompatibleWithBaseTexture);
                 
             var color = Color.white;
             var tipTooltip = extraDecorationDefs[i].label;
@@ -125,7 +279,12 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
             }
             if (!hasReq)
             {
-                tipTooltip += "\n" + "BEWH.Framework.DecoRequirement.RequirementNotMet".Translate() + reason;
+                tipTooltip += "\n" + "BEWH.Framework.Customization.RequirementNotMet".Translate() + reason;
+                color = Color.gray;
+            }
+            if (incompatibleDeco)
+            {
+                tipTooltip += "\n" +"BEWH.Framework.Customization.IncompatibleWithCurrentAltBase".Translate();
                 color = Color.gray;
             }
             
@@ -144,7 +303,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
             }
 
             TooltipHandler.TipRegion(iconRect, tipTooltip);
-            if (hasReq)
+            if (hasReq && !incompatibleDeco)
             {
                 TooltipHandler.TipRegion(iconRect, extraDecorationDefs[i].label);
             
@@ -230,15 +389,15 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
                     presetSelection = presetSelection.ContractedBy(1f);
                     maskSelection = maskSelection.ContractedBy(1f);
                     Text.Font = GameFont.Tiny;
-                    TooltipHandler.TipRegion(presetSelection, "BEWH.Framework.ExtraDecoration.PresetDesc".Translate());
-                    if (Widgets.ButtonText(presetSelection, "BEWH.Framework.ExtraDecoration.Preset".Translate()))
+                    TooltipHandler.TipRegion(presetSelection, "BEWH.Framework.Customization.ColorPresetShortDesc".Translate());
+                    if (Widgets.ButtonText(presetSelection, "BEWH.Framework.Customization.DecorationPreset".Translate()))
                     {
                         SelectPreset(apparel, extraDecorationDefs[i1]);
                     }
                     if (masks.TryGetValue(extraDecorationDefs[i]).Count > 1)
                     {
-                        TooltipHandler.TipRegion(maskSelection, "BEWH.Framework.ExtraDecoration.MaskDesc".Translate());
-                        if (Widgets.ButtonText(maskSelection, "BEWH.Framework.ExtraDecoration.Mask".Translate()))
+                        TooltipHandler.TipRegion(maskSelection, "BEWH.Framework.Customization.MaskDesc".Translate());
+                        if (Widgets.ButtonText(maskSelection, "BEWH.Framework.Customization.Mask".Translate()))
                         {
                             SelectMask(decorativeComp, extraDecorationDefs[i1], viewRect.width/1.3f);
                         }
@@ -279,7 +438,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         Widgets.DrawMenuSection(colourSelection);
         colourSelection = colourSelection.ContractedBy(1f);
         Widgets.DrawRectFast(colourSelection, compDecorative.ExtraDecorations[extraDecorationDef].Color);
-        TooltipHandler.TipRegion(colourSelection, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        TooltipHandler.TipRegion(colourSelection, "BEWH.Framework.Customization.ChooseCustomColour".Translate());
         if (Widgets.ButtonInvisible(colourSelection))
         {
             Find.WindowStack.Add( new Dialog_ColourPicker( compDecorative.ExtraDecorations[extraDecorationDef].Color, ( newColour ) =>
@@ -296,7 +455,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         Widgets.DrawMenuSection(colourSelectionTwo);
         colourSelectionTwo = colourSelectionTwo.ContractedBy(1f);
         Widgets.DrawRectFast(colourSelectionTwo, compDecorative.ExtraDecorations[extraDecorationDef].ColorTwo);
-        TooltipHandler.TipRegion(colourSelectionTwo, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        TooltipHandler.TipRegion(colourSelectionTwo, "BEWH.Framework.Customization.ChooseCustomColour".Translate());
         if (Widgets.ButtonInvisible(colourSelectionTwo))
         {
             Find.WindowStack.Add( new Dialog_ColourPicker( compDecorative.ExtraDecorations[extraDecorationDef].ColorTwo, ( newColour ) =>
@@ -313,7 +472,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         Widgets.DrawMenuSection(colourSelectionThree);
         colourSelectionThree = colourSelectionThree.ContractedBy(1f);
         Widgets.DrawRectFast(colourSelectionThree, compDecorative.ExtraDecorations[extraDecorationDef].ColorThree);
-        TooltipHandler.TipRegion(colourSelectionThree, "BEWH.Framework.ApparelMultiColor.ChooseCustomColour".Translate());
+        TooltipHandler.TipRegion(colourSelectionThree, "BEWH.Framework.Customization.ChooseCustomColour".Translate());
         if (Widgets.ButtonInvisible(colourSelectionThree))
         {
             Find.WindowStack.Add( new Dialog_ColourPicker( compDecorative.ExtraDecorations[extraDecorationDef].ColorThree, ( newColour ) =>
@@ -423,7 +582,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
 
         if (extraDecoration.hasArmorColourPaletteOption)
         {
-            var menuOptionMatch = new FloatMenuOption("BEWH.Framework.ExtraDecoration.UseArmourColour".Translate(), delegate
+            var menuOptionMatch = new FloatMenuOption("BEWH.Framework.Customization.UseArmourColour".Translate(), delegate
             {
                 decorativeComp.SetArmorColors(extraDecoration);
             }, Core40kUtils.ThreeColourPreview(armorCol1,armorCol2, armorCol3, colorAmount), Color.white);
@@ -434,7 +593,7 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         var col2 = extraDecoration.defaultColourTwo ?? (extraDecoration.useArmorColourAsDefault ? armorCol2 : Color.white);
         var col3 = extraDecoration.defaultColourThree ?? (extraDecoration.useArmorColourAsDefault ? armorCol3 : Color.white);
         
-        var menuOptionDefault = new FloatMenuOption("BEWH.Framework.ExtraDecoration.SetDefaultColor".Translate(), delegate
+        var menuOptionDefault = new FloatMenuOption("BEWH.Framework.Customization.SetDefaultColor".Translate(), delegate
         {
             decorativeComp.SetDefaultColors(extraDecoration);
         }, Core40kUtils.ThreeColourPreview(col1, col2, col3, colorAmount), Color.white);
@@ -497,12 +656,12 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
             }, Widgets.PlaceholderIconTex, Color.white);
             menuOption.extraPartWidth = 30f;
             menuOption.extraPartOnGUI = rect1 => Core40kUtils.DeletePreset(rect1, preset);
-            menuOption.tooltip = "BEWH.Framework.ApparelMultiColor.OverridePreset".Translate(preset.name);
+            menuOption.tooltip = "BEWH.Framework.Customization.OverridePreset".Translate(preset.name);
             floatMenuOptions.Add(menuOption);
         }
             
         //Create new
-        var newPreset = new FloatMenuOption("BEWH.Framework.ApparelMultiColor.NewPreset".Translate(), delegate
+        var newPreset = new FloatMenuOption("BEWH.Framework.Customization.NewPreset".Translate(), delegate
         {
             Find.WindowStack.Add( new Dialog_EditExtraDecorationPresets(currentPreset));
         }, Widgets.PlaceholderIconTex, Color.white);
@@ -550,143 +709,27 @@ public class ExtraDecorationTab : ApparelMultiColorTabDrawer
         Find.WindowStack.Add(new FloatMenu(list));
     }
         
-    public override void DrawTab(Rect rect, Pawn pawn, ref Vector2 apparelColorScrollPosition)
+    
+    public override void OnClose(Pawn pawn, bool closeOnCancel, bool closeOnClickedOutside)
     {
-        if (!setupDone)
-        {
-            setupDone = true;
-            Setup(pawn);
-        }
             
-        GUI.BeginGroup(rect);
-        var outRect = new Rect(0f, 0f, rect.width, rect.height);
-        var viewRect = new Rect(0f, 0f, rect.width - 16f, listScrollViewHeight);
-        Widgets.BeginScrollView(outRect, ref apparelColorScrollPosition, viewRect);
-            
-        var bodyApparels = pawn.apparel.WornApparel.Where(a =>
-        {
-            var temp = a.GetComp<CompDecorative>();
-            return temp != null && temp.Props.decorativeType == DecorativeType.Body;
-        }).ToList();
-        var helmetApparels = pawn.apparel.WornApparel.Where(a =>
-        {
-            var temp = a.GetComp<CompDecorative>();
-            return temp != null && temp.Props.decorativeType == DecorativeType.Head;
-        }).ToList();
-            
-        curY = viewRect.y;
-            
-        //Body Decorations
-        if (!bodyApparels.NullOrEmpty())
-        {
-            foreach (var bodyApparel in bodyApparels)
-            {
-                //Extra decoration title
-                var nameRect = new Rect(viewRect.x, curY, viewRect.width, 30f);
-                nameRect.width /= 2;
-                nameRect.x += nameRect.width / 2;
-                Widgets.DrawMenuSection(nameRect);
-                Text.Anchor = TextAnchor.MiddleCenter;
-                Widgets.Label(nameRect, "BEWH.Framework.ExtraDecoration.BodyDecoration".Translate());
-                Text.Anchor = TextAnchor.UpperLeft;
-                    
-                //Remove All
-                var resetAllDecorations = new Rect(nameRect.xMin, curY, viewRect.width, 30f);
-                resetAllDecorations.width /= 5;
-                resetAllDecorations.x -= resetAllDecorations.width + nameRect.width/20;
-                if (Widgets.ButtonText(resetAllDecorations, "BEWH.Framework.ExtraDecoration.RemoveAllDecorations".Translate()))
-                {
-                    bodyApparel.GetComp<CompDecorative>().RemoveAllDecorations();
-                }
-                    
-                //Preset Tab
-                var presetSelectRect = new Rect(nameRect.xMax, curY, viewRect.width, 30f);
-                presetSelectRect.x += nameRect.width/20;
-                presetSelectRect.width /= 10;
-                presetSelectRect.width -= 2;
+    }
 
-                var presetEditRect = new Rect(presetSelectRect);
-                presetEditRect.x += presetSelectRect.width + 4;
-                    
-                //Select Preset
-                TooltipHandler.TipRegion(presetSelectRect, "BEWH.Framework.ExtraDecoration.SelectDesc".Translate());
-                if (Widgets.ButtonText(presetSelectRect, "BEWH.Framework.ExtraDecoration.Select".Translate()))
-                {
-                    SelectDecorationPreset(bodyApparel);
-                }
-                    
-                //Edit Presets
-                TooltipHandler.TipRegion(presetEditRect, "BEWH.Framework.ExtraDecoration.EditDesc".Translate());
-                if (Widgets.ButtonText(presetEditRect, "BEWH.Framework.ExtraDecoration.Edit".Translate()))
-                {
-                    EditDecorationPreset(bodyApparel);
-                }
-                    
-                var position = new Vector2(viewRect.x, resetAllDecorations.yMax);
-                curY = position.y;    
-                
-                DrawRowContent(bodyApparel, extraDecorationDefsBody, ref position, ref viewRect);
-                
-                listScrollViewHeight = curY + 10f;
-            }
-        }
-            
-        //Head Decorations
-        if (!helmetApparels.NullOrEmpty())
+    public override void OnAccept(Pawn pawn)
+    {
+        var apparels = pawn.apparel.WornApparel.Where(a => a.HasComp<CompDecorative>()).ToList();
+        foreach (var apparel in apparels)
         {
-            foreach (var helmetApparel in helmetApparels)
-            {
-                //Extra decoration title
-                var nameRect = new Rect(viewRect.x, curY, viewRect.width, 30f);
-                nameRect.width /= 2;
-                nameRect.x += nameRect.width / 2;
-                Widgets.DrawMenuSection(nameRect);
-                Text.Anchor = TextAnchor.MiddleCenter;
-                Widgets.Label(nameRect, "BEWH.Framework.ExtraDecoration.HelmetDecoration".Translate());
-                Text.Anchor = TextAnchor.UpperLeft;
-                    
-                //Remove All
-                var resetAllDecorations = new Rect(nameRect.xMin, curY, viewRect.width, 30f);
-                resetAllDecorations.width /= 5;
-                resetAllDecorations.x -= resetAllDecorations.width + nameRect.width/20;
-                if (Widgets.ButtonText(resetAllDecorations, "BEWH.Framework.ExtraDecoration.RemoveAllDecorations".Translate()))
-                {
-                    helmetApparel.GetComp<CompDecorative>().RemoveAllDecorations();
-                }
-                    
-                //Preset Tab
-                var presetSelectRect = new Rect(nameRect.xMax, curY, viewRect.width, 30f);
-                presetSelectRect.x += nameRect.width/20;
-                presetSelectRect.width /= 10;
-                presetSelectRect.width -= 2;
-
-                var presetEditRect = new Rect(presetSelectRect);
-                presetEditRect.x += presetSelectRect.width + 4;
-                    
-                //Select Preset
-                TooltipHandler.TipRegion(presetSelectRect, "BEWH.Framework.ExtraDecoration.SelectDesc".Translate());
-                if (Widgets.ButtonText(presetSelectRect, "BEWH.Framework.ExtraDecoration.Select".Translate()))
-                {
-                    SelectDecorationPreset(helmetApparel);
-                }
-                    
-                //Edit Presets
-                TooltipHandler.TipRegion(presetEditRect, "BEWH.Framework.ExtraDecoration.EditDesc".Translate());
-                if (Widgets.ButtonText(presetEditRect, "BEWH.Framework.ExtraDecoration.Edit".Translate()))
-                {
-                    EditDecorationPreset(helmetApparel);
-                }
-                    
-                var position = new Vector2(viewRect.x, curY + resetAllDecorations.height);
-                curY = position.y;   
-                
-                DrawRowContent(helmetApparel, extraDecorationDefsHelmet, ref position, ref viewRect);
-                
-                listScrollViewHeight = curY + 10f;
-            }
+            apparel.GetComp<CompDecorative>().SetOriginals();
         }
-            
-        Widgets.EndScrollView();
-        GUI.EndGroup();
+    }
+    
+    public override void OnReset(Pawn pawn)
+    {
+        var apparels = pawn.apparel.WornApparel.Where(a => a.HasComp<CompDecorative>()).ToList();
+        foreach (var apparel in apparels)
+        {
+            apparel.GetComp<CompDecorative>().Reset();
+        }
     }
 }

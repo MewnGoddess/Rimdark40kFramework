@@ -88,10 +88,10 @@ public class DecorationDef : Def
             if (missingRanks.Count > 0)
             {
                 requirementFulfilled = false;
-                reason.AppendLine("BEWH.Framework.DecoRequirement.MissingRanks".Translate());
+                reason.AppendLine("BEWH.Framework.Customization.MissingRanks".Translate());
                 foreach (var rank in missingRanks)
                 {
-                    reason.AppendLine("BEWH.Framework.DecoRequirement.AppendedLabel".Translate(rank));
+                    reason.AppendLine("BEWH.Framework.Customization.AppendedLabel".Translate(rank));
                 }
             }
         }
@@ -107,10 +107,10 @@ public class DecorationDef : Def
             if (missingGenes.Count > 0)
             {
                 requirementFulfilled = false;
-                reason.AppendLine("BEWH.Framework.DecoRequirement.MissingGenes".Translate());
+                reason.AppendLine("BEWH.Framework.Customization.MissingGenes".Translate());
                 foreach (var gene in missingGenes)
                 {
-                    reason.AppendLine("BEWH.Framework.DecoRequirement.AppendedLabel".Translate(gene));
+                    reason.AppendLine("BEWH.Framework.Customization.AppendedLabel".Translate(gene));
                 }
             }
         }
@@ -126,10 +126,10 @@ public class DecorationDef : Def
             if (missingTraits.Count > 0)
             {
                 requirementFulfilled = false;
-                reason.AppendLine("BEWH.Framework.DecoRequirement.MissingTraits".Translate());
+                reason.AppendLine("BEWH.Framework.Customization.MissingTraits".Translate());
                 foreach (var trait in missingTraits)
                 {
-                    reason.AppendLine("BEWH.Framework.DecoRequirement.AppendedLabel".Translate(trait));
+                    reason.AppendLine("BEWH.Framework.Customization.AppendedLabel".Translate(trait));
                 }
             }
         }
@@ -146,10 +146,10 @@ public class DecorationDef : Def
             if (missingHediffs.Count > 0)
             {
                 requirementFulfilled = false;
-                reason.AppendLine("BEWH.Framework.DecoRequirement.MissingHediffs".Translate());
+                reason.AppendLine("BEWH.Framework.Customization.MissingHediffs".Translate());
                 foreach (var hediff in missingHediffs)
                 {
-                    reason.AppendLine("BEWH.Framework.DecoRequirement.AppendedLabel".Translate(hediff));
+                    reason.AppendLine("BEWH.Framework.Customization.AppendedLabel".Translate(hediff));
                 }
             }
         }

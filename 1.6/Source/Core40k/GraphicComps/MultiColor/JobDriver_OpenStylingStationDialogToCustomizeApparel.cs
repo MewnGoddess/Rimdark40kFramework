@@ -4,7 +4,7 @@ using Verse.AI;
 
 namespace Core40k;
 
-public class JobDriver_OpenStylingStationDialogForApparelMultiColor : JobDriver
+public class JobDriver_OpenStylingStationDialogToCustomizeApparel : JobDriver
 {
     public override bool TryMakePreToilReservations(bool errorOnFailed)
     {
@@ -16,7 +16,7 @@ public class JobDriver_OpenStylingStationDialogForApparelMultiColor : JobDriver
         yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell).FailOnDespawnedOrNull(TargetIndex.A);
         yield return Toils_General.Do(delegate
         {
-            Find.WindowStack.Add(new Dialog_PaintApparelMultiColor(pawn));
+            Find.WindowStack.Add(new Dialog_CustomizeApparel(pawn));
         });
     }
 }

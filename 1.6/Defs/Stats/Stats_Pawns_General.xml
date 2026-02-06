@@ -4,7 +4,7 @@
   <StatDef>
     <defName>BEWH_ArtificialPartsAffinityFactor</defName>
     <label>artificial part affinity</label>
-    <description>A multiplier on how effective artificial parts are on this pawn.</description>
+    <description>A multiplier on how artificial parts affects the capacities of this pawn.</description>
     <category>BasicsPawn</category>
     <toStringStyle>PercentZero</toStringStyle>
     <defaultBaseValue>1</defaultBaseValue>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Defs>
+
+    <!-- Armor -->
+    <Core40k.CustomizationTabDef>
+        <defName>BEWH_ArmorColoring</defName>
+        <label>Armor Coloring</label>
+        <description>Armor coloring.</description>
+        <tabDrawerClass>Core40k.ArmorColoringTab</tabDrawerClass>
+    </Core40k.CustomizationTabDef>
+
+    <Core40k.CustomizationTabDef>
+        <defName>BEWH_ArmorDecoration</defName>
+        <label>Armor Decoration</label>
+        <description>Deocrations for armor.</description>
+        <tabDrawerClass>Core40k.ExtraDecorationTab</tabDrawerClass>
+    </Core40k.CustomizationTabDef>
+
+    <Core40k.CustomizationTabDef>
+        <defName>BEWH_ArmorAlternateBaseForms</defName>
+        <label>Alternate base textures</label>
+        <description>Alternate base textures for apparel.</description>
+        <tabDrawerClass>Core40k.ArmorAlternateTextureTab</tabDrawerClass>
+    </Core40k.CustomizationTabDef>
+
+    <!-- Weapon -->
+    <Core40k.CustomizationTabDef>
+        <defName>BEWH_WeaponColoring</defName>
+        <label>Weapon Coloring</label>
+        <description>Weapon coloring.</description>
+        <tabDrawerClass>Core40k.WeaponColoringTab</tabDrawerClass>
+    </Core40k.CustomizationTabDef>
+
+    <Core40k.CustomizationTabDef>
+        <defName>BEWH_WeaponDecoration</defName>
+        <label>Weapon Decoration</label>
+        <description>Decorations for weapon.</description>
+        <tabDrawerClass>Core40k.WeaponDecorationTab</tabDrawerClass>
+    </Core40k.CustomizationTabDef>
+
+    <Core40k.CustomizationTabDef>
+        <defName>BEWH_WeaponAlternateBaseForms</defName>
+        <label>Alternate base textures</label>
+        <description>Alternate base textures for weapons.</description>
+        <tabDrawerClass>Core40k.WeaponAlternateTextureTab</tabDrawerClass>
+    </Core40k.CustomizationTabDef>
+
+
+</Defs>

@@ -4,7 +4,7 @@ using Verse.AI;
 
 namespace Core40k;
 
-public class JobDriver_OpenStylingStationDialogForWeaponMultiColor : JobDriver
+public class JobDriver_OpenStylingStationDialogToCustomizeWeapon : JobDriver
 {
     public override bool TryMakePreToilReservations(bool errorOnFailed)
     {
@@ -16,7 +16,7 @@ public class JobDriver_OpenStylingStationDialogForWeaponMultiColor : JobDriver
         yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell).FailOnDespawnedOrNull(TargetIndex.A);
         yield return Toils_General.Do(delegate
         {
-            Find.WindowStack.Add(new Dialog_PaintWeaponMultiColor(pawn, pawn.equipment.Primary));
+            Find.WindowStack.Add(new Dialog_CustomizeWeapon(pawn));
         });
     }
 }

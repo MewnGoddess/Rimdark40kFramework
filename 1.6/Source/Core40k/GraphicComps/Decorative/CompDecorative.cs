@@ -142,6 +142,8 @@ public class CompDecorative : CompGraphicParent
     {
         extraDecorations = new Dictionary<ExtraDecorationDef, ExtraDecorationSettings>();
         extraDecorations.AddRange(originalExtraDecorations);
+        cachedGraphics = [];
+        Notify_GraphicChanged();
         base.Reset();
     }
 
@@ -151,6 +153,26 @@ public class CompDecorative : CompGraphicParent
         foreach (var extraDecoration in extraDecorations)
         {
             if (!extraDecoration.Key.HasRequirements(pawn, out _))
+            {
+                toRemove.Add(extraDecoration.Key);
+            }
+        }
+        foreach (var extraDecorationDef in toRemove)
+        {
+            extraDecorations.Remove(extraDecorationDef);
+        }
+    }
+
+    public void RemoveDecorationsIncompatibleWithAlternate(AlternateBaseFormDef alternateBaseFormDef)
+    {
+        var toRemove = new List<ExtraDecorationDef>();
+        foreach (var extraDecoration in extraDecorations)
+        {
+            if (alternateBaseFormDef == null && extraDecoration.Key.isIncompatibleWithBaseTexture)
+            {
+                toRemove.Add(extraDecoration.Key);
+            }
+            else if (alternateBaseFormDef != null && alternateBaseFormDef.incompatibleArmorDecorations.Contains(extraDecoration.Key))
             {
                 toRemove.Add(extraDecoration.Key);
             }

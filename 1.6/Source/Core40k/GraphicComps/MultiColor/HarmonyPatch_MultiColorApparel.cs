@@ -44,13 +44,17 @@ public static class ApparelMultiColorPatch
 
         bodyType = apparel.def.GetModExtension<DefModExtension_ForcesBodyType>()?.forcedBodyType ?? bodyType;
         var extension = apparel.def.GetModExtension<ApparelExtension>();
+
+        var alternatePath = multiColor.currentAlternateBaseForm?.drawnTextureIconPath;
+        var usedPath = alternatePath.NullOrEmpty() ? apparel.WornGraphicPath : alternatePath;
+        
         var path = apparel.def.apparel.LastLayer != ApparelLayerDefOf.Overhead 
                    && apparel.def.apparel.LastLayer != ApparelLayerDefOf.EyeCover 
                    && !apparel.RenderAsPack() 
-                   && apparel.WornGraphicPath != BaseContent.PlaceholderImagePath 
-                   && apparel.WornGraphicPath != BaseContent.PlaceholderGearImagePath 
+                   && usedPath != BaseContent.PlaceholderImagePath 
+                   && usedPath != BaseContent.PlaceholderGearImagePath 
                    && extension is not { isUnifiedApparel: true }
-            ? (apparel.WornGraphicPath + "_" + bodyType.defName) : apparel.WornGraphicPath;
+                    ? usedPath + "_" + bodyType.defName : usedPath;
         
         var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
         var maskPath = multiColor.MaskDef?.maskPath;

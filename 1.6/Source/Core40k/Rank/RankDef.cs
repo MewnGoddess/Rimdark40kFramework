@@ -454,8 +454,6 @@ public class RankDef : Def
         
         //Recreation From Skills
         var recreationFromSkillStringBuilder = new StringBuilder();
-        Log.Message("recreationFromSkills: " + recreationFromSkills);
-        Log.Message("recreationFromSkills c: " + recreationFromSkills.Count);
         foreach (var recreationFromSkill in recreationFromSkills)
         {
             recreationFromSkillStringBuilder.AppendLine("    " + recreationFromSkill.label.CapitalizeFirst());

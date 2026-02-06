@@ -21,6 +21,8 @@ public class ExtraDecorationDef : DecorationDef
     public bool drawInHeadSpace = false;
     
     public List<BodyTypeDef> appliesToBodyTypes = new();
+    
+    public bool isIncompatibleWithBaseTexture = false;
 
     public override bool HasRequirements(Pawn pawn, out string lockedReason)
     {
@@ -41,7 +43,7 @@ public class ExtraDecorationDef : DecorationDef
         var pawnBodyType = bodyApparel.def?.GetModExtension<DefModExtension_ForcesBodyType>()?.forcedBodyType ?? pawn.story.bodyType;
         if (!appliesToBodyTypes.Contains(pawnBodyType))
         {
-            reason.AppendLine("BEWH.Framework.DecoRequirement.InvalidBodytype".Translate());
+            reason.AppendLine("BEWH.Framework.Customization.InvalidBodytype".Translate());
             lockedReason = reason.ToString();
             requirementFulfilled = false;
         }
