@@ -1,7 +1,7 @@
 ﻿using RimWorld;
 using Verse;
 
-namespace Genes40k;
+namespace Core40k;
 
 public class Comp_DisableIfApparelCovers : CompAbilityEffect
 {

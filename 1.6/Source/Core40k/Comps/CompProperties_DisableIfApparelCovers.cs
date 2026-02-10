@@ -2,7 +2,7 @@
 using RimWorld;
 using Verse;
 
-namespace Genes40k;
+namespace Core40k;
 
 public class CompProperties_DisableIfApparelCovers : CompProperties_AbilityEffect
 {
