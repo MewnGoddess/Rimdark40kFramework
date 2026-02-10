@@ -5,7 +5,7 @@ using Verse;
 
 namespace Core40k;
 
-public class CompForceWeapon : ThingComp
+public class Comp_ForceWeapon : ThingComp
 {
     public CompProperties_ForceWeapon Props => (CompProperties_ForceWeapon)props;
 

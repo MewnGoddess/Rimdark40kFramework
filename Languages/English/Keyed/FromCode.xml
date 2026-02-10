@@ -139,4 +139,10 @@
   <!-- Comp-->
   <BEWH.Framework.Comp.PawnDoesNotHaveRequiredGene>{0} does not have the {1} gene</BEWH.Framework.Comp.PawnDoesNotHaveRequiredGene>
 
+  <BEWH.Framework.Comp.AbilityDisabledByCoveredPart>Cannot use {0}, due to covered {1} by {2}</BEWH.Framework.Comp.AbilityDisabledByCoveredPart>
+
+  <BEWH.Framework.Comp.DeterioratingOutsideContainer>Deteriorates outside suitable container.</BEWH.Framework.Comp.DeterioratingOutsideContainer>
+  <BEWH.Framework.Comp.SuitableContainers>Suitable containers:</BEWH.Framework.Comp.SuitableContainers>
+  <BEWH.Framework.Comp.ItemDeterioratingNotInContainer>not in safe container</BEWH.Framework.Comp.ItemDeterioratingNotInContainer>
+
 </LanguageData>

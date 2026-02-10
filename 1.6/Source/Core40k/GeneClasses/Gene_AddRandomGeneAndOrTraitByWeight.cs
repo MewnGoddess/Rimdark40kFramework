@@ -206,17 +206,20 @@ public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
         {
             weightedSelection.AddEntry(gene.Key, gene.Value);
         }
-        if (GeneDefMod.amountToGive == 1)
+
+        var amountToGive = GeneDefMod.amountToGive.RandomInRange;
+        
+        if (amountToGive == 1)
         {
             chosenGene = weightedSelection.GetRandom();
         }
-        else if (GeneDefMod.amountToGive == GeneDefMod.possibleGenesToGive.Count)
+        else if (amountToGive == GeneDefMod.possibleGenesToGive.Count)
         {
             chosenGenes.AddRangeUnique(GeneDefMod.possibleGenesToGive.Select(pair => pair.Key));
         }
         else
         {
-            for (var i = 0; i < GeneDefMod.amountToGive; i++)
+            for (var i = 0; i < amountToGive; i++)
             {
                 var result = weightedSelection.GetRandomUnique();
                 chosenGenes.Add(result);

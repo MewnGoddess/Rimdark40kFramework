@@ -19,6 +19,6 @@ public class CompProperties_ForceWeapon : CompProperties
 
     public CompProperties_ForceWeapon()
     {
-        compClass = typeof(CompForceWeapon);
+        compClass = typeof(Comp_ForceWeapon);
     }
 }

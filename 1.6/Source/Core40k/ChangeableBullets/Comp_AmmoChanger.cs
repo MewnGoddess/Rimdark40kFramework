@@ -46,4 +46,11 @@ public class Comp_AmmoChanger : ThingComp
         researchDef = research;
         return research?.IsFinished ?? true;
     }
+
+    public override void PostExposeData()
+    {
+        Scribe_Defs.Look(ref currentlySelectedProjectile, "currentlySelectedProjectile");
+        Scribe_Defs.Look(ref nextProjectile, "nextProjectile");
+        base.PostExposeData();
+    }
 }

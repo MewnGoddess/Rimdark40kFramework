@@ -110,7 +110,7 @@ public class ExtraDecorationTab : CustomizerTabDrawer
                 nameRect.x += nameRect.width / 2;
                 Widgets.DrawMenuSection(nameRect);
                 Text.Anchor = TextAnchor.MiddleCenter;
-                Widgets.Label(nameRect, "BEWH.Framework.Customization.BodyDecoration".Translate());
+                Widgets.Label(nameRect, bodyApparel.LabelCap);
                 Text.Anchor = TextAnchor.UpperLeft;
                     
                 //Remove All
@@ -165,7 +165,7 @@ public class ExtraDecorationTab : CustomizerTabDrawer
                 nameRect.x += nameRect.width / 2;
                 Widgets.DrawMenuSection(nameRect);
                 Text.Anchor = TextAnchor.MiddleCenter;
-                Widgets.Label(nameRect, "BEWH.Framework.Customization.HelmetDecoration".Translate());
+                Widgets.Label(nameRect, helmetApparel.LabelCap);
                 Text.Anchor = TextAnchor.UpperLeft;
                     
                 //Remove All

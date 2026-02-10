@@ -35,7 +35,7 @@ public class CustomizerOnThing
         //Equipment
         if (__instance.def.GetModExtension<DefModExtension_AllowColoringOfThings>().allowColoringOfEquipment)
         {   
-            if (selPawn.equipment.Primary.def.HasModExtension<DefModExtension_AvailableDrawerTabDefs>())
+            if (selPawn.equipment.Primary?.def?.GetModExtension<DefModExtension_AvailableDrawerTabDefs>() != null)
             {
                 var changeFloatMenu = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("BEWH.Framework.Customization.WeaponDecorationFeature".Translate().CapitalizeFirst(), delegate
                 {
