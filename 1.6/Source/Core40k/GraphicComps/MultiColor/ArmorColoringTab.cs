@@ -145,36 +145,73 @@ public class ArmorColoringTab : CustomizerTabDrawer
                     Find.WindowStack.Add(new FloatMenu(list));
                 }
             }
-                
-                
+            
             curY += nameRect.height + 3f;
             var itemRect = new Rect(rect.x, curY, viewRect.width - 16f, 76f);
             curY += itemRect.height;
                 
             if (!pawn.apparel.IsLocked(item) || DevMode)
             {
-                var colorOneRect = new Rect(itemRect);
-                colorOneRect.width /= 3;
-                colorOneRect.x = itemRect.xMin;
-                colorOneRect.y = itemRect.yMin + 2f;
+                var colorOneRect = new Rect(itemRect)
+                {
+                    x = itemRect.xMin,
+                    y = itemRect.yMin + 2f
+                };
+                Rect colorTwoRect;
+
+                var colAmount = multiColor.Props.colorMaskAmount;
+                if (multiColor.currentAlternateBaseForm != null)
+                {
+                    colAmount = multiColor.currentAlternateBaseForm.colorAmount;
+                }
+                if (multiColor.MaskDef is { setsNull: false })
+                {
+                    colAmount = multiColor.MaskDef.colorAmount;
+                }
                 
-                var colorTwoRect = new Rect(colorOneRect)
+                switch (colAmount)
                 {
-                    x = colorOneRect.xMax
-                };
-
-                var colorThreeRect = new Rect(colorTwoRect)
-                {
-                    x = colorTwoRect.xMax
-                };
-
-                colorOneRect = colorOneRect.ContractedBy(3);
-                colorTwoRect = colorTwoRect.ContractedBy(3);
-                colorThreeRect = colorThreeRect.ContractedBy(3);
-
-                PrimaryColorBox(colorOneRect, multiColor);
-                SecondaryColorBox(colorTwoRect, multiColor);
-                TertiaryColorBox(colorThreeRect, multiColor);
+                    case 1:
+                        colorOneRect = colorOneRect.ContractedBy(3);
+                        PrimaryColorBox(colorOneRect, multiColor);
+                        break;
+                    case 2:
+                        colorOneRect.width /= 2;
+                        colorTwoRect = new Rect(colorOneRect)
+                        {
+                            x = colorOneRect.xMax
+                        };
+                        
+                        colorOneRect = colorOneRect.ContractedBy(3);
+                        PrimaryColorBox(colorOneRect, multiColor);
+                        
+                        colorTwoRect = colorTwoRect.ContractedBy(3);
+                        SecondaryColorBox(colorTwoRect, multiColor);
+                        break;
+                    case 3:
+                        colorOneRect.width /= 3;
+                        colorTwoRect = new Rect(colorOneRect)
+                        {
+                            x = colorOneRect.xMax
+                        };
+                        var colorThreeRect = new Rect(colorTwoRect)
+                        {
+                            x = colorTwoRect.xMax
+                        };
+                        
+                        colorOneRect = colorOneRect.ContractedBy(3);
+                        PrimaryColorBox(colorOneRect, multiColor);
+                        
+                        colorTwoRect = colorTwoRect.ContractedBy(3);
+                        SecondaryColorBox(colorTwoRect, multiColor);
+                        
+                        colorThreeRect = colorThreeRect.ContractedBy(3);
+                        TertiaryColorBox(colorThreeRect, multiColor);
+                        break;
+                    default:
+                        Log.Warning("Wrong setup in " + item + "colorAmount is more than 3 or less than 1");
+                        break;
+                }
                 
                 //Mask Stuff
                 if (masks.ContainsKey(item.def) && masks[item.def].Count > 1)

@@ -77,11 +77,13 @@
     <Compile Include="ColourPicker\TextField.cs" />
     <Compile Include="Comps\CompAbilityEffect_AoeHit.cs" />
     <Compile Include="Comps\CompAbilityEffect_GiveHediffAndMentalBreak.cs" />
+    <Compile Include="Comps\CompAbilityEffect_HealAndTend.cs" />
     <Compile Include="Comps\CompAbilityEffect_MustHaveGeneTraitOrHediff.cs" />
     <Compile Include="Comps\CompAbilityEffect_ResetRanks.cs" />
     <Compile Include="Comps\CompAbilityEffect_WaveAttack.cs" />
     <Compile Include="Comps\CompProperties_AbilityAoeHit.cs" />
     <Compile Include="Comps\CompProperties_AbilityGiveHediffAndMental.cs" />
+    <Compile Include="Comps\CompProperties_AbilityHealAndTend.cs" />
     <Compile Include="Comps\CompProperties_AbilityWaveAttack.cs" />
     <Compile Include="Comps\CompProperties_Aura.cs" />
     <Compile Include="Comps\CompProperties_DeteriorateOutsideBuilding.cs" />
@@ -132,7 +134,6 @@
     <Compile Include="GraphicComps\Attachment\CompWeaponDecoration.cs" />
     <Compile Include="GraphicComps\Attachment\CompProperties_WeaponDecoration.cs" />
     <Compile Include="GraphicComps\Attachment\Dialog_CustomizeWeapon.cs" />
-    <Compile Include="GraphicComps\Attachment\Dialog_CustomizeWeaponOld.cs" />
     <Compile Include="GraphicComps\Attachment\WeaponDecorationPresetDef.cs" />
     <Compile Include="GraphicComps\Attachment\HarmonyPatch_RenderWeaponAttachments.cs" />
     <Compile Include="GraphicComps\Attachment\VerbModifier.cs" />
@@ -185,6 +186,7 @@
     <Compile Include="GraphicComps\MultiColor\Dialog_EditColourPresets.cs" />
     <Compile Include="GraphicComps\MultiColor\Dialog_CustomizeApparel.cs" />
     <Compile Include="GraphicComps\MultiColor\ArmorColoringTab.cs" />
+    <Compile Include="GraphicComps\MultiColor\HarmonyPatch_ChangeDrawDataPatch.cs" />
     <Compile Include="GraphicComps\MultiColor\HarmonyPatch_MultiColorApparel.cs" />
     <Compile Include="GraphicComps\MultiColor\HarmonyPatch_ThingWithCompsMultiColorGraphicOverride.cs" />
     <Compile Include="GraphicComps\MultiColor\JobDriver_OpenStylingStationDialogToCustomizeApparel.cs" />

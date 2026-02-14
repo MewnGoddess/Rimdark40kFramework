@@ -144,29 +144,68 @@ public class WeaponColoringTab : CustomizerTabDrawer
 
         var height = Math.Abs(viewRect.height - nameRect.height);
         
-        var colorOneRect = new Rect(itemRect);
-        colorOneRect.height = height / 3f;
-        colorOneRect.x = itemRect.xMin;
-        colorOneRect.y = itemRect.yMin + 2f;
-
-        var colorTwoRect = new Rect(colorOneRect)
+        var colorOneRect = new Rect(itemRect)
         {
-            y = colorOneRect.yMax
+            x = itemRect.xMin,
+            y = itemRect.yMin + 2f,
+            height = height
         };
-
-        var colorThreeRect = new Rect(colorTwoRect)
+        Rect colorTwoRect;
+        
+        var colAmount = MultiColor.Props.colorMaskAmount;
+        if (MultiColor.currentAlternateBaseForm != null)
         {
-            y = colorTwoRect.yMax
-        };
-
-        colorOneRect = colorOneRect.ContractedBy(3);
-        colorTwoRect = colorTwoRect.ContractedBy(3);
-        colorThreeRect = colorThreeRect.ContractedBy(3);
-
-        PrimaryColorBox(colorOneRect);
-        SecondaryColorBox(colorTwoRect);
-        TertiaryColorBox(colorThreeRect);
-
+            colAmount = MultiColor.currentAlternateBaseForm.colorAmount;
+        }
+        if (MultiColor.MaskDef is { setsNull: false })
+        {
+            colAmount = MultiColor.MaskDef.colorAmount;
+        }
+        
+        switch (colAmount)
+        {
+            case 1:
+                colorOneRect = colorOneRect.ContractedBy(3);
+                PrimaryColorBox(colorOneRect);
+                break;
+            case 2:
+                colorOneRect.height /= 2;
+                colorTwoRect = new Rect(colorOneRect)
+                {
+                    y = colorOneRect.yMax
+                };
+                        
+                colorOneRect = colorOneRect.ContractedBy(3);
+                PrimaryColorBox(colorOneRect);
+                        
+                colorTwoRect = colorTwoRect.ContractedBy(3);
+                SecondaryColorBox(colorTwoRect);
+                break;
+            case 3:
+                colorOneRect.height /= 3;
+                colorTwoRect = new Rect(colorOneRect)
+                {
+                    y = colorOneRect.yMax
+                };
+                var colorThreeRect = new Rect(colorTwoRect)
+                {
+                    y = colorTwoRect.yMax
+                };
+                        
+                colorOneRect = colorOneRect.ContractedBy(3);
+                PrimaryColorBox(colorOneRect);
+                        
+                colorTwoRect = colorTwoRect.ContractedBy(3);
+                SecondaryColorBox(colorTwoRect);
+                        
+                colorThreeRect = colorThreeRect.ContractedBy(3);
+                TertiaryColorBox(colorThreeRect);
+                break;
+            default:
+                Log.Warning("Wrong setup in " + weapon + "colorAmount is more than 3 or less than 1");
+                break;
+        }
+        
         //Mask Stuff
         if (masks.ContainsKey(weapon.def) && masks[weapon.def].Count > 1)
         {

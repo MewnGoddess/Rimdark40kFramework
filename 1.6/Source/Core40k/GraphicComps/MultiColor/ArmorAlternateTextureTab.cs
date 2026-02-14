@@ -50,7 +50,6 @@ public class ArmorAlternateTextureTab : CustomizerTabDrawer
         
         foreach (var alternateBaseFormDef in alternateBaseFormDefs)
         {
-            //Extra decoration title
             var nameRect = new Rect(viewRect.x, curY, viewRect.width, 30f);
             nameRect.width /= 2;
             nameRect.x += nameRect.width / 2;

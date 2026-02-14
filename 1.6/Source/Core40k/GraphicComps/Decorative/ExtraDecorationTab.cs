@@ -325,9 +325,7 @@ public class ExtraDecorationTab : CustomizerTabDrawer
 
                     Rect colourSelection;
                     Rect colourSelectionTwo;
-                    Rect colourSelectionThree;
-                    Rect presetSelection;
-                
+
                     var colorAmount = extraDecorationDefs[i].colorAmount;
                 
                     if (!decorativeComp.ExtraDecorations[extraDecorationDefs[i]].maskDef.setsNull)
@@ -360,7 +358,7 @@ public class ExtraDecorationTab : CustomizerTabDrawer
                             {
                                 x = colourSelection.xMax
                             };
-                            colourSelectionThree = new Rect(colourSelectionTwo)
+                            var colourSelectionThree = new Rect(colourSelectionTwo)
                             {
                                 x = colourSelectionTwo.xMax
                             };
@@ -374,7 +372,7 @@ public class ExtraDecorationTab : CustomizerTabDrawer
                             break;
                     }
                 
-                    presetSelection = new Rect(bottomRect)
+                    var presetSelection = new Rect(bottomRect)
                     {
                         y = bottomRect.yMax
                     };
