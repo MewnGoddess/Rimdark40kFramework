@@ -5,7 +5,12 @@ namespace Core40k;
 public class CompGraphicParent : ThingComp
 {
     private bool initialSet;
-    public bool InitialSet => initialSet;
+
+    public bool InitialSet
+    {
+        get => initialSet;
+        set => initialSet = value;
+    }
     
     public virtual void Notify_GraphicChanged()
     {

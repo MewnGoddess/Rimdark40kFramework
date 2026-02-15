@@ -35,9 +35,22 @@ public class Dialog_CustomizeWeapon : Window
     {
         this.pawn = pawn;
             
-        var defMod = pawn.equipment.Primary.def.GetModExtension<DefModExtension_AvailableDrawerTabDefs>();
+        //var defMod = pawn.equipment.Primary.def.GetModExtension<DefModExtension_AvailableDrawerTabDefs>();
         
-        foreach (var tabDef in defMod.tabDefs)
+        //TEMP CODE START
+        var defMod = pawn.equipment.Primary.def.GetModExtension<DefModExtension_AvailableDrawerTabDefs>();
+        List<CustomizationTabDef> tabDefs;
+        if (defMod == null)
+        {
+            tabDefs = pawn.equipment.Primary.GetComp<CompMultiColor>().Props.tabDefs;
+        }
+        else
+        {
+            tabDefs = defMod.tabDefs;
+        }
+        //TEMP CODE END
+        
+        foreach (var tabDef in tabDefs)
         {
             if (!tabRecords.ContainsKey(tabDef))
             {

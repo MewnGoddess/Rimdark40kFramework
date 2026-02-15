@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Defs>
 
+    <!-- OLD REMOVE AT SOME POINT -->
+    <Core40k.CustomizationTabDef>
+        <defName>BEWH_ExtraDecoration</defName>
+        <label>Armor Decoration</label>
+        <description>Deocrations for armor.</description>
+        <tabDrawerClass>Core40k.ExtraDecorationTab</tabDrawerClass>
+    </Core40k.CustomizationTabDef>
+
     <!-- Armor -->
     <Core40k.CustomizationTabDef>
         <defName>BEWH_ArmorColoring</defName>

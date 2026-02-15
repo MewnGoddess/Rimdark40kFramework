@@ -117,4 +117,67 @@ public static class Core40kUtils
         }
         return text2;
     }
+
+    public static bool HasMultiColorThing(this Pawn pawn)
+    {
+        if (pawn.apparel?.WornApparel != null)
+        {
+            if (pawn.apparel.WornApparel.Any(apparel => apparel.HasComp<CompMultiColor>()))
+            {
+                return true;
+            }
+        }
+
+        if (pawn.equipment?.Primary?.GetComp<CompMultiColor>() != null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+    
+    public static void SetupColorsForPawn(Pawn pawn)
+    {
+        var factionSelection = pawn.Faction?.def?.GetModExtension<DefModExtension_DefaultMultiColor>()?.defaultColorSelection;
+        var pawnKindSelection = pawn.kindDef?.GetModExtension<DefModExtension_DefaultMultiColor>()?.defaultColorSelection;
+        
+        List<ColourPresetDef> finalSelection;
+        if (!pawnKindSelection.NullOrEmpty())
+        {
+            finalSelection = pawnKindSelection;
+        }
+        else if (!factionSelection.NullOrEmpty())
+        {
+            finalSelection = factionSelection;
+        }
+        else
+        {
+            return;
+        }
+
+        var selectedCol = finalSelection.RandomElement();
+        
+        foreach (var apparel in pawn.apparel.WornApparel)
+        {
+            var comp = apparel.GetComp<CompMultiColor>();
+            if (comp == null)
+            {
+                continue;
+            }
+            
+            comp.SetColors(selectedCol);
+            comp.SetOriginals();
+            comp.InitialSet = true;
+        }
+        
+        var equipment = pawn.equipment?.PrimaryEq?.parent;
+        if (equipment != null && equipment.HasComp<CompMultiColor>())
+        {
+            var comp = equipment.GetComp<CompMultiColor>();
+            
+            comp.SetColors(selectedCol);
+            comp.SetOriginals();
+            comp.InitialSet = true;
+        }
+    }
 }

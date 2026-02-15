@@ -39,8 +39,22 @@ public class Dialog_CustomizeApparel : Window
             
         foreach (var item in pawn.apparel.WornApparel.Where(a => a.def.HasModExtension<DefModExtension_AvailableDrawerTabDefs>()))
         {
+            //var defMod = item.def.GetModExtension<DefModExtension_AvailableDrawerTabDefs>();
+            
+            //TEMP CODE START
             var defMod = item.def.GetModExtension<DefModExtension_AvailableDrawerTabDefs>();
-            foreach (var tabDef in defMod.tabDefs)
+            List<CustomizationTabDef> tabDefs;
+            if (defMod == null)
+            {
+                tabDefs = item.GetComp<CompMultiColor>().Props.tabDefs;
+            }
+            else
+            {
+                tabDefs = defMod.tabDefs;
+            }
+            //TEMP CODE END
+            
+            foreach (var tabDef in tabDefs)
             {
                 if (!tabRecords.ContainsKey(tabDef))
                 {
