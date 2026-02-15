@@ -51,6 +51,7 @@ public class Dialog_CustomizeWeapon : Window
         }
         //TEMP CODE END
         
+        tabDefs.SortBy(def => def.sortOrder);
         foreach (var tabDef in tabDefs)
         {
             if (!tabRecords.ContainsKey(tabDef))

@@ -7,6 +7,7 @@
         <label>Armor Decoration</label>
         <description>Deocrations for armor.</description>
         <tabDrawerClass>Core40k.ExtraDecorationTab</tabDrawerClass>
+        <sortOrder>3</sortOrder>
     </Core40k.CustomizationTabDef>
 
     <!-- Armor -->
@@ -15,6 +16,7 @@
         <label>Armor Coloring</label>
         <description>Armor coloring.</description>
         <tabDrawerClass>Core40k.ArmorColoringTab</tabDrawerClass>
+        <sortOrder>1</sortOrder>
     </Core40k.CustomizationTabDef>
 
     <Core40k.CustomizationTabDef>
@@ -22,6 +24,7 @@
         <label>Armor Decoration</label>
         <description>Deocrations for armor.</description>
         <tabDrawerClass>Core40k.ExtraDecorationTab</tabDrawerClass>
+        <sortOrder>2</sortOrder>
     </Core40k.CustomizationTabDef>
 
     <Core40k.CustomizationTabDef>
@@ -29,6 +32,7 @@
         <label>Alternate base textures</label>
         <description>Alternate base textures for apparel.</description>
         <tabDrawerClass>Core40k.ArmorAlternateTextureTab</tabDrawerClass>
+        <sortOrder>3</sortOrder>
     </Core40k.CustomizationTabDef>
 
     <!-- Weapon -->
@@ -37,6 +41,7 @@
         <label>Weapon Coloring</label>
         <description>Weapon coloring.</description>
         <tabDrawerClass>Core40k.WeaponColoringTab</tabDrawerClass>
+        <sortOrder>1</sortOrder>
     </Core40k.CustomizationTabDef>
 
     <Core40k.CustomizationTabDef>
@@ -44,6 +49,7 @@
         <label>Weapon Decoration</label>
         <description>Decorations for weapon.</description>
         <tabDrawerClass>Core40k.WeaponDecorationTab</tabDrawerClass>
+        <sortOrder>2</sortOrder>
     </Core40k.CustomizationTabDef>
 
     <Core40k.CustomizationTabDef>
@@ -51,6 +57,7 @@
         <label>Alternate base textures</label>
         <description>Alternate base textures for weapons.</description>
         <tabDrawerClass>Core40k.WeaponAlternateTextureTab</tabDrawerClass>
+        <sortOrder>3</sortOrder>
     </Core40k.CustomizationTabDef>
 
 
