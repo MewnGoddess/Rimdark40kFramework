@@ -43,6 +43,7 @@ public class Dialog_CustomizeWeapon : Window
         if (defMod == null)
         {
             tabDefs = pawn.equipment.Primary.GetComp<CompMultiColor>().Props.tabDefs;
+            tabDefs.Add(Core40kDefOf.BEWH_WeaponColoring);
         }
         else
         {

@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using System;
+using RimWorld;
 using Verse;
 
 namespace Core40k;
@@ -23,6 +24,11 @@ public static class Core40kDefOf
     public static StatDef BEWH_RankLearningFactor;
     
     public static JoyKindDef BEWH_RecreationFromSkill;
+    
+    [Obsolete]
+    public static CustomizationTabDef BEWH_ArmorColoring;
+    [Obsolete]
+    public static CustomizationTabDef BEWH_WeaponColoring;
 
     static Core40kDefOf()
     {

@@ -37,7 +37,7 @@ public class Dialog_CustomizeApparel : Window
     {
         this.pawn = pawn;
             
-        foreach (var item in pawn.apparel.WornApparel.Where(a => a.def.HasModExtension<DefModExtension_AvailableDrawerTabDefs>()))
+        foreach (var item in pawn.apparel.WornApparel.Where(a => a.def.HasModExtension<DefModExtension_AvailableDrawerTabDefs>() || a.HasComp<CompMultiColor>()))
         {
             //var defMod = item.def.GetModExtension<DefModExtension_AvailableDrawerTabDefs>();
             
@@ -47,6 +47,7 @@ public class Dialog_CustomizeApparel : Window
             if (defMod == null)
             {
                 tabDefs = item.GetComp<CompMultiColor>().Props.tabDefs;
+                tabDefs.Add(Core40kDefOf.BEWH_ArmorColoring);
             }
             else
             {
