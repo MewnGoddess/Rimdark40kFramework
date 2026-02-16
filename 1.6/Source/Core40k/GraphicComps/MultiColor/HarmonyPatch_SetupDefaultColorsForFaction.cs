@@ -10,7 +10,7 @@ public class SetupDefaultColorsForFactionPatch
 {
     public static void Postfix(Pawn __instance)
     {
-        if (__instance.Faction == null || __instance.Faction.IsPlayer || !__instance.HasMultiColorThing())
+        if (__instance?.Faction == null || __instance.Faction.IsPlayer || !__instance.HasMultiColorThing())
         {
             return;
         }
