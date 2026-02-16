@@ -24,6 +24,8 @@ public class WeaponColoringTab : CustomizerTabDrawer
 
     private ThingWithComps weapon = null;
     private CompMultiColor MultiColor = null;
+    
+    private (Color col1, Color col2, Color col3) originalColor = (Color.white, Color.white, Color.white);
 
     public override void Setup(Pawn pawn)
     {
@@ -35,6 +37,8 @@ public class WeaponColoringTab : CustomizerTabDrawer
         
         MultiColor = weapon.GetComp<CompMultiColor>();
         MultiColor.SetOriginals();
+        
+        originalColor = (MultiColor?.Props?.defaultPrimaryColor ?? (weapon.def.MadeFromStuff ? weapon.def.GetColorForStuff(weapon.Stuff) : Color.white), MultiColor?.Props?.defaultSecondaryColor ?? Color.white, MultiColor?.Props?.defaultTertiaryColor ?? Color.white);
         
         var masksForItem = masksTemp.Where(mask => mask.appliesTo.Contains(weapon.def.defName) || mask.appliesToKind == AppliesToKind.All).ToList();
 
@@ -68,6 +72,15 @@ public class WeaponColoringTab : CustomizerTabDrawer
         if (Widgets.ButtonText(selectPresetRect, "BEWH.Framework.Customization.ColorPreset".Translate()))
         {
             var list = new List<FloatMenuOption>();
+            var defaultMenuOption = new FloatMenuOption("BEWH.Framework.CommonKeyword.Default".Translate(), delegate
+            {
+                MultiColor.DrawColor = originalColor.col1;
+                MultiColor.DrawColorTwo = originalColor.col2;
+                MultiColor.DrawColorThree = originalColor.col3;
+                recache = true;
+                            
+            }, Core40kUtils.ThreeColourPreview(originalColor.col1, originalColor.col2, originalColor.col3, 3), Color.white);
+            list.Add(defaultMenuOption);
             foreach (var preset in presets.Where(p => p.appliesTo.Contains(weapon.def.defName) || p.appliesTo.Empty()))
             {
                 var menuOption = new FloatMenuOption(preset.label, delegate
@@ -81,7 +94,7 @@ public class WeaponColoringTab : CustomizerTabDrawer
                         preset.colorAmount), Color.white);
                 list.Add(menuOption);
             }
-
+    
             foreach (var preset in ModSettings.ColourPresets.Where(preset => preset.appliesToKind is PresetType.Weapon or PresetType.All))
             {
                 var menuOption = new FloatMenuOption(preset.name.CapitalizeFirst(), delegate

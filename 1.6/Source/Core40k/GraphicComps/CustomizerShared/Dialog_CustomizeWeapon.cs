@@ -112,9 +112,9 @@ public class Dialog_CustomizeWeapon : Window
         iconRect = iconRect.ContractedBy(1);
         
         Widgets.DrawMenuSection(iconRect.ContractedBy(-1));
-
+        
         Widgets.DrawTextureFitted(iconRect, weapon.Graphic.MatSingle.mainTexture, 1f, weapon.Graphic.MatSingle);
-
+        
         var weaponDecorationComp = weapon.TryGetComp<CompWeaponDecoration>();
         
         if (weaponDecorationComp != null)
@@ -147,7 +147,7 @@ public class Dialog_CustomizeWeapon : Window
                 offsetRect.x += (offset.x * sizeDiff.x + offsetRect.width * offset.x) / weapon.def.graphicData.drawSize.x;
                 offsetRect.y -= (offset.z * sizeDiff.y + offsetRect.height * offset.z) / weapon.def.graphicData.drawSize.y;
                 
-                Widgets.DrawTextureFitted(offsetRect, graphic.Value.MatSouth.mainTexture, 1f, graphic.Value.MatSingle);
+                Graphics.DrawTexture(offsetRect, graphic.Value.MatSouth.mainTexture, new Rect(0f, 0f, 1f, 1f), 0, 0, 0, 0, Color.white, graphic.Value.MatSingle);
             }
         }
     }

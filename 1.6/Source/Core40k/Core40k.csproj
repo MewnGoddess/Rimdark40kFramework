@@ -130,7 +130,6 @@
     <Compile Include="GeneClasses\Gene_DisabledBy.cs" />
     <Compile Include="GraphicComps\Attachment\WeaponAlternateTextureTab.cs" />
     <Compile Include="GraphicComps\Attachment\WeaponDecorationTab.cs" />
-    <Compile Include="GraphicComps\Attachment\WeaponColoringTab.cs" />
     <Compile Include="GraphicComps\Attachment\CompWeaponDecoration.cs" />
     <Compile Include="GraphicComps\Attachment\CompProperties_WeaponDecoration.cs" />
     <Compile Include="GraphicComps\Attachment\WeaponDecorationPresetDef.cs" />
@@ -195,6 +194,7 @@
     <Compile Include="GraphicComps\MultiColor\HarmonyPatch_ThingWithCompsMultiColorGraphicOverride.cs" />
     <Compile Include="GraphicComps\MultiColor\PawnRenderNodePropertiesMultiColor.cs" />
     <Compile Include="GraphicComps\MultiColor\PawnRenderNode_AttachmentApparelMultiColor.cs" />
+    <Compile Include="GraphicComps\MultiColor\WeaponColoringTab.cs" />
     <Compile Include="GraphicComps\MultiColor\WeaponMultiColor.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_AddedWorldCarryCapacityPatch.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_ArtificialPartsAffinityPatch.cs" />
