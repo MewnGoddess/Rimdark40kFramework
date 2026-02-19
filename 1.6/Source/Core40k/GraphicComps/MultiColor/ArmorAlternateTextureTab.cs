@@ -71,7 +71,7 @@ public class ArmorAlternateTextureTab : CustomizerTabDrawer
                     
                 iconRect = iconRect.ContractedBy(5f);
             
-                var alternateFormSelected = multiColorComp.currentAlternateBaseForm == alternateBaseFormDef.Value[i];
+                var alternateFormSelected = multiColorComp.CurrentAlternateBaseForm == alternateBaseFormDef.Value[i];
             
                 if (alternateFormSelected)
                 {

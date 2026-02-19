@@ -60,7 +60,7 @@ public class WeaponAlternateTextureTab : CustomizerTabDrawer
 
             iconRect = iconRect.ContractedBy(5f);
 
-            var alternateFormSelected = multiColor.currentAlternateBaseForm == alternateBaseFormDefs[i];
+            var alternateFormSelected = multiColor.CurrentAlternateBaseForm == alternateBaseFormDefs[i];
 
             if (alternateFormSelected)
             {

@@ -9,11 +9,11 @@ public static class ChangeDrawDataPatch
     public static void Postfix(ref PawnRenderNodeProperties __result, PawnRenderNode __instance)
     {
         var multiColor = __instance?.apparel?.GetComp<CompMultiColor>();
-        if (multiColor?.currentAlternateBaseForm == null)
+        if (multiColor?.CurrentAlternateBaseForm == null)
         {
             return;
         }
         
-        __result.drawData = multiColor.currentAlternateBaseForm.drawData;
+        __result.drawData = multiColor.CurrentAlternateBaseForm.drawData;
     }
 }

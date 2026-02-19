@@ -166,9 +166,9 @@ public class WeaponColoringTab : CustomizerTabDrawer
         Rect colorTwoRect;
         
         var colAmount = MultiColor.Props.colorMaskAmount;
-        if (MultiColor.currentAlternateBaseForm != null)
+        if (MultiColor.CurrentAlternateBaseForm != null)
         {
-            colAmount = MultiColor.currentAlternateBaseForm.colorAmount;
+            colAmount = MultiColor.CurrentAlternateBaseForm.colorAmount;
         }
         if (MultiColor.MaskDef is { setsNull: false })
         {
@@ -237,9 +237,9 @@ public class WeaponColoringTab : CustomizerTabDrawer
 
             var maskDefs = new List<MaskDef>();
 
-            if (MultiColor.currentAlternateBaseForm != null)
+            if (MultiColor.CurrentAlternateBaseForm != null)
                 maskDefs.AddRange(masks[weapon.def].Where(maskDef =>
-                    !MultiColor.currentAlternateBaseForm.incompatibleMaskDefs.Contains(maskDef)));
+                    !MultiColor.CurrentAlternateBaseForm.incompatibleMaskDefs.Contains(maskDef)));
             else
                 maskDefs = masks[weapon.def];
 
@@ -263,7 +263,7 @@ public class WeaponColoringTab : CustomizerTabDrawer
                     
                     var bodyType = weapon.def.GetModExtension<DefModExtension_ForcesBodyType>()?.forcedBodyType ?? pawn.story.bodyType;
 
-                    var alternatePath = MultiColor.currentAlternateBaseForm?.drawnTextureIconPath;
+                    var alternatePath = MultiColor.CurrentAlternateBaseForm?.drawnTextureIconPath;
                     var usedPath = alternatePath.NullOrEmpty() ? weapon.def.graphicData.texPath : alternatePath;
 
                     var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;

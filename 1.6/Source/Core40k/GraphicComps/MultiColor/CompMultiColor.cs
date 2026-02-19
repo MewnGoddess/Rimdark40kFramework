@@ -179,8 +179,9 @@ public class CompMultiColor : CompGraphicParent
     }
     
     
-    public AlternateBaseFormDef originalCurrentAlternateBaseForm = null;
-    public AlternateBaseFormDef currentAlternateBaseForm = null;
+    private AlternateBaseFormDef originalCurrentAlternateBaseForm = null;
+    private AlternateBaseFormDef currentAlternateBaseForm = null;
+    public AlternateBaseFormDef CurrentAlternateBaseForm => currentAlternateBaseForm;
 
     public void SetAlternateBaseForm(AlternateBaseFormDef alternateBaseFormDef, bool isForApparel)
     {
@@ -195,9 +196,22 @@ public class CompMultiColor : CompGraphicParent
             compWeaponDeco?.RemoveDecorationsIncompatibleWithAlternate(alternateBaseFormDef);
         }
         
-        if (alternateBaseFormDef != null && alternateBaseFormDef.incompatibleMaskDefs.Contains(maskDef))
+        if (alternateBaseFormDef.incompatibleMaskDefs.Contains(maskDef))
         {
             maskDef = Core40kDefOf.BEWH_DefaultMask;
+        }
+
+        if (alternateBaseFormDef.newPrimaryColor.HasValue)
+        {
+            DrawColor = alternateBaseFormDef.newPrimaryColor.Value;
+        }
+        if (alternateBaseFormDef.newSecondaryColor.HasValue)
+        {
+            DrawColorTwo = alternateBaseFormDef.newSecondaryColor.Value;
+        }
+        if (alternateBaseFormDef.newTertiaryColor.HasValue)
+        {
+            DrawColorThree = alternateBaseFormDef.newTertiaryColor.Value;
         }
         
         currentAlternateBaseForm = alternateBaseFormDef;

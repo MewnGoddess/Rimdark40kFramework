@@ -45,7 +45,7 @@ public static class ApparelMultiColorPatch
         bodyType = apparel.def.GetModExtension<DefModExtension_ForcesBodyType>()?.forcedBodyType ?? bodyType;
         var extension = apparel.def.GetModExtension<ApparelExtension>();
 
-        var alternatePath = multiColor.currentAlternateBaseForm?.drawnTextureIconPath;
+        var alternatePath = multiColor.CurrentAlternateBaseForm?.drawnTextureIconPath;
         var usedPath = alternatePath.NullOrEmpty() ? apparel.WornGraphicPath : alternatePath;
         
         var path = apparel.def.apparel.LastLayer != ApparelLayerDefOf.Overhead 

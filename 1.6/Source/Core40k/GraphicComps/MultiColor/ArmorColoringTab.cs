@@ -160,9 +160,9 @@ public class ArmorColoringTab : CustomizerTabDrawer
                 Rect colorTwoRect;
 
                 var colAmount = multiColor.Props.colorMaskAmount;
-                if (multiColor.currentAlternateBaseForm != null)
+                if (multiColor.CurrentAlternateBaseForm != null)
                 {
-                    colAmount = multiColor.currentAlternateBaseForm.colorAmount;
+                    colAmount = multiColor.CurrentAlternateBaseForm.colorAmount;
                 }
                 if (multiColor.MaskDef is { setsNull: false })
                 {
@@ -235,9 +235,9 @@ public class ArmorColoringTab : CustomizerTabDrawer
                     
                     var maskDefs = new List<MaskDef>();
 
-                    if (multiColor.currentAlternateBaseForm != null)
+                    if (multiColor.CurrentAlternateBaseForm != null)
                     {
-                        maskDefs.AddRange(masks[item.def].Where(maskDef => !multiColor.currentAlternateBaseForm.incompatibleMaskDefs.Contains(maskDef)));
+                        maskDefs.AddRange(masks[item.def].Where(maskDef => !multiColor.CurrentAlternateBaseForm.incompatibleMaskDefs.Contains(maskDef)));
                     }
                     else
                     {
@@ -263,7 +263,7 @@ public class ArmorColoringTab : CustomizerTabDrawer
                             }
                             var bodyType = item.def.GetModExtension<DefModExtension_ForcesBodyType>()?.forcedBodyType ?? pawn.story.bodyType;
                             
-                            var alternatePath = multiColor.currentAlternateBaseForm?.drawnTextureIconPath;
+                            var alternatePath = multiColor.CurrentAlternateBaseForm?.drawnTextureIconPath;
                             var usedPath = alternatePath.NullOrEmpty() ? item.WornGraphicPath : alternatePath;
                             
                             var path = item.def.apparel.LastLayer != ApparelLayerDefOf.Overhead 

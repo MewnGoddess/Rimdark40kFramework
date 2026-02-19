@@ -236,9 +236,9 @@ public class ExtraDecorationTab : CustomizerTabDrawer
         extraDecorationDefs.CopyToList(tempExtraDecorationDefs);
         
         var multiColorComp = apparel.TryGetComp<CompMultiColor>();
-        if (multiColorComp?.currentAlternateBaseForm != null)
+        if (multiColorComp?.CurrentAlternateBaseForm != null)
         {
-            foreach (var incompatibleArmorDecoration in multiColorComp.currentAlternateBaseForm.incompatibleArmorDecorations)
+            foreach (var incompatibleArmorDecoration in multiColorComp.CurrentAlternateBaseForm.incompatibleArmorDecorations)
             {
                 if (extraDecorationDefs.Contains(incompatibleArmorDecoration))
                 {
@@ -266,9 +266,9 @@ public class ExtraDecorationTab : CustomizerTabDrawer
             }
             
             var hasReq = extraDecorationDefs[i].HasRequirements(selPawn, out var reason);
-            var incompatibleDeco = (multiColorComp?.currentAlternateBaseForm != null 
-                                        && multiColorComp.currentAlternateBaseForm.incompatibleArmorDecorations.Contains(extraDecorationDefs[i]))
-                                        || (multiColorComp?.currentAlternateBaseForm == null 
+            var incompatibleDeco = (multiColorComp?.CurrentAlternateBaseForm != null 
+                                        && multiColorComp.CurrentAlternateBaseForm.incompatibleArmorDecorations.Contains(extraDecorationDefs[i]))
+                                        || (multiColorComp?.CurrentAlternateBaseForm == null 
                                         && extraDecorationDefs[i].isIncompatibleWithBaseTexture);
                 
             var color = Color.white;
