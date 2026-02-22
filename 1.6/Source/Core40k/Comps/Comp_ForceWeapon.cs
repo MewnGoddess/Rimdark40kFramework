@@ -11,6 +11,8 @@ public class Comp_ForceWeapon : ThingComp
 
     private float statValue = -1;
 
+    public const string ExtraDamageName = "Custom extra damage";
+
     public override void Notify_Equipped(Pawn pawn)
     {
         base.Notify_Equipped(pawn);
@@ -27,12 +29,12 @@ public class Comp_ForceWeapon : ThingComp
 
     private void CalculateExtraDamage(Pawn pawn)
     {
-        if (pawn == null || pawn.GetStatValue(Props.scalingStat) <= 0)
+        statValue = pawn.GetStatValue(Props.scalingStat);
+        
+        if (pawn == null || statValue <= 0 || statValue < Props.minValueToWork)
         {
             return;
         }
-
-        statValue = pawn.GetStatValue(Props.scalingStat);
 
         var cachedDamageValue = statValue * Props.damageScalingFactor;
         var cachedPenValue = Props.flatPen;
@@ -46,19 +48,28 @@ public class Comp_ForceWeapon : ThingComp
             
         foreach (var tool in parent.TryGetComp<CompEquippable>().Tools)
         {
-            if (tool.capacities.Intersect(Props.capacitiesToApplyOn).EnumerableNullOrEmpty()) continue;
-                
-            var extraDamage = new ExtraDamage
+            if (tool.capacities.Intersect(Props.capacitiesToApplyOn).EnumerableNullOrEmpty())
             {
-                def = Props.damageDef,
-                amount = cachedDamageValue,
-                armorPenetration = cachedPenValue
-            };
+                continue;
+            }
                     
             if (tool.extraMeleeDamages.NullOrEmpty())
             {
-                tool.extraMeleeDamages = new List<ExtraDamage>();
+                tool.extraMeleeDamages = [];
             }
+            else
+            {
+                tool.extraMeleeDamages.RemoveWhere(damage => damage is NamedExtraDamage);
+            }
+            
+            var extraDamage = new NamedExtraDamage
+            {
+                def = Props.damageDef,
+                amount = cachedDamageValue,
+                armorPenetration = cachedPenValue,
+                name = ExtraDamageName
+            };
+            
             tool.extraMeleeDamages.Add(extraDamage);
         }
     }

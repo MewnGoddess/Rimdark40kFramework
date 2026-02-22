@@ -12,6 +12,7 @@ public class CompProperties_ForceWeapon : CompProperties
 
     public StatDef scalingStat;
     public float damageScalingFactor = 1;
+    public float minValueToWork = 0;
 
     public bool scalesPen = false;
     public float penScaleFactor = 1;
