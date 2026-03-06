@@ -315,10 +315,15 @@ public class CompRankInfo : ThingComp
             return;
         }
         
+        var daysAsRankTemp = new Dictionary<RankDef, int>();
+        daysAsRankTemp.AddRange(daysAsRank);
+        
         foreach (var keyPair in daysAsRank)
         {
-            daysAsRank[keyPair.Key] = Find.TickManager.TicksGame - keyPair.Value;
+            daysAsRankTemp[keyPair.Key] = Find.TickManager.TicksGame - keyPair.Value;
         }
+        
+        daysAsRank = daysAsRankTemp;
 
         convertToStartTick = false;
     }
