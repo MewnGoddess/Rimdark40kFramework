@@ -196,12 +196,15 @@ public class CompDecorative : CompGraphicParent
     public override void Notify_Equipped(Pawn pawn)
     {
         RemoveInvalidDecorations(pawn);
-        if (!pawnKindDefSetupDone && pawn.Faction != Faction.OfPlayer)
+        if (!pawnKindDefSetupDone)
         {
             pawnKindDefSetupDone = true;
-            if(Props.extraDecorationsByPawnKindDef.TryGetValue(pawn.kindDef, out var defs))
+            if (Current.CreatingWorld.factionManager.OfPlayer != null && pawn.Faction != Current.CreatingWorld.factionManager.OfPlayer)
             {
-                ApplyDecorationsFromList(defs);
+                if(Props.extraDecorationsByPawnKindDef.TryGetValue(pawn.kindDef, out var defs))
+                {
+                    ApplyDecorationsFromList(defs);
+                }
             }
         }
         Notify_ColorChanged();
