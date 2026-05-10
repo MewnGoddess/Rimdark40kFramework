@@ -21,14 +21,21 @@ public class CompDecorative : CompGraphicParent
     public Dictionary<ExtraDecorationDef, ExtraDecorationSettings> ExtraDecorations => extraDecorations;
 
     public CompMultiColor MultiColor => parent.GetComp<CompMultiColor>();
+
+    private bool pawnKindDefSetupDone = false;
     
     public override void InitialSetup()
     {
-        foreach (var extraDecoration in Props.extraDecorations)
+        ApplyDecorationsFromList(Props.extraDecorations);
+        base.InitialSetup();
+    }
+
+    private void ApplyDecorationsFromList(List<ExtraDecorationDef> list)
+    {
+        foreach (var extraDecoration in list)
         {
             AddOrRemoveDecoration(extraDecoration);
         }
-        base.InitialSetup();
     }
     
     public void AddOrRemoveDecoration(ExtraDecorationDef decoration)
@@ -189,6 +196,14 @@ public class CompDecorative : CompGraphicParent
     public override void Notify_Equipped(Pawn pawn)
     {
         RemoveInvalidDecorations(pawn);
+        if (!pawnKindDefSetupDone && pawn.Faction != Faction.OfPlayer)
+        {
+            pawnKindDefSetupDone = true;
+            if(Props.extraDecorationsByPawnKindDef.TryGetValue(pawn.kindDef, out var defs))
+            {
+                ApplyDecorationsFromList(defs);
+            }
+        }
         Notify_ColorChanged();
         base.Notify_Equipped(pawn);
     }
@@ -240,6 +255,7 @@ public class CompDecorative : CompGraphicParent
     public override void PostExposeData()
     {
         base.PostExposeData();
+        Scribe_Values.Look(ref pawnKindDefSetupDone, "pawnKindDefSetupDone");
         Scribe_Collections.Look(ref extraDecorations, "extraDecorations");
         Scribe_Collections.Look(ref originalExtraDecorations, "originalExtraDecorations");
     }

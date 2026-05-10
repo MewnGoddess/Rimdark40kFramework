@@ -1,10 +1,7 @@
 using System.Collections.Generic;
-using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.AI;
-using Verse.Sound;
-using Verse.Steam;
 
 namespace Core40k;
 
@@ -58,7 +55,7 @@ public class Gizmo_AmmoChanger : Command
                 else if (!compAmmoChanger.HasResearchForAmmo(availableProjectile, out var researchDef))
                 {
                     menuOption.Disabled = true;
-                    menuOption.tooltip = "BEWH.Framework.AmmoChanger.MissingResearch".Translate(researchDef.label.CapitalizeFirst());
+                    menuOption.tooltip = "BEWH.Framework.Common.MissingResearch".Translate(researchDef.label.CapitalizeFirst());
                 }
                 else
                 {
