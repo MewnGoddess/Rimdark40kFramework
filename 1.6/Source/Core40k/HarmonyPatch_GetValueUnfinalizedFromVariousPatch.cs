@@ -61,7 +61,6 @@ public static class GetValueUnfinalizedFromVariousPatch
         var rankComp = pawn.GetComp<CompRankInfo>();
         if (rankComp != null && !rankComp.UnlockedRanks.NullOrEmpty())
         {
-            
             var rankListForReading = rankComp.UnlockedRanks;
             
             if (rankComp.CachedStatOffset.TryGetValue(stat, out var cachedStatOffset))
@@ -100,7 +99,7 @@ public static class GetValueUnfinalizedFromVariousPatch
             }
         }
 
-        if (!CoreUtils.cachedDecoratives.TryGetValue(pawn, out var cachedDecoratives))
+        if (CoreUtils == null || coreUtils.cachedDecoratives.NullOrEmpty() || !CoreUtils.cachedDecoratives.TryGetValue(pawn, out var cachedDecoratives))
         {
             return num;
         }
@@ -143,7 +142,7 @@ public static class GetValueUnfinalizedFromVariousPatch
                 }
             }
         }
-        
+
         //Weapon offset
         if (cachedDecoratives.weapon != null)
         {
@@ -194,11 +193,10 @@ public static class GetValueUnfinalizedFromVariousPatch
             return num;
         }
 
-        //Rank offset
+        //Rank factor
         var rankComp = pawn.GetComp<CompRankInfo>();
         if (rankComp != null && !rankComp.UnlockedRanks.NullOrEmpty())
         {
-            
             var rankListForReading = rankComp.UnlockedRanks;
             
             if (rankComp.CachedStatFactor.TryGetValue(stat, out var cachedStatFactor))
@@ -207,7 +205,7 @@ public static class GetValueUnfinalizedFromVariousPatch
             }
             else
             {
-                var resNum = 0f;
+                var resNum = 1f;
                 foreach (var rank in rankListForReading)
                 {
                     if (rank == null)
@@ -217,7 +215,7 @@ public static class GetValueUnfinalizedFromVariousPatch
 
                     if (!rank.statFactors.NullOrEmpty())
                     {
-                        resNum *= rank.statFactors.GetStatOffsetFromList(stat);
+                        resNum *= rank.statFactors.GetStatFactorFromList(stat);
                     }
                 }
 
@@ -231,18 +229,18 @@ public static class GetValueUnfinalizedFromVariousPatch
                 {
                     if (!conditional.statFactors.NullOrEmpty() && conditional.Applies(req))
                     {
-                        num *= conditional.statFactors.GetStatOffsetFromList(stat);
+                        num *= conditional.statFactors.GetStatFactorFromList(stat);
                     }
                 }
             }
         }
 
-        if (!CoreUtils.cachedDecoratives.TryGetValue(pawn, out var cachedDecoratives))
+        if (CoreUtils == null || coreUtils.cachedDecoratives.NullOrEmpty() || !CoreUtils.cachedDecoratives.TryGetValue(pawn, out var cachedDecoratives))
         {
             return num;
         }
         
-        //Apparel offset
+        //Apparel factor
         if (!cachedDecoratives.apparels.NullOrEmpty())
         {
             foreach (var apparel in cachedDecoratives.apparels)
@@ -254,34 +252,33 @@ public static class GetValueUnfinalizedFromVariousPatch
                 }
                 else
                 {
-                    var resNum = 0f;
+                    var resNum = 1f;
                     
                     foreach (var extraDecoration in compApparel.ExtraDecorations)
                     {
                         if (!extraDecoration.Key.statFactors.NullOrEmpty())
                         {
-                            resNum *= extraDecoration.Key.statFactors.GetStatOffsetFromList(stat);
+                            resNum *= extraDecoration.Key.statFactors.GetStatFactorFromList(stat);
                         }
                     }
                     
                     compApparel.CachedStatFactor.Add(stat, resNum);
                     num *= resNum;
                 }
-                
                 foreach (var extraDecoration in compApparel.ExtraDecorations)
                 {
                     foreach (var conditional in extraDecoration.Key.conditionalStatAffecters)
                     {
                         if (!conditional.statFactors.NullOrEmpty() && conditional.Applies(req))
                         {
-                            num *= conditional.statFactors.GetStatOffsetFromList(stat);
+                            num *= conditional.statFactors.GetStatFactorFromList(stat);
                         }
                     }
                 }
             }
         }
-        
-        //Weapon offset
+
+        //Weapon factor
         if (cachedDecoratives.weapon != null)
         {
             var compWeapon = cachedDecoratives.weapon.GetComp<CompWeaponDecoration>();
@@ -291,13 +288,13 @@ public static class GetValueUnfinalizedFromVariousPatch
             }
             else
             {
-                var resNum = 0f;
+                var resNum = 1f;
                     
                 foreach (var weaponDecoration in compWeapon.WeaponDecorations)
                 {
                     if (!weaponDecoration.Key.statFactors.NullOrEmpty())
                     {
-                        resNum *= weaponDecoration.Key.statFactors.GetStatOffsetFromList(stat);
+                        resNum *= weaponDecoration.Key.statFactors.GetStatFactorFromList(stat);
                     }
                 }
                     
@@ -311,7 +308,7 @@ public static class GetValueUnfinalizedFromVariousPatch
                 {
                     if (!conditional.statFactors.NullOrEmpty() && conditional.Applies(req))
                     {
-                        num *= conditional.statFactors.GetStatOffsetFromList(stat);
+                        num *= conditional.statFactors.GetStatFactorFromList(stat);
                     }
                 }
             }

@@ -27,5 +27,6 @@
 		<li>Ludeon.RimWorld</li>
 		<li>brrainz.harmony</li>
 		<li>OskarPotocki.VanillaFactionsExpanded.Core</li>
+		<li>SmashPhil.VehicleFramework</li>
 	</loadAfter>
 </ModMetaData>

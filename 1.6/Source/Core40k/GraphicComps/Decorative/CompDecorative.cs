@@ -214,6 +214,8 @@ public class CompDecorative : CompGraphicParent
 
         if (pawn != null)
         {
+            cachedStatOffset = new Dictionary<StatDef, float>();
+            cachedStatFactor = new Dictionary<StatDef, float>();
             if (CoreUtils.cachedDecoratives.TryGetValue(pawn, out var decoratives))
             {
                 decoratives.apparels.Add(parent as Apparel);
@@ -239,6 +241,8 @@ public class CompDecorative : CompGraphicParent
             if (CoreUtils.cachedDecoratives.TryGetValue(pawn, out var decoratives))
             {
                 decoratives.apparels.Remove(parent as Apparel);
+                cachedStatOffset = new Dictionary<StatDef, float>();
+                cachedStatFactor = new Dictionary<StatDef, float>();
             }
         }
         

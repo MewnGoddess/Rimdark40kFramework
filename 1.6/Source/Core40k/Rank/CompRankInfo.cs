@@ -313,8 +313,6 @@ public class CompRankInfo : ThingComp
         Scribe_Collections.Look(ref unlockedRanksAtDeath, "unlockedRanksAtDeath", LookMode.Def);
         Scribe_Collections.Look(ref daysAsRank, "daysAsRank");
         Scribe_Values.Look(ref convertToStartTick, "convertToStartTick");
-        Scribe_Collections.Look(ref cachedStatOffset, "cachedStatOffset", LookMode.Def, LookMode.Value);
-        Scribe_Collections.Look(ref cachedStatFactor, "cachedStatFactor", LookMode.Def, LookMode.Value);
         Scribe_Defs.Look(ref lastOpenedRankCategory, "lastOpenedRankCategory");
 
         if (Scribe.mode != LoadSaveMode.PostLoadInit)

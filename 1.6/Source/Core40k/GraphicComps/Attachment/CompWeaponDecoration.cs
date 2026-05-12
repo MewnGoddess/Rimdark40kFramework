@@ -203,13 +203,15 @@ public class CompWeaponDecoration : CompGraphicParent
 
         if (pawn != null)
         {
+            cachedStatOffset = new Dictionary<StatDef, float>();
+            cachedStatFactor = new Dictionary<StatDef, float>();
             if (CoreUtils.cachedDecoratives.TryGetValue(pawn, out var decoratives))
             {
                 decoratives.weapon = parent;
             }
             else
             {
-                var cachedDecoratives = new GameComponent_CoreUtils.CachedDecoratives()
+                var cachedDecoratives = new GameComponent_CoreUtils.CachedDecoratives
                 {
                     weapon = parent,
                 };
@@ -227,6 +229,8 @@ public class CompWeaponDecoration : CompGraphicParent
             if (CoreUtils.cachedDecoratives.TryGetValue(pawn, out var decoratives))
             {
                 decoratives.weapon = null;
+                cachedStatOffset = new Dictionary<StatDef, float>();
+                cachedStatFactor = new Dictionary<StatDef, float>();
             }
         }
         
