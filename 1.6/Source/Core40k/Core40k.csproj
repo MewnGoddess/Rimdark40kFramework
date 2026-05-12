@@ -127,6 +127,7 @@
     <Compile Include="DefModExtensions\DefModExtension_InheritableArchite.cs" />
     <Compile Include="DefModExtensions\DefModExtension_InitialGoodwill.cs" />
     <Compile Include="DefModExtensions\DefModExtension_LockedByResearch.cs" />
+    <Compile Include="GameComponent_CoreUtils.cs" />
     <Compile Include="GeneClasses\Gene_AddRandomGeneAndOrTraitByWeight.cs" />
     <Compile Include="GeneClasses\Gene_ChanceToAddEachGene.cs" />
     <Compile Include="GeneClasses\Gene_DisabledBy.cs" />

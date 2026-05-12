@@ -7,6 +7,9 @@ namespace Core40k;
 
 public class CompDecorative : CompGraphicParent
 {
+    private static GameComponent_CoreUtils coreUtils;
+    private static GameComponent_CoreUtils CoreUtils => coreUtils ??= Current.Game.GetComponent<GameComponent_CoreUtils>();
+    
     public void TempSetInitialValues(DecorativeApparelMultiColor multiColor)
     {
         extraDecorations = multiColor.ExtraDecorations;
@@ -187,6 +190,7 @@ public class CompDecorative : CompGraphicParent
                 toRemove.Add(extraDecoration.Key);
             }
         }
+        
         foreach (var extraDecorationDef in toRemove)
         {
             extraDecorations.Remove(extraDecorationDef);
@@ -199,7 +203,7 @@ public class CompDecorative : CompGraphicParent
         if (!pawnKindDefSetupDone)
         {
             pawnKindDefSetupDone = true;
-            if (Current.CreatingWorld.factionManager.OfPlayer != null && pawn.Faction != Current.CreatingWorld.factionManager.OfPlayer)
+            if ((Current.CreatingWorld?.factionManager?.OfPlayer != null && pawn.Faction != Current.CreatingWorld.factionManager.OfPlayer) || (pawn.Faction != null && pawn.Faction != Faction.OfPlayerSilentFail))
             {
                 if(Props.extraDecorationsByPawnKindDef.TryGetValue(pawn.kindDef, out var defs))
                 {
@@ -207,9 +211,53 @@ public class CompDecorative : CompGraphicParent
                 }
             }
         }
+
+        if (pawn != null)
+        {
+            if (CoreUtils.cachedDecoratives.TryGetValue(pawn, out var decoratives))
+            {
+                decoratives.apparels.Add(parent as Apparel);
+            }
+            else
+            {
+                var cachedDecoratives = new GameComponent_CoreUtils.CachedDecoratives()
+                {
+                    apparels = [parent as Apparel],
+                };
+                CoreUtils.cachedDecoratives.Add(pawn, cachedDecoratives);
+            }
+        }
+        
         Notify_ColorChanged();
         base.Notify_Equipped(pawn);
     }
+
+    public override void Notify_Unequipped(Pawn pawn)
+    {
+        if (pawn != null)
+        {
+            if (CoreUtils.cachedDecoratives.TryGetValue(pawn, out var decoratives))
+            {
+                decoratives.apparels.Remove(parent as Apparel);
+            }
+        }
+        
+        base.Notify_Unequipped(pawn);
+    }
+    
+    public override void Notify_GraphicChanged()
+    {
+        cachedStatOffset = new Dictionary<StatDef, float>();
+        cachedStatFactor = new Dictionary<StatDef, float>();
+        
+        parent.Notify_ColorChanged();
+    }
+
+    private Dictionary<StatDef, float> cachedStatOffset = new();
+    public Dictionary<StatDef, float> CachedStatOffset => cachedStatOffset;
+    
+    private Dictionary<StatDef, float> cachedStatFactor = new();
+    public Dictionary<StatDef, float> CachedStatFactor => cachedStatFactor;
     
     private List<Graphic> cachedGraphics = [];
     

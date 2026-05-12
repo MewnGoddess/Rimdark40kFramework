@@ -50,7 +50,7 @@ public class ITab_RankSystem : ITab
             }
             
             var defaultRes = ModSettings?.alwaysShowRankTab ?? false;
-            if (Find.Selector.SingleSelectedThing is not Pawn p || !p.HasComp<CompRankInfo>() || p.Faction == null || !p.Faction.IsPlayer || p.IsSlaveOfColony || p.IsPrisonerOfColony)
+            if (Find.Selector?.SingleSelectedThing is not Pawn p || !p.HasComp<CompRankInfo>() || p.Faction == null || !p.Faction.IsPlayer || p.IsSlaveOfColony || p.IsPrisonerOfColony)
             {
                 return defaultRes;
             }

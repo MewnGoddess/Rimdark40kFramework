@@ -46,7 +46,7 @@ public class RankCategoryDef : Def
 
         if (unlockedByTrait != null)
         {
-            if (pawn.story == null || !pawn.story.traits.HasTrait(unlockedByTrait, unlockTraitDegree))
+            if (pawn.story?.traits == null || !pawn.story.traits.HasTrait(unlockedByTrait, unlockTraitDegree))
             {
                 return false;
             }
@@ -54,7 +54,7 @@ public class RankCategoryDef : Def
 
         if (unlockedByHediff != null)
         {
-            if (pawn.health == null || !pawn.health.hediffSet.HasHediff(unlockedByHediff))
+            if (pawn.health?.hediffSet == null || !pawn.health.hediffSet.HasHediff(unlockedByHediff))
             {
                 return false;
             }
@@ -70,7 +70,7 @@ public class RankCategoryDef : Def
 
         if (lockedByTrait != null)
         {
-            if (pawn.story != null && pawn.story.traits.HasTrait(lockedByTrait, lockTraitDegree))
+            if (pawn.story?.traits != null && pawn.story.traits.HasTrait(lockedByTrait, lockTraitDegree))
             {
                 return false;
             }
@@ -78,7 +78,7 @@ public class RankCategoryDef : Def
 
         if (lockedByHediff != null)
         {
-            if (pawn.health != null && pawn.health.hediffSet.HasHediff(lockedByHediff))
+            if (pawn.health?.hediffSet != null && pawn.health.hediffSet.HasHediff(lockedByHediff))
             {
                 return false;
             }

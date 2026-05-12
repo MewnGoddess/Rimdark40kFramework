@@ -8,6 +8,9 @@ namespace Core40k;
 
 public class CompWeaponDecoration : CompGraphicParent
 {
+    private static GameComponent_CoreUtils coreUtils;
+    private static GameComponent_CoreUtils CoreUtils => coreUtils ??= Current.Game.GetComponent<GameComponent_CoreUtils>();
+    
     private Dictionary<WeaponDecorationDef, ExtraDecorationSettings> originalWeaponDecorations = new ();
     private Dictionary<WeaponDecorationDef, ExtraDecorationSettings> weaponDecorations = new ();
 
@@ -152,6 +155,8 @@ public class CompWeaponDecoration : CompGraphicParent
     public override void Notify_GraphicChanged()
     {
         RecacheGraphics();
+        cachedStatOffset = new Dictionary<StatDef, float>();
+        cachedStatFactor = new Dictionary<StatDef, float>();
         base.Notify_GraphicChanged();
     }
     
@@ -195,8 +200,44 @@ public class CompWeaponDecoration : CompGraphicParent
     {
         RemoveInvalidDecorations(pawn);
         Notify_GraphicChanged();
+
+        if (pawn != null)
+        {
+            if (CoreUtils.cachedDecoratives.TryGetValue(pawn, out var decoratives))
+            {
+                decoratives.weapon = parent;
+            }
+            else
+            {
+                var cachedDecoratives = new GameComponent_CoreUtils.CachedDecoratives()
+                {
+                    weapon = parent,
+                };
+                CoreUtils.cachedDecoratives.Add(pawn, cachedDecoratives);
+            }
+        }
+        
         base.Notify_Equipped(pawn);
     }
+    
+    public override void Notify_Unequipped(Pawn pawn)
+    {
+        if (pawn != null)
+        {
+            if (CoreUtils.cachedDecoratives.TryGetValue(pawn, out var decoratives))
+            {
+                decoratives.weapon = null;
+            }
+        }
+        
+        base.Notify_Unequipped(pawn);
+    }
+    
+    private Dictionary<StatDef, float> cachedStatOffset = new Dictionary<StatDef, float>();
+    public Dictionary<StatDef, float> CachedStatOffset => cachedStatOffset;
+    
+    private Dictionary<StatDef, float> cachedStatFactor = new Dictionary<StatDef, float>();
+    public Dictionary<StatDef, float> CachedStatFactor => cachedStatFactor;
     
     public override void PostExposeData()
     {

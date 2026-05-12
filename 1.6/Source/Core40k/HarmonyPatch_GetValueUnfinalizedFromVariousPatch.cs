@@ -10,6 +10,9 @@ namespace Core40k;
 [HarmonyPatch(typeof(StatWorker), "GetValueUnfinalized")]
 public static class GetValueUnfinalizedFromVariousPatch
 {
+    private static GameComponent_CoreUtils coreUtils;
+    private static GameComponent_CoreUtils CoreUtils => coreUtils ??= Current.Game.GetComponent<GameComponent_CoreUtils>();
+    
     static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
     {
         var addedOffset = false;
@@ -55,49 +58,81 @@ public static class GetValueUnfinalizedFromVariousPatch
         }
 
         //Rank offset
-        if (pawn.HasComp<CompRankInfo>())
+        var rankComp = pawn.GetComp<CompRankInfo>();
+        if (rankComp != null && !rankComp.UnlockedRanks.NullOrEmpty())
         {
-            var rankListForReading = pawn.GetComp<CompRankInfo>().UnlockedRanks;
-        
-            if (!rankListForReading.NullOrEmpty())
+            
+            var rankListForReading = rankComp.UnlockedRanks;
+            
+            if (rankComp.CachedStatOffset.TryGetValue(stat, out var cachedStatOffset))
             {
+                num += cachedStatOffset;
+            }
+            else
+            {
+                var resNum = 0f;
                 foreach (var rank in rankListForReading)
                 {
-                    if (rank == null || rank.statOffsets.NullOrEmpty())
+                    if (rank == null)
                     {
                         continue;
                     }
-                    num += rank.statOffsets.GetStatOffsetFromList(stat);
-                    foreach (var conditional in rank.conditionalStatAffecters)
+
+                    if (!rank.statOffsets.NullOrEmpty())
                     {
-                        if (!conditional.statOffsets.NullOrEmpty() && conditional.Applies(req))
-                        {
-                            num += conditional.statOffsets.GetStatOffsetFromList(stat);
-                        }
+                        resNum += rank.statOffsets.GetStatOffsetFromList(stat);
+                    }
+                }
+
+                rankComp.CachedStatOffset.Add(stat, resNum);
+                num += resNum;
+            }
+            
+            foreach (var rank in rankListForReading.Where(def => def.conditionalStatAffecters != null))
+            {
+                foreach (var conditional in rank.conditionalStatAffecters)
+                {
+                    if (!conditional.statOffsets.NullOrEmpty() && conditional.Applies(req))
+                    {
+                        num += conditional.statOffsets.GetStatOffsetFromList(stat);
                     }
                 }
             }
         }
+
+        if (!CoreUtils.cachedDecoratives.TryGetValue(pawn, out var cachedDecoratives))
+        {
+            return num;
+        }
         
         //Apparel offset
-        var apparels = pawn.apparel?.WornApparel?.Where(apparel => apparel.HasComp<CompDecorative>()).ToList();
-        if (apparels != null)
+        if (!cachedDecoratives.apparels.NullOrEmpty())
         {
-            foreach (var apparel in apparels)
+            foreach (var apparel in cachedDecoratives.apparels)
             {
-                var compApparel = apparel.TryGetComp<CompDecorative>();
-                if (compApparel == null)
+                var compApparel = apparel.GetComp<CompDecorative>();
+                if (compApparel.CachedStatOffset.TryGetValue(stat, out var cachedStatOffset))
                 {
-                    continue;
+                    num += cachedStatOffset;
                 }
-
+                else
+                {
+                    var resNum = 0f;
+                    
+                    foreach (var extraDecoration in compApparel.ExtraDecorations)
+                    {
+                        if (!extraDecoration.Key.statOffsets.NullOrEmpty())
+                        {
+                            resNum += extraDecoration.Key.statOffsets.GetStatOffsetFromList(stat);
+                        }
+                    }
+                    
+                    compApparel.CachedStatOffset.Add(stat, resNum);
+                    num += resNum;
+                }
+                
                 foreach (var extraDecoration in compApparel.ExtraDecorations)
                 {
-                    if (!extraDecoration.Key.statOffsets.NullOrEmpty())
-                    {
-                        num += extraDecoration.Key.statOffsets.GetStatOffsetFromList(stat);
-                    }
-                
                     foreach (var conditional in extraDecoration.Key.conditionalStatAffecters)
                     {
                         if (!conditional.statOffsets.NullOrEmpty() && conditional.Applies(req))
@@ -110,17 +145,31 @@ public static class GetValueUnfinalizedFromVariousPatch
         }
         
         //Weapon offset
-        var weapon = pawn.equipment?.Primary;
-        var compWeapon = weapon?.TryGetComp<CompWeaponDecoration>();
-        if (compWeapon != null)
+        if (cachedDecoratives.weapon != null)
         {
+            var compWeapon = cachedDecoratives.weapon.GetComp<CompWeaponDecoration>();
+            if (compWeapon.CachedStatOffset.TryGetValue(stat, out var cachedStatOffset))
+            {
+                num += cachedStatOffset;
+            }
+            else
+            {
+                var resNum = 0f;
+                    
+                foreach (var weaponDecoration in compWeapon.WeaponDecorations)
+                {
+                    if (!weaponDecoration.Key.statOffsets.NullOrEmpty())
+                    {
+                        resNum += weaponDecoration.Key.statOffsets.GetStatOffsetFromList(stat);
+                    }
+                }
+                    
+                compWeapon.CachedStatOffset.Add(stat, resNum);
+                num += resNum;
+            }
+            
             foreach (var weaponDecoration in compWeapon.WeaponDecorations)
             {
-                if (!weaponDecoration.Key.statOffsets.NullOrEmpty())
-                {
-                    num += weaponDecoration.Key.statOffsets.GetStatOffsetFromList(stat);
-                }
-                
                 foreach (var conditional in weaponDecoration.Key.conditionalStatAffecters)
                 {
                     if (!conditional.statOffsets.NullOrEmpty() && conditional.Applies(req))
@@ -130,7 +179,7 @@ public static class GetValueUnfinalizedFromVariousPatch
                 }
             }
         }
-
+        
         return num;
     }
     
@@ -144,84 +193,130 @@ public static class GetValueUnfinalizedFromVariousPatch
         {
             return num;
         }
-        
-        //Rank factor
-        if (pawn.HasComp<CompRankInfo>())
+
+        //Rank offset
+        var rankComp = pawn.GetComp<CompRankInfo>();
+        if (rankComp != null && !rankComp.UnlockedRanks.NullOrEmpty())
         {
-            var rankListForReading = pawn.GetComp<CompRankInfo>().UnlockedRanks;
-        
-            if (!rankListForReading.NullOrEmpty())
+            
+            var rankListForReading = rankComp.UnlockedRanks;
+            
+            if (rankComp.CachedStatFactor.TryGetValue(stat, out var cachedStatFactor))
             {
+                num *= cachedStatFactor;
+            }
+            else
+            {
+                var resNum = 0f;
                 foreach (var rank in rankListForReading)
                 {
-                    if (rank == null || rank.statFactors.NullOrEmpty())
+                    if (rank == null)
                     {
                         continue;
                     }
-                    num *= rank.statFactors.GetStatFactorFromList(stat);
-                    foreach (var conditional in rank.conditionalStatAffecters)
+
+                    if (!rank.statFactors.NullOrEmpty())
                     {
-                        if (!conditional.statFactors.NullOrEmpty() && conditional.Applies(req))
-                        {
-                            num *= conditional.statFactors.GetStatFactorFromList(stat);
-                        }
+                        resNum *= rank.statFactors.GetStatOffsetFromList(stat);
+                    }
+                }
+
+                rankComp.CachedStatFactor.Add(stat, resNum);
+                num *= resNum;
+            }
+            
+            foreach (var rank in rankListForReading.Where(def => def.conditionalStatAffecters != null))
+            {
+                foreach (var conditional in rank.conditionalStatAffecters)
+                {
+                    if (!conditional.statFactors.NullOrEmpty() && conditional.Applies(req))
+                    {
+                        num *= conditional.statFactors.GetStatOffsetFromList(stat);
                     }
                 }
             }
         }
-        
-        //Apparel factor
-        var apparels = pawn.apparel?.WornApparel?.Where(apparel => apparel.HasComp<CompDecorative>()).ToList();
-        if (apparels != null)
-        {
-            foreach (var apparel in apparels)
-            {
-                var compApparel = apparel.TryGetComp<CompDecorative>();
-                if (compApparel == null)
-                {
-                    continue;
-                }
 
+        if (!CoreUtils.cachedDecoratives.TryGetValue(pawn, out var cachedDecoratives))
+        {
+            return num;
+        }
+        
+        //Apparel offset
+        if (!cachedDecoratives.apparels.NullOrEmpty())
+        {
+            foreach (var apparel in cachedDecoratives.apparels)
+            {
+                var compApparel = apparel.GetComp<CompDecorative>();
+                if (compApparel.CachedStatFactor.TryGetValue(stat, out var cachedStatFactor))
+                {
+                    num *= cachedStatFactor;
+                }
+                else
+                {
+                    var resNum = 0f;
+                    
+                    foreach (var extraDecoration in compApparel.ExtraDecorations)
+                    {
+                        if (!extraDecoration.Key.statFactors.NullOrEmpty())
+                        {
+                            resNum *= extraDecoration.Key.statFactors.GetStatOffsetFromList(stat);
+                        }
+                    }
+                    
+                    compApparel.CachedStatFactor.Add(stat, resNum);
+                    num *= resNum;
+                }
+                
                 foreach (var extraDecoration in compApparel.ExtraDecorations)
                 {
-                    if (!extraDecoration.Key.statFactors.NullOrEmpty())
-                    {
-                        num *= extraDecoration.Key.statFactors.GetStatFactorFromList(stat);
-                    }
-                
                     foreach (var conditional in extraDecoration.Key.conditionalStatAffecters)
                     {
                         if (!conditional.statFactors.NullOrEmpty() && conditional.Applies(req))
                         {
-                            num *= conditional.statFactors.GetStatFactorFromList(stat);
+                            num *= conditional.statFactors.GetStatOffsetFromList(stat);
                         }
                     }
                 }
             }
         }
         
-        //Weapon factor
-        var weapon = pawn.equipment?.Primary;
-        var compWeapon = weapon?.TryGetComp<CompWeaponDecoration>();
-        if (compWeapon != null)
+        //Weapon offset
+        if (cachedDecoratives.weapon != null)
         {
+            var compWeapon = cachedDecoratives.weapon.GetComp<CompWeaponDecoration>();
+            if (compWeapon.CachedStatFactor.TryGetValue(stat, out var cachedStatFactor))
+            {
+                num *= cachedStatFactor;
+            }
+            else
+            {
+                var resNum = 0f;
+                    
+                foreach (var weaponDecoration in compWeapon.WeaponDecorations)
+                {
+                    if (!weaponDecoration.Key.statFactors.NullOrEmpty())
+                    {
+                        resNum *= weaponDecoration.Key.statFactors.GetStatOffsetFromList(stat);
+                    }
+                }
+                    
+                compWeapon.CachedStatFactor.Add(stat, resNum);
+                num *= resNum;
+            }
+            
             foreach (var weaponDecoration in compWeapon.WeaponDecorations)
             {
-                if (!weaponDecoration.Key.statFactors.NullOrEmpty())
-                {
-                    num *= weaponDecoration.Key.statFactors.GetStatFactorFromList(stat);
-                }
-                
                 foreach (var conditional in weaponDecoration.Key.conditionalStatAffecters)
                 {
                     if (!conditional.statFactors.NullOrEmpty() && conditional.Applies(req))
                     {
-                        num *= conditional.statFactors.GetStatFactorFromList(stat);
+                        num *= conditional.statFactors.GetStatOffsetFromList(stat);
                     }
                 }
             }
         }
-
+        
         return num;
     }
 }

@@ -59,6 +59,12 @@ public class CompRankInfo : ThingComp
     }
 
     public Pawn ParentPawn => parent as Pawn;
+
+    private Dictionary<StatDef, float> cachedStatOffset = new Dictionary<StatDef, float>();
+    public Dictionary<StatDef, float> CachedStatOffset => cachedStatOffset;
+    
+    private Dictionary<StatDef, float> cachedStatFactor = new Dictionary<StatDef, float>();
+    public Dictionary<StatDef, float> CachedStatFactor => cachedStatFactor;
     
     public void UnlockRank(RankDef rank)
     {
@@ -96,6 +102,9 @@ public class CompRankInfo : ThingComp
         {
             gameCompRankInfo.rankLimits.Add(rank, 1);
         }
+
+        cachedStatOffset = new Dictionary<StatDef, float>();
+        cachedStatFactor = new Dictionary<StatDef, float>();
     }
 
     public void RemoveRank(RankDef rank, bool removeFromRankLimit)
@@ -120,6 +129,9 @@ public class CompRankInfo : ThingComp
         {
             pawn.story.Title = newHighestRank.label;
         }
+        
+        cachedStatOffset = new Dictionary<StatDef, float>();
+        cachedStatFactor = new Dictionary<StatDef, float>();
     }
     
     public void RecalculatePassions()
@@ -301,6 +313,8 @@ public class CompRankInfo : ThingComp
         Scribe_Collections.Look(ref unlockedRanksAtDeath, "unlockedRanksAtDeath", LookMode.Def);
         Scribe_Collections.Look(ref daysAsRank, "daysAsRank");
         Scribe_Values.Look(ref convertToStartTick, "convertToStartTick");
+        Scribe_Collections.Look(ref cachedStatOffset, "cachedStatOffset", LookMode.Def, LookMode.Value);
+        Scribe_Collections.Look(ref cachedStatFactor, "cachedStatFactor", LookMode.Def, LookMode.Value);
         Scribe_Defs.Look(ref lastOpenedRankCategory, "lastOpenedRankCategory");
 
         if (Scribe.mode != LoadSaveMode.PostLoadInit)
