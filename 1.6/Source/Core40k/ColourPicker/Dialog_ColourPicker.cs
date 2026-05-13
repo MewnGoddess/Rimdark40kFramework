@@ -124,10 +124,9 @@ namespace ColourPicker
             Alpha2Field = TextField<float>.Float01(A, "Alpha2", a => A = a);
             HexField = TextField<string>.Hex( Hex, "Hex", hex => Hex = hex );
 
-            textFieldIds = new List<string>( new []
-            {
-                "Hue", "Saturation", "Value", "Alpha1", "Red", "Green", "Blue", "Alpha2", "Hex" 
-            });
+            textFieldIds = new List<string>([
+                "Hue", "Saturation", "Value", "Alpha1", "Red", "Green", "Blue", "Alpha2", "Hex"
+            ]);
 
             NotifyRGBUpdated();
         }

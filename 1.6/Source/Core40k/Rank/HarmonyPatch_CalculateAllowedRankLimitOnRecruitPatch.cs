@@ -6,17 +6,15 @@ using Verse;
 
 namespace Core40k;
 
-[HarmonyPatch(typeof(InteractionWorker_RecruitAttempt), "DoRecruit", new Type[]
-{
+[HarmonyPatch(typeof(InteractionWorker_RecruitAttempt), "DoRecruit", [
     typeof(Pawn),
     typeof(Pawn),
-    typeof(bool),
-}, new ArgumentType[]
-{
+    typeof(bool)
+], [
     ArgumentType.Normal,
     ArgumentType.Normal,
-    ArgumentType.Normal,
-})]
+    ArgumentType.Normal
+])]
 public class CalculateAllowedRankLimitOnRecruit
 {
     public static void Postfix(Pawn recruiter, Pawn recruitee)

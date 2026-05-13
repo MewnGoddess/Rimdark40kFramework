@@ -7,7 +7,7 @@ public class ExtraDecorationPreset : IExposable
 {
     public string name = "extra decoration preset";
     public string appliesTo = null;
-    public List<ExtraDecorationPresetParts> extraDecorationPresetParts = new List<ExtraDecorationPresetParts>();
+    public List<ExtraDecorationPresetParts> extraDecorationPresetParts = [];
     
     public ExtraDecorationPreset()
     {

@@ -10,7 +10,7 @@ public class ExtraDecorationDef : DecorationDef
 {
     public bool isHelmetDecoration = false;
         
-    public List<Rot4> defaultShowRotation = new() {Rot4.North, Rot4.South, Rot4.East, Rot4.West};
+    public List<Rot4> defaultShowRotation = [Rot4.North, Rot4.South, Rot4.East, Rot4.West];
         
     public bool flipable = false;
 
@@ -20,7 +20,7 @@ public class ExtraDecorationDef : DecorationDef
         
     public bool drawInHeadSpace = false;
     
-    public List<BodyTypeDef> appliesToBodyTypes = new();
+    public List<BodyTypeDef> appliesToBodyTypes = [];
     
     public bool isIncompatibleWithBaseTexture = false;
 

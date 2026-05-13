@@ -5,5 +5,5 @@ namespace Core40k;
 
 public class DefModExtension_GeneDisabledBy : DefModExtension
 {
-    public List<GeneDef> geneDisabledBy = new List<GeneDef>();
+    public List<GeneDef> geneDisabledBy = [];
 }

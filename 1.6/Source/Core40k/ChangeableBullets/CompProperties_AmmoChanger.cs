@@ -5,7 +5,7 @@ namespace Core40k;
 
 public class CompProperties_AmmoChanger : CompProperties
 {
-    public List<ThingDef> availableProjectiles = new();
+    public List<ThingDef> availableProjectiles = [];
     
     public CompProperties_AmmoChanger()
     {

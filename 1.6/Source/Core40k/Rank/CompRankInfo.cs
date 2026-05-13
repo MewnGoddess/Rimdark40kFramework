@@ -12,9 +12,9 @@ public class CompRankInfo : ThingComp
     private const int TicksPerDay = 60000;
     public CompProperties_RankInfo Props => (CompProperties_RankInfo)props;
         
-    private List<RankDef> unlockedRanks = new List<RankDef>();
+    private List<RankDef> unlockedRanks = [];
 
-    public List<RankDef> unlockedRanksAtDeath = new List<RankDef>();
+    public List<RankDef> unlockedRanksAtDeath = [];
 
     public List<RankDef> UnlockedRanks
     {

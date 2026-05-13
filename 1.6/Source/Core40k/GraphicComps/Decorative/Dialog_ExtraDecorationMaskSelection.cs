@@ -14,7 +14,7 @@ public class Dialog_ExtraDecorationMaskSelection : Window
     private CompDecorative decorativeComp;
     private ExtraDecorationDef decorationDef;
     private ExtraDecorationSettings decorationSettings;
-    private List<MaskDef> masks = new();
+    private List<MaskDef> masks = [];
     private int pageNumber = 0;
     private Dictionary<MaskDef, Material> cachedMaterials = new ();
     private bool recache = true;

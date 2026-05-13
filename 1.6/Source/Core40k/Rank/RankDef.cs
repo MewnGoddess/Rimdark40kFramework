@@ -14,35 +14,37 @@ public class RankDef : Def
     [NoTranslate]
     public string rankIconPath;
         
-    public List<RankDef> incompatibleRanks = new List<RankDef>();
+    public List<RankDef> incompatibleRanks = [];
 
-    public List<Aptitude> requiredSkills = new List<Aptitude>();
+    public List<Aptitude> requiredSkills = [];
         
-    public List<GeneDef> requiredGenesAll = new List<GeneDef>();
+    public List<GeneDef> requiredGenesAll = [];
         
-    public List<GeneDef> requiredGenesOneAmong = new List<GeneDef>();
+    public List<GeneDef> requiredGenesOneAmong = [];
         
-    public List<TraitData> requiredTraitsAll = new List<TraitData>();
+    public List<TraitData> requiredTraitsAll = [];
         
-    public List<TraitData> requiredTraitsOneAmong = new List<TraitData>();
+    public List<TraitData> requiredTraitsOneAmong = [];
         
-    public List<StatModifier> statOffsets = new List<StatModifier>();
+    public List<StatModifier> statOffsets = [];
 
-    public List<StatModifier> statFactors = new List<StatModifier>();
+    public List<StatModifier> statFactors = [];
 
-    public List<ConditionalStatAffecter> conditionalStatAffecters = new List<ConditionalStatAffecter>();
+    public List<ConditionalStatAffecter> conditionalStatAffecters = [];
         
-    public List<AbilityDef> givesAbilities = new List<AbilityDef>();
+    public List<AbilityDef> givesAbilities = [];
         
-    public List<VEF.Abilities.AbilityDef> givesVFEAbilities = new List<VEF.Abilities.AbilityDef>();
+    public List<VEF.Abilities.AbilityDef> givesVFEAbilities = [];
     
-    public List<HediffData> givesHediffs = new List<HediffData>();
+    public List<HediffData> givesHediffs = [];
     
-    public List<SkillDef> recreationFromSkills = new List<SkillDef>();
+    public List<SkillDef> recreationFromSkills = [];
     
-    public List<PassionMod> givesPassions = new List<PassionMod>();
+    public List<PassionMod> givesPassions = [];
         
-    public List<string> customEffectDescriptions = new List<string>();
+    public List<string> customEffectDescriptions = [];
+
+    public List<RankDef> removeRanksOnUnlock = [];
         
     public Vector2 colonyLimitOfRank = new Vector2(-1, -1);
 
@@ -74,7 +76,7 @@ public class RankDef : Def
     
     public virtual void UnlockRank(CompRankInfo rankComp)
     {
-        if (givesAbilities != null)
+        if (!givesAbilities.NullOrEmpty())
         {
             foreach (var ability in givesAbilities)
             {
@@ -82,7 +84,7 @@ public class RankDef : Def
             }
         }
             
-        if (givesVFEAbilities != null)
+        if (!givesVFEAbilities.NullOrEmpty())
         {
             var comp = rankComp.ParentPawn.GetComp<CompAbilities>();
             if (comp != null)
@@ -94,7 +96,7 @@ public class RankDef : Def
             }
         }
         
-        if (givesPassions != null)
+        if (!givesPassions.NullOrEmpty())
         {
             if (rankComp.originalPassions.NullOrEmpty())
             {
@@ -111,13 +113,21 @@ public class RankDef : Def
             rankComp.RecalculatePassions();
         }
 
-        if (givesHediffs != null)
+        if (!givesHediffs.NullOrEmpty())
         {
             foreach (var hediffData in givesHediffs)
             {
                 var hediff = HediffMaker.MakeHediff(hediffData.hediffDef, rankComp.ParentPawn, rankComp.ParentPawn.health.hediffSet.GetBodyPartRecord(hediffData.bodyPartDef));
                 hediff.Severity = hediffData.initialSeverity;
                 rankComp.ParentPawn.health.AddHediff(hediff);
+            }
+        }
+
+        if (!removeRanksOnUnlock.NullOrEmpty())
+        {
+            foreach (var rankDef in removeRanksOnUnlock)
+            {
+                rankComp.RemoveRank(rankDef, true);
             }
         }
     }

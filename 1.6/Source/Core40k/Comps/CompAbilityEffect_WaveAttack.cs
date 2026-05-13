@@ -10,7 +10,7 @@ public class CompAbilityEffect_WaveAttack : CompAbilityEffect_WithDuration
 {
     private new CompProperties_AbilityWaveAttack Props => (CompProperties_AbilityWaveAttack)props;
         
-    private List<IntVec3> tmpCells = new List<IntVec3>();
+    private List<IntVec3> tmpCells = [];
 
     private Pawn Pawn => parent.pawn;
 

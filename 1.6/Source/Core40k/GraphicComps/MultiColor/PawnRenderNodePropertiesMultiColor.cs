@@ -13,5 +13,5 @@ public class PawnRenderNodePropertiesMultiColor : PawnRenderNodeProperties
     public bool useMask;
     public BodyTypeDef bodyType;
     public bool useBodyType;
-    public List<DecorationFlag> decorationFlags = new ();
+    public List<DecorationFlag> decorationFlags = [];
 }

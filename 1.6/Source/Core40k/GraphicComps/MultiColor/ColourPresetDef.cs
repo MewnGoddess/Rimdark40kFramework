@@ -14,7 +14,7 @@ public class ColourPresetDef : Def
 
     public PresetType appliesToKind = PresetType.All;
     
-    public List<string> appliesTo = new List<string>();
+    public List<string> appliesTo = [];
 }
 
 public enum PresetType

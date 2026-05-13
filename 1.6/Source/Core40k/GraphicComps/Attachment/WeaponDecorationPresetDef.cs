@@ -5,6 +5,6 @@ namespace Core40k;
 
 public class WeaponDecorationPresetDef : Def
 {
-    public List<ThingDef> appliesTo = new List<ThingDef>();
-    public List<PresetData> presetData = new();
+    public List<ThingDef> appliesTo = [];
+    public List<PresetData> presetData = [];
 }

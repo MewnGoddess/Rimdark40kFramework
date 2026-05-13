@@ -12,7 +12,7 @@ namespace ColourPicker
     public class RecentColours
     {
         private const int max = 20;
-        private static List<Color> _colors = new List<Color>();
+        private static List<Color> _colors = [];
 
         static RecentColours()
         {

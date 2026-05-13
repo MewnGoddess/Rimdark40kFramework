@@ -8,7 +8,7 @@ namespace Core40k;
 
 public class RankCategoryDef : Def
 {
-    public List<RankCategorySpecificData> ranks = new List<RankCategorySpecificData>();
+    public List<RankCategorySpecificData> ranks = [];
     
     public Dictionary<RankDef, RankCategorySpecificData> rankDict = new Dictionary<RankDef, RankCategorySpecificData>();
     

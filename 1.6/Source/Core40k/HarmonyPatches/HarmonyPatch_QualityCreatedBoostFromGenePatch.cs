@@ -7,17 +7,15 @@ using Verse;
 
 namespace Core40k;
 
-[HarmonyPatch(typeof(QualityUtility), "GenerateQualityCreatedByPawn", new Type[]
-{
+[HarmonyPatch(typeof(QualityUtility), "GenerateQualityCreatedByPawn", [
     typeof(Pawn),
     typeof(SkillDef),
     typeof(bool)
-}, new ArgumentType[]
-{
+], [
     ArgumentType.Normal,
     ArgumentType.Normal,
-    ArgumentType.Normal,
-})]
+    ArgumentType.Normal
+])]
 public class QualityCreatedBoostFromGene
 {
     public static void Postfix(Pawn pawn, SkillDef relevantSkill, ref QualityCategory __result )

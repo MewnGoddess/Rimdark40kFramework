@@ -5,5 +5,5 @@ namespace Core40k;
 
 public class DefModExtension_DecorationFlags : DefModExtension
 {
-    public List<string> flags = new ();
+    public List<string> flags = [];
 }

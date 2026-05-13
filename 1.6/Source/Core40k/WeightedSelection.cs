@@ -13,7 +13,7 @@ public class WeightedSelection<T>
         public T item;
     }
 
-    private List<Entry> entries = new List<Entry>();
+    private List<Entry> entries = [];
     private double accumulatedWeight;
     private Random rand = new Random();
 

@@ -17,7 +17,7 @@ public class Gene_DisabledBy : Gene
             
             if (def.HasModExtension<DefModExtension_GeneDisabledBy>())
             {
-                var disabledByGenes = def.GetModExtension<DefModExtension_GeneDisabledBy>().geneDisabledBy ?? new List<GeneDef>();
+                var disabledByGenes = def.GetModExtension<DefModExtension_GeneDisabledBy>().geneDisabledBy ?? [];
                 var overriddenGene = Enumerable.FirstOrDefault(disabledByGenes, gene => pawn.genes.HasActiveGene(gene));
                 if (overriddenGene != null)
                 {

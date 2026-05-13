@@ -16,9 +16,9 @@ public class ITab_RankSystem : ITab
         
     private RankCategoryDef currentlySelectedRankCategory = null;
         
-    private List<RankCategoryDef> availableCategories = new List<RankCategoryDef>();
+    private List<RankCategoryDef> availableCategories = [];
         
-    private List<RankInfoForTab> availableRanksForCategory = new List<RankInfoForTab>();
+    private List<RankInfoForTab> availableRanksForCategory = [];
 
     private Pawn pawn;
         
@@ -339,8 +339,8 @@ public class ITab_RankSystem : ITab
             }
 
             var rankData = new List<RankData>();
-            rankData.AddRange(currentlySelectedRankCategory.rankDict[rank.rankDef].rankRequirements ?? new List<RankData>());
-            rankData.AddRange(currentlySelectedRankCategory.rankDict[rank.rankDef].rankRequirementsOneAmong ?? new List<RankData>());
+            rankData.AddRange(currentlySelectedRankCategory.rankDict[rank.rankDef].rankRequirements ?? []);
+            rankData.AddRange(currentlySelectedRankCategory.rankDict[rank.rankDef].rankRequirementsOneAmong ?? []);
             
             foreach (var rankReq in rankData)
             {

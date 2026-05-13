@@ -35,7 +35,7 @@ public class DecorationDef : Def
         
     public float sortOrder = 0f;
     
-    public List<string> appliesTo = new List<string>();
+    public List<string> appliesTo = [];
         
     public bool appliesToAll = false;
     
@@ -54,7 +54,7 @@ public class DecorationDef : Def
     
     public Vector2 drawSize = Vector2.one;
         
-    public List<DecorationColourPresetDef> availablePresets = new();
+    public List<DecorationColourPresetDef> availablePresets = [];
         
     public List<RankDef> mustHaveRank = null;
         
@@ -64,13 +64,13 @@ public class DecorationDef : Def
     
     public List<HediffDef> mustHaveHediff = null;
     
-    public List<DecorationFlag> decorationFlags = new();
+    public List<DecorationFlag> decorationFlags = [];
     
-    public List<StatModifier> statOffsets = new List<StatModifier>();
+    public List<StatModifier> statOffsets = [];
 
-    public List<StatModifier> statFactors = new List<StatModifier>();
+    public List<StatModifier> statFactors = [];
     
-    public List<ConditionalStatAffecter> conditionalStatAffecters = new List<ConditionalStatAffecter>();
+    public List<ConditionalStatAffecter> conditionalStatAffecters = [];
 
     public string TooltipDescription()
     {

@@ -9,7 +9,7 @@ namespace Core40k;
 public class Gene_AddRandomGeneAndOrTraitByWeight : Gene
 {
     private GeneDef chosenGene = null;
-    private List<GeneDef> chosenGenes = new List<GeneDef>();
+    private List<GeneDef> chosenGenes = [];
 
     private TraitDef chosenTrait = null;
     private int chosenTraitDegree = 0;

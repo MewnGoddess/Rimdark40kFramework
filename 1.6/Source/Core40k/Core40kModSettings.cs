@@ -13,10 +13,10 @@ public class Core40kModSettings : ModSettings
 
     public bool showAllRankCategories = false;
         
-    private List<ColourPreset> colourPresets = new List<ColourPreset>();
+    private List<ColourPreset> colourPresets = [];
     public List<ColourPreset> ColourPresets => colourPresets;
         
-    private List<ExtraDecorationPreset> extraDecorationPresets = new List<ExtraDecorationPreset>();
+    private List<ExtraDecorationPreset> extraDecorationPresets = [];
     public List<ExtraDecorationPreset> ExtraDecorationPresets => extraDecorationPresets;
 
     //Colour Preset
