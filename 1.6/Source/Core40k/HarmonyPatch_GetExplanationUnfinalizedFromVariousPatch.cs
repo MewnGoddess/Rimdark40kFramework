@@ -11,6 +11,9 @@ namespace Core40k;
 [HarmonyPatch(typeof(StatWorker), "GetExplanationUnfinalized")]
 public static class GetExplanationUnfinalizedFromVariousPatch
 {
+    private static GameComponent_CoreUtils coreUtils;
+    private static GameComponent_CoreUtils CoreUtils => coreUtils ??= Current.Game.GetComponent<GameComponent_CoreUtils>();
+    
     static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
     {
         var codeInstructions = instructions.ToList();
@@ -44,9 +47,10 @@ public static class GetExplanationUnfinalizedFromVariousPatch
         
         //Rank
         var appendOverallRankText = true;
-        if (pawn.HasComp<CompRankInfo>())
+        var rankComp = pawn.GetComp<CompRankInfo>();
+        if (rankComp != null && !rankComp.UnlockedRanks.NullOrEmpty())
         {
-            var rankListForReading = pawn.GetComp<CompRankInfo>().UnlockedRanks;
+            var rankListForReading = rankComp.UnlockedRanks;
             foreach (var rank in rankListForReading)
             {
                 if (rank == null)
@@ -108,12 +112,16 @@ public static class GetExplanationUnfinalizedFromVariousPatch
             }
         }
         
+        if (!CoreUtils.cachedDecoratives.TryGetValue(pawn, out var cachedDecoratives))
+        {
+            return stringBuilder;
+        }
+        
         //Apparel
         appendOverallRankText = true;
-        var apparels = pawn.apparel?.WornApparel?.Where(apparel => apparel.HasComp<CompDecorative>()).ToList();
-        if (apparels != null)
+        if (!cachedDecoratives.apparels.NullOrEmpty())
         {
-            foreach (var apparel in apparels)
+            foreach (var apparel in cachedDecoratives.apparels)
             {
                 var comp = apparel.TryGetComp<CompDecorative>();
                 if (comp == null)
@@ -180,10 +188,9 @@ public static class GetExplanationUnfinalizedFromVariousPatch
         
         //Weapon
         appendOverallRankText = true;
-        var weapon = pawn.equipment?.Primary;
-        var compWeapon = weapon?.TryGetComp<CompWeaponDecoration>();
-        if (compWeapon != null)
+        if (cachedDecoratives.weapon != null)
         {
+            var compWeapon = cachedDecoratives.weapon.GetComp<CompWeaponDecoration>();
             foreach (var weaponDecoration in compWeapon.WeaponDecorations)
             {
                 var statOffsetFromRank = weaponDecoration.Key.statOffsets.GetStatOffsetFromList(stat);

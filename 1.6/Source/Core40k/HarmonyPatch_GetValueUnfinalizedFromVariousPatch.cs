@@ -99,7 +99,7 @@ public static class GetValueUnfinalizedFromVariousPatch
             }
         }
 
-        if (CoreUtils == null || coreUtils.cachedDecoratives.NullOrEmpty() || !CoreUtils.cachedDecoratives.TryGetValue(pawn, out var cachedDecoratives))
+        if (!CoreUtils.cachedDecoratives.TryGetValue(pawn, out var cachedDecoratives))
         {
             return num;
         }
@@ -235,7 +235,7 @@ public static class GetValueUnfinalizedFromVariousPatch
             }
         }
 
-        if (CoreUtils == null || coreUtils.cachedDecoratives.NullOrEmpty() || !CoreUtils.cachedDecoratives.TryGetValue(pawn, out var cachedDecoratives))
+        if (!CoreUtils.cachedDecoratives.TryGetValue(pawn, out var cachedDecoratives))
         {
             return num;
         }
