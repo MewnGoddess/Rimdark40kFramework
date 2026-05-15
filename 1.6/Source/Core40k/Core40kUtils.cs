@@ -135,13 +135,64 @@ public static class Core40kUtils
 
         return false;
     }
-    
-    public static void SetupColorsForPawn(Pawn pawn)
+
+    private static void SetupMultiColorCustomization(ThingWithComps thing, Dictionary<ColourPresetDef, ColorSelectionType> finalSelection, Pawn pawn)
     {
-        var factionSelection = pawn.Faction?.def?.GetModExtension<DefModExtension_DefaultMultiColor>()?.defaultColorSelection;
-        var pawnKindSelection = pawn.kindDef?.GetModExtension<DefModExtension_DefaultMultiColor>()?.defaultColorSelection;
+        var colorComp = thing.GetComp<CompMultiColor>();
+        if (colorComp == null)
+        {
+            return;
+        }
         
-        Dictionary<ColourPresetDef, ColorSelectionType> finalSelection;
+        var selection =
+            finalSelection
+                .Where(col => 
+                    col.Value == ColorSelectionType.TryMatch 
+                    && col.Key.appliesTo.Contains(thing.def.defName)).FirstOrFallback(new KeyValuePair<ColourPresetDef, ColorSelectionType>());
+
+        if (selection.Key == null)
+        {
+            selection = finalSelection
+                .Where(col => 
+                    col.Value == ColorSelectionType.Default).FirstOrFallback();
+        }
+
+        if (selection.Key == null)
+        {
+            Log.Warning("Tried to give " + pawn.kindDef + " default colored clothe, but is not setup correctly");
+            return;
+        }
+            
+        colorComp.SetColors(selection.Key);
+        colorComp.SetOriginals();
+        colorComp.InitialSet = true;
+    }
+    
+    private static void SetupDecorationCustomization(ThingWithComps thing, DefModExtension_PawnKindCustomization pawnModExtension)
+    {
+        var decoComp = thing.GetComp<CompDecorative>();
+        if (decoComp == null || pawnModExtension == null)
+        {
+            return;
+        }
+        
+        if (pawnModExtension.extraDecorationPreset.TryGetValue(thing.def, out var preset))
+        {
+            decoComp.LoadFromPreset(preset);
+        }
+        if (pawnModExtension.extraDecorations.TryGetValue(thing.def, out var decos))
+        {
+            decoComp.ApplyDecorationsFromList(decos);
+        }
+    }
+    
+    public static void SetupCustomizationForPawn(Pawn pawn, bool setupMultiColor, bool setupDecoration)
+    {
+        var factionSelection = pawn.Faction?.def?.GetModExtension<DefModExtension_PawnKindCustomization>()?.defaultColorSelection;
+        var pawnModExtension = pawn.kindDef?.GetModExtension<DefModExtension_PawnKindCustomization>();
+        var pawnKindSelection = pawnModExtension?.defaultColorSelection;
+        
+        Dictionary<ColourPresetDef, ColorSelectionType> finalSelection = null;
         if (!pawnKindSelection.NullOrEmpty())
         {
             finalSelection = pawnKindSelection;
@@ -150,73 +201,41 @@ public static class Core40kUtils
         {
             finalSelection = factionSelection;
         }
-        else
+
+        if (finalSelection == null)
         {
             return;
         }
-
+        
         if (pawn.apparel?.WornApparel != null)
         {
             foreach (var apparel in pawn.apparel.WornApparel)
             {
-                var selection =
-                    finalSelection
-                        .Where(col => 
-                            col.Value == ColorSelectionType.TryMatch 
-                            && col.Key.appliesTo.Contains(apparel.def.defName)).FirstOrFallback(new KeyValuePair<ColourPresetDef, ColorSelectionType>());
-
-                if (selection.Key == null)
+                if (setupMultiColor)
                 {
-                    selection = finalSelection
-                        .Where(col => 
-                            col.Value == ColorSelectionType.Default).FirstOrFallback();
-                }
-
-                if (selection.Key == null)
-                {
-                    Log.Warning("Tried to give " + pawn.kindDef + " default colored clothe, but is not setup correctly");
-                    continue;
+                    SetupMultiColorCustomization(apparel, finalSelection, pawn);
                 }
                 
-                var comp = apparel.GetComp<CompMultiColor>();
-                if (comp == null)
+                if (setupDecoration)
                 {
-                    continue;
+                    SetupDecorationCustomization(apparel, pawnModExtension);
                 }
-            
-                comp.SetColors(selection.Key);
-                comp.SetOriginals();
-                comp.InitialSet = true;
             }
         }
         
         var equipment = pawn.equipment?.PrimaryEq?.parent;
-        if (equipment != null && equipment.HasComp<CompMultiColor>())
+        var colorCompWeap = equipment?.GetComp<CompMultiColor>();
+        if (colorCompWeap != null)
         {
-            var selection =
-                finalSelection
-                    .Where(col => 
-                        col.Value == ColorSelectionType.TryMatch 
-                        && col.Key.appliesTo.Contains(equipment.def.defName)).FirstOrFallback();
-
-            if (selection.Key == null)
+            if (setupMultiColor)
             {
-                selection = finalSelection
-                    .Where(col => 
-                        col.Value == ColorSelectionType.Default).FirstOrFallback();
+                SetupMultiColorCustomization(equipment, finalSelection, pawn);
             }
 
-            if (selection.Key == null)
+            if (setupDecoration)
             {
-                Log.Warning("Tried to give " + pawn.kindDef + " default colored clothe, but is not setup correctly");
-                return;
+                SetupDecorationCustomization(equipment, pawnModExtension);
             }
-            
-            var comp = equipment.GetComp<CompMultiColor>();
-            
-            comp.SetColors(selection.Key);
-            comp.SetOriginals();
-            comp.InitialSet = true;
         }
     }
 

@@ -9,8 +9,6 @@ public class CompProperties_Decorative : CompProperties
     
     public DecorativeType decorativeType = DecorativeType.Body;
     
-    public Dictionary<PawnKindDef, List<ExtraDecorationDef>> extraDecorationsByPawnKindDef = new();
-    
     public CompProperties_Decorative()
     {
         compClass = typeof(CompDecorative);

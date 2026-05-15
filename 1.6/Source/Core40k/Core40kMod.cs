@@ -4,34 +4,34 @@ using Verse;
 
 namespace Core40k;
 
-public class Core40kMod : Mod
+public class Core40kMod : CoreMod
 {
     public static string CurrentVersion;
     
     public static Harmony harmony;
         
-    readonly Core40kModSettings settings;
+    private Core40kModSettings settings;
+    public override ModSettings Settings => settings ??= GetSettings<Core40kModSettings>();
     public Core40kMod(ModContentPack content) : base(content)
     {
-        settings = GetSettings<Core40kModSettings>();
-        CurrentVersion = content.ModMetaData.ModVersion;
         harmony = new Harmony("Core40k.Mod");
+        CurrentVersion = content.ModMetaData.ModVersion;
+        
         harmony.PatchAll();
     }
-        
-    public override void DoSettingsWindowContents(Rect inRect)
+    
+    private readonly ModSettingTab_CoreMain coreMainSettings = new();
+    
+    public override void InitializeTabs()
     {
-        var listingStandard = new Listing_Standard();
-        listingStandard.Begin(inRect);
+        var mainTab = new TabRecord("BEWH.ModSettings.TabMain".Translate(), delegate
+        {
+            currentSettingTab = coreMainSettings;
+        }, () => currentSettingTab == coreMainSettings);
+        tabs.Add(mainTab);
 
-        listingStandard.CheckboxLabeled("BEWH.Framework.ModSettings.ShowRankTab".Translate(), ref settings.alwaysShowRankTab);
-        
-        listingStandard.CheckboxLabeled("BEWH.Framework.ModSettings.ConfirmRankUnlock".Translate(), ref settings.confirmRankUnlock);
-
-        listingStandard.Label("\n" + "BEWH.ModSettings.CheckVEFPatches".Translate());
-            
-        listingStandard.End();
-        base.DoSettingsWindowContents(inRect);
+        currentSettingTab = coreMainSettings;
+        base.InitializeTabs();
     }
 
     public override string SettingsCategory()

@@ -6,6 +6,9 @@
   <BEWH.Framework.ModSettings.ShowRankTab>Always show Rank tab for player pawns. Will show even if no category or rank is available to the pawn.</BEWH.Framework.ModSettings.ShowRankTab>
   <BEWH.Framework.ModSettings.ConfirmRankUnlock>Confirm rank unlock with popup. (Looking at you butterfingers)</BEWH.Framework.ModSettings.ConfirmRankUnlock>
 
+  <BEWH.ModSettings.TabMain>Main</BEWH.ModSettings.TabMain>
+  <BEWH.ModSettings.TabMisc>Misc</BEWH.ModSettings.TabMisc>
+
   <BEWH.ModSettings.CheckVEFPatches>Remember to check Vanilla Expanded Framework toggleable patches for more settings for this mod!</BEWH.ModSettings.CheckVEFPatches>
 
   <!--=== Common Keywords ===-->

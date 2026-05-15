@@ -24,7 +24,7 @@ public class CompDecorative : CompGraphicParent
     public Dictionary<ExtraDecorationDef, ExtraDecorationSettings> ExtraDecorations => extraDecorations;
 
     public CompMultiColor MultiColor => parent.GetComp<CompMultiColor>();
-
+    
     private bool pawnKindDefSetupDone = false;
     
     public override void InitialSetup()
@@ -33,7 +33,7 @@ public class CompDecorative : CompGraphicParent
         base.InitialSetup();
     }
 
-    private void ApplyDecorationsFromList(List<ExtraDecorationDef> list)
+    public void ApplyDecorationsFromList(List<ExtraDecorationDef> list)
     {
         foreach (var extraDecoration in list)
         {
@@ -71,7 +71,7 @@ public class CompDecorative : CompGraphicParent
         Notify_GraphicChanged();
     }
     
-    public void SetArmorColors(ExtraDecorationDef decoration)
+    public void SetDecorationToArmorColors(ExtraDecorationDef decoration)
     {
         extraDecorations[decoration].Color = MultiColor.DrawColor;
         extraDecorations[decoration].ColorTwo = MultiColor.DrawColorTwo;
@@ -90,6 +90,10 @@ public class CompDecorative : CompGraphicParent
         foreach (var presetPart in preset.extraDecorationPresetParts)
         {
             var decoDef = Core40kUtils.GetArmorDecoDefFromString(presetPart.extraDecorationDefs);
+            if (extraDecorations.ContainsKey(decoDef))
+            {
+                continue;
+            }
             var extraDecorationsSetting = new ExtraDecorationSettings()
             {
                 Flipped = presetPart.flipped,
@@ -107,6 +111,10 @@ public class CompDecorative : CompGraphicParent
     {
         foreach (var presetPart in preset.presetData)
         {
+            if (extraDecorations.ContainsKey(presetPart.extraDecorationDef))
+            {
+                continue;
+            }
             var extraDecorationsSetting = new ExtraDecorationSettings()
             {
                 Flipped = presetPart.flipped,
@@ -155,7 +163,7 @@ public class CompDecorative : CompGraphicParent
     {
         extraDecorations = new Dictionary<ExtraDecorationDef, ExtraDecorationSettings>();
         extraDecorations.AddRange(originalExtraDecorations);
-        cachedGraphics = [];
+        //cachedGraphics = [];
         Notify_GraphicChanged();
         base.Reset();
     }
@@ -200,18 +208,20 @@ public class CompDecorative : CompGraphicParent
     public override void Notify_Equipped(Pawn pawn)
     {
         RemoveInvalidDecorations(pawn);
+
         if (!pawnKindDefSetupDone)
         {
             pawnKindDefSetupDone = true;
-            if ((Current.CreatingWorld?.factionManager?.OfPlayer != null && pawn.Faction != Current.CreatingWorld.factionManager.OfPlayer) || (pawn.Faction != null && pawn.Faction != Faction.OfPlayerSilentFail))
-            {
-                if(Props.extraDecorationsByPawnKindDef.TryGetValue(pawn.kindDef, out var defs))
-                {
-                    ApplyDecorationsFromList(defs);
-                }
-            }
-        }
 
+            Log.Message("Here1");
+            Core40kUtils.SetupCustomizationForPawn(pawn, false, true);
+            Log.Message("Here2");
+            /*if ((Current.CreatingWorld?.factionManager?.OfPlayer != null && pawn.Faction != Current.CreatingWorld.factionManager.OfPlayer) || (pawn.Faction != null && pawn.Faction != Faction.OfPlayerSilentFail))
+            {
+
+            }*/
+        }
+        
         if (pawn != null)
         {
             cachedStatOffset = new Dictionary<StatDef, float>();
@@ -263,8 +273,7 @@ public class CompDecorative : CompGraphicParent
     private Dictionary<StatDef, float> cachedStatFactor = new();
     public Dictionary<StatDef, float> CachedStatFactor => cachedStatFactor;
     
-    private List<Graphic> cachedGraphics = [];
-    
+    //private List<Graphic> cachedGraphics = [];
     //MESS WITH THIS WHEN YOURE GOING TO FIX OUTFIT STANDS NOT SHOWING DECOS, SHOULD BE ABLE TO DRAW FROM HERE.
     /*public override void Notify_GraphicChanged()
     {
@@ -310,8 +319,8 @@ public class CompDecorative : CompGraphicParent
     public override void PostExposeData()
     {
         base.PostExposeData();
-        Scribe_Values.Look(ref pawnKindDefSetupDone, "pawnKindDefSetupDone");
         Scribe_Collections.Look(ref extraDecorations, "extraDecorations");
         Scribe_Collections.Look(ref originalExtraDecorations, "originalExtraDecorations");
+        Scribe_Values.Look(ref pawnKindDefSetupDone, "pawnKindDefSetupDone");
     }
 }

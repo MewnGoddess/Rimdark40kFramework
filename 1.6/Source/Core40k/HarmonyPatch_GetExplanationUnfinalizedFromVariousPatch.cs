@@ -14,42 +14,28 @@ public static class GetExplanationUnfinalizedFromVariousPatch
     private static GameComponent_CoreUtils coreUtils;
     private static GameComponent_CoreUtils CoreUtils => coreUtils ??= Current.Game.GetComponent<GameComponent_CoreUtils>();
     
-    static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+    public static void Postfix(ref string __result, StatWorker __instance, StatRequest req)
     {
-        var codeInstructions = instructions.ToList();
-        var patched = false;
-        for (var i = 0; i < codeInstructions.Count; i++)
-        {
-            if (!patched && codeInstructions[i+1].opcode == OpCodes.Ret)
-            {
-                yield return new CodeInstruction(OpCodes.Ldarg_1);
-                yield return new CodeInstruction(OpCodes.Ldarg_0);
-                yield return new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(StatWorker), "stat"));
-                yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GetExplanationUnfinalizedFromVariousPatch), "GetExplanationForX"));
-                yield return new CodeInstruction(OpCodes.Stloc_0);
-                yield return new CodeInstruction(OpCodes.Ldloc_0);
-                patched = true;
-            }
-            yield return codeInstructions[i];
-        }
-    }
-
-    public static StringBuilder GetExplanationForX(StringBuilder stringBuilder, StatRequest req, StatDef stat)
-    {
-        if (stat == null)
-        {
-            return stringBuilder;
-        }
         if (req.Thing is not Pawn pawn)
         {
-            return stringBuilder;
+            return;
         }
+        
+        var stringbuilder = new StringBuilder();
+        stringbuilder.Append(__result);
+        __result = GetExplanationForX(stringbuilder, req, __instance, pawn).ToString();
+    }
+
+    public static StringBuilder GetExplanationForX(StringBuilder stringBuilder, StatRequest req, StatWorker statWorker, Pawn pawn)
+    {
+        StatDef stat = null;
         
         //Rank
         var appendOverallRankText = true;
         var rankComp = pawn.GetComp<CompRankInfo>();
         if (rankComp != null && !rankComp.UnlockedRanks.NullOrEmpty())
         {
+            stat = statWorker.stat;
             var rankListForReading = rankComp.UnlockedRanks;
             foreach (var rank in rankListForReading)
             {
@@ -115,6 +101,11 @@ public static class GetExplanationUnfinalizedFromVariousPatch
         if (!CoreUtils.cachedDecoratives.TryGetValue(pawn, out var cachedDecoratives))
         {
             return stringBuilder;
+        }
+
+        if (stat == null)
+        {
+            stat = statWorker.stat;
         }
         
         //Apparel
@@ -247,6 +238,7 @@ public static class GetExplanationUnfinalizedFromVariousPatch
                 }
             }
         }
+        
         return stringBuilder;
     }
 }

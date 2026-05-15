@@ -136,6 +136,7 @@ public class CompMultiColor : CompGraphicParent
         }
     }
     
+    private bool pawnKindDefSetupDone = false;
     
     private bool recacheSingleGraphics = true;
     public bool RecacheSingleGraphics => recacheSingleGraphics;
@@ -279,12 +280,25 @@ public class CompMultiColor : CompGraphicParent
     
     public override void Notify_Equipped(Pawn pawn)
     {
+        if (!pawnKindDefSetupDone)
+        {
+            pawnKindDefSetupDone = true;
+
+            Log.Message("Here3");
+            Core40kUtils.SetupCustomizationForPawn(pawn, true, false);
+            Log.Message("Here4");
+            /*if ((Current.CreatingWorld?.factionManager?.OfPlayer != null && pawn.Faction != Current.CreatingWorld.factionManager.OfPlayer) || (pawn.Faction != null && pawn.Faction != Faction.OfPlayerSilentFail))
+            {
+
+            }*/
+        }
         Notify_GraphicChanged();
         base.Notify_Equipped(pawn);
     }
     
     public override void PostExposeData()
     {
+        Scribe_Values.Look(ref pawnKindDefSetupDone, "pawnKindDefSetupDone");
         Scribe_Values.Look(ref originalColorOne, "originalColorOne", Color.white);
         Scribe_Values.Look(ref originalColorTwo, "originalColorTwo", Color.white);
         Scribe_Values.Look(ref originalColorThree, "originalColorThree", Color.white);

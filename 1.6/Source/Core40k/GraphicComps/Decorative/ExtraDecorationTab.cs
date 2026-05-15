@@ -582,7 +582,7 @@ public class ExtraDecorationTab : CustomizerTabDrawer
         {
             var menuOptionMatch = new FloatMenuOption("BEWH.Framework.Customization.UseArmourColour".Translate(), delegate
             {
-                decorativeComp.SetArmorColors(extraDecoration);
+                decorativeComp.SetDecorationToArmorColors(extraDecoration);
             }, Core40kUtils.ThreeColourPreview(armorCol1,armorCol2, armorCol3, colorAmount), Color.white);
             list.Add(menuOptionMatch);
         }

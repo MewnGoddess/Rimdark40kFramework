@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+  <Import Project="packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.props" Condition="Exists('packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -24,10 +25,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System"/>
-    <Reference Include="System.Core"/>
-    <Reference Include="System.Data"/>
-    <Reference Include="System.Xml"/>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
     <Reference Include="0Harmony">
       <HintPath>..\..\..\..\..\..\..\workshop\content\294100\2009463077\Current\Assemblies\0Harmony.dll</HintPath>
       <Private>False</Private>
@@ -146,6 +147,7 @@
     <Compile Include="GraphicComps\CustomizerShared\DecorationDef.cs" />
     <Compile Include="GraphicComps\CustomizerShared\DefModExtension_AllowColoringOfThings.cs" />
     <Compile Include="GraphicComps\CustomizerShared\DefModExtension_AvailableDrawerTabDefs.cs" />
+    <Compile Include="GraphicComps\CustomizerShared\DefModExtension_PawnKindCustomization.cs" />
     <Compile Include="GraphicComps\CustomizerShared\Dialog_CustomizeApparel.cs" />
     <Compile Include="GraphicComps\CustomizerShared\Dialog_CustomizeWeapon.cs" />
     <Compile Include="GraphicComps\CustomizerShared\HarmonyPatch_CustomizerOnThing.cs" />
@@ -187,13 +189,11 @@
     <Compile Include="GraphicComps\MultiColor\ColourPresetDef.cs" />
     <Compile Include="GraphicComps\MultiColor\CompMultiColor.cs" />
     <Compile Include="GraphicComps\MultiColor\CompProperties_MultiColor.cs" />
-    <Compile Include="GraphicComps\MultiColor\DefModExtension_DefaultMultiColor.cs" />
     <Compile Include="GraphicComps\MultiColor\Dialog_ConfirmColorPresetOverride.cs" />
     <Compile Include="GraphicComps\MultiColor\Dialog_EditColourPresets.cs" />
     <Compile Include="GraphicComps\MultiColor\ArmorColoringTab.cs" />
     <Compile Include="GraphicComps\MultiColor\HarmonyPatch_ChangeDrawDataPatch.cs" />
     <Compile Include="GraphicComps\MultiColor\HarmonyPatch_MultiColorApparel.cs" />
-    <Compile Include="GraphicComps\MultiColor\HarmonyPatch_SetupDefaultColorsForFaction.cs" />
     <Compile Include="GraphicComps\MultiColor\HarmonyPatch_ThingWithCompsMultiColorGraphicOverride.cs" />
     <Compile Include="GraphicComps\MultiColor\PawnRenderNodePropertiesMultiColor.cs" />
     <Compile Include="GraphicComps\MultiColor\PawnRenderNodeWorker_AlternateFormCompatible.cs" />
@@ -214,8 +214,12 @@
     <Compile Include="GraphicComps\DefModExtension_ForcesBodyType.cs" />
     <Compile Include="HarmonyPatches\HarmonyPatch_StopDeterioation.cs" />
     <Compile Include="HarmonyPatch_GetExplanationUnfinalizedFromVariousPatch.cs" />
-    <Compile Include="HarmonyPatch_GetValueUnfinalizedFromVariousPatch.cs" />
+    <Compile Include="HarmonyPatch_GetValueUnfinalizedFromVariousOffsetPatch.cs" />
+    <Compile Include="HarmonyPatch_GetValueUnfinalizedFromVariousFactorPatch.cs" />
     <Compile Include="HarmonyPatch_PopulateMutableStatsWithStatsPatch.cs" />
+    <Compile Include="ModSettings\CoreMod.cs" />
+    <Compile Include="ModSettings\ModSettingTab.cs" />
+    <Compile Include="ModSettings\ModSettingTab_CoreMain.cs" />
     <Compile Include="MultiColorUtils.cs" />
     <Compile Include="PlaceWorkers\PlaceWorker_OnlyOnePerMap.cs" />
     <Compile Include="Rank\CompProperties_RankInfo.cs" />
@@ -255,5 +259,21 @@
     <Compile Include="Core40kDefOf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\packages.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Publicize Include="Assembly-CSharp:RimWorld.StatWorker.stat" />
+  </ItemGroup>
+  
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.props'))" />
+    <Error Condition="!Exists('packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.targets'))" />
+  </Target>
+  <Import Project="packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.targets" Condition="Exists('packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.targets')" />
 </Project>
