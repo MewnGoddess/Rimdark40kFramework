@@ -213,13 +213,7 @@ public class CompDecorative : CompGraphicParent
         {
             pawnKindDefSetupDone = true;
 
-            Log.Message("Here1");
             Core40kUtils.SetupCustomizationForPawn(pawn, false, true);
-            Log.Message("Here2");
-            /*if ((Current.CreatingWorld?.factionManager?.OfPlayer != null && pawn.Faction != Current.CreatingWorld.factionManager.OfPlayer) || (pawn.Faction != null && pawn.Faction != Faction.OfPlayerSilentFail))
-            {
-
-            }*/
         }
         
         if (pawn != null)

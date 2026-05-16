@@ -283,14 +283,8 @@ public class CompMultiColor : CompGraphicParent
         if (!pawnKindDefSetupDone)
         {
             pawnKindDefSetupDone = true;
-
-            Log.Message("Here3");
+            
             Core40kUtils.SetupCustomizationForPawn(pawn, true, false);
-            Log.Message("Here4");
-            /*if ((Current.CreatingWorld?.factionManager?.OfPlayer != null && pawn.Faction != Current.CreatingWorld.factionManager.OfPlayer) || (pawn.Faction != null && pawn.Faction != Faction.OfPlayerSilentFail))
-            {
-
-            }*/
         }
         Notify_GraphicChanged();
         base.Notify_Equipped(pawn);
