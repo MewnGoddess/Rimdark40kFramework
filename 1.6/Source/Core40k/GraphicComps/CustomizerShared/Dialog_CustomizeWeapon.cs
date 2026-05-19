@@ -137,6 +137,11 @@ public class Dialog_CustomizeWeapon : Window
                     offset += offsetValue;
                 }
                 
+                if (weaponDecorationComp.debugDrawsize.TryGetValue(graphic.Key, out var debugValue))
+                {
+                    drawSize *= debugValue;
+                }
+                
                 var offsetRect = new Rect(iconRect);
                 offsetRect.width *= drawSize.x;
                 offsetRect.height *= drawSize.y;

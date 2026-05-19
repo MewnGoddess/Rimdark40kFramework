@@ -21,6 +21,7 @@ public class Core40kMod : CoreMod
     }
     
     private readonly ModSettingTab_CoreMain coreMainSettings = new();
+    private readonly ModSettingTab_CoreDebug coreDebugSettings = new();
     
     public override void InitializeTabs()
     {
@@ -29,6 +30,13 @@ public class Core40kMod : CoreMod
             currentSettingTab = coreMainSettings;
         }, () => currentSettingTab == coreMainSettings);
         tabs.Add(mainTab);
+        
+        var debugTab = new TabRecord("BEWH.ModSettings.TabDebug".Translate(), delegate
+        {
+            currentSettingTab = coreDebugSettings;
+        }, () => currentSettingTab == coreDebugSettings);
+        tabs.Add(debugTab);
+
 
         currentSettingTab = coreMainSettings;
         base.InitializeTabs();

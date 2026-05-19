@@ -219,6 +219,7 @@
     <Compile Include="HarmonyPatch_PopulateMutableStatsWithStatsPatch.cs" />
     <Compile Include="ModSettings\CoreMod.cs" />
     <Compile Include="ModSettings\ModSettingTab.cs" />
+    <Compile Include="ModSettings\ModSettingTab_CoreDebug.cs" />
     <Compile Include="ModSettings\ModSettingTab_CoreMain.cs" />
     <Compile Include="MultiColorUtils.cs" />
     <Compile Include="PlaceWorkers\PlaceWorker_OnlyOnePerMap.cs" />

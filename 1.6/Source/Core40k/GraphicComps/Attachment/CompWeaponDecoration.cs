@@ -17,6 +17,7 @@ public class CompWeaponDecoration : CompGraphicParent
     public Dictionary<WeaponDecorationDef, ExtraDecorationSettings> WeaponDecorations => weaponDecorations;
     
     public Dictionary<WeaponDecorationDef, Vector3> debugOffset = new(); 
+    public Dictionary<WeaponDecorationDef, float> debugDrawsize = new(); 
     
     public CompMultiColor MultiColor => parent.GetComp<CompMultiColor>();
     

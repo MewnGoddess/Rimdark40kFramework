@@ -77,6 +77,11 @@ public static class RenderWeaponAttachments
                 offset += offsetValue;
             }
             
+            if (decoComp.debugDrawsize.TryGetValue(decoCompGraphic.Key, out var debugValue))
+            {
+                drawSize *= debugValue;
+            }
+            
             var quaterion = Quaternion.AngleAxis(num, Vector3.up);
             var afterOffsetPos = drawLoc + quaterion * offset;
             var size = new Vector3(drawSize.x, 0f, drawSize.y);

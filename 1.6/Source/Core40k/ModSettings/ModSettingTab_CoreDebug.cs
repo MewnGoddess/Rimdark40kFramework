@@ -3,7 +3,7 @@ using Verse;
 
 namespace Core40k;
 
-public class ModSettingTab_CoreMain : ModSettingTab
+public class ModSettingTab_CoreDebug : ModSettingTab
 {
     public override void DrawTab(Rect inRect, ModSettings settings)
     {
@@ -22,9 +22,11 @@ public class ModSettingTab_CoreMain : ModSettingTab
         listingStandard.Gap(36);
         scrollViewHeight += ListingHeightIncreaseGap;
         scrollViewHeight += ListingHeightIncrease;
-        
-        listingStandard.CheckboxLabeled("BEWH.Framework.ModSettings.ConfirmRankUnlock".Translate(), ref core40KModSettings.confirmRankUnlock);
 
+        listingStandard.CheckboxLabeled("BEWH.Framework.ModSettings.ShowRankTab".Translate(), ref core40KModSettings.alwaysShowRankTab);
+        scrollViewHeight += ListingHeightIncrease;
+        
+        listingStandard.CheckboxLabeled("BEWH.Framework.ModSettings.ShowWeaponDecoDebugOffset".Translate(), ref core40KModSettings.showWeaponDecoDebugOffset);
         scrollViewHeight += ListingHeightIncrease;
         
         //Check VEF patches

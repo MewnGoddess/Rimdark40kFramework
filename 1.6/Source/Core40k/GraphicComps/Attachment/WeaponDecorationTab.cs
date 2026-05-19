@@ -281,12 +281,15 @@ public class WeaponDecorationTab : CustomizerTabDrawer
                                 break;
                         }
 
-                        if (DebugSettings.godMode)
+                        if (ModSettings.showWeaponDecoDebugOffset)
                         {
-                            var offsetX = new Rect(new Vector2(bottomRect.x, bottomRect.yMax + 3f), iconRect.size);
-                            var offsetZ = offsetX.TakeBottomPart(offsetX.height / 2);
+                            var resetRect = new Rect(new Vector2(bottomRect.x, bottomRect.yMax + 3f), iconRect.size);
+                            var offsetZ = resetRect.TakeBottomPart(resetRect.height / 4);
+                            var offsetX = resetRect.TakeBottomPart(resetRect.height / 3);
+                            var drawSizeRect = resetRect.TakeBottomPart(resetRect.height / 2);
 
                             Vector3 xyz;
+                            float drawSize;
                             
                             if (!WeaponDecorationComp.debugOffset.TryGetValue(weaponDecoration.Value[i], out var value))
                             {
@@ -298,12 +301,29 @@ public class WeaponDecorationTab : CustomizerTabDrawer
                                 xyz = value;
                             }
                             
+                            if (!WeaponDecorationComp.debugDrawsize.TryGetValue(weaponDecoration.Value[i], out var drawSizeVal))
+                            {
+                                drawSize = 1f;
+                                WeaponDecorationComp.debugDrawsize.Add(weaponDecoration.Value[i], drawSize);
+                            }
+                            else
+                            {
+                                drawSize = drawSizeVal;
+                            }
+                            
                             debugRowExpanded = true;
 
+                            if (Widgets.ButtonText(resetRect, "Reset"))
+                            {
+                                xyz = new Vector3();
+                                drawSize = 1f;
+                            }
                             xyz.x = Widgets.HorizontalSlider(offsetX, xyz.x, -1f, 1f, true, "X: " + xyz.x);
                             xyz.z = Widgets.HorizontalSlider(offsetZ, xyz.z, -1f, 1f, true, "Z: " + xyz.z);
+                            drawSize = Widgets.HorizontalSlider(drawSizeRect, drawSize, 0.01f, 2f, true, "DrawSize: " + drawSize);
 
                             WeaponDecorationComp.debugOffset[weaponDecoration.Value[i]] = xyz;
+                            WeaponDecorationComp.debugDrawsize[weaponDecoration.Value[i]] = drawSize;
                         }
                     }
                 }

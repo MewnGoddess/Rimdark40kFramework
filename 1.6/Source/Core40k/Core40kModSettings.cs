@@ -8,6 +8,7 @@ namespace Core40k;
 public class Core40kModSettings : ModSettings
 {
     public bool alwaysShowRankTab = false;
+    public bool showWeaponDecoDebugOffset = false;
 
     public bool confirmRankUnlock = false;
 
@@ -90,6 +91,7 @@ public class Core40kModSettings : ModSettings
     public override void ExposeData()
     {
         Scribe_Values.Look(ref alwaysShowRankTab, "alwaysShowRankTab", false);
+        Scribe_Values.Look(ref showWeaponDecoDebugOffset, "showWeaponDecoDebugOffset", false);
         Scribe_Values.Look(ref confirmRankUnlock, "confirmRankUnlock", false);
         Scribe_Values.Look(ref showAllRankCategories, "showAllRankCategories", false);
         Scribe_Collections.Look(ref colourPresets, "colourPresets");
