@@ -243,4 +243,16 @@ public static class Core40kUtils
     {
         return listerBuildings.AllBuildingsColonistOfDef(def).Count;
     }
+    
+    private static Color MenuSectionBGFillColor = new ColorInt(42, 43, 44).ToColor;
+    private static Color MenuSectionBGBorderColor = new ColorInt(135, 135, 135).ToColor;
+    
+    public static void DrawColoredMenuSection(Rect rect, Color? menuFillColor, Color? borderColor)
+    	{
+    		GUI.color = menuFillColor ?? MenuSectionBGFillColor;
+    		GUI.DrawTexture(rect, BaseContent.WhiteTex);
+    		GUI.color = borderColor ?? MenuSectionBGBorderColor;
+    		Widgets.DrawBox(rect);
+    		GUI.color = Color.white;
+    	}
 }
