@@ -34,8 +34,6 @@ public class Dialog_CustomizeWeapon : Window
     public Dialog_CustomizeWeapon(Pawn pawn)
     {
         this.pawn = pawn;
-            
-        //var defMod = pawn.equipment.Primary.def.GetModExtension<DefModExtension_AvailableDrawerTabDefs>();
         
         //TEMP CODE START
         var defMod = pawn.equipment.Primary.def.GetModExtension<DefModExtension_AvailableDrawerTabDefs>();
@@ -132,6 +130,11 @@ public class Dialog_CustomizeWeapon : Window
                 {
                     offset = graphic.Key.drawData.OffsetForRot(Rot4.Invalid);
                     drawSize *= graphic.Key.drawData.scale;
+                }
+                
+                if (weaponDecorationComp.debugOffset.TryGetValue(graphic.Key, out var offsetValue))
+                {
+                    offset += offsetValue;
                 }
                 
                 var offsetRect = new Rect(iconRect);

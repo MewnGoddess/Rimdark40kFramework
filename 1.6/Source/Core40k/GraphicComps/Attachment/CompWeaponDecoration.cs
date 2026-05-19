@@ -16,6 +16,8 @@ public class CompWeaponDecoration : CompGraphicParent
 
     public Dictionary<WeaponDecorationDef, ExtraDecorationSettings> WeaponDecorations => weaponDecorations;
     
+    public Dictionary<WeaponDecorationDef, Vector3> debugOffset = new(); 
+    
     public CompMultiColor MultiColor => parent.GetComp<CompMultiColor>();
     
     public void AddOrRemoveDecoration(WeaponDecorationDef decoration)
@@ -214,6 +216,7 @@ public class CompWeaponDecoration : CompGraphicParent
                 var cachedDecoratives = new GameComponent_CoreUtils.CachedDecoratives
                 {
                     weapon = parent,
+                    apparels = [],
                 };
                 CoreUtils.cachedDecoratives.Add(pawn, cachedDecoratives);
             }

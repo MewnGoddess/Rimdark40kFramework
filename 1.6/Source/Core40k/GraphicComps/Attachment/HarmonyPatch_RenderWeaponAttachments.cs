@@ -71,6 +71,11 @@ public static class RenderWeaponAttachments
                 offset = decoCompGraphic.Key.drawData.OffsetForRot(equipmentTracker.pawn.Rotation);
                 drawSize *= decoCompGraphic.Key.drawData.scale;
             }
+
+            if (decoComp.debugOffset.TryGetValue(decoCompGraphic.Key, out var offsetValue))
+            {
+                offset += offsetValue;
+            }
             
             var quaterion = Quaternion.AngleAxis(num, Vector3.up);
             var afterOffsetPos = drawLoc + quaterion * offset;

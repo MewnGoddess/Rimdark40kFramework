@@ -2,6 +2,7 @@
 using System.Linq;
 using ColourPicker;
 using UnityEngine;
+using VEF.Utils;
 using Verse;
 
 namespace Core40k;
@@ -159,6 +160,7 @@ public class WeaponDecorationTab : CustomizerTabDrawer
         Widgets.BeginScrollView(rect, ref weaponDecorationScrollPosition, viewRect);
         
         var rowExpanded = false;
+        var debugRowExpanded = false;
         
         foreach (var weaponDecoration in weaponDecorations)
         {
@@ -278,6 +280,31 @@ public class WeaponDecorationTab : CustomizerTabDrawer
                                 Log.Warning("Wrong setup in " + weaponDecoration.Value[i] + "colorAmount is more than 3 or less than 1");
                                 break;
                         }
+
+                        if (DebugSettings.godMode)
+                        {
+                            var offsetX = new Rect(new Vector2(bottomRect.x, bottomRect.yMax + 3f), iconRect.size);
+                            var offsetZ = offsetX.TakeBottomPart(offsetX.height / 2);
+
+                            Vector3 xyz;
+                            
+                            if (!WeaponDecorationComp.debugOffset.TryGetValue(weaponDecoration.Value[i], out var value))
+                            {
+                                xyz = Vector3.zero;
+                                WeaponDecorationComp.debugOffset.Add(weaponDecoration.Value[i], xyz);
+                            }
+                            else
+                            {
+                                xyz = value;
+                            }
+                            
+                            debugRowExpanded = true;
+
+                            xyz.x = Widgets.HorizontalSlider(offsetX, xyz.x, -1f, 1f, true, "X: " + xyz.x);
+                            xyz.z = Widgets.HorizontalSlider(offsetZ, xyz.z, -1f, 1f, true, "Z: " + xyz.z);
+
+                            WeaponDecorationComp.debugOffset[weaponDecoration.Value[i]] = xyz;
+                        }
                     }
                 }
                 
@@ -288,6 +315,11 @@ public class WeaponDecorationTab : CustomizerTabDrawer
                     if (rowExpanded)
                     {
                         curY += iconRect.height/3;
+                        if (debugRowExpanded)
+                        {
+                            curY += iconRect.height;
+                            debugRowExpanded = false;
+                        }
                         rowExpanded = false;
                     }
                 }

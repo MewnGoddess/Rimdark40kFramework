@@ -72,6 +72,8 @@ public class DecorationDef : Def
     
     public List<ConditionalStatAffecter> conditionalStatAffecters = [];
 
+    public List<DecorationDef> incompatibleDecorations = [];
+
     public string TooltipDescription()
     {
         var stringbuilder = new StringBuilder();
