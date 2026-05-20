@@ -227,60 +227,60 @@ public class WeaponDecorationTab : CustomizerTabDrawer
                     {
                         WeaponDecorationComp.AddOrRemoveDecoration(weaponDecoration.Value[i]);
                     }
-                
-                    if (weaponDecoration.Value[i].colourable && WeaponDecorationComp.WeaponDecorations.ContainsKey(weaponDecoration.Value[i]))
+
+                    if (WeaponDecorationComp.WeaponDecorations.ContainsKey(weaponDecoration.Value[i]))
                     {
-                        rowExpanded = true;
-                    
                         var bottomRect = new Rect(new Vector2(iconRect.x, iconRect.yMax + 3f), iconRect.size);
                         bottomRect.height /= 3;
                         bottomRect = bottomRect.ContractedBy(2f);
-                    
-                        Rect colourSelection;
-                        Rect colourSelectionTwo;
-                        Rect colourSelectionThree;
-                
-                        var colorAmount = weaponDecoration.Value[i].colorAmount;
-                    
-                        switch (colorAmount)
+                        if (weaponDecoration.Value[i].colourable)
                         {
-                            case 1:
-                                colourSelection = new Rect(bottomRect);
+                            rowExpanded = true;
+                            Rect colourSelection;
+                            Rect colourSelectionTwo;
+                            Rect colourSelectionThree;
+                
+                            var colorAmount = weaponDecoration.Value[i].colorAmount;
+                    
+                            switch (colorAmount)
+                            {
+                                case 1:
+                                    colourSelection = new Rect(bottomRect);
                         
-                                PrimaryColorBox(colourSelection, weaponDecoration.Value[i]);
-                                break;
-                            case 2:
-                                colourSelection = new Rect(bottomRect);
-                                colourSelection.width /= 2;
-                                colourSelectionTwo = new Rect(colourSelection)
-                                {
-                                    x = colourSelection.xMax
-                                };
+                                    PrimaryColorBox(colourSelection, weaponDecoration.Value[i]);
+                                    break;
+                                case 2:
+                                    colourSelection = new Rect(bottomRect);
+                                    colourSelection.width /= 2;
+                                    colourSelectionTwo = new Rect(colourSelection)
+                                    {
+                                        x = colourSelection.xMax
+                                    };
 
-                                PrimaryColorBox(colourSelection, weaponDecoration.Value[i]);
-                                SecondaryColorBox(colourSelectionTwo, weaponDecoration.Value[i]);
-                                break;
-                            case 3:
-                                colourSelection = new Rect(bottomRect);
-                                colourSelection.width /= 3;
-                                colourSelectionTwo = new Rect(colourSelection)
-                                {
-                                    x = colourSelection.xMax
-                                };
-                                colourSelectionThree = new Rect(colourSelectionTwo)
-                                {
-                                    x = colourSelectionTwo.xMax
-                                };
+                                    PrimaryColorBox(colourSelection, weaponDecoration.Value[i]);
+                                    SecondaryColorBox(colourSelectionTwo, weaponDecoration.Value[i]);
+                                    break;
+                                case 3:
+                                    colourSelection = new Rect(bottomRect);
+                                    colourSelection.width /= 3;
+                                    colourSelectionTwo = new Rect(colourSelection)
+                                    {
+                                        x = colourSelection.xMax
+                                    };
+                                    colourSelectionThree = new Rect(colourSelectionTwo)
+                                    {
+                                        x = colourSelectionTwo.xMax
+                                    };
 
-                                PrimaryColorBox(colourSelection, weaponDecoration.Value[i]);
-                                SecondaryColorBox(colourSelectionTwo, weaponDecoration.Value[i]);
-                                TertiaryColorBox(colourSelectionThree, weaponDecoration.Value[i]);
-                                break;
-                            default:
-                                Log.Warning("Wrong setup in " + weaponDecoration.Value[i] + "colorAmount is more than 3 or less than 1");
-                                break;
+                                    PrimaryColorBox(colourSelection, weaponDecoration.Value[i]);
+                                    SecondaryColorBox(colourSelectionTwo, weaponDecoration.Value[i]);
+                                    TertiaryColorBox(colourSelectionThree, weaponDecoration.Value[i]);
+                                    break;
+                                default:
+                                    Log.Warning("Wrong setup in " + weaponDecoration.Value[i] + "colorAmount is more than 3 or less than 1");
+                                    break;
+                            }
                         }
-
                         if (ModSettings.showWeaponDecoDebugOffset)
                         {
                             var resetRect = new Rect(new Vector2(bottomRect.x, bottomRect.yMax + 3f), iconRect.size);
@@ -335,12 +335,12 @@ public class WeaponDecorationTab : CustomizerTabDrawer
                     if (rowExpanded)
                     {
                         curY += iconRect.height/3;
-                        if (debugRowExpanded)
-                        {
-                            curY += iconRect.height;
-                            debugRowExpanded = false;
-                        }
                         rowExpanded = false;
+                    }
+                    if (debugRowExpanded)
+                    {
+                        curY += iconRect.height;
+                        debugRowExpanded = false;
                     }
                 }
             }
