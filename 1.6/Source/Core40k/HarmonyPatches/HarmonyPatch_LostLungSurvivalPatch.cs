@@ -24,7 +24,7 @@ public class LostLungSurvivalPatch
         
         foreach (var gene in pawn.genes.GenesListForReading)
         {
-            if (!gene.def.HasModExtension<DefModExtension_LostLungSurvival>())
+            if (!gene.def.HasModExtension<DefModExtension_LostLungSurvival>() || !gene.Active)
             {
                 continue;
             }

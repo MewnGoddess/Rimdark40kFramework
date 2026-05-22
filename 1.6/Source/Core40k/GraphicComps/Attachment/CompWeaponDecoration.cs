@@ -252,5 +252,15 @@ public class CompWeaponDecoration : CompGraphicParent
         base.PostExposeData();
         Scribe_Collections.Look(ref originalWeaponDecorations, "originalWeaponDecorations");
         Scribe_Collections.Look(ref weaponDecorations, "weaponDecorations");
+        Scribe_Collections.Look(ref debugOffset, "debugOffset");
+        Scribe_Collections.Look(ref debugDrawsize, "debugDrawsize");
+        
+        if (Scribe.mode != LoadSaveMode.PostLoadInit)
+        {
+            return;
+        }
+        
+        debugDrawsize ??= new Dictionary<WeaponDecorationDef, float>();
+        debugOffset ??= new Dictionary<WeaponDecorationDef, Vector3>();
     }
 }

@@ -24,7 +24,7 @@ public class LostHeartSurvivalPatch
         
         foreach (var gene in pawn.genes.GenesListForReading)
         {
-            if (!gene.def.HasModExtension<DefModExtension_LostHeartSurvival>())
+            if (!gene.def.HasModExtension<DefModExtension_LostHeartSurvival>() || !gene.Active)
             {
                 continue;
             }

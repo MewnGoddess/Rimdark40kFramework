@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using ColourPicker;
 using UnityEngine;
@@ -23,6 +25,10 @@ public class WeaponDecorationTab : CustomizerTabDrawer
     private AlternateBaseFormDef selectedAlternateBaseForm = null;
     
     private Vector2 weaponDecorationScrollPosition;
+
+    private string xOffsetString = string.Empty;
+    private string zOffsetString = string.Empty;
+    private string drawSizeOffsetString = string.Empty;
     
     public override void Setup(Pawn pawn)
     {
@@ -228,13 +234,116 @@ public class WeaponDecorationTab : CustomizerTabDrawer
                         WeaponDecorationComp.AddOrRemoveDecoration(weaponDecoration.Value[i]);
                     }
 
+                    //Debug offset
                     if (WeaponDecorationComp.WeaponDecorations.ContainsKey(weaponDecoration.Value[i]))
                     {
                         var bottomRect = new Rect(new Vector2(iconRect.x, iconRect.yMax + 3f), iconRect.size);
                         bottomRect.height /= 3;
-                        bottomRect = bottomRect.ContractedBy(2f);
+                        
+                        if (ModSettings.showWeaponDecoDebugOffset)
+                        {
+                            var yVal = !weaponDecoration.Value[i].colourable ? bottomRect.yMin : bottomRect.yMax;
+                            var debugRect = new Rect(new Vector2(bottomRect.x, yVal + 3f), iconRect.size);
+                            debugRect.height *= 2;
+                            
+                            var resetRect = debugRect.TakeTopPart(iconRect.height / 4);
+                            resetRect = resetRect.ContractedBy(3f);
+                            
+                            var offsetX = debugRect.TakeTopPart(iconRect.height / 4);
+                            var offsetXText = debugRect.TakeTopPart(iconRect.height / 4);
+                            offsetX = offsetX.ContractedBy(3f);
+                            offsetXText = offsetXText.ContractedBy(3f);
+                            
+                            var offsetZ = debugRect.TakeTopPart(iconRect.height / 4);
+                            var offsetZText = debugRect.TakeTopPart(iconRect.height / 4);
+                            offsetZ = offsetZ.ContractedBy(3f);
+                            offsetZText = offsetZText.ContractedBy(3f);
+                            
+                            var drawSizeRect = debugRect.TakeTopPart(iconRect.height / 4);
+                            var drawSizeRectText = debugRect.TakeTopPart(iconRect.height / 4);
+                            drawSizeRect = drawSizeRect.ContractedBy(3f);
+                            drawSizeRectText = drawSizeRectText.ContractedBy(3f);
+
+                            Vector3 xyz;
+                            float drawSize;
+                            
+                            if (!WeaponDecorationComp.debugOffset.TryGetValue(weaponDecoration.Value[i], out var value))
+                            {
+                                xyz = Vector3.zero;
+                                WeaponDecorationComp.debugOffset.Add(weaponDecoration.Value[i], xyz);
+                            }
+                            else
+                            {
+                                xyz = value;
+                            }
+                            
+                            if (!WeaponDecorationComp.debugDrawsize.TryGetValue(weaponDecoration.Value[i], out var drawSizeVal))
+                            {
+                                drawSize = 1f;
+                                WeaponDecorationComp.debugDrawsize.Add(weaponDecoration.Value[i], drawSize);
+                            }
+                            else
+                            {
+                                drawSize = drawSizeVal;
+                            }
+                            
+                            debugRowExpanded = true;
+
+                            if (Widgets.ButtonText(resetRect, "Reset"))
+                            {
+                                xyz = new Vector3();
+                                drawSize = 1f;
+                            }
+                            
+                            
+                            var valX = Widgets.TextArea(offsetXText, xOffsetString);
+                            xOffsetString = valX;
+                            if (float.TryParse(valX, out var newValx))
+                            {
+                                xyz.x = newValx;
+                            }
+                            xyz.x = Widgets.HorizontalSlider(offsetX, xyz.x, -1f, 1f, true, "X: " + xyz.x);
+                            if (!Mathf.Approximately(newValx, xyz.x))
+                            {
+                                xOffsetString = string.Empty;
+                            }
+
+                            
+                            var valZ = Widgets.TextArea(offsetZText, zOffsetString);
+                            zOffsetString = valZ;
+                            if (float.TryParse(valZ, out var newValZ))
+                            {
+                                xyz.z = newValZ;
+                            }
+                            xyz.z = Widgets.HorizontalSlider(offsetZ, xyz.z, -1f, 1f, true, "Z: " + xyz.z);
+                            if (!Mathf.Approximately(newValZ, xyz.z))
+                            {
+                                zOffsetString = string.Empty;
+                            }
+                            
+                            
+                            
+                            var valDrawSize = Widgets.TextArea(drawSizeRectText, drawSizeOffsetString);
+                            drawSizeOffsetString = valDrawSize;
+                            if (float.TryParse(valDrawSize, out var newValDrawSize))
+                            {
+                                drawSize = newValDrawSize;
+                            }
+                            drawSize = Widgets.HorizontalSlider(drawSizeRect, drawSize, 0.01f, 2f, true, "SZ: " + drawSize);
+                            if (!Mathf.Approximately(newValDrawSize, drawSize))
+                            {
+                                drawSizeOffsetString = string.Empty;
+                            }
+                            
+                            
+                            WeaponDecorationComp.debugOffset[weaponDecoration.Value[i]] = xyz;
+                            WeaponDecorationComp.debugDrawsize[weaponDecoration.Value[i]] = drawSize;
+                        }
+                        
+                        //Color Selection
                         if (weaponDecoration.Value[i].colourable)
                         {
+                            bottomRect = bottomRect.ContractedBy(2f);
                             rowExpanded = true;
                             Rect colourSelection;
                             Rect colourSelectionTwo;
@@ -281,50 +390,6 @@ public class WeaponDecorationTab : CustomizerTabDrawer
                                     break;
                             }
                         }
-                        if (ModSettings.showWeaponDecoDebugOffset)
-                        {
-                            var resetRect = new Rect(new Vector2(bottomRect.x, bottomRect.yMax + 3f), iconRect.size);
-                            var offsetZ = resetRect.TakeBottomPart(resetRect.height / 4);
-                            var offsetX = resetRect.TakeBottomPart(resetRect.height / 3);
-                            var drawSizeRect = resetRect.TakeBottomPart(resetRect.height / 2);
-
-                            Vector3 xyz;
-                            float drawSize;
-                            
-                            if (!WeaponDecorationComp.debugOffset.TryGetValue(weaponDecoration.Value[i], out var value))
-                            {
-                                xyz = Vector3.zero;
-                                WeaponDecorationComp.debugOffset.Add(weaponDecoration.Value[i], xyz);
-                            }
-                            else
-                            {
-                                xyz = value;
-                            }
-                            
-                            if (!WeaponDecorationComp.debugDrawsize.TryGetValue(weaponDecoration.Value[i], out var drawSizeVal))
-                            {
-                                drawSize = 1f;
-                                WeaponDecorationComp.debugDrawsize.Add(weaponDecoration.Value[i], drawSize);
-                            }
-                            else
-                            {
-                                drawSize = drawSizeVal;
-                            }
-                            
-                            debugRowExpanded = true;
-
-                            if (Widgets.ButtonText(resetRect, "Reset"))
-                            {
-                                xyz = new Vector3();
-                                drawSize = 1f;
-                            }
-                            xyz.x = Widgets.HorizontalSlider(offsetX, xyz.x, -1f, 1f, true, "X: " + xyz.x);
-                            xyz.z = Widgets.HorizontalSlider(offsetZ, xyz.z, -1f, 1f, true, "Z: " + xyz.z);
-                            drawSize = Widgets.HorizontalSlider(drawSizeRect, drawSize, 0.01f, 2f, true, "DrawSize: " + drawSize);
-
-                            WeaponDecorationComp.debugOffset[weaponDecoration.Value[i]] = xyz;
-                            WeaponDecorationComp.debugDrawsize[weaponDecoration.Value[i]] = drawSize;
-                        }
                     }
                 }
                 
@@ -334,12 +399,12 @@ public class WeaponDecorationTab : CustomizerTabDrawer
                     curX = viewRect.x;
                     if (rowExpanded)
                     {
-                        curY += iconRect.height/3;
+                        curY += iconRect.height / 3;
                         rowExpanded = false;
                     }
                     if (debugRowExpanded)
                     {
-                        curY += iconRect.height;
+                        curY += (iconRect.height * 2) - (iconRect.height / 4);
                         debugRowExpanded = false;
                     }
                 }
