@@ -6,8 +6,8 @@ namespace Core40k;
 
 public class GameComponent_CoreUtils : GameComponent
 {
-    private List<Pawn> pawnList;
-    private List<CachedDecoratives> cachedDecorativesList;
+    private List<Pawn> pawnList = [];
+    private List<CachedDecoratives> cachedDecorativesList = [];
     
     public Dictionary<Pawn, CachedDecoratives> cachedDecoratives = new ();
     
@@ -19,6 +19,20 @@ public class GameComponent_CoreUtils : GameComponent
     {
         base.ExposeData();
         Scribe_Collections.Look(ref cachedDecoratives, "cachedDecoratives", LookMode.Reference, LookMode.Deep, ref pawnList, ref cachedDecorativesList);
+        
+        if (Scribe.mode != LoadSaveMode.PostLoadInit)
+        {
+            return;
+        }
+
+        if (!pawnList.NullOrEmpty())
+        {
+            return;
+        }
+        
+        cachedDecoratives = new Dictionary<Pawn, CachedDecoratives>();
+        pawnList = [];
+        cachedDecorativesList = [];
     }
     
     public class CachedDecoratives : IExposable
