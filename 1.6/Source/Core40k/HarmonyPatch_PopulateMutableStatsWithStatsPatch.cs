@@ -21,18 +21,6 @@ public class PopulateMutableStatsWithRankStatsPatch
             {
                 ___mutableStats.AddRange(rankDef.statOffsets.Select(mod => mod.stat));
             }
-                
-            foreach (var conditionalStatAffecter in rankDef.conditionalStatAffecters)
-            {
-                if (conditionalStatAffecter.statFactors != null)
-                {
-                    ___mutableStats.AddRange(conditionalStatAffecter.statFactors.Select(mod => mod.stat));
-                }
-                if (conditionalStatAffecter.statOffsets != null)
-                {
-                    ___mutableStats.AddRange(conditionalStatAffecter.statOffsets.Select(mod => mod.stat));
-                }
-            }
         }
         
         foreach (var decorationDef in DefDatabase<DecorationDef>.AllDefsListForReading)
@@ -44,18 +32,6 @@ public class PopulateMutableStatsWithRankStatsPatch
             if (decorationDef.statOffsets != null)
             {
                 ___mutableStats.AddRange(decorationDef.statOffsets.Select(mod => mod.stat));
-            }
-                
-            foreach (var conditionalStatAffecter in decorationDef.conditionalStatAffecters)
-            {
-                if (conditionalStatAffecter.statFactors != null)
-                {
-                    ___mutableStats.AddRange(conditionalStatAffecter.statFactors.Select(mod => mod.stat));
-                }
-                if (conditionalStatAffecter.statOffsets != null)
-                {
-                    ___mutableStats.AddRange(conditionalStatAffecter.statOffsets.Select(mod => mod.stat));
-                }
             }
         }
     }

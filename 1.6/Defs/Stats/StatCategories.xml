@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <StatCategoryDef>
+    <defName>BEWH_DecorationOffsets</defName>
+    <label>Decoration Offsets</label>
+    <displayOrder>85</displayOrder>
+    <displayAllByDefault>true</displayAllByDefault>
+  </StatCategoryDef>
+
+
+  <StatCategoryDef>
+    <defName>BEWH_DecorationFactors</defName>
+    <label>Decoration Factors</label>
+    <displayOrder>86</displayOrder>
+    <displayAllByDefault>true</displayAllByDefault>
+  </StatCategoryDef>
+
+  <StatCategoryDef>
+    <defName>BEWH_AlternateTextureOffsets</defName>
+    <label>Alt. Texture Offsets</label>
+    <displayOrder>87</displayOrder>
+    <displayAllByDefault>true</displayAllByDefault>
+  </StatCategoryDef>
+
+
+  <StatCategoryDef>
+    <defName>BEWH_AlternateTextureFactors</defName>
+    <label>Alt. Factors</label>
+    <displayOrder>88</displayOrder>
+    <displayAllByDefault>true</displayAllByDefault>
+  </StatCategoryDef>
+
+</Defs>

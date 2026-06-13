@@ -1,8 +1,6 @@
 ﻿using HarmonyLib;
-using System;
 using System.Collections.Generic;
 using RimWorld;
-using VEF.Genes;
 using Verse;
 
 namespace Core40k;

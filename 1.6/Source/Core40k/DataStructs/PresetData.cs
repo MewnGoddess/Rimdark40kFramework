@@ -7,8 +7,7 @@ namespace Core40k;
 
 public class PresetData
 {
-    public ExtraDecorationDef extraDecorationDef;
-    public WeaponDecorationDef weaponDecorationDef;
+    public DecorationDef decorationDef;
 
     public bool flipped = false;
     public Color? colour = null;
@@ -20,9 +19,9 @@ public class PresetData
     {
     }
 
-    public PresetData(ExtraDecorationDef extraDecorationDef, bool flipped, Color colour, Color colourTwo, Color colourThree, MaskDef maskDef)
+    public PresetData(DecorationDef decorationDef, bool flipped, Color colour, Color colourTwo, Color colourThree, MaskDef maskDef)
     {
-        this.extraDecorationDef = extraDecorationDef;
+        this.decorationDef = decorationDef;
         this.flipped = flipped;
         this.colour = colour;
         this.colourTwo = colourTwo;
@@ -32,7 +31,7 @@ public class PresetData
 
     public void LoadDataFromXmlCustom(XmlNode xmlRoot)
     {
-        DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(this, "extraDecorationDef", xmlRoot.Name, null, null, typeof(ExtraDecorationDef));
+        DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(this, "decorationDef", xmlRoot.Name, null, null, typeof(DecorationDef));
         foreach (var xmlNode in xmlRoot.ChildNodes)
         {
             var childNode = (XmlElement)xmlNode;
@@ -55,7 +54,7 @@ public class PresetData
                     maskDef = ParseHelper.FromString<MaskDef>(childNode.FirstChild.Value);
                     break;
                 default:
-                    Log.Warning("Error in ExtraDecorationPresetDef, " + childNode.Name + " not recognized as a valid field.");
+                    Log.Warning("Error in DecorationPresetDef, " + childNode.Name + " not recognized as a valid field.");
                     break;
             }
         }

@@ -1,56 +1,16 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using RimWorld;
 using UnityEngine;
+using VEF.Abilities;
 using Verse;
 
 namespace Core40k;
 
 public class CompMultiColor : CompGraphicParent
 {
-    public void TempSetInitialValues(ApparelMultiColor multiColor)
-    {
-        drawColorOne = multiColor.DrawColor;
-        originalColorOne = multiColor.DrawColor;
-        
-        drawColorTwo = multiColor.DrawColorTwo;
-        originalColorTwo = multiColor.DrawColorTwo;
-        
-        drawColorThree = multiColor.DrawColorThree;
-        originalColorThree = multiColor.DrawColorThree;
-        
-        maskDef = multiColor.MaskDef;
-        originalMaskDef = multiColor.MaskDef;
-    }
-    
-    public void TempSetInitialValues(WeaponMultiColor multiColor)
-    {
-        drawColorOne = multiColor.DrawColor;
-        originalColorOne = multiColor.DrawColor;
-        
-        drawColorTwo = multiColor.DrawColorTwo;
-        originalColorTwo = multiColor.DrawColorTwo;
-        
-        drawColorThree = multiColor.DrawColorThree;
-        originalColorThree = multiColor.DrawColorThree;
-    }
-    
     public CompProperties_MultiColor Props => (CompProperties_MultiColor)props; 
-
-    private ThingDef thingDef => parent.def;
-    private Thing thing => parent;
-    public Pawn Wearer
-    {
-        get
-        {
-            if (ParentHolder is not Pawn_ApparelTracker pawn_ApparelTracker)
-            {
-                return null;
-            }
-            return pawn_ApparelTracker.pawn;
-        }
-    }
-    
-    private bool isApparel => parent is Apparel;
     
     private BodyTypeDef originalBodyType = null;
         
@@ -116,7 +76,7 @@ public class CompMultiColor : CompGraphicParent
         {
             cachedGraphicMulti = value;
             recacheMultiGraphics = false;
-            if (isApparel)
+            if (IsApparel)
             {
                 apparelGraphicRecord = new ApparelGraphicRecord(cachedGraphicMulti, parent as Apparel);
             }
@@ -127,7 +87,7 @@ public class CompMultiColor : CompGraphicParent
     {
         get
         {
-            if (!isApparel)
+            if (!IsApparel)
             {
                 return new ApparelGraphicRecord(null, null);
             }
@@ -137,6 +97,8 @@ public class CompMultiColor : CompGraphicParent
     }
     
     private bool pawnKindDefSetupDone = false;
+
+    private CompAlternateTexture AlternateTexture => parent?.GetComp<CompAlternateTexture>();
     
     private bool recacheSingleGraphics = true;
     public bool RecacheSingleGraphics => recacheSingleGraphics;
@@ -165,10 +127,10 @@ public class CompMultiColor : CompGraphicParent
     public void SetSingleGraphic(bool onlyDefaultGraphic = false)
     {
         recacheSingleGraphics = false;
-        var path = onlyDefaultGraphic ? thingDef.graphicData.texPath : currentAlternateBaseForm?.drawnTextureIconPath ?? thingDef.graphicData.texPath;
-        var drawSize = currentAlternateBaseForm?.newDrawSize ?? thingDef.graphicData.drawSize;
+        var path = onlyDefaultGraphic ? ThingDef.graphicData.texPath : AlternateTexture?.CurrentAlternateBaseForm?.drawnTextureIconPath ?? ThingDef.graphicData.texPath;
+        var drawSize = AlternateTexture?.CurrentAlternateBaseForm?.newDrawSize ?? ThingDef.graphicData.drawSize;
         var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
-        var drawMult = isApparel ? 0.9f : 1f;
+        var drawMult = IsApparel ? 0.9f : 1f;
         var graphic = MultiColorUtils.GetGraphic<Graphic_Single>(path, shader, drawSize*drawMult, DrawColor, DrawColorTwo, DrawColorThree, null, maskDef?.maskPath);
         if (onlyDefaultGraphic)
         {
@@ -179,48 +141,27 @@ public class CompMultiColor : CompGraphicParent
             cachedGraphic = new Graphic_RandomRotated(graphic, 35f);
         }
     }
-    
-    
-    private AlternateBaseFormDef originalCurrentAlternateBaseForm = null;
-    private AlternateBaseFormDef currentAlternateBaseForm = null;
-    public AlternateBaseFormDef CurrentAlternateBaseForm => currentAlternateBaseForm;
 
-    public void SetAlternateBaseForm(AlternateBaseFormDef alternateBaseFormDef, bool isForApparel)
+
+    public void ResetFieldsByAlternateTexture(AlternateBaseFormDef alternateBaseFormDef)
     {
-        if (isForApparel)
+        if (alternateBaseFormDef.incompatibleMaskDefs.Contains(maskDef))
         {
-            var compArmorDeco = thing.TryGetComp<CompDecorative>();
-            compArmorDeco?.RemoveDecorationsIncompatibleWithAlternate(alternateBaseFormDef);
-        }
-        else
-        {
-            var compWeaponDeco = thing.TryGetComp<CompWeaponDecoration>();
-            compWeaponDeco?.RemoveDecorationsIncompatibleWithAlternate(alternateBaseFormDef);
+            maskDef = Core40kDefOf.BEWH_DefaultMask;
         }
 
-        if (alternateBaseFormDef != null)
+        if (alternateBaseFormDef.newPrimaryColor.HasValue)
         {
-            if (alternateBaseFormDef.incompatibleMaskDefs.Contains(maskDef))
-            {
-                maskDef = Core40kDefOf.BEWH_DefaultMask;
-            }
-
-            if (alternateBaseFormDef.newPrimaryColor.HasValue)
-            {
-                DrawColor = alternateBaseFormDef.newPrimaryColor.Value;
-            }
-            if (alternateBaseFormDef.newSecondaryColor.HasValue)
-            {
-                DrawColorTwo = alternateBaseFormDef.newSecondaryColor.Value;
-            }
-            if (alternateBaseFormDef.newTertiaryColor.HasValue)
-            {
-                DrawColorThree = alternateBaseFormDef.newTertiaryColor.Value;
-            }
+            DrawColor = alternateBaseFormDef.newPrimaryColor.Value;
         }
-        
-        currentAlternateBaseForm = alternateBaseFormDef;
-        Notify_GraphicChanged();
+        if (alternateBaseFormDef.newSecondaryColor.HasValue)
+        {
+            DrawColorTwo = alternateBaseFormDef.newSecondaryColor.Value;
+        }
+        if (alternateBaseFormDef.newTertiaryColor.HasValue)
+        {
+            DrawColorThree = alternateBaseFormDef.newTertiaryColor.Value;
+        }
     }
     
     public override void InitialSetup()
@@ -232,7 +173,7 @@ public class CompMultiColor : CompGraphicParent
 
     public virtual void InitialColors()
     {
-        drawColorOne = Props.defaultPrimaryColor ?? (thingDef.MadeFromStuff ? thingDef.GetColorForStuff(parent.Stuff) : Color.white);
+        drawColorOne = Props.defaultPrimaryColor ?? (ThingDef.MadeFromStuff ? ThingDef.GetColorForStuff(parent.Stuff) : Color.white);
         drawColorTwo = Props.defaultSecondaryColor ?? Color.white;
         drawColorThree = Props.defaultTertiaryColor ?? Color.white;
     }
@@ -250,6 +191,13 @@ public class CompMultiColor : CompGraphicParent
         drawColorTwo = preset.secondaryColour;
         drawColorThree = preset.tertiaryColour ?? preset.secondaryColour;
     }
+
+    public void SetDefaultColors()
+    {
+        drawColorOne = Props.defaultPrimaryColor ?? parent.DrawColor;
+        drawColorTwo = Props.defaultSecondaryColor ?? parent.DrawColorTwo;
+        drawColorThree = Props.defaultTertiaryColor ?? parent.DrawColorTwo;
+    }
     
     public override void SetOriginals()
     {
@@ -257,7 +205,6 @@ public class CompMultiColor : CompGraphicParent
         originalColorTwo = drawColorTwo;
         originalColorThree = drawColorThree;
         originalMaskDef = maskDef;
-        originalCurrentAlternateBaseForm = currentAlternateBaseForm;
         Notify_GraphicChanged();
     }
 
@@ -267,7 +214,6 @@ public class CompMultiColor : CompGraphicParent
         drawColorTwo = originalColorTwo;
         drawColorThree = originalColorThree;
         maskDef = originalMaskDef;
-        currentAlternateBaseForm = originalCurrentAlternateBaseForm;
         Notify_GraphicChanged();
     }
     
@@ -286,6 +232,7 @@ public class CompMultiColor : CompGraphicParent
             
             Core40kUtils.SetupCustomizationForPawn(pawn, true, false);
         }
+
         Notify_GraphicChanged();
         base.Notify_Equipped(pawn);
     }
@@ -300,9 +247,7 @@ public class CompMultiColor : CompGraphicParent
         Scribe_Values.Look(ref drawColorTwo, "drawColorTwo", Color.white);
         Scribe_Values.Look(ref drawColorThree, "drawColorThree", Color.white);
         Scribe_Defs.Look(ref originalMaskDef, "originalMaskDef");
-        Scribe_Defs.Look(ref originalCurrentAlternateBaseForm, "originalCurrentAlternateBaseForm");
         Scribe_Defs.Look(ref maskDef, "maskDef");
-        Scribe_Defs.Look(ref currentAlternateBaseForm, "currentAlternateBaseForm");
         Scribe_Defs.Look(ref originalBodyType, "originalBodyType");
         
         base.PostExposeData();

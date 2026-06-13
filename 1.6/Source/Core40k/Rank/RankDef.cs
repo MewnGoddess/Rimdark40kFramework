@@ -29,8 +29,6 @@ public class RankDef : Def
     public List<StatModifier> statOffsets = [];
 
     public List<StatModifier> statFactors = [];
-
-    public List<ConditionalStatAffecter> conditionalStatAffecters = [];
         
     public List<AbilityDef> givesAbilities = [];
         

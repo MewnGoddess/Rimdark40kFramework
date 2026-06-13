@@ -14,13 +14,18 @@ public static class IncreaseShotBurstCountFromVarious
             __result = ammoChangerComp.ShotsPerBurst;
         }
         var weaponDecoComp = __instance?.EquipmentSource?.GetComp<CompWeaponDecoration>();
-        if (weaponDecoComp != null)
+        if (weaponDecoComp?.Decorations != null)
         {
-            foreach (var weaponDecoration in weaponDecoComp.WeaponDecorations)
+            foreach (var weaponDecoration in weaponDecoComp.Decorations)
             {
-                if (weaponDecoration.Key.verbModifier != null)
+                if (weaponDecoration.Key is not WeaponDecorationDef weaponDecorationDef)
                 {
-                    __result += weaponDecoration.Key.verbModifier.additionalBurstShotCount;
+                    continue;
+                }
+                
+                if (weaponDecorationDef.verbModifier != null)
+                {
+                    __result += weaponDecorationDef.verbModifier.additionalBurstShotCount;
                 }
             }
         }

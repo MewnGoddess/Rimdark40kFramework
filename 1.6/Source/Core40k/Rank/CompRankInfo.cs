@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using RimWorld;
+using UnityEngine;
 using VEF.Abilities;
 using Verse;
 
@@ -33,8 +35,6 @@ public class CompRankInfo : ThingComp
     private RankCategoryDef lastOpenedRankCategory = null;
         
     public RankCategoryDef LastOpenedRankCategory => lastOpenedRankCategory;
-
-    private bool convertToStartTick = true;
     
     private Dictionary<RankDef, int> daysAsRank = new Dictionary<RankDef, int>();
     
@@ -278,7 +278,7 @@ public class CompRankInfo : ThingComp
         
     public override void Notify_Killed(Map prevMap, DamageInfo? dinfo = null)
     {
-        base.Notify_Killed(prevMap, dinfo);
+        base.Notify_Killed(prevMap, dinfo); //TODO: Make patch for if they are resurrected?
         foreach (var rank in UnlockedRanks)
         {
             rank.Notify_Killed(this, prevMap, dinfo);
@@ -312,7 +312,6 @@ public class CompRankInfo : ThingComp
         Scribe_Collections.Look(ref unlockedRanks, "unlockedRanks", LookMode.Def);
         Scribe_Collections.Look(ref unlockedRanksAtDeath, "unlockedRanksAtDeath", LookMode.Def);
         Scribe_Collections.Look(ref daysAsRank, "daysAsRank");
-        Scribe_Values.Look(ref convertToStartTick, "convertToStartTick");
         Scribe_Defs.Look(ref lastOpenedRankCategory, "lastOpenedRankCategory");
 
         if (Scribe.mode != LoadSaveMode.PostLoadInit)
@@ -321,23 +320,84 @@ public class CompRankInfo : ThingComp
         }
             
         daysAsRank ??= new Dictionary<RankDef, int>();
-
-        if (!convertToStartTick)
-        {
-            return;
-        }
-        
-        var daysAsRankTemp = new Dictionary<RankDef, int>();
-        daysAsRankTemp.AddRange(daysAsRank);
-        
-        foreach (var keyPair in daysAsRank)
-        {
-            daysAsRankTemp[keyPair.Key] = Find.TickManager.TicksGame - keyPair.Value;
-        }
-        
-        daysAsRank = daysAsRankTemp;
-
-        convertToStartTick = false;
     }
+    
+    //StatOffset
+    public override float GetStatOffset(StatDef stat)
+    {
+        var num = 0f;
+        if (CachedStatOffset.TryGetValue(stat, out var cachedStatOffsetOut))
+        {
+            num += cachedStatOffsetOut;
+        }
+        else
+        {
+            foreach (var rank in UnlockedRanks)
+            {
+                if (!rank.statOffsets.NullOrEmpty())
+                {
+                    num += rank.statOffsets.GetStatOffsetFromList(stat);
+                }
+            }
+
+            CachedStatOffset.Add(stat, num);
+        }
+
+        return num;
+    }
+    
+    //Stat Factor
+    public override float GetStatFactor(StatDef stat)
+    {
+        var num = 1f;
         
+        if (CachedStatFactor.TryGetValue(stat, out var cachedStatFactorOut))
+        {
+            num *= cachedStatFactorOut;
+        }
+        else
+        {
+            foreach (var rank in UnlockedRanks)
+            {
+                if (!rank.statFactors.NullOrEmpty())
+                {
+                    num *= rank.statFactors.GetStatFactorFromList(stat);
+                }
+            }
+                    
+            CachedStatFactor.Add(stat, num);
+        }
+        
+        return num;
+    }
+    
+    public override void GetStatsExplanation(StatDef stat, StringBuilder sb, string whitespace = "")
+    {
+        if (UnlockedRanks.NullOrEmpty())
+        {
+            base.GetStatsExplanation(stat, sb, whitespace);
+        }
+        var stringBuilder = new StringBuilder();
+        
+        foreach (var rank in UnlockedRanks)
+        {
+            var statOffsetFromList = rank.statOffsets.GetStatOffsetFromList(stat);
+            if (!Mathf.Approximately(statOffsetFromList, 0f))
+            {
+                stringBuilder.AppendLine(whitespace + "    " + rank.LabelCap + ": " + stat.Worker.ValueToString(statOffsetFromList, finalized: false, ToStringNumberSense.Offset));
+            }
+            var statFactorFromList = rank.statFactors.GetStatFactorFromList(stat);
+            if (!Mathf.Approximately(statFactorFromList, 1f))
+            {
+                stringBuilder.AppendLine(whitespace + "    " + rank.LabelCap + ": " + stat.Worker.ValueToString(statFactorFromList, finalized: false, ToStringNumberSense.Factor));
+            }
+        }
+        
+        if (stringBuilder.Length != 0)
+        {
+            sb.AppendLine(whitespace + "BEWH.Framework.StatReport.Rank".Translate() + ":");
+            sb.Append(stringBuilder);
+        }
+    }
+
 }

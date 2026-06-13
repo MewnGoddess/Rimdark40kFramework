@@ -13,13 +13,13 @@ public class PawnRenderNodeWorker_AlternateFormCompatible : PawnRenderNodeWorker
             return base.OffsetFor(node, parms, out pivot);
         }
         
-        var multiComp =  node.apparel.GetComp<CompMultiColor>();
-        if (multiComp.CurrentAlternateBaseForm == null)
+        var alternateTexture =  node.apparel.GetComp<CompAlternateTexture>();
+        if (alternateTexture.CurrentAlternateBaseForm == null)
         {
             return base.OffsetFor(node, parms, out pivot);
         }
         
-        var curAltForm = multiComp.CurrentAlternateBaseForm;
+        var curAltForm = alternateTexture.CurrentAlternateBaseForm;
         
         var anchorOffset = Vector3.zero;
         pivot = PivotFor(node, parms);
@@ -64,13 +64,13 @@ public class PawnRenderNodeWorker_AlternateFormCompatible : PawnRenderNodeWorker
             return base.PivotFor(node, parms);
         }
         
-        var multiComp =  node.apparel.GetComp<CompMultiColor>();
-        if (multiComp.CurrentAlternateBaseForm == null)
+        var alternateTexture =  node.apparel.GetComp<CompAlternateTexture>();
+        if (alternateTexture.CurrentAlternateBaseForm == null)
         {
             return base.PivotFor(node, parms);
         }
         
-        var curAltForm = multiComp.CurrentAlternateBaseForm;
+        var curAltForm = alternateTexture.CurrentAlternateBaseForm;
         
         var result = Vector3.zero;
         if (node.Props.drawData != null)

@@ -26,9 +26,6 @@ public class ModSettingTab_CoreDebug : ModSettingTab
         listingStandard.CheckboxLabeled("BEWH.Framework.ModSettings.ShowRankTab".Translate(), ref core40KModSettings.alwaysShowRankTab);
         scrollViewHeight += ListingHeightIncrease;
         
-        listingStandard.CheckboxLabeled("BEWH.Framework.ModSettings.ShowWeaponDecoDebugOffset".Translate(), ref core40KModSettings.showWeaponDecoDebugOffset);
-        scrollViewHeight += ListingHeightIncrease;
-        
         //Check VEF patches
         listingStandard.GapLine(36);
         scrollViewHeight += ListingHeightIncreaseGap;

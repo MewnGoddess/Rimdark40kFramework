@@ -1,9 +1,29 @@
+using System.Collections.Generic;
+using RimWorld;
 using Verse;
 
 namespace Core40k;
 
 public class CompGraphicParent : ThingComp
 {
+    protected static GameComponent_CoreUtils coreUtils;
+    protected static GameComponent_CoreUtils CoreUtils => coreUtils ??= Current.Game.GetComponent<GameComponent_CoreUtils>();
+    
+    protected Dictionary<StatDef, float> cachedStatOffset = new();
+    public Dictionary<StatDef, float> CachedStatOffset => cachedStatOffset;
+    protected Dictionary<StatDef, float> cachedStatFactor = new();
+    public Dictionary<StatDef, float> CachedStatFactor => cachedStatFactor;
+    
+    protected ThingDef ThingDef => parent.def;
+    protected Thing Thing => parent;
+    
+    protected bool IsApparel => parent is Apparel;
+
+    protected Pawn Wearer => ParentHolder is not Pawn_ApparelTracker pawn_ApparelTracker ? null : pawn_ApparelTracker.pawn;
+    protected Pawn Holder => ParentHolder is not Pawn_EquipmentTracker pawn_EquipmentTracker ? null : pawn_EquipmentTracker.pawn;
+
+    protected Pawn Pawn => Wearer ?? Holder;
+
     private bool initialSet;
 
     public bool InitialSet
@@ -14,6 +34,8 @@ public class CompGraphicParent : ThingComp
     
     public virtual void Notify_GraphicChanged()
     {
+        cachedStatOffset = new Dictionary<StatDef, float>();
+        cachedStatFactor = new Dictionary<StatDef, float>();
         parent.Notify_ColorChanged();
     }
     

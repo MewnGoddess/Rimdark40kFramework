@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Defs>
+
+    <Core40k.DecorationTypeDef>
+        <defName>BEWH_UndefinedType</defName>
+        <label>Undefined</label>
+        <description>Undefined</description>
+    </Core40k.DecorationTypeDef>
+
+    <Core40k.DecorationTypeDef>
+        <defName>BEWH_DecoCategory_decals</defName>
+        <label>Decals</label>
+        <description>Decals</description>
+    </Core40k.DecorationTypeDef>
+
+    <Core40k.DecorationTypeDef>
+        <defName>BEWH_DecoCategory_trinkets</defName>
+        <label>Trinkets</label>
+        <description>Trinkets</description>
+    </Core40k.DecorationTypeDef>
+
+    <Core40k.DecorationTypeDef>
+        <defName>BEWH_DecoCategory_sights</defName>
+        <label>Sights</label>
+        <description>Sights</description>
+    </Core40k.DecorationTypeDef>
+
+    <Core40k.DecorationTypeDef>
+        <defName>BEWH_DecoCategory_misc</defName>
+        <label>Misc</label>
+        <description>Misc</description>
+    </Core40k.DecorationTypeDef>
+
+</Defs>

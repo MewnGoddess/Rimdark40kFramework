@@ -14,13 +14,18 @@ public static class IncreaseRangeFromVarious
             __result = ammoChangerComp.EffectiveRange;
         }
         var weaponDecoComp = __instance?.EquipmentSource?.GetComp<CompWeaponDecoration>();
-        if (weaponDecoComp != null)
+        if (weaponDecoComp?.Decorations != null)
         {
-            foreach (var weaponDecoration in weaponDecoComp.WeaponDecorations)
+            foreach (var weaponDecoration in weaponDecoComp.Decorations)
             {
-                if (weaponDecoration.Key.verbModifier != null)
+                if (weaponDecoration.Key is not WeaponDecorationDef weaponDecorationDef)
                 {
-                    __result += weaponDecoration.Key.verbModifier.additionalRange;
+                    continue;
+                }
+                
+                if (weaponDecorationDef.verbModifier != null)
+                {
+                    __result += weaponDecorationDef.verbModifier.additionalRange;
                 }
             }
         }

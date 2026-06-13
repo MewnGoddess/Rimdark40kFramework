@@ -8,7 +8,9 @@ namespace Core40k;
 public class Core40kModSettings : ModSettings
 {
     public bool alwaysShowRankTab = false;
-    public bool showWeaponDecoDebugOffset = false;
+    
+    public bool showCustomizationDebugOptions = false;
+    public int decorationsPerRow = 6;
 
     public bool confirmRankUnlock = false;
 
@@ -17,8 +19,8 @@ public class Core40kModSettings : ModSettings
     private List<ColourPreset> colourPresets = [];
     public List<ColourPreset> ColourPresets => colourPresets;
         
-    private List<ExtraDecorationPreset> extraDecorationPresets = [];
-    public List<ExtraDecorationPreset> ExtraDecorationPresets => extraDecorationPresets;
+    private List<DecorationPreset> extraDecorationPresets = []; //Todo: rename to decorationPresets
+    public List<DecorationPreset> ExtraDecorationPresets => extraDecorationPresets;
 
     //Colour Preset
     public bool AddPreset(ColourPreset preset)
@@ -53,7 +55,7 @@ public class Core40kModSettings : ModSettings
     }
         
     //Extra Decoration Preset
-    public bool AddPreset(ExtraDecorationPreset preset)
+    public bool AddPreset(DecorationPreset preset)
     {
         if (Enumerable.Any(extraDecorationPresets, cPreset => cPreset.name == preset.name))
         {
@@ -65,7 +67,7 @@ public class Core40kModSettings : ModSettings
         Mod.WriteSettings();
         return true;
     }
-    public void UpdatePreset(ExtraDecorationPreset preset, ExtraDecorationPreset newPreset)
+    public void UpdatePreset(DecorationPreset preset, DecorationPreset newPreset)
     {
         if (!extraDecorationPresets.Contains(preset))
         {
@@ -77,7 +79,7 @@ public class Core40kModSettings : ModSettings
             
         Mod.WriteSettings();
     }
-    public void RemovePreset(ExtraDecorationPreset preset)
+    public void RemovePreset(DecorationPreset preset)
     {
         if (!extraDecorationPresets.Contains(preset))
         {
@@ -91,7 +93,8 @@ public class Core40kModSettings : ModSettings
     public override void ExposeData()
     {
         Scribe_Values.Look(ref alwaysShowRankTab, "alwaysShowRankTab", false);
-        Scribe_Values.Look(ref showWeaponDecoDebugOffset, "showWeaponDecoDebugOffset", false);
+        Scribe_Values.Look(ref showCustomizationDebugOptions, "showCustomizationDebugOptions", false);
+        Scribe_Values.Look(ref decorationsPerRow, "decorationsPerRow", 6);
         Scribe_Values.Look(ref confirmRankUnlock, "confirmRankUnlock", false);
         Scribe_Values.Look(ref showAllRankCategories, "showAllRankCategories", false);
         Scribe_Collections.Look(ref colourPresets, "colourPresets");

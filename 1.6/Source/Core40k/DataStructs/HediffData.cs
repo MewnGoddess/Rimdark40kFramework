@@ -37,7 +37,7 @@ public class HediffData
                     initialSeverity = ParseHelper.FromString<float>(childNode.FirstChild.Value);
                     break;
                 default:
-                    Log.Warning("Error in ExtraDecorationPresetDef, " + childNode.Name + " not recognized as a valid field.");
+                    Log.Warning("Error in HediffData, " + childNode.Name + " not recognized as a valid field.");
                     break;
             }
         }

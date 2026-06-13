@@ -9,7 +9,6 @@ public class MaskDef : Def
     public string maskPath = null;
     public List<string> appliesTo = [];
     public int sortOrder = 1;
-    public List<string> maskExtraFlags = [];
     public bool setsNull = false;
     public AppliesToKind appliesToKind = AppliesToKind.Thing;
     public int colorAmount = 1;

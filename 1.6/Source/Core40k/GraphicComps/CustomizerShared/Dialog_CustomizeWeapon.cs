@@ -119,9 +119,13 @@ public class Dialog_CustomizeWeapon : Window
         {
             foreach (var graphic in weaponDecorationComp.Graphics)
             {
+                if (graphic.Key is not WeaponDecorationDef weaponDecoration)
+                {
+                    continue;
+                }
                 var offset = Vector3.zero;
                 var drawSize = graphic.Key.drawSize;
-                if (graphic.Key.weaponSpecificDrawData != null && graphic.Key.weaponSpecificDrawData.TryGetValue(weapon.def.defName, out var value))
+                if (weaponDecoration.weaponSpecificDrawData != null && weaponDecoration.weaponSpecificDrawData.TryGetValue(weapon.def.defName, out var value))
                 {
                     offset = value.OffsetForRot(Rot4.Invalid);
                     drawSize *= value.scale;
@@ -132,14 +136,10 @@ public class Dialog_CustomizeWeapon : Window
                     drawSize *= graphic.Key.drawData.scale;
                 }
                 
-                if (weaponDecorationComp.debugOffset.TryGetValue(graphic.Key, out var offsetValue))
+                if (weaponDecorationComp.drawDatas.TryGetValue(graphic.Key, out var drawData))
                 {
-                    offset += offsetValue;
-                }
-                
-                if (weaponDecorationComp.debugDrawsize.TryGetValue(graphic.Key, out var debugValue))
-                {
-                    drawSize *= debugValue;
+                    offset += drawData.defaultData.offset;
+                    drawSize *= drawData.defaultData.scale;
                 }
                 
                 var offsetRect = new Rect(iconRect);

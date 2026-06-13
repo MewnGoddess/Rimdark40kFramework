@@ -3,11 +3,14 @@
 
   <!--=== Mod Setting related ===-->
   <BEWH.Framework.ModSettings.ModName>RimDark 40k - Framework - {0}</BEWH.Framework.ModSettings.ModName>
-  <BEWH.Framework.ModSettings.ShowRankTab>Always show Rank tab for player pawns. Will show even if no category or rank is available to the pawn.</BEWH.Framework.ModSettings.ShowRankTab>
-  <BEWH.Framework.ModSettings.ShowWeaponDecoDebugOffset>Show weapon decoration debug offsets when customizing weapons.</BEWH.Framework.ModSettings.ShowWeaponDecoDebugOffset>
+  <BEWH.Framework.ModSettings.ShowRankTab>Always show Rank tab for player pawns. Will show even if no category or rank is available to the pawn</BEWH.Framework.ModSettings.ShowRankTab>
+  <BEWH.Framework.ModSettings.ShowCustomizationDebugOptions>Show decoration debug options when customizing armor</BEWH.Framework.ModSettings.ShowCustomizationDebugOptions>
+  <BEWH.Framework.ModSettings.DecorationsPerRow>Decorations per row when customizing: {0}</BEWH.Framework.ModSettings.DecorationsPerRow>
+  <BEWH.Framework.ModSettings.DecorationsPerRowTooltip>Amount of decorations shown when applying decorations on things. Icons and texts can become small and overlap wierdly if too many decorations per row.</BEWH.Framework.ModSettings.DecorationsPerRowTooltip>
   <BEWH.Framework.ModSettings.ConfirmRankUnlock>Confirm rank unlock with popup. (Looking at you butterfingers)</BEWH.Framework.ModSettings.ConfirmRankUnlock>
 
   <BEWH.ModSettings.TabMain>Main</BEWH.ModSettings.TabMain>
+  <BEWH.ModSettings.TabCustomization>Customization</BEWH.ModSettings.TabCustomization>
   <BEWH.ModSettings.TabDebug>Debug</BEWH.ModSettings.TabDebug>
   <BEWH.ModSettings.TabMisc>Misc</BEWH.ModSettings.TabMisc>
 
@@ -15,6 +18,7 @@
 
   <!--=== Common Keywords ===-->
   <BEWH.Framework.CommonKeyword.None>None</BEWH.Framework.CommonKeyword.None>
+  <BEWH.Framework.CommonKeyword.Reset>Reset</BEWH.Framework.CommonKeyword.Reset>
   <BEWH.Framework.CommonKeyword.StatOffset>Stat Offset</BEWH.Framework.CommonKeyword.StatOffset>
   <BEWH.Framework.CommonKeyword.StatFactor>Stat Factor</BEWH.Framework.CommonKeyword.StatFactor>
   <BEWH.Framework.CommonKeyword.Default>Default</BEWH.Framework.CommonKeyword.Default>
@@ -23,14 +27,23 @@
   <!--=== Common ===-->
   <BEWH.Framework.Common.MissingResearch>Missing research: {0}</BEWH.Framework.Common.MissingResearch>
 
+  <!--=== Stat Report ===-->
+  <BEWH.Framework.StatReport.Rank>Ranks</BEWH.Framework.StatReport.Rank>
+  <BEWH.Framework.StatReport.Decoration>Decorations</BEWH.Framework.StatReport.Decoration>
+  <BEWH.Framework.StatReport.AlternateTexture>Alternate Base Form</BEWH.Framework.StatReport.AlternateTexture>
+
   <!--=== Customization ===-->
   <BEWH.Framework.Customization.PrimaryColor>Primary</BEWH.Framework.Customization.PrimaryColor>
   <BEWH.Framework.Customization.SecondaryColor>Secondary</BEWH.Framework.Customization.SecondaryColor>
   <BEWH.Framework.Customization.TertiaryColor>Tertiary</BEWH.Framework.Customization.TertiaryColor>
   <BEWH.Framework.Customization.ChooseCustomColour>Click to select custom color</BEWH.Framework.Customization.ChooseCustomColour>
 
-  <BEWH.Framework.Customization.UseArmourColour>Use Armor Color</BEWH.Framework.Customization.UseArmourColour>
+  <BEWH.Framework.Customization.UseParentColor>Use Parent Colors</BEWH.Framework.Customization.UseParentColor>
   <BEWH.Framework.Customization.SetDefaultColor>Set Default Colors</BEWH.Framework.Customization.SetDefaultColor>
+
+  <BEWH.Framework.Customization.Precision>Precision</BEWH.Framework.Customization.Precision>
+  <BEWH.Framework.Customization.Exit>Exit</BEWH.Framework.Customization.Exit>
+  <BEWH.Framework.Customization.Accept>Accept</BEWH.Framework.Customization.Accept>
 
   <BEWH.Framework.Customization.ColorPreset>Color Preset</BEWH.Framework.Customization.ColorPreset>
   <BEWH.Framework.Customization.EditPreset>Edit Presets</BEWH.Framework.Customization.EditPreset>
@@ -101,10 +114,6 @@
   <BEWH.Framework.RankSystem.PassionMod>Passions</BEWH.Framework.RankSystem.PassionMod>
   <BEWH.Framework.RankSystem.PassionModAddOne> - increase by one</BEWH.Framework.RankSystem.PassionModAddOne>
   <BEWH.Framework.RankSystem.PassionModDropAll> - drop all</BEWH.Framework.RankSystem.PassionModDropAll>
-
-  <BEWH.Framework.RankSystem.StatsReport_Rank>Relevant ranks</BEWH.Framework.RankSystem.StatsReport_Rank>
-  <BEWH.Framework.RankSystem.StatsReport_ArmorDeco>Armor decorations</BEWH.Framework.RankSystem.StatsReport_ArmorDeco>
-  <BEWH.Framework.RankSystem.StatsReport_WeaponDeco>Weapon decorations</BEWH.Framework.RankSystem.StatsReport_WeaponDeco>
 
   <BEWH.Framework.RankSystem.RequirementsSkills>All of the following skills</BEWH.Framework.RankSystem.RequirementsSkills>
   <BEWH.Framework.RankSystem.RequirementsRanks>All of the following ranks</BEWH.Framework.RankSystem.RequirementsRanks>

@@ -3,6 +3,7 @@ using System.Linq;
 using RimWorld;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
+using VEF.Utils;
 using Verse;
 
 namespace Core40k;
@@ -24,14 +25,9 @@ public static class Core40kUtils
     public static readonly Color RequirementMetColour = Color.white;
     public static readonly Color RequirementNotMetColour = new Color(1f, 0.0f, 0.0f, 0.8f);
     
-    public static ExtraDecorationDef GetArmorDecoDefFromString(string defName)
+    public static DecorationDef GetDecoDefFromString(string defName)
     {
-        return DefDatabase<ExtraDecorationDef>.GetNamed(defName);
-    }
-    
-    public static WeaponDecorationDef GetWeaponDecoDefFromString(string defName)
-    {
-        return DefDatabase<WeaponDecorationDef>.GetNamed(defName);
+        return DefDatabase<DecorationDef>.GetNamed(defName);
     }
         
     public static bool DeletePreset(Rect rect, ColourPreset preset)
@@ -45,7 +41,7 @@ public static class Core40kUtils
         ModSettings.RemovePreset(preset);
         return true;
     }
-    public static bool DeletePreset(Rect rect, ExtraDecorationPreset preset)
+    public static bool DeletePreset(Rect rect, DecorationPreset preset)
     {
         rect.x += 5f;
         if (!Widgets.ButtonImage(rect, TexButton.Delete))
@@ -182,7 +178,7 @@ public static class Core40kUtils
         }
         if (pawnModExtension.extraDecorations.TryGetValue(thing.def, out var decos))
         {
-            decoComp.ApplyDecorationsFromList(decos);
+            decoComp.ApplyDecorationsFromList([..decos]);
         }
     }
     
@@ -248,11 +244,37 @@ public static class Core40kUtils
     private static Color MenuSectionBGBorderColor = new ColorInt(135, 135, 135).ToColor;
     
     public static void DrawColoredMenuSection(Rect rect, Color? menuFillColor, Color? borderColor)
-    	{
-    		GUI.color = menuFillColor ?? MenuSectionBGFillColor;
-    		GUI.DrawTexture(rect, BaseContent.WhiteTex);
-    		GUI.color = borderColor ?? MenuSectionBGBorderColor;
-    		Widgets.DrawBox(rect);
-    		GUI.color = Color.white;
-    	}
+    {
+        GUI.color = menuFillColor ?? MenuSectionBGFillColor;
+        GUI.DrawTexture(rect, BaseContent.WhiteTex);
+        GUI.color = borderColor ?? MenuSectionBGBorderColor;
+        Widgets.DrawBox(rect);
+        GUI.color = Color.white;
+    }
+    
+    public static void TextFieldWithHorizontalSlider(ref Rect textRect, ref float value, ref string textBuffer, string label, float minVal, float maxVal, bool asIntValue = false)
+    {
+        var sliderRect = textRect.TakeTopPart(textRect.height/2);
+        
+        var valX = Widgets.TextArea(textRect, textBuffer);
+        
+        textBuffer = valX;
+        if (float.TryParse(valX, out var newValx))
+        {
+            value = newValx;
+        }
+        
+        var newSliderValue = Widgets.HorizontalSlider(sliderRect, value , minVal, maxVal, true, label);
+
+        if (asIntValue)
+        {
+            newSliderValue = Mathf.RoundToInt(newSliderValue);
+        }
+        
+        if (!Mathf.Approximately(newSliderValue, value))
+        {
+            value = newSliderValue;
+            textBuffer = newSliderValue.ToString();
+        }
+    }
 }
