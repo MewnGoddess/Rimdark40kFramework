@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using Verse;
 
@@ -20,6 +21,15 @@ public class ArtificialPartsAffinity
             impactors?.Add(new PawnCapacityUtility.CapacityImpactorHediff
             {
                 hediff = firstHediffMatchingPart
+            });
+            __result *= diffSet.pawn.GetStatValue(Core40kDefOf.BEWH_ArtificialPartsAffinityFactor);
+        }
+        else if (diffSet.IsBionicOrImplant(part.def))
+        {
+            var firstBionicOrImplant = Enumerable.FirstOrDefault(diffSet.hediffs, hediff => hediff.Part != null && hediff.Part.def == part.def && hediff.def.countsAsAddedPartOrImplant);
+            impactors?.Add(new PawnCapacityUtility.CapacityImpactorHediff
+            {
+                hediff = firstBionicOrImplant
             });
             __result *= diffSet.pawn.GetStatValue(Core40kDefOf.BEWH_ArtificialPartsAffinityFactor);
         }
