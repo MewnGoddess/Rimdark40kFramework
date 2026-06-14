@@ -3,8 +3,10 @@ using System.Linq;
 using RimWorld;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
+using VEF.Abilities;
 using VEF.Utils;
 using Verse;
+using AbilityDef = RimWorld.AbilityDef;
 
 namespace Core40k;
 
@@ -275,6 +277,52 @@ public static class Core40kUtils
         {
             value = newSliderValue;
             textBuffer = newSliderValue.ToString();
+        }
+    }
+
+    public static void AddAbilities(this Pawn pawn, List<AbilityDef> vanillaAbilities, List<VEF.Abilities.AbilityDef> VEFAbilities)
+    {
+        if (!vanillaAbilities.NullOrEmpty())
+        {
+            foreach (var ability in vanillaAbilities)
+            {
+                pawn.abilities.GainAbility(ability);
+            }
+        }
+            
+        if (!VEFAbilities.NullOrEmpty())
+        {
+            var comp = pawn.GetComp<CompAbilities>();
+            if (comp != null)
+            {
+                foreach (var ability in VEFAbilities)
+                {
+                    comp.GiveAbility(ability);
+                }
+            }
+        }
+    }
+    
+    public static void RemoveAbilities(this Pawn pawn, List<AbilityDef> vanillaAbilities, List<VEF.Abilities.AbilityDef> VEFAbilities)
+    {
+        if (vanillaAbilities != null)
+        {
+            foreach (var ability in vanillaAbilities)
+            {
+                pawn.abilities.RemoveAbility(ability);
+            }
+        }
+            
+        if (VEFAbilities != null)
+        {
+            var comp = pawn.GetComp<CompAbilities>();
+            if (comp != null)
+            {
+                foreach (var ability in VEFAbilities)
+                {
+                    comp.LearnedAbilities.RemoveWhere(learnedAbility => learnedAbility.def == ability);
+                }
+            }
         }
     }
 }

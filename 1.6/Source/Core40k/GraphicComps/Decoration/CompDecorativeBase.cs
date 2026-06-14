@@ -51,6 +51,7 @@ public class CompDecorativeBase : CompGraphicParent
         if (!decorations.ContainsKey(decoration))
         {
             decorations.Add(decoration, decorationSettings ?? new DecorationSettings());
+            Pawn.AddAbilities(decoration.givesAbilities, decoration.givesVFEAbilities);
         }
 
         if (!drawDatas.ContainsKey(decoration))
@@ -68,6 +69,7 @@ public class CompDecorativeBase : CompGraphicParent
             return false;
         }
         
+        Pawn.RemoveAbilities(decoration.givesAbilities, decoration.givesVFEAbilities);
         drawDatas.Remove(decoration);
         
         return true;

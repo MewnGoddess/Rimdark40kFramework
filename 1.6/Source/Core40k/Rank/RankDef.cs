@@ -15,23 +15,18 @@ public class RankDef : Def
     public string rankIconPath;
         
     public List<RankDef> incompatibleRanks = [];
-
     public List<Aptitude> requiredSkills = [];
         
     public List<GeneDef> requiredGenesAll = [];
-        
     public List<GeneDef> requiredGenesOneAmong = [];
         
     public List<TraitData> requiredTraitsAll = [];
-        
     public List<TraitData> requiredTraitsOneAmong = [];
         
     public List<StatModifier> statOffsets = [];
-
     public List<StatModifier> statFactors = [];
         
     public List<AbilityDef> givesAbilities = [];
-        
     public List<VEF.Abilities.AbilityDef> givesVFEAbilities = [];
     
     public List<HediffData> givesHediffs = [];
@@ -74,26 +69,8 @@ public class RankDef : Def
     
     public virtual void UnlockRank(CompRankInfo rankComp)
     {
-        if (!givesAbilities.NullOrEmpty())
-        {
-            foreach (var ability in givesAbilities)
-            {
-                rankComp.ParentPawn.abilities.GainAbility(ability);
-            }
-        }
-            
-        if (!givesVFEAbilities.NullOrEmpty())
-        {
-            var comp = rankComp.ParentPawn.GetComp<CompAbilities>();
-            if (comp != null)
-            {
-                foreach (var ability in givesVFEAbilities)
-                {
-                    comp.GiveAbility(ability);
-                }
-            }
-        }
-        
+        rankComp.ParentPawn.AddAbilities(givesAbilities, givesVFEAbilities);
+
         if (!givesPassions.NullOrEmpty())
         {
             if (rankComp.originalPassions.NullOrEmpty())
@@ -132,25 +109,7 @@ public class RankDef : Def
 
     public virtual void RemoveRank(CompRankInfo rankComp)
     {
-        if (givesAbilities != null)
-        {
-            foreach (var ability in givesAbilities)
-            {
-                rankComp.ParentPawn.abilities.RemoveAbility(ability);
-            }
-        }
-            
-        if (givesVFEAbilities != null)
-        {
-            var comp = rankComp.ParentPawn.GetComp<CompAbilities>();
-            if (comp != null)
-            {
-                foreach (var ability in givesVFEAbilities)
-                {
-                    comp.LearnedAbilities.RemoveWhere(learnedAbility => learnedAbility.def == ability);
-                }
-            }
-        }
+        rankComp.ParentPawn.RemoveAbilities(givesAbilities, givesVFEAbilities);
         
         if (givesPassions != null)
         {

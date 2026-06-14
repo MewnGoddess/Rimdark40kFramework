@@ -13,7 +13,4 @@ public class AlternateBaseFormDef : DecorationDef
     public Color? newTertiaryColor;
 
     public Vector2? newDrawSize;
-    
-    public List<AbilityDef> abilitiesDefs = [];
-    public List<VEF.Abilities.AbilityDef> vfeAbilities = [];
 }

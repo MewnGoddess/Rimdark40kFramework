@@ -72,6 +72,9 @@ public class DecorationDef : Def
     
     public List<StatModifier> statOffsets = [];
     public List<StatModifier> statFactors = [];
+    
+    public List<AbilityDef> givesAbilities = [];
+    public List<VEF.Abilities.AbilityDef> givesVFEAbilities = [];
 
     public string TooltipDescription()
     {

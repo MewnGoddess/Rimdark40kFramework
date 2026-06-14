@@ -44,51 +44,14 @@ public class CompAlternateTexture : CompGraphicParent
         if (currentAlternateBaseForm != null)
         {
             //Remove stuff from old alternate
-            if (currentAlternateBaseForm.abilitiesDefs != null)
-            {
-                foreach (var ability in currentAlternateBaseForm.abilitiesDefs)
-                {
-                    Pawn?.abilities?.RemoveAbility(ability);
-                }
-            }
-            
-            if (currentAlternateBaseForm.vfeAbilities != null)
-            {
-                var comp = Pawn?.GetComp<CompAbilities>();
-                if (comp != null)
-                {
-                    foreach (var ability in currentAlternateBaseForm.vfeAbilities)
-                    {
-                        comp.LearnedAbilities.RemoveWhere(learnedAbility => learnedAbility.def == ability);
-                    }
-                }
-            }
+            Pawn.RemoveAbilities(currentAlternateBaseForm.givesAbilities, currentAlternateBaseForm.givesVFEAbilities);
         }
         
         currentAlternateBaseForm = alternateBaseFormDef;
         
         if (currentAlternateBaseForm != null)
         {
-            //Add stuff from new alternate
-            if (!currentAlternateBaseForm.abilitiesDefs.NullOrEmpty())
-            {
-                foreach (var ability in currentAlternateBaseForm.abilitiesDefs)
-                {
-                    Pawn?.abilities?.GainAbility(ability);
-                }
-            }
-            
-            if (!currentAlternateBaseForm.vfeAbilities.NullOrEmpty())
-            {
-                var comp = Pawn?.GetComp<CompAbilities>();
-                if (comp != null)
-                {
-                    foreach (var ability in currentAlternateBaseForm.vfeAbilities)
-                    {
-                        comp.GiveAbility(ability);
-                    }
-                }
-            }
+            Pawn.AddAbilities(currentAlternateBaseForm.givesAbilities, currentAlternateBaseForm.givesVFEAbilities);
         }
         
         Notify_GraphicChanged();
