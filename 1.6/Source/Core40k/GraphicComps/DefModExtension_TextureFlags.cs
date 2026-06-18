@@ -56,6 +56,10 @@ public class TextureFlag
     public ThingDef thingActivator = null;
     public HediffDef hediffActivator = null;
     public GeneDef geneActivator = null;
+
+    public bool gizmoActivated = false;
+    public string gizmoOnText = "On";
+    public string gizmoOffText = "Off";
 }
 
 public class MaskExpansion

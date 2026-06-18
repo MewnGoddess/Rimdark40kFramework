@@ -6,6 +6,10 @@ namespace Core40k;
 
 public class PawnRenderNode_FlagEdit : PawnRenderNode_Apparel
 {
+    private static GameComponent_CoreUtils coreUtils;
+
+    private static GameComponent_CoreUtils CoreUtils => coreUtils ??= Current.Game.GetComponent<GameComponent_CoreUtils>();
+    
     public PawnRenderNode_FlagEdit(Pawn pawn, PawnRenderNodeProperties props, PawnRenderTree tree) : base(pawn, props, tree)
     {
     }
@@ -31,7 +35,8 @@ public class PawnRenderNode_FlagEdit : PawnRenderNode_Apparel
         if ((flag.pathExpansion == string.Empty) 
             || (flag.thingActivator != null && pawn?.apparel?.WornApparel != null && !pawn.apparel.WornApparel.Select(apparel1 => apparel1.def).Contains(flag.thingActivator) && pawn.equipment?.Primary?.def != flag.thingActivator) 
             || (flag.hediffActivator != null && pawn?.health?.hediffSet?.hediffs != null && !pawn.health.hediffSet.hediffs.Select(hediff1 => hediff1.def ).Contains(flag.hediffActivator)) 
-            || (flag.geneActivator != null && pawn?.genes?.GenesListForReading != null && !pawn.genes.GenesListForReading.Where(gene1 => gene1.Active).Select(gene1 => gene1.def).Contains(flag.geneActivator)))
+            || (flag.geneActivator != null && pawn?.genes?.GenesListForReading != null && !pawn.genes.GenesListForReading.Where(gene1 => gene1.Active).Select(gene1 => gene1.def).Contains(flag.geneActivator))
+            || (flag.gizmoActivated && !CoreUtils.cachedGizmoToggles[(pawn, apparel)]))
         {
             return string.Empty;
         }
