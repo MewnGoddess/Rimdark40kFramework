@@ -13,8 +13,13 @@ public class GizmoTextureTogglePatch
 
     private static GameComponent_CoreUtils CoreUtils => coreUtils ??= Current.Game.GetComponent<GameComponent_CoreUtils>();
     
-    public static IEnumerable<Gizmo> Postfix(Thing __instance)
+    public static IEnumerable<Gizmo> Postfix(IEnumerable<Gizmo> __result, Thing __instance)
     {
+        foreach (var floatMenu in __result)
+        {
+            yield return floatMenu;
+        }
+        
         var defMod = __instance.def.GetModExtension<DefModExtension_TextureFlags>();
         if (defMod == null)
         {
