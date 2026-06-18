@@ -62,7 +62,7 @@ public class DecorationBaseTab : CustomizerTabDrawer
         }
 
         var tempMasks = DefDatabase<MaskDef>.AllDefs.Where(def => def.appliesToKind is AppliesToKind.ExtraDecoration or AppliesToKind.All).ToList();
-        var tempDefs = DefDatabase<DecorationDef>.AllDefs.ToList();
+        var tempDefs = DefDatabase<DecorationDef>.AllDefs.Where(def => def is not AlternateBaseFormDef).ToList();
         
         foreach (var decorativeComp in decorativeComps)
         {
