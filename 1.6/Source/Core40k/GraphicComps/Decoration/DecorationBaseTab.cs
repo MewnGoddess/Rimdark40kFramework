@@ -482,10 +482,7 @@ public class DecorationBaseTab : CustomizerTabDrawer
             }
 
             var hasReq = decoDef.HasRequirements(selPawn, out var reason);
-            var incompatibleDeco = (selectedAlternateBaseForm != null 
-                                    && selectedAlternateBaseForm.incompatibleDecorations.Contains(decoDef)) 
-                                   || (selectedAlternateBaseForm == null
-                                       && decoDef.isIncompatibleWithBaseTexture);
+            var incompatibleDeco = DecoIsIncompatible(decoDef, decorativeComp);
             
             var color = Color.white;
             var tipTooltip = decoDef.TooltipDescription();
@@ -561,6 +558,26 @@ public class DecorationBaseTab : CustomizerTabDrawer
             }
         }
         curY += 34f;
+    }
+
+    private bool DecoIsIncompatible(DecorationDef decoDef, CompDecorativeBase decorativeComp)
+    {
+        //Alternate base form incompatible
+        if (selectedAlternateBaseForm != null && selectedAlternateBaseForm.incompatibleDecorations.Contains(decoDef))
+        {
+            return true;
+        }
+        //Deco incompatible with base texture
+        if (selectedAlternateBaseForm == null && decoDef.isIncompatibleWithBaseTexture)
+        {
+            return true;
+        }
+        if (!decoDef.incompatibleDecorations.NullOrEmpty() && decoDef.incompatibleDecorations.Any(def => decorativeComp.Decorations.ContainsKey(def)))
+        {
+            return true;
+        }
+
+        return decorativeComp.Decorations.Any(decoration => decoration.Key.incompatibleDecorations.Contains(decoDef));
     }
 
     private void DrawColorPresetAndMaskOptions(ref Rect bottomRect, DecorationDef decoDef, CompDecorativeBase decorativeComp)
