@@ -686,7 +686,7 @@ public class DecorationBaseTab : CustomizerTabDrawer
                 };
 
                 DecoColorBox(colourSelection, decorativeComp, decoDef, decorativeComp.Decorations[decoDef].Color, 1);
-                DecoColorBox(colourSelectionTwo, decorativeComp, decoDef, decorativeComp.Decorations[decoDef].ColorTwo, 3);
+                DecoColorBox(colourSelectionTwo, decorativeComp, decoDef, decorativeComp.Decorations[decoDef].ColorTwo, 2);
                 DecoColorBox(colourSelectionThree, decorativeComp, decoDef, decorativeComp.Decorations[decoDef].ColorThree, 3);
                 break;
             default:
