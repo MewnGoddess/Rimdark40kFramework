@@ -74,7 +74,7 @@ public static class ApparelGraphicPatch
                    && extension is not { isUnifiedApparel: true }
                     ? usedPath + "_" + bodyType.defName : usedPath;
         
-        var shader = Core40kDefOf.BEWH_CutoutThreeColor.Shader;
+        var shader = multiColor.Props.colorMaskAmount == 3 ? Core40kDefOf.BEWH_CutoutThreeColor.Shader : apparel.def.graphicData.shaderType.Shader;
         var maskPath = multiColor?.MaskDef?.maskPath;
         var drawSize = alternateTexture?.CurrentAlternateBaseForm?.newDrawSize ?? apparel.def.graphicData.drawSize;
         if (multiColor?.MaskDef != null && multiColor.MaskDef.useBodyTypes)
