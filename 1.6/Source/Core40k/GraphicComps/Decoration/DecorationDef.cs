@@ -192,7 +192,7 @@ public class DecorationDef : Def
     
     public override void ResolveReferences()
     {
-        shaderType ??= ShaderTypeDefOf.Cutout;
+        shaderType ??= Core40kDefOf.BEWH_CutoutThreeColor;
         defaultMask ??= Core40kDefOf.BEWH_DefaultMask;
         decorationType ??= Core40kDefOf.BEWH_UndefinedType;
         base.ResolveReferences();
