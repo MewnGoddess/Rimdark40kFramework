@@ -12,11 +12,11 @@ namespace Core40k;
 /// </summary>
 public static class RequirementUtility
 {
-    public static bool MeetsRequirements(Pawn pawn, List<RankDef> ranks, List<GeneDef> genes, List<TraitData> traits, List<HediffDef> hediffs, List<ResearchProjectDef> research = null)
+    public static bool MeetsRequirements(Pawn pawn, List<RankDef> ranks, List<GeneDef> genes, List<TraitData> traits, List<HediffDef> hediffs, List<ResearchProjectDef> research = null, List<GeneDef> genesOneAmong = null)
     {
         if (pawn == null)
         {
-            return ranks == null && genes == null && traits == null && hediffs == null && research == null;
+            return ranks == null && genes == null && traits == null && hediffs == null && research == null && genesOneAmong == null;
         }
 
         if (ranks != null)
@@ -47,6 +47,18 @@ public static class RequirementUtility
                 {
                     return false;
                 }
+            }
+        }
+
+        if (!genesOneAmong.NullOrEmpty())
+        {
+            if (pawn.genes == null)
+            {
+                return false;
+            }
+            if (!genesOneAmong.Any(gene => pawn.genes.HasActiveGene(gene)))
+            {
+                return false;
             }
         }
 
@@ -94,7 +106,7 @@ public static class RequirementUtility
         return true;
     }
 
-    public static bool HasRequirements(Pawn pawn, List<RankDef> ranks, List<GeneDef> genes, List<TraitData> traits, List<HediffDef> hediffs, List<ResearchProjectDef> research, out string lockedReason)
+    public static bool HasRequirements(Pawn pawn, List<RankDef> ranks, List<GeneDef> genes, List<TraitData> traits, List<HediffDef> hediffs, List<ResearchProjectDef> research, out string lockedReason, List<GeneDef> genesOneAmong = null)
     {
         var reason = new StringBuilder();
         var requirementFulfilled = true;
@@ -103,7 +115,7 @@ public static class RequirementUtility
         if (pawn == null)
         {
             lockedReason = string.Empty;
-            return ranks == null && genes == null && traits == null && hediffs == null && research == null;
+            return ranks == null && genes == null && traits == null && hediffs == null && research == null && genesOneAmong == null;
         }
 
         if (ranks != null)
@@ -153,6 +165,16 @@ public static class RequirementUtility
                 {
                     reason.AppendLine("BEWH.Framework.Customization.AppendedLabel".Translate(gene));
                 }
+            }
+        }
+
+        if (!genesOneAmong.NullOrEmpty() && (pawn.genes == null || !genesOneAmong.Any(gene => pawn.genes.HasActiveGene(gene))))
+        {
+            requirementFulfilled = false;
+            reason.AppendLine("BEWH.Framework.Customization.MissingGenesOneAmong".Translate());
+            foreach (var gene in genesOneAmong)
+            {
+                reason.AppendLine("BEWH.Framework.Customization.AppendedLabel".Translate(gene.label.CapitalizeFirst()));
             }
         }
 

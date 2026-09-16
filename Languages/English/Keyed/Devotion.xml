@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!--=== Devotion ===-->
+  <BEWH.Framework.StatReport.Devotion>Devotion</BEWH.Framework.StatReport.Devotion>
+
+  <BEWH.Framework.Devotion.TierLetterLabel>{0}: {1}</BEWH.Framework.Devotion.TierLetterLabel>
+  <BEWH.Framework.Devotion.TierLetterText>{0} has reached {1} in the service of {2}.</BEWH.Framework.Devotion.TierLetterText>
+
+  <BEWH.Framework.Devotion.NoStanding>No standing to purge.</BEWH.Framework.Devotion.NoStanding>
+  <BEWH.Framework.Devotion.PurgeTooDeep>Their devotion to {0} has passed the point where it can be purged.</BEWH.Framework.Devotion.PurgeTooDeep>
+
+</LanguageData>

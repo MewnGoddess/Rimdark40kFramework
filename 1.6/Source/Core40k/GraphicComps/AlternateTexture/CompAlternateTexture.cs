@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using RimWorld;
 using UnityEngine;
@@ -268,6 +268,40 @@ public class CompAlternateTexture : CompGraphicParent
         
         return num;
     }
+    public override float GetPawnStatOffset(StatDef stat)
+    {
+        if (CurrentAlternateBaseForm == null || stat == null)
+        {
+            return 0f;
+        }
+
+        if (CachedPawnStatOffset.TryGetValue(stat, out var cached))
+        {
+            return cached;
+        }
+
+        var resNum = CurrentAlternateBaseForm.pawnStatOffsets.GetStatOffsetFromList(stat);
+        CachedPawnStatOffset.Add(stat, resNum);
+        return resNum;
+    }
+
+    public override float GetPawnStatFactor(StatDef stat)
+    {
+        if (CurrentAlternateBaseForm == null || stat == null)
+        {
+            return 1f;
+        }
+
+        if (CachedPawnStatFactor.TryGetValue(stat, out var cached))
+        {
+            return cached;
+        }
+
+        var resNum = CurrentAlternateBaseForm.pawnStatFactors.GetStatFactorFromList(stat);
+        CachedPawnStatFactor.Add(stat, resNum);
+        return resNum;
+    }
+
     public override float GetStatFactor(StatDef stat)
     {
         var num = 1f;

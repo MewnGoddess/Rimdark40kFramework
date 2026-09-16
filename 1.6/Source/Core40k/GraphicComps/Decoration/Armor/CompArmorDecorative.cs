@@ -18,6 +18,12 @@ public class CompDecorative : CompDecorativeBase
     
     public override void Notify_Equipped(Pawn pawn)
     {
+        //Apparel generated straight onto a pawn is never spawned, so PostSpawnSetup never ran.
+        if (!InitialSet)
+        {
+            InitialSetup();
+        }
+
         if (!pawnKindDefSetupDone)
         {
             pawnKindDefSetupDone = true;

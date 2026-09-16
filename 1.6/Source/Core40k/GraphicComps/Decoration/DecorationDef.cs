@@ -71,12 +71,18 @@ public class DecorationDef : Def
     
     public List<RankDef> mustHaveRank = null;
     public List<GeneDef> mustHaveGene = null;
+    public List<GeneDef> mustHaveGeneOneAmong = null;
     public List<TraitData> mustHaveTrait = null;
     public List<HediffDef> mustHaveHediff = null;
     public List<ResearchProjectDef> mustHaveResearch = null;
     
+    //Offsets and factors on the item's own stats, applied by vanilla through ThingComp.GetStatOffset.
     public List<StatModifier> statOffsets = [];
     public List<StatModifier> statFactors = [];
+
+    //Offsets and factors on the wearer's stats, applied by GetValueUnfinalizedFromVariousFactorPatch.
+    public List<StatModifier> pawnStatOffsets = [];
+    public List<StatModifier> pawnStatFactors = [];
     
     public List<AbilityDef> givesAbilities = [];
     public List<VEF.Abilities.AbilityDef> givesVFEAbilities = [];
@@ -104,6 +110,8 @@ public class DecorationDef : Def
         isInternal
         || !statOffsets.NullOrEmpty()
         || !statFactors.NullOrEmpty()
+        || !pawnStatOffsets.NullOrEmpty()
+        || !pawnStatFactors.NullOrEmpty()
         || !givesAbilities.NullOrEmpty()
         || !givesVFEAbilities.NullOrEmpty()
         || !givesHediffs.NullOrEmpty();
@@ -119,7 +127,7 @@ public class DecorationDef : Def
         var stringbuilder = new StringBuilder();
         stringbuilder.AppendLine(label);
 
-        if (!statOffsets.NullOrEmpty())
+        if (!statOffsets.NullOrEmpty() || !pawnStatOffsets.NullOrEmpty())
         {
             stringbuilder.AppendLine();
             stringbuilder.AppendLine("BEWH.Framework.CommonKeyword.StatOffset".Translate());
@@ -127,13 +135,21 @@ public class DecorationDef : Def
             {
                 stringbuilder.AppendLine(statOffset.stat.label.CapitalizeFirst() + ": " + statOffset.ValueToStringAsOffset);
             }
+            foreach (var statOffset in pawnStatOffsets)
+            {
+                stringbuilder.AppendLine(statOffset.stat.label.CapitalizeFirst() + ": " + statOffset.ValueToStringAsOffset);
+            }
         }
         
-        if (!statFactors.NullOrEmpty())
+        if (!statFactors.NullOrEmpty() || !pawnStatFactors.NullOrEmpty())
         {
             stringbuilder.AppendLine();
             stringbuilder.AppendLine("BEWH.Framework.CommonKeyword.StatFactor".Translate());
             foreach (var statFactor in statFactors)
+            {
+                stringbuilder.AppendLine(statFactor.stat.label.CapitalizeFirst() + ": x" + statFactor.ValueToStringAsOffset);
+            }
+            foreach (var statFactor in pawnStatFactors)
             {
                 stringbuilder.AppendLine(statFactor.stat.label.CapitalizeFirst() + ": x" + statFactor.ValueToStringAsOffset);
             }
@@ -167,12 +183,12 @@ public class DecorationDef : Def
     /// </summary>
     public virtual bool MeetsRequirements(Pawn pawn)
     {
-        return RequirementUtility.MeetsRequirements(pawn, mustHaveRank, mustHaveGene, mustHaveTrait, mustHaveHediff, mustHaveResearch);
+        return RequirementUtility.MeetsRequirements(pawn, mustHaveRank, mustHaveGene, mustHaveTrait, mustHaveHediff, mustHaveResearch, mustHaveGeneOneAmong);
     }
 
     public virtual bool HasRequirements(Pawn pawn, out string lockedReason)
     {
-        return RequirementUtility.HasRequirements(pawn, mustHaveRank, mustHaveGene, mustHaveTrait, mustHaveHediff, mustHaveResearch, out lockedReason);
+        return RequirementUtility.HasRequirements(pawn, mustHaveRank, mustHaveGene, mustHaveTrait, mustHaveHediff, mustHaveResearch, out lockedReason, mustHaveGeneOneAmong);
     }
     
     public override IEnumerable<string> ConfigErrors()

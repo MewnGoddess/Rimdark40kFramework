@@ -96,6 +96,7 @@
   <BEWH.Framework.Customization.RequirementNotMet>Requirements not met:\n</BEWH.Framework.Customization.RequirementNotMet>
   <BEWH.Framework.Customization.MissingRanks>Missing Ranks:</BEWH.Framework.Customization.MissingRanks>
   <BEWH.Framework.Customization.MissingGenes>Missing Genes:</BEWH.Framework.Customization.MissingGenes>
+  <BEWH.Framework.Customization.MissingGenesOneAmong>Missing one of these genes:</BEWH.Framework.Customization.MissingGenesOneAmong>
   <BEWH.Framework.Customization.MissingTraits>Missing Traits:</BEWH.Framework.Customization.MissingTraits>
   <BEWH.Framework.Customization.MissingHediffs>Missing Hediffs:</BEWH.Framework.Customization.MissingHediffs>
   <BEWH.Framework.Customization.InvalidBodytype>Invalid bodytype</BEWH.Framework.Customization.InvalidBodytype>
@@ -255,6 +256,9 @@
   <BEWH.Framework.Comp.CasterMissingRequiredRank>Requires rank: {0}</BEWH.Framework.Comp.CasterMissingRequiredRank>
 
   <BEWH.Framework.Comp.AbilityDisabledByCoveredPart>Cannot use {0}, due to covered {1} by {2}</BEWH.Framework.Comp.AbilityDisabledByCoveredPart>
+
+  <!-- Abilities -->
+  <BEWH.Framework.Ability.Charges>Charges: {0} / {1}</BEWH.Framework.Ability.Charges>
 
   <BEWH.Framework.Comp.DeterioratingOutsideContainer>Deteriorates outside suitable container.</BEWH.Framework.Comp.DeterioratingOutsideContainer>
   <BEWH.Framework.Comp.SuitableContainers>Suitable containers:</BEWH.Framework.Comp.SuitableContainers>

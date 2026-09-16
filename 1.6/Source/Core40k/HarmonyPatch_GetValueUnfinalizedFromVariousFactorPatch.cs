@@ -32,10 +32,35 @@ public static class GetValueUnfinalizedFromVariousFactorPatch
             return;
         }
 
-        __result *= GetStatFactorForX(req, __instance, pawn);;
+        var stat = __instance.stat;
+
+        __result = (__result + GetStatOffsetForX(pawn, stat)) * GetStatFactorForX(pawn, stat);
     }
-    
-    public static float GetStatFactorForX(StatRequest req, StatWorker statWorker, Pawn pawn)
+
+    public static float GetStatOffsetForX(Pawn pawn, StatDef stat)
+    {
+        var num = 0f;
+
+        var coreUtilsComp = CoreUtils;
+        if (coreUtilsComp == null)
+        {
+            return num;
+        }
+
+        if (coreUtilsComp.cachedDecoratives.TryGetValue(pawn, out var cachedDecoratives))
+        {
+            num += OffsetFrom(cachedDecoratives, stat);
+        }
+
+        if (coreUtilsComp.cachedAlternateTexture.TryGetValue(pawn, out var cachedAlternateTexture))
+        {
+            num += OffsetFrom(cachedAlternateTexture, stat);
+        }
+
+        return num;
+    }
+
+    public static float GetStatFactorForX(Pawn pawn, StatDef stat)
     {
         var num = 1f;
 
@@ -47,14 +72,35 @@ public static class GetValueUnfinalizedFromVariousFactorPatch
 
         if (coreUtilsComp.cachedDecoratives.TryGetValue(pawn, out var cachedDecoratives))
         {
-            num *= FactorFrom(cachedDecoratives, statWorker.stat);
+            num *= FactorFrom(cachedDecoratives, stat);
         }
 
         if (coreUtilsComp.cachedAlternateTexture.TryGetValue(pawn, out var cachedAlternateTexture))
         {
-            num *= FactorFrom(cachedAlternateTexture, statWorker.stat);
+            num *= FactorFrom(cachedAlternateTexture, stat);
         }
         
+        return num;
+    }
+
+    private static float OffsetFrom(GameComponent_CoreUtils.CachedDecoratives cached, StatDef stat)
+    {
+        var num = 0f;
+
+        var apparelComps = cached.apparelComps;
+        for (var i = 0; i < apparelComps.Count; i++)
+        {
+            if (apparelComps[i] is CompGraphicParent graphicParent)
+            {
+                num += graphicParent.GetPawnStatOffset(stat);
+            }
+        }
+
+        if (cached.weaponComp is CompGraphicParent weaponGraphicParent)
+        {
+            num += weaponGraphicParent.GetPawnStatOffset(stat);
+        }
+
         return num;
     }
 
@@ -65,12 +111,15 @@ public static class GetValueUnfinalizedFromVariousFactorPatch
         var apparelComps = cached.apparelComps;
         for (var i = 0; i < apparelComps.Count; i++)
         {
-            num *= apparelComps[i].GetStatFactor(stat);
+            if (apparelComps[i] is CompGraphicParent graphicParent)
+            {
+                num *= graphicParent.GetPawnStatFactor(stat);
+            }
         }
 
-        if (cached.weaponComp != null)
+        if (cached.weaponComp is CompGraphicParent weaponGraphicParent)
         {
-            num *= cached.weaponComp.GetStatFactor(stat);
+            num *= weaponGraphicParent.GetPawnStatFactor(stat);
         }
 
         return num;

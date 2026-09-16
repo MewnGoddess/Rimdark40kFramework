@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using RimWorld;
 using Verse;
@@ -30,6 +30,29 @@ public class CompGraphicParent : ThingComp
     protected Dictionary<StatDef, float> cachedStatFactor = new();
     public Dictionary<StatDef, float> CachedStatFactor => cachedStatFactor ??= new Dictionary<StatDef, float>();
     
+    protected Dictionary<StatDef, float> cachedPawnStatOffset = new();
+    public Dictionary<StatDef, float> CachedPawnStatOffset => cachedPawnStatOffset ??= new Dictionary<StatDef, float>();
+    protected Dictionary<StatDef, float> cachedPawnStatFactor = new();
+    public Dictionary<StatDef, float> CachedPawnStatFactor => cachedPawnStatFactor ??= new Dictionary<StatDef, float>();
+
+    /// <summary>
+    /// Stat offset this comp gives the pawn wearing or holding the parent. ThingComp.GetStatOffset
+    /// only reaches the parent item's own stats, so wearer-level offsets come through here instead.
+    /// Applied by GetValueUnfinalizedFromVariousFactorPatch.
+    /// </summary>
+    public virtual float GetPawnStatOffset(StatDef stat)
+    {
+        return 0f;
+    }
+
+    /// <summary>
+    /// Stat factor this comp gives the pawn wearing or holding the parent. See GetPawnStatOffset.
+    /// </summary>
+    public virtual float GetPawnStatFactor(StatDef stat)
+    {
+        return 1f;
+    }
+    
     protected ThingDef ThingDef => parent.def;
     protected Thing Thing => parent;
     
@@ -52,6 +75,8 @@ public class CompGraphicParent : ThingComp
     {
         cachedStatOffset = new Dictionary<StatDef, float>();
         cachedStatFactor = new Dictionary<StatDef, float>();
+        cachedPawnStatOffset = new Dictionary<StatDef, float>();
+        cachedPawnStatFactor = new Dictionary<StatDef, float>();
         parent.Notify_ColorChanged();
         OutfitStandDecorationRenderer.Notify_ItemGraphicChanged(parent);
     }

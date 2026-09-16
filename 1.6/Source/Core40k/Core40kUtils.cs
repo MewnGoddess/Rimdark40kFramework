@@ -383,8 +383,9 @@ public static class Core40kUtils
         GUI.color = Color.white;
     }
     
-    public static void TextFieldWithHorizontalSlider(ref Rect textRect, ref float value, ref string textBuffer, string label, float minVal, float maxVal, bool asIntValue = false)
+    public static bool TextFieldWithHorizontalSlider(ref Rect textRect, ref float value, ref string textBuffer, string label, float minVal, float maxVal, bool asIntValue = false)
     {
+        var valueBefore = value;
         var sliderRect = textRect.TakeTopPart(textRect.height/2);
         
         var valX = Widgets.TextArea(textRect, textBuffer);
@@ -407,6 +408,8 @@ public static class Core40kUtils
             value = newSliderValue;
             textBuffer = newSliderValue.ToString();
         }
+
+        return value != valueBefore;
     }
 
     public static void AddAbilities(this Pawn pawn, List<AbilityDef> vanillaAbilities, List<VEF.Abilities.AbilityDef> VEFAbilities)

@@ -14,5 +14,6 @@ public static class PawnKindRanksPatch
         }
 
         RankUtils.TryGivePawnKindRanks(__result);
+        DevotionGenerationUtils.TryGivePawnKindDevotion(__result);
     }
 }

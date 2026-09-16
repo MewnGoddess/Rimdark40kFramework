@@ -36,6 +36,60 @@ public class CompRankInfo : ThingComp
 
     public List<RankDef> UnlockedRanks => unlockedRanks ??= [];
 
+    private DevotionState devotion;
+
+    public DevotionState Devotion
+    {
+        get
+        {
+            if (devotion != null)
+            {
+                return devotion;
+            }
+
+            devotion = new DevotionState();
+            devotion.SetParent(this);
+            return devotion;
+        }
+    }
+
+    public bool HasAnyDevotion => devotion is { HasAnyDevotion: true };
+
+    public IReadOnlyList<DevotionCreedDef> ActiveCreeds => devotion == null ? Array.Empty<DevotionCreedDef>() : devotion.ActiveCreeds;
+
+    public DevotionCreedDef DominantCreed => devotion?.DominantCreed;
+
+    public DevotionFaithDef DominantFaith => devotion?.DominantFaith;
+
+    public float GetStanding(DevotionCreedDef creed) => devotion?.GetStanding(creed) ?? 0f;
+
+    public float GetStandingPct(DevotionCreedDef creed) => devotion?.GetStandingPct(creed) ?? 0f;
+
+    public float AddStanding(DevotionCreedDef creed, float amount) => Devotion.AddStanding(creed, amount);
+
+    public void SetStanding(DevotionCreedDef creed, float value, bool silent = false) => Devotion.SetStanding(creed, value, silent);
+
+    public void TickDevotionDecay(int interval) => devotion?.TickDecay(interval);
+
+    public int TierIndexOf(DevotionCreedDef creed) => devotion?.TierIndexOf(creed) ?? -1;
+
+    public DevotionTierDef TierOf(DevotionCreedDef creed) => devotion?.TierOf(creed);
+
+    public int HighestTierReached(DevotionCreedDef creed) => devotion?.HighestTierReached(creed) ?? -1;
+
+    public bool TryPurge(DevotionCreedDef creed, out string reason)
+    {
+        if (devotion == null)
+        {
+            reason = "BEWH.Framework.Devotion.NoStanding".Translate();
+            return false;
+        }
+
+        return devotion.TryPurge(creed, out reason);
+    }
+
+    public void ClearAllDevotion() => devotion?.ClearAllDevotion();
+
     private RankCategoryDef lastOpenedRankCategory = null;
         
     public RankCategoryDef LastOpenedRankCategory => lastOpenedRankCategory;
@@ -79,7 +133,7 @@ public class CompRankInfo : ThingComp
         }
     }
 
-    private void InvalidateRankCaches()
+    public void InvalidateCaches()
     {
         cachedRecreationSkills = null;
         cachedStatOffset = new Dictionary<StatDef, float>();
@@ -131,7 +185,7 @@ public class CompRankInfo : ThingComp
             LimitCountedRanks.Add(rank);
         }
 
-        InvalidateRankCaches();
+        InvalidateCaches();
     }
 
     public void RemoveRank(RankDef rank, bool removeFromRankLimit)
@@ -159,7 +213,7 @@ public class CompRankInfo : ThingComp
             pawn.story.Title = newHighestRank.label;
         }
         
-        InvalidateRankCaches();
+        InvalidateCaches();
     }
     
     public void RecalculatePassions()
@@ -351,6 +405,7 @@ public class CompRankInfo : ThingComp
         Scribe_Collections.Look(ref originalPassions, "originalPassions", LookMode.Def, LookMode.Value);
         Scribe_Defs.Look(ref lastOpenedRankCategory, "lastOpenedRankCategory");
         Scribe_Values.Look(ref migratedLimitCounts, "migratedLimitCounts");
+        Scribe_Deep.Look(ref devotion, "devotion");
 
         if (Scribe.mode != LoadSaveMode.PostLoadInit)
         {
@@ -365,6 +420,12 @@ public class CompRankInfo : ThingComp
         originalPassions ??= new Dictionary<SkillDef, Passion>();
         limitCountedRanks ??= [];
         announcedEligibleRanks ??= [];
+
+        if (devotion != null)
+        {
+            devotion.SetParent(this);
+            devotion.PostLoadInit();
+        }
 
         if (!migratedLimitCounts)
         {
@@ -395,6 +456,11 @@ public class CompRankInfo : ThingComp
                 }
             }
 
+            if (devotion != null)
+            {
+                num += devotion.GetStatOffset(stat);
+            }
+
             CachedStatOffset.Add(stat, num);
         }
 
@@ -420,6 +486,11 @@ public class CompRankInfo : ThingComp
                 }
             }
                     
+            if (devotion != null)
+            {
+                num *= devotion.GetStatFactor(stat);
+            }
+
             CachedStatFactor.Add(stat, num);
         }
         
@@ -428,7 +499,7 @@ public class CompRankInfo : ThingComp
     
     public override void GetStatsExplanation(StatDef stat, StringBuilder sb, string whitespace = "")
     {
-        if (UnlockedRanks.NullOrEmpty())
+        if (UnlockedRanks.NullOrEmpty() && !HasAnyDevotion)
         {
             base.GetStatsExplanation(stat, sb, whitespace);
             return;
@@ -454,6 +525,8 @@ public class CompRankInfo : ThingComp
             sb.AppendLine(whitespace + "BEWH.Framework.StatReport.Rank".Translate() + ":");
             sb.Append(stringBuilder);
         }
+
+        devotion?.AppendStatsExplanation(stat, sb, whitespace);
     }
 
-}
+}

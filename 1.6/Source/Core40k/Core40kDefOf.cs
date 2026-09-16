@@ -44,8 +44,10 @@ public static class Core40kDefOf
     
     public static BodyPartGroupDef UpperHead;
 
+    public static ThoughtDef BEWH_DevotionOpinion;
+
     static Core40kDefOf()
     {
         DefOfHelper.EnsureInitializedInCtor(typeof(Core40kDefOf));
     }
-}
+}

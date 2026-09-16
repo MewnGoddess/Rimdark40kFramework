@@ -460,7 +460,7 @@ public class DecorationBaseTab : CustomizerTabDrawer
         }
         if (!zStringBuffers.ContainsKey((selectedPrecisionDef, rot4)))
         {
-            zStringBuffers.Add((selectedPrecisionDef, rot4), drawData.offset.y.ToString());
+            zStringBuffers.Add((selectedPrecisionDef, rot4), drawData.offset.z.ToString());
         }
         if (!drawSizeStringBuffers.ContainsKey((selectedPrecisionDef, rot4)))
         {
@@ -483,16 +483,10 @@ public class DecorationBaseTab : CustomizerTabDrawer
             Text.Anchor = TextAnchor.UpperLeft;
         }
         
-        var guiChangedBefore = GUI.changed;
-        GUI.changed = false;
-
-        Core40kUtils.TextFieldWithHorizontalSlider(ref offsetXRect, ref drawData.offset.x, ref xStringBuffer, "X Offset", -2f, 2f);
-        Core40kUtils.TextFieldWithHorizontalSlider(ref offsetZRect, ref drawData.offset.z, ref zStringBuffer, "Z Offset", -2f, 2f);
-        Core40kUtils.TextFieldWithHorizontalSlider(ref drawSizeRect, ref drawData.scale, ref drawSizeStringBuffer, "Draw Size", 0, 3f);
-        Core40kUtils.TextFieldWithHorizontalSlider(ref layerRect, ref drawData.layer, ref layerStringBuffer, "Layer", -100, 100, true);
-
-        changed |= GUI.changed;
-        GUI.changed = guiChangedBefore || GUI.changed;
+        changed |= Core40kUtils.TextFieldWithHorizontalSlider(ref offsetXRect, ref drawData.offset.x, ref xStringBuffer, "X Offset", -2f, 2f);
+        changed |= Core40kUtils.TextFieldWithHorizontalSlider(ref offsetZRect, ref drawData.offset.z, ref zStringBuffer, "Z Offset", -2f, 2f);
+        changed |= Core40kUtils.TextFieldWithHorizontalSlider(ref drawSizeRect, ref drawData.scale, ref drawSizeStringBuffer, "Draw Size", 0, 3f);
+        changed |= Core40kUtils.TextFieldWithHorizontalSlider(ref layerRect, ref drawData.layer, ref layerStringBuffer, "Layer", -100, 100, true);
         
         xStringBuffers[(selectedPrecisionDef, rot4)] = xStringBuffer;
         zStringBuffers[(selectedPrecisionDef, rot4)] = zStringBuffer;

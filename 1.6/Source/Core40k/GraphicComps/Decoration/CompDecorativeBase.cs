@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RimWorld;
@@ -815,6 +815,56 @@ public class CompDecorativeBase : CompGraphicParent
         }
         return num;
     }
+    public override float GetPawnStatOffset(StatDef stat)
+    {
+        var num = 0f;
+        if (CachedPawnStatOffset == null || stat == null)
+        {
+            return num;
+        }
+        if (CachedPawnStatOffset.TryGetValue(stat, out var cachedPawnStatOffsetOut))
+        {
+            return cachedPawnStatOffsetOut;
+        }
+
+        var resNum = 0f;
+        foreach (var decoration in Decorations)
+        {
+            if (decoration.Key == null || decoration.Key.pawnStatOffsets.NullOrEmpty())
+            {
+                continue;
+            }
+            resNum += decoration.Key.pawnStatOffsets.GetStatOffsetFromList(stat);
+        }
+        CachedPawnStatOffset.Add(stat, resNum);
+        return resNum;
+    }
+
+    public override float GetPawnStatFactor(StatDef stat)
+    {
+        var num = 1f;
+        if (CachedPawnStatFactor == null || stat == null)
+        {
+            return num;
+        }
+        if (CachedPawnStatFactor.TryGetValue(stat, out var cachedPawnStatFactorOut))
+        {
+            return cachedPawnStatFactorOut;
+        }
+
+        var resNum = 1f;
+        foreach (var decoration in Decorations)
+        {
+            if (decoration.Key == null || decoration.Key.pawnStatFactors.NullOrEmpty())
+            {
+                continue;
+            }
+            resNum *= decoration.Key.pawnStatFactors.GetStatFactorFromList(stat);
+        }
+        CachedPawnStatFactor.Add(stat, resNum);
+        return resNum;
+    }
+
     public override float GetStatFactor(StatDef stat)
     {
         var num = 1f;
@@ -953,7 +1003,15 @@ public class CompDecorativeBase : CompGraphicParent
             {
                 report.AppendLine("    " + statOffset.stat.LabelCap + ": " + statOffset.ValueToStringAsOffset);
             }
+            foreach (var statOffset in decoration.pawnStatOffsets)
+            {
+                report.AppendLine("    " + statOffset.stat.LabelCap + ": " + statOffset.ValueToStringAsOffset);
+            }
             foreach (var statFactor in decoration.statFactors)
+            {
+                report.AppendLine("    " + statFactor.stat.LabelCap + ": x" + statFactor.ValueToStringAsOffset);
+            }
+            foreach (var statFactor in decoration.pawnStatFactors)
             {
                 report.AppendLine("    " + statFactor.stat.LabelCap + ": x" + statFactor.ValueToStringAsOffset);
             }

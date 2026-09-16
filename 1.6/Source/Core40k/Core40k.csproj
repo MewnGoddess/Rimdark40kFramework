@@ -66,6 +66,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abilities\Ability_MapWideHediff.cs" />
+    <Compile Include="Abilities\Ability_ShootProjectileWithCharges.cs" />
+    <Compile Include="Abilities\Command_AbilityWithCharges.cs" />
     <Compile Include="ChangeableBullets\CompProperties_AmmoChanger.cs" />
     <Compile Include="ChangeableBullets\Comp_AmmoChanger.cs" />
     <Compile Include="ChangeableBullets\DefModExtension_AmmoChanger.cs" />
@@ -84,6 +86,23 @@
     <Compile Include="ColourPicker\TextField.cs" />
     <Compile Include="Comps\CompAbilityEffect_AoeHit.cs" />
     <Compile Include="Comps\CompAbilityEffect_GiveHediffAndMentalBreak.cs" />
+    <Compile Include="Devotion\ConsequenceTrackDef.cs" />
+    <Compile Include="Devotion\DefModExtension_PawnKindDevotion.cs" />
+    <Compile Include="Devotion\DevotionBleed.cs" />
+    <Compile Include="Devotion\DevotionCreedDef.cs" />
+    <Compile Include="Devotion\DevotionEnums.cs" />
+    <Compile Include="Devotion\DevotionFaithDef.cs" />
+    <Compile Include="Devotion\DevotionGenerationUtils.cs" />
+    <Compile Include="Devotion\DevotionOpinion.cs" />
+    <Compile Include="Devotion\DevotionRecord.cs" />
+    <Compile Include="Devotion\DevotionState.cs" />
+    <Compile Include="Devotion\DevotionTierDef.cs" />
+    <Compile Include="Devotion\DevotionTierEffect.cs" />
+    <Compile Include="Devotion\DevotionUtils.cs" />
+    <Compile Include="Devotion\GameComponent_Devotion.cs" />
+    <Compile Include="Devotion\Thought_DevotionOpinion.cs" />
+    <Compile Include="Devotion\ThoughtWorker_DevotionOpinion.cs" />
+    <Compile Include="PawnInfo\Core40kPawnData.cs" />
     <Compile Include="Comps\CompAbilityEffect_HealAndTend.cs" />
     <Compile Include="Comps\CompAbilityEffect_MustHaveGeneTraitOrHediff.cs" />
     <Compile Include="Comps\CompAbilityEffect_RequireRank.cs" />
@@ -102,6 +121,10 @@
     <Compile Include="Comps\CompProperties_MustHaveGeneTraitOrHediff.cs" />
     <Compile Include="Comps\CompProperties_ResetRanks.cs" />
     <Compile Include="Comps\Comp_Aura.cs" />
+    <Compile Include="Comps\CompProperties_ConversionField.cs" />
+    <Compile Include="Comps\Comp_ConversionField.cs" />
+    <Compile Include="Comps\Hediff\HediffCompProperties_AutoInjector.cs" />
+    <Compile Include="Comps\Hediff\HediffComp_AutoInjector.cs" />
     <Compile Include="Comps\Comp_DeteriorateOutsideBuilding.cs" />
     <Compile Include="Comps\Comp_DisableIfApparelCovers.cs" />
     <Compile Include="Comps\Comp_DisableInactiveGene.cs" />
@@ -122,6 +145,7 @@
     <Compile Include="DataStructs\TraitData.cs" />
     <Compile Include="DataStructs\WieghtedTraitData.cs" />
     <Compile Include="Debug\DebugActions.cs" />
+    <Compile Include="DefModExtensions\DefModExtension_AbilityCharges.cs" />
     <Compile Include="DefModExtensions\DefModExtension_AddRandomTraitByWeight.cs" />
     <Compile Include="DefModExtensions\DefModExtension_AddRandomGeneByWeight.cs" />
     <Compile Include="DefModExtensions\DefModExtension_BeheadingCut.cs" />
