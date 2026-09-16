@@ -27,14 +27,59 @@ public static class GetValueUnfinalizedFromVariousFactorPatch
     
     public static void Postfix(ref float __result, StatWorker __instance, StatRequest req)
     {
-        if (req.Thing is not Pawn pawn)
+        var stat = __instance.stat;
+        if (!DecorationIndex.AffectsPawnStat(stat) || req.Thing is not Pawn pawn)
         {
             return;
         }
 
-        var stat = __instance.stat;
+        var coreUtilsComp = CoreUtils;
+        if (coreUtilsComp == null)
+        {
+            return;
+        }
 
-        __result = (__result + GetStatOffsetForX(pawn, stat)) * GetStatFactorForX(pawn, stat);
+        var offset = 0f;
+        var factor = 1f;
+
+        if (coreUtilsComp.cachedDecoratives.TryGetValue(pawn, out var cachedDecoratives))
+        {
+            Accumulate(cachedDecoratives, stat, ref offset, ref factor);
+        }
+
+        if (coreUtilsComp.cachedAlternateTexture.TryGetValue(pawn, out var cachedAlternateTexture))
+        {
+            Accumulate(cachedAlternateTexture, stat, ref offset, ref factor);
+        }
+
+        if (offset == 0f && factor == 1f)
+        {
+            return;
+        }
+
+        __result = (__result + offset) * factor;
+    }
+
+    /// <summary>
+    /// Single pass over the cached comps collecting both the pawn stat offset and factor.
+    /// </summary>
+    private static void Accumulate(GameComponent_CoreUtils.CachedDecoratives cached, StatDef stat, ref float offset, ref float factor)
+    {
+        var apparelComps = cached.apparelComps;
+        for (var i = 0; i < apparelComps.Count; i++)
+        {
+            if (apparelComps[i] is CompGraphicParent graphicParent)
+            {
+                offset += graphicParent.GetPawnStatOffset(stat);
+                factor *= graphicParent.GetPawnStatFactor(stat);
+            }
+        }
+
+        if (cached.weaponComp is CompGraphicParent weaponGraphicParent)
+        {
+            offset += weaponGraphicParent.GetPawnStatOffset(stat);
+            factor *= weaponGraphicParent.GetPawnStatFactor(stat);
+        }
     }
 
     public static float GetStatOffsetForX(Pawn pawn, StatDef stat)

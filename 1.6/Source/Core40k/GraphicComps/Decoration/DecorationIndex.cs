@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RimWorld;
 using Verse;
 
 namespace Core40k;
@@ -18,6 +19,7 @@ public static class DecorationIndex
     private static Dictionary<ThingDef, List<AlternateBaseFormDef>> alternatesByThing;
     private static Dictionary<DecorationDef, List<MaskDef>> masksByDecoration;
     private static Dictionary<ThingDef, List<MaskDef>> masksByThing;
+    private static HashSet<StatDef> pawnStatRelevant;
 
     private static readonly List<DecorationDef> EmptyDecorations = [];
     private static readonly List<AlternateBaseFormDef> EmptyAlternates = [];
@@ -43,6 +45,7 @@ public static class DecorationIndex
         alternatesByThing = new Dictionary<ThingDef, List<AlternateBaseFormDef>>();
         masksByDecoration = new Dictionary<DecorationDef, List<MaskDef>>();
         masksByThing = new Dictionary<ThingDef, List<MaskDef>>();
+        pawnStatRelevant = new HashSet<StatDef>();
 
         //Only things that can actually carry a decoration are considered, so an appliesToAll
         //decoration does not attach itself to every ThingDef in the game.
@@ -101,6 +104,33 @@ public static class DecorationIndex
         }
 
         BuildMasks(decorations, decorables);
+        BuildPawnStatRelevant();
+    }
+
+    //Every DecorationDef, alternates included, since AlternateBaseFormDef inherits the pawn stat lists.
+    private static void BuildPawnStatRelevant()
+    {
+        foreach (var decoration in DefDatabase<DecorationDef>.AllDefsListForReading)
+        {
+            AddStats(decoration.pawnStatOffsets);
+            AddStats(decoration.pawnStatFactors);
+        }
+    }
+
+    private static void AddStats(List<StatModifier> modifiers)
+    {
+        if (modifiers.NullOrEmpty())
+        {
+            return;
+        }
+
+        foreach (var modifier in modifiers)
+        {
+            if (modifier?.stat != null)
+            {
+                pawnStatRelevant.Add(modifier.stat);
+            }
+        }
     }
 
     private static void BuildMasks(List<DecorationDef> decorations, List<ThingDef> decorables)
@@ -158,6 +188,16 @@ public static class DecorationIndex
         }
 
         dict.Add(key, [value]);
+    }
+
+    /// <summary>
+    /// Whether any loaded DecorationDef or AlternateBaseFormDef can offset or factor this stat on the
+    /// wearing pawn. Lets the StatWorker postfix skip stats the framework can never touch.
+    /// </summary>
+    public static bool AffectsPawnStat(StatDef stat)
+    {
+        EnsureBuilt();
+        return stat != null && pawnStatRelevant.Count != 0 && pawnStatRelevant.Contains(stat);
     }
 
     public static List<DecorationDef> DecorationsFor(ThingDef thingDef)
