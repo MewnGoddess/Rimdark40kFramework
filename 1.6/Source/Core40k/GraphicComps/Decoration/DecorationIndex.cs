@@ -12,7 +12,6 @@ namespace Core40k;
 //    alternate forms at all, without scanning the def database per item.
 // 2. The tab drawers used to rescan the whole def database every time a dialog opened, once per
 //    comp. They now read from here instead.
-[StaticConstructorOnStartup]
 public static class DecorationIndex
 {
     private static Dictionary<ThingDef, List<DecorationDef>> decorationsByThing;
@@ -20,20 +19,15 @@ public static class DecorationIndex
     private static Dictionary<DecorationDef, List<MaskDef>> masksByDecoration;
     private static Dictionary<ThingDef, List<MaskDef>> masksByThing;
     private static HashSet<StatDef> pawnStatRelevant;
+    private static bool built;
 
     private static readonly List<DecorationDef> EmptyDecorations = [];
     private static readonly List<AlternateBaseFormDef> EmptyAlternates = [];
     private static readonly List<MaskDef> EmptyMasks = [];
 
-    static DecorationIndex()
-    {
-        Build();
-        WarnOnDeprecatedTabExtension();
-    }
-
     private static void EnsureBuilt()
     {
-        if (decorationsByThing == null)
+        if (!built)
         {
             Build();
         }
@@ -105,6 +99,8 @@ public static class DecorationIndex
 
         BuildMasks(decorations, decorables);
         BuildPawnStatRelevant();
+
+        built = true;
     }
 
     //Every DecorationDef, alternates included, since AlternateBaseFormDef inherits the pawn stat lists.
@@ -196,8 +192,7 @@ public static class DecorationIndex
     /// </summary>
     public static bool AffectsPawnStat(StatDef stat)
     {
-        EnsureBuilt();
-        return stat != null && pawnStatRelevant.Count != 0 && pawnStatRelevant.Contains(stat);
+        return built && stat != null && pawnStatRelevant.Count != 0 && pawnStatRelevant.Contains(stat);
     }
 
     public static List<DecorationDef> DecorationsFor(ThingDef thingDef)
@@ -270,7 +265,7 @@ public static class DecorationIndex
 
     //Customization tabs are detected automatically now. Anything still carrying the old extension
     //is dead weight, so say so once with the list of defs rather than once per def.
-    private static void WarnOnDeprecatedTabExtension()
+    internal static void WarnOnDeprecatedTabExtension()
     {
         var stale = DefDatabase<ThingDef>.AllDefs
             .Where(thingDef => thingDef.HasModExtension<DefModExtension_AvailableDrawerTabDefs>())
@@ -293,5 +288,17 @@ public static class DecorationIndex
         }
 
         Log.Warning(builder.ToString());
+    }
+}
+
+//Built from here rather than from a static constructor on DecorationIndex itself, so the index is
+//never raised early by an off-main-thread caller and always sees the finished def database.
+[StaticConstructorOnStartup]
+internal static class DecorationIndexStartup
+{
+    static DecorationIndexStartup()
+    {
+        DecorationIndex.Build();
+        DecorationIndex.WarnOnDeprecatedTabExtension();
     }
 }

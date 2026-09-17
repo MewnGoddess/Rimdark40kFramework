@@ -27,8 +27,13 @@ public static class GetValueUnfinalizedFromVariousFactorPatch
     
     public static void Postfix(ref float __result, StatWorker __instance, StatRequest req)
     {
+        if (req.Thing is not Pawn pawn)
+        {
+            return;
+        }
+
         var stat = __instance.stat;
-        if (!DecorationIndex.AffectsPawnStat(stat) || req.Thing is not Pawn pawn)
+        if (!DecorationIndex.AffectsPawnStat(stat))
         {
             return;
         }
