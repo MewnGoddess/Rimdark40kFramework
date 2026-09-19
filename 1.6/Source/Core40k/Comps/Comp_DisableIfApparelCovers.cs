@@ -7,11 +7,19 @@ public class Comp_DisableIfApparelCovers : CompAbilityEffect
 {
     private new CompProperties_DisableIfApparelCovers Props => (CompProperties_DisableIfApparelCovers)props;
 
-    public override bool GizmoDisabled(out string reason)
+    public override bool CanCast => !TryGetBlockingApparel(out _, out _);
+
+    /// <summary>
+    /// Finds the first worn apparel that covers one of the body part groups listed in the comp props.
+    /// </summary>
+    private bool TryGetBlockingApparel(out Apparel blockingApparel, out BodyPartGroupDef coveredBodyPart)
     {
+        blockingApparel = null;
+        coveredBodyPart = null;
+
         if (parent.pawn?.apparel == null)
         {
-            return base.GizmoDisabled(out reason);
+            return false;
         }
 
         foreach (var apparel in parent.pawn.apparel.WornApparel)
@@ -22,10 +30,22 @@ public class Comp_DisableIfApparelCovers : CompAbilityEffect
                 {
                     continue;
                 }
-                
-                reason = "BEWH.Framework.Comp.AbilityDisabledByCoveredPart".Translate(parent.def.LabelCap, bodyPart.LabelCap, apparel.Label);
+
+                blockingApparel = apparel;
+                coveredBodyPart = bodyPart;
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    public override bool GizmoDisabled(out string reason)
+    {
+        if (TryGetBlockingApparel(out var blockingApparel, out var coveredBodyPart))
+        {
+            reason = "BEWH.Framework.Comp.AbilityDisabledByCoveredPart".Translate(parent.def.LabelCap, coveredBodyPart.LabelCap, blockingApparel.Label);
+            return true;
         }
 
         return base.GizmoDisabled(out reason);
